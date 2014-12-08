@@ -264,7 +264,7 @@ public class HtmlReport {
         VelocityContext srcTreeContext = new VelocityContext();
         srcTreeContext.put("yamlStr", srcTreeYamlStr);
         File srcTreeYamlJsFile = new File(htmlExternalResRootDir, "js/src-tree-yaml.js");
-        generateVelocityOutput(srcTreeContext, "/src-tree-yaml.js.vm", srcTreeYamlJsFile);
+        generateVelocityOutput(srcTreeContext, "/template/src-tree-yaml.js.vm", srcTreeYamlJsFile);
 
         // set up HTML external files
         // TODO all file paths are hard coded. this is very poor logic..
@@ -297,11 +297,11 @@ public class HtmlReport {
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "css/perfect-scrollbar.min.css");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "css/report.css");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "images/noImage.png");
-        extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/jquery-1.11.1.min.js");
-        extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/jquery.bxslider.min.js");
-        extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/jquery.treetable.js");
-        extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/perfect-scrollbar.min.js");
-        extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/report.js");
+        extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/report/jquery-1.11.1.min.js");
+        extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/report/jquery.bxslider.min.js");
+        extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/report/jquery.treetable.js");
+        extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/report/perfect-scrollbar.min.js");
+        extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/report/report.js");
 
         // copy screen captures to reportOutputDir
         // TODO copying screen capture may be slow action
@@ -367,7 +367,7 @@ public class HtmlReport {
             funcContext.put("captures", captures);
 
             File funcReportFile = new File(funcReportParentDir, rootFunc.getSimpleName() + ".html");
-            generateVelocityOutput(funcContext, "/report.html.vm", funcReportFile);
+            generateVelocityOutput(funcContext, "/template/report.html.vm", funcReportFile);
 
             // set reportLinks data
             ReportFuncLink reportLink = new ReportFuncLink();
@@ -379,7 +379,7 @@ public class HtmlReport {
         // generate main index.html report
         VelocityContext mainContext = new VelocityContext();
         mainContext.put("reportLinks", reportLinks);
-        generateVelocityOutput(mainContext, "/index.html.vm",
+        generateVelocityOutput(mainContext, "/template/index.html.vm",
                 CommonPath.htmlReportMainFile(reportOutputDir));
     }
 
