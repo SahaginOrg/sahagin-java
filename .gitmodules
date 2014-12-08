@@ -1,0 +1,3 @@
+[submodule "src/main/resources/js/share"]
+	path = src/main/resources/js/share
+	url = https://github.com/SahaginOrg/sahagin-js-share.git

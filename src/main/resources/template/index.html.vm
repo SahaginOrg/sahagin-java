@@ -1,0 +1,11 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Sahagin Test Report</title>
+  </head>
+  <body>
+  #foreach( $reportLink in $reportLinks )
+    <a href="${reportLink.getPath()}" title="${reportLink.getTitle()}" target="_blank">${reportLink.getTitle()}</a><br/>
+  #end
+  </body>
+</html>

@@ -1,0 +1,6 @@
+/**
+ * @type {string}
+ */
+sahagin.srcTreeYamlStr = (function(){/*
+${yamlStr}
+*/}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];

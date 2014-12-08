@@ -1,0 +1,92 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>${title}</title>
+    <script src="${externalResourceRootDir}/js/share/common-utils.js"></script>
+    <script src="${externalResourceRootDir}/js/share/yaml/js-yaml.min.js"></script>
+    <script src="${externalResourceRootDir}/js/share/yaml/yaml-utils.js"></script>
+    <script src="${externalResourceRootDir}/js/share/srctree/code/code.js"></script>
+    <script src="${externalResourceRootDir}/js/share/srctree/code/string-code.js"></script>
+    <script src="${externalResourceRootDir}/js/share/srctree/code/unknown-code.js"></script>
+    <script src="${externalResourceRootDir}/js/share/srctree/code/sub-function-invoke.js"></script>
+    <script src="${externalResourceRootDir}/js/share/srctree/code/sub-method-invoke.js"></script>
+    <script src="${externalResourceRootDir}/js/share/srctree/code/code-line.js"></script>
+    <script src="${externalResourceRootDir}/js/share/srctree/test-class.js"></script>
+    <script src="${externalResourceRootDir}/js/share/srctree/page-class.js"></script>
+    <script src="${externalResourceRootDir}/js/share/srctree/test-function.js"></script>
+    <script src="${externalResourceRootDir}/js/share/srctree/test-method.js"></script>
+    <script src="${externalResourceRootDir}/js/share/srctree/test-func-table.js"></script>
+    <script src="${externalResourceRootDir}/js/share/srctree/test-class-table.js"></script>
+    <script src="${externalResourceRootDir}/js/share/srctree/src-tree.js"></script>
+    <script src="${externalResourceRootDir}/js/share/testdoc-resolver.js"></script>
+
+    <link href="${externalResourceRootDir}/css/perfect-scrollbar.min.css" rel="stylesheet" type="text/css" />
+    <link href="${externalResourceRootDir}/css/jquery.treetable.css" rel="stylesheet" type="text/css" />
+    <link href="${externalResourceRootDir}/css/jquery.treetable.theme.default.css" rel="stylesheet" type="text/css" />
+    <link href="${externalResourceRootDir}/css/jquery.bxslider.css" rel="stylesheet" type="text/css" />
+    <link href="${externalResourceRootDir}/css/report.css" rel="stylesheet" type="text/css" />
+
+    <script src="${externalResourceRootDir}/js/report/src-tree-yaml.js"></script>
+    <script src="${externalResourceRootDir}/js/report/jquery-1.11.1.min.js"></script>
+    <script src="${externalResourceRootDir}/js/report/perfect-scrollbar.min.js"></script>
+    <script src="${externalResourceRootDir}/js/report/jquery.treetable.js"></script>
+    <script src="${externalResourceRootDir}/js/report/jquery.bxslider.min.js"></script>
+    <script src="${externalResourceRootDir}/js/report/report.js"></script>
+  </head>
+  <body>
+    #if ( ${classTestDoc} )
+    <div>${classTestDoc} (${className})</div>
+    #else
+    <div>${className}</div>
+    #end
+    #if ( ${funcTestDoc} )
+    <div>${funcTestDoc} (${funcName})</div>
+    #else
+    <div>${funcName}</div>
+    #end
+    <br/>
+    <div class="scrollContainer" id="script_table_container">
+      <table border="1" cellpadding="1" cellspacing="1" id="script_table">
+        <tbody>
+        #foreach( $codeLine in $codeBody )
+          #if( ${codeLine.hasError()} )
+            #set( $lineClass = "errorLine" )
+          #elseif( ${codeLine.isAlreadyRun()} )
+            #set( $lineClass = "successLine" )
+          #else
+            #set( $lineClass = "notRunLine" )
+          #end
+          #if( ${codeLine.getParentTtId()} )
+          <tr data-tt-id="${codeLine.getTtId()}" data-tt-parent-id="${codeLine.getParentTtId()}" data-func-key="${codeLine.getFunctionKey()}" class='${lineClass}'>
+          #else
+          <tr data-tt-id="${codeLine.getTtId()}" data-func-key="${codeLine.getFunctionKey()}" class='${lineClass}'>
+          #end
+            <td>${codeLine.getPageTestDoc()}</td>
+            <td>${codeLine.getPlaceholderResolvedTestDoc()}</td>
+            <td>${codeLine.getCodeLine().getCode().getOriginal()}</td>
+          </tr>
+        #end
+        </tbody>
+      </table>
+    </div>
+    <br/>
+    <div id="bxslider_container">
+      <ul class="bxslider">
+      #foreach( $capture in $captures )
+        <li>
+          <div data-tt-id="${capture.getTtId()}" class="scrollContainer">
+            <img src="${capture.getPath()}" />
+          </div>
+        </li>
+      #end
+      </ul>
+    </div>
+    #if( ${errMsg} )
+    <div id="err_msg_container">
+      [Error]
+      <br>
+      <span id="err_msg">${errMsg}</span>
+    </div>
+    #end
+  </body>
+</html>
