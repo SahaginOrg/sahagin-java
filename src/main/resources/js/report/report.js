@@ -1,6 +1,5 @@
 // global slider object
 var slider = null;
-
 // global srcTree object;
 var srcTree = null;
 
@@ -36,7 +35,7 @@ function getSelectedTr() {
 // returns empty object if no next tr exists
 function getNextTr(trObject) {
   if (!trObject || trObject.length == 0) {
-    throw "null argument";
+    throw new Error("null argument");
   }
   var nextInvisibleNodes = trObject.nextUntil("tr:visible");
   if (nextInvisibleNodes.length == 0) {
@@ -49,7 +48,7 @@ function getNextTr(trObject) {
 // returns empty object if no previous tr exists
 function getPrevTr(trObject) {
   if (!trObject || trObject.length == 0) {
-    throw "null argument";
+    throw new Error("null argument");
   }
   var prevInvisibleNodes = trObject.prevUntil("tr:visible");
   if (prevInvisibleNodes.length == 0) {
@@ -104,9 +103,13 @@ function syncSlideIndexToSelectedTr() {
   }
   var ttId = getTrTtId(selected);
   var slideIndex = getTtIdSlideIndex(ttId);
-  if (slideIndex != -1) {
-    slider.goToSlide(slideIndex);
-  };
+  if (slideIndex == -1) {
+    slideIndex = getTtIdSlideIndex('noImage');
+    if (slideIndex == -1) {
+      throw new Error("noImage slide not found");
+    }
+  }
+  slider.goToSlide(slideIndex);
 };
 
 // positive value means down direction scroll
@@ -243,14 +246,7 @@ $(document).ready(function() {
     infiniteLoop: false,
     hideControlOnEnd: true,
     pager: false,
-    controls: false,
-    onSlideAfter: function(slideElement, oldIndex, newIndex) {
-      // sync table selection to the new slide index
-      var ttId = getSlideTtId(newIndex);
-      var trObj = getTtIdTr(ttId);
-      selectTr(trObj);
-      scrollToShowSelectedTr();
-    }
+    controls: false
   });
 
   $(".scrollContainer").perfectScrollbar({

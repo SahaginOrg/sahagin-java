@@ -56,22 +56,31 @@ public class HtmlReport {
         return null;
     }
 
+    // search LineScreenCapture for each code line of reportCodeBody
+    // from lineScreenCaptures and generate ResportScreenCapture list.
     private List<ReportScreenCapture> generateReportScreenCaptures(
-            TestFunction rootFuntion, List<ReportCodeLine> reportCodeBody,
-            List<LineScreenCapture> lineScreenCaptures,
+            List<ReportCodeLine> reportCodeBody, List<LineScreenCapture> lineScreenCaptures,
             File inputCaptureRootDir, File reportOutputDir, File funcReportParentDir) {
         List<ReportScreenCapture> reportCaptures
         = new ArrayList<ReportScreenCapture>(reportCodeBody.size());
+
+        String noImageFilePath = new File(CommonUtils.relativize(
+                CommonPath.htmlExternalResourceRootDir(reportOutputDir), funcReportParentDir),
+                "images/noImage.png").getPath();
+
+        // add noImage line
+        ReportScreenCapture noImageCapture = new ReportScreenCapture();
+        noImageCapture.setTtId("noImage");
+        noImageCapture.setPath(noImageFilePath);
+        reportCaptures.add(noImageCapture);
+
         for (int i = 0; i < reportCodeBody.size(); i++) {
             LineScreenCapture capture = getScreenCaptureOfStacks(
                     reportCodeBody.get(i).getStackLines(), lineScreenCaptures);
             ReportScreenCapture reportCapture = new ReportScreenCapture();
             reportCapture.setTtId(reportCodeBody.get(i).getTtId());
             if (capture == null) {
-                reportCapture.setPath(
-                        new File(CommonUtils.relativize(
-                                CommonPath.htmlExternalResourceRootDir(reportOutputDir), funcReportParentDir),
-                                "images/noImage.png").getPath());
+                reportCapture.setPath(noImageFilePath);
             } else {
                 File relInputCapturePath = CommonUtils.relativize(
                         capture.getPath(), inputCaptureRootDir);
@@ -82,6 +91,7 @@ public class HtmlReport {
             }
             reportCaptures.add(reportCapture);
         }
+
         return reportCaptures;
     }
 
@@ -263,7 +273,7 @@ public class HtmlReport {
         }
         VelocityContext srcTreeContext = new VelocityContext();
         srcTreeContext.put("yamlStr", srcTreeYamlStr);
-        File srcTreeYamlJsFile = new File(htmlExternalResRootDir, "js/src-tree-yaml.js");
+        File srcTreeYamlJsFile = new File(htmlExternalResRootDir, "js/report/src-tree-yaml.js");
         generateVelocityOutput(srcTreeContext, "/template/src-tree-yaml.js.vm", srcTreeYamlJsFile);
 
         // set up HTML external files
@@ -361,8 +371,8 @@ public class HtmlReport {
             List<ReportCodeLine> reportCodeBody = generateReportCodeBody(rootFunc, runFailure);
             funcContext.put("codeBody", reportCodeBody);
 
-            List<ReportScreenCapture> captures =generateReportScreenCaptures(
-                    rootFunc, reportCodeBody, lineScreenCaptures,
+            List<ReportScreenCapture> captures = generateReportScreenCaptures(
+                    reportCodeBody, lineScreenCaptures,
                     inputCaptureRootDir, reportOutputDir, funcReportParentDir);
             funcContext.put("captures", captures);
 
