@@ -26,12 +26,15 @@
     <link href="${externalResourceRootDir}/css/jquery.bxslider.css" rel="stylesheet" type="text/css" />
     <link href="${externalResourceRootDir}/css/report.css" rel="stylesheet" type="text/css" />
 
-    <script src="${externalResourceRootDir}/js/report/src-tree-yaml.js"></script>
     <script src="${externalResourceRootDir}/js/report/jquery-1.11.1.min.js"></script>
     <script src="${externalResourceRootDir}/js/report/perfect-scrollbar.min.js"></script>
     <script src="${externalResourceRootDir}/js/report/jquery.treetable.js"></script>
     <script src="${externalResourceRootDir}/js/report/jquery.bxslider.min.js"></script>
+    <script src="${externalResourceRootDir}/js/report/src-tree-yaml.js"></script>
     <script src="${externalResourceRootDir}/js/report/report.js"></script>
+    <script>
+      sahagin.errLineTtId = "${errLineTtId}";
+    </script>
   </head>
   <body>
     #if ( ${classTestDoc} )

@@ -16,7 +16,6 @@ import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
-
 import org.openqa.selenium.io.IOUtils;
 import org.sahagin.share.CommonPath;
 import org.sahagin.share.CommonUtils;
@@ -102,43 +101,53 @@ public class HtmlReport {
         return runResult.getRunFailures().get(0);
     }
 
-    private int getErrorCodeBodyIndex(RunFailure failure,
-            int stackLineHeight, TestFunction expectedStackLineFunction) {
-        if (failure == null) {
-            return -1;
+    // returns 0 if stackLines == errStackLines (means error line),
+    // returns positive if stackLines > errStackLines (means not executed),
+    // returns negative if stackLines < errStackLines (means already executed)
+    private int compareToErrStackLines(List<StackLine> stackLines, List<StackLine> errStackLines) {
+        if (errStackLines == null || errStackLines.size() == 0) {
+            return -1; // already executed
         }
-        if (stackLineHeight < 0) {
-            throw new IllegalArgumentException(Integer.toString(stackLineHeight));
+        if (stackLines.size() == 0) {
+            throw new IllegalArgumentException("empty stackLine");
         }
-        if (stackLineHeight >= failure.getStackLines().size()) {
-            return -1;
+
+        for (int i = 0; i < stackLines.size(); i++) {
+            if (i >= errStackLines.size()) {
+                throw new IllegalArgumentException("stackLines and errStackLines mismatch");
+            }
+            int indexFromTail = stackLines.size() - 1 - i;
+            int errIndexFromTail = errStackLines.size() - 1 - i;
+            int line = stackLines.get(indexFromTail).getCodeBodyIndex();
+            int errLine = errStackLines.get(errIndexFromTail).getCodeBodyIndex();
+            if (line < errLine) {
+                return -1; // already executed
+            } else if (line > errLine) {
+                return 1; // not executed
+            }
         }
-        StackLine stackLine = failure.getStackLines().get(
-                failure.getStackLines().size() - 1 - stackLineHeight);
-        if (stackLine.getFunction() == null) {
-            throw new NullPointerException("implementation error");
-        }
-        if (!stackLine.getFunction().getKey().equals(expectedStackLineFunction.getKey())) {
-            throw new IllegalArgumentException(
-                    "function mismatch: " + expectedStackLineFunction.getKey());
-        }
-        return stackLine.getCodeBodyIndex();
+        return 0;
     }
 
     private ReportCodeLine generateReportCodeLine(CodeLine codeLine, List<StackLine> stackLines,
-            String ttId, String parentTtId, int codeLineIndex, int errLineIndex) {
+            RunFailure runFailure, String ttId, String parentTtId) {
         ReportCodeLine result = new ReportCodeLine();
         result.setCodeLine(codeLine);
         result.setStackLines(stackLines);
         result.setTtId(ttId);
         result.setParentTtId(parentTtId);
-        if (errLineIndex == -1 || errLineIndex > codeLineIndex) {
+        List<StackLine> errStackLines = null;
+        if (runFailure != null) {
+            errStackLines = runFailure.getStackLines();
+        }
+        int errCompare = compareToErrStackLines(stackLines, errStackLines);
+        if (errCompare < 0) {
             result.setHasError(false);
             result.setAlreadyRun(true);
-        } else if (errLineIndex == codeLineIndex) {
+        } else if (errCompare == 0) {
             result.setHasError(true);
             result.setAlreadyRun(true);
-        } else if (errLineIndex < codeLineIndex) {
+        } else if (errCompare > 0) {
             result.setHasError(false);
             result.setAlreadyRun(false);
         } else {
@@ -160,8 +169,6 @@ public class HtmlReport {
     // runFailure... set null if not error
     private List<ReportCodeLine> generateReportCodeBody(
             TestFunction rootFunction, RunFailure runFailure) {
-        int rootErrIndex = getErrorCodeBodyIndex(runFailure, 0, rootFunction);
-
         List<ReportCodeLine> result = new ArrayList<ReportCodeLine>(rootFunction.getCodeBody().size());
         for (int i = 0; i < rootFunction.getCodeBody().size(); i++) {
             CodeLine codeLine = rootFunction.getCodeBody().get(i);
@@ -173,17 +180,13 @@ public class HtmlReport {
             rootStackLines.add(rootStackLine);
 
             ReportCodeLine reportCodeLine = generateReportCodeLine(
-                    codeLine, rootStackLines, rootTtId, null, i, rootErrIndex);
+                    codeLine, rootStackLines, runFailure, rootTtId, null);
             result.add(reportCodeLine);
 
             // add direct child to HTML report
             if (codeLine.getCode() instanceof SubFunctionInvoke) {
                 SubFunctionInvoke invoke = (SubFunctionInvoke) codeLine.getCode();
                 List<CodeLine> codeBody = invoke.getSubFunction().getCodeBody();
-                int errIndex = -1;
-                if (reportCodeLine.hasError()) {
-                    errIndex = getErrorCodeBodyIndex(runFailure, 1, invoke.getSubFunction());
-                }
                 for (int j = 0; j < codeBody.size(); j++) {
                     CodeLine childCodeLine = codeBody.get(j);
 
@@ -194,8 +197,7 @@ public class HtmlReport {
                     childStackLines.add(rootStackLine);
 
                     ReportCodeLine childReportCodeLine = generateReportCodeLine(
-                            childCodeLine, childStackLines, rootTtId + "_" + j, rootTtId,
-                            j, errIndex);
+                            childCodeLine, childStackLines, runFailure, rootTtId + "_" + j, rootTtId);
                     result.add(childReportCodeLine);
                 }
             }
@@ -352,22 +354,24 @@ public class HtmlReport {
             funcContext.put("funcTestDoc", rootFunc.getTestDoc());
 
             RootFuncRunResult runResult = runResults.getRunResultByRootFunction(rootFunc);
+            RunFailure runFailure = getRunFailure(runResult);
+            if (runFailure == null) {
+                funcContext.put("errMsg", null);
+                funcContext.put("errLineTtId", "");
+            } else {
+                funcContext.put("errMsg", runFailure.getMessage().trim());
+                funcContext.put("errLineTtId", generateTtId(runFailure.getStackLines()));
+            }
+
+            List<ReportCodeLine> reportCodeBody = generateReportCodeBody(rootFunc, runFailure);
+            funcContext.put("codeBody", reportCodeBody);
+
             List<LineScreenCapture> lineScreenCaptures;
             if (runResult == null) {
                 lineScreenCaptures = new ArrayList<LineScreenCapture>(0);
             } else {
                 lineScreenCaptures = runResult.getLineScreenCaptures();
             }
-            RunFailure runFailure = getRunFailure(runResult);
-            if (runFailure == null) {
-                funcContext.put("errMsg", null);
-            } else {
-                funcContext.put("errMsg", runFailure.getMessage().trim());
-            }
-
-            List<ReportCodeLine> reportCodeBody = generateReportCodeBody(rootFunc, runFailure);
-            funcContext.put("codeBody", reportCodeBody);
-
             List<ReportScreenCapture> captures = generateReportScreenCaptures(
                     lineScreenCaptures, inputCaptureRootDir, reportOutputDir, funcReportParentDir);
             funcContext.put("captures", captures);

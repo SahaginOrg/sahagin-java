@@ -154,6 +154,34 @@ function collapseSelectedTr() {
   $("#script_table").treetable("collapseNode", getTrTtId(selectedTr));
 }
 
+// returns 0 if lineTtId == errLineTtId (means error line),
+// returns positive if lineTtId > errLineTtId (means not executed),
+// returns negative if lineTtd < errLineTtId (means already executed)
+function compareToErrTtId(lineTtId, errLineTtId) {
+  var lineArray = lineTtId.split("_");
+  if (lineArray.length == 0) {
+    throw new Error(lineTtId);
+  }
+  var errLineArray = errLineTtId.split("_");
+  if (errLineArray.length == 0) {
+    return -1; // already executed
+  }
+  
+  for (var i = 0; i < lineArray.length; i++) {
+    if (i >= errLineArray.length) { 
+      throw new Error("lineTtId: " + lineTtId + "; errLineTtId: " + errLineTtId);
+    }
+    var line = parseInt(lineArray[i], 10);
+    var errLine = parseInt(errLineArray[i], 10);
+    if (line < errLine) {
+      return -1; // already executed
+    } else if (line > errLine) {
+      return 1; // not executed
+    }
+  }
+  return 0;
+}
+
 function getSrcTree() {
   if (srcTree == null) {
     var yamlObj = jsyaml.safeLoad(sahagin.srcTreeYamlStr);
@@ -193,6 +221,15 @@ function loadCodeBodyHiddenNode(tr) {
     var parentTtId = trTtId;
     var ttId = parentTtId + '_' + i.toString(10);
     var funcKey = getFunctionKey(codeLine.getCode());
+    var errCompare = compareToErrTtId(ttId, sahagin.errLineTtId);
+    var lineClass;
+    if (errCompare == 0) {
+      lineClass = "errorLine";
+    } else if (errCompare > 0) {
+      lineClass = "notRunLine";
+    } else {
+      lineClass = "successLine";
+    }
     var pageTestDoc = sahagin.TestDocResolver.pageTestDoc(codeLine.getCode());
     if (pageTestDoc == null) {
       pageTestDoc = '-';
@@ -203,10 +240,11 @@ function loadCodeBodyHiddenNode(tr) {
     }
     var original = codeLine.getCode().getOriginal();
     childNodeHtml = childNodeHtml + sahagin.CommonUtils.strFormat(
-      '<tr data-tt-id="{0}" data-tt-parent-id="{1}" data-func-key="{2}">'
-          + '<td>{3}</td><td>{4}</td><td>{5}</td></tr>',
-      ttId, parentTtId, funcKey, pageTestDoc, testDoc, original);
+      '<tr data-tt-id="{0}" data-tt-parent-id="{1}" data-func-key="{2}" class="{3}">'
+          + '<td>{4}</td><td>{5}</td><td>{6}</td></tr>',
+      ttId, parentTtId, funcKey, lineClass, pageTestDoc, testDoc, original);
   }
+  
   var trNode = $("#script_table").treetable("node", trTtId);
   $("#script_table").treetable("loadBranch", trNode, childNodeHtml);
   // loadBranch automatically expand the trNode,
