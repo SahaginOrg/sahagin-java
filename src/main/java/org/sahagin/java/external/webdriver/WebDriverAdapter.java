@@ -3,6 +3,7 @@ package org.sahagin.java.external.webdriver;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.SessionNotFoundException;
 import org.sahagin.java.adapter.Adapter;
 import org.sahagin.java.adapter.AdapterContainer;
 import org.sahagin.java.adapter.AdditionalTestDocsAdapter;
@@ -42,7 +43,12 @@ public class WebDriverAdapter implements Adapter {
             if (!(driver instanceof TakesScreenshot)) {
                 return null;
             }
-            return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+            try {
+                return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+            } catch (SessionNotFoundException e) {
+                // just do nothing if WebDriver instance is in invalid state
+                return null;
+            }
         }
 
     }
