@@ -158,13 +158,13 @@ function collapseSelectedTr() {
 // returns positive if lineTtId > errLineTtId (means not executed),
 // returns negative if lineTtd < errLineTtId (means already executed)
 function compareToErrTtId(lineTtId, errLineTtId) {
+  if (errLineTtId == null || errLineTtId == "") {
+    return -1; // already executed
+  }
   var lineArray = lineTtId.split("_");
+  var errLineArray = errLineTtId.split("_");
   if (lineArray.length == 0) {
     throw new Error(lineTtId);
-  }
-  var errLineArray = errLineTtId.split("_");
-  if (errLineArray.length == 0) {
-    return -1; // already executed
   }
   
   for (var i = 0; i < lineArray.length; i++) {
