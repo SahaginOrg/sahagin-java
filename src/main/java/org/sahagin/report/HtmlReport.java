@@ -46,52 +46,49 @@ public class HtmlReport {
         Velocity.init();
     }
 
-    private LineScreenCapture getScreenCaptureOfStacks(
-            List<StackLine> stackLines, List<LineScreenCapture> lineScreenCaptures) {
-        for (LineScreenCapture lineScreenCapture : lineScreenCaptures) {
-            if (lineScreenCapture.matchesStackLines(stackLines)) {
-                return lineScreenCapture;
-            }
+    private String generateTtId(List<StackLine> stackLines) {
+        if (stackLines.size() == 0) {
+            throw new IllegalArgumentException("empty stackLines");
         }
-        return null;
+        String ttId = "";
+        for (int i = stackLines.size() - 1; i >= 0; i--) {
+            if (i != stackLines.size() - 1) {
+                ttId = ttId + "_";
+            }
+            ttId = ttId + Integer.toString(stackLines.get(i).getCodeBodyIndex());
+        }
+        return ttId;
     }
 
-    // search LineScreenCapture for each code line of reportCodeBody
-    // from lineScreenCaptures and generate ResportScreenCapture list.
+    // generate ResportScreenCapture list from lineScreenCaptures and
     private List<ReportScreenCapture> generateReportScreenCaptures(
-            List<ReportCodeLine> reportCodeBody, List<LineScreenCapture> lineScreenCaptures,
+            List<LineScreenCapture> lineScreenCaptures,
             File inputCaptureRootDir, File reportOutputDir, File funcReportParentDir) {
         List<ReportScreenCapture> reportCaptures
-        = new ArrayList<ReportScreenCapture>(reportCodeBody.size());
+        = new ArrayList<ReportScreenCapture>(lineScreenCaptures.size());
 
+        // add noImage capture
         String noImageFilePath = new File(CommonUtils.relativize(
                 CommonPath.htmlExternalResourceRootDir(reportOutputDir), funcReportParentDir),
                 "images/noImage.png").getPath();
-
-        // add noImage line
         ReportScreenCapture noImageCapture = new ReportScreenCapture();
-        noImageCapture.setTtId("noImage");
         noImageCapture.setPath(noImageFilePath);
+        noImageCapture.setTtId("noImage");
         reportCaptures.add(noImageCapture);
 
-        for (int i = 0; i < reportCodeBody.size(); i++) {
-            LineScreenCapture capture = getScreenCaptureOfStacks(
-                    reportCodeBody.get(i).getStackLines(), lineScreenCaptures);
+        // add each line screen capture
+        for (LineScreenCapture lineScreenCapture : lineScreenCaptures) {
             ReportScreenCapture reportCapture = new ReportScreenCapture();
-            reportCapture.setTtId(reportCodeBody.get(i).getTtId());
-            if (capture == null) {
-                reportCapture.setPath(noImageFilePath);
-            } else {
-                File relInputCapturePath = CommonUtils.relativize(
-                        capture.getPath(), inputCaptureRootDir);
-                File absOutputCapturePath = new File(
-                        CommonPath.htmlReportCaptureRootDir(reportOutputDir), relInputCapturePath.getPath());
-                File relOutputCapturePath = CommonUtils.relativize(absOutputCapturePath, funcReportParentDir);
-                reportCapture.setPath(relOutputCapturePath.getPath());
-            }
+            File relInputCapturePath = CommonUtils.relativize(
+                    lineScreenCapture.getPath(), inputCaptureRootDir);
+            File absOutputCapturePath = new File(
+                    CommonPath.htmlReportCaptureRootDir(reportOutputDir), relInputCapturePath.getPath());
+            File relOutputCapturePath = CommonUtils.relativize(absOutputCapturePath, funcReportParentDir);
+            reportCapture.setPath(relOutputCapturePath.getPath());
+            String ttId = generateTtId(lineScreenCapture.getStackLines());
+            reportCapture.setTtId(ttId);
             reportCaptures.add(reportCapture);
         }
-
         return reportCaptures;
     }
 
@@ -372,8 +369,7 @@ public class HtmlReport {
             funcContext.put("codeBody", reportCodeBody);
 
             List<ReportScreenCapture> captures = generateReportScreenCaptures(
-                    reportCodeBody, lineScreenCaptures,
-                    inputCaptureRootDir, reportOutputDir, funcReportParentDir);
+                    lineScreenCaptures, inputCaptureRootDir, reportOutputDir, funcReportParentDir);
             funcContext.put("captures", captures);
 
             File funcReportFile = new File(funcReportParentDir, rootFunc.getSimpleName() + ".html");
