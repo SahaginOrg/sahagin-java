@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.jar.Manifest;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
@@ -546,7 +547,7 @@ public class SrcTreeGenerator {
         // TODO handle wild card classpath entry
         List<String> classPathList = new ArrayList<String>(64);
         String classPathStr = System.getProperty("java.class.path");
-        String[] classPathArray = classPathStr.split(File.pathSeparator);
+        String[] classPathArray = classPathStr.split(Pattern.quote(File.pathSeparator));
         addToClassPathList(classPathList, classPathArray);
         for (String classPath : classPathList) {
             logger.info("classPath: " + classPath);

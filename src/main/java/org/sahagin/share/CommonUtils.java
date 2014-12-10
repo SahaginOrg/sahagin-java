@@ -7,6 +7,7 @@ import java.net.JarURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.jar.Manifest;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.FilenameUtils;
 import org.openqa.selenium.io.IOUtils;
@@ -16,50 +17,54 @@ public class CommonUtils {
     // cannot use Path.relativize since Sahagin support Java 1.6 or later
     public static File relativize(File target, File baseDir) {
         String separator = File.separator;
-        String absTargetPath = target.getAbsolutePath();
-        absTargetPath = FilenameUtils.normalizeNoEndSeparator(
-                FilenameUtils.separatorsToSystem(absTargetPath));
-        String absBasePath = baseDir.getAbsolutePath();
-        absBasePath = FilenameUtils.normalizeNoEndSeparator(
-                FilenameUtils.separatorsToSystem(absBasePath));
+        try {
+            String absTargetPath = target.getAbsolutePath();
+            absTargetPath = FilenameUtils.normalizeNoEndSeparator(
+                    FilenameUtils.separatorsToSystem(absTargetPath));
+            String absBasePath = baseDir.getAbsolutePath();
+            absBasePath = FilenameUtils.normalizeNoEndSeparator(
+                    FilenameUtils.separatorsToSystem(absBasePath));
 
-        if (absTargetPath.equals(absBasePath)) {
-            throw new IllegalArgumentException("target and base are equal: " + absTargetPath);
-        }
-
-        String[] absTargets = absTargetPath.split(separator);
-        String[] absBases = absBasePath.split(separator);
-
-        int minLength = Math.min(absTargets.length, absBases.length);
-
-        int lastCommonRoot = -1;
-        for (int i = 0; i < minLength; i++) {
-            if (absTargets[i].equals(absBases[i])) {
-                lastCommonRoot = i;
-            } else {
-                break;
+            if (absTargetPath.equals(absBasePath)) {
+                throw new IllegalArgumentException("target and base are equal: " + absTargetPath);
             }
-        }
 
-        if (lastCommonRoot == -1) {
-            // This case can happen on Windows when drive of two file paths differ.
-            throw new IllegalArgumentException("no common root");
-        }
+            String[] absTargets = absTargetPath.split(Pattern.quote(separator));
+            String[] absBases = absBasePath.split(Pattern.quote(separator));
 
-        String relativePath = "";
+            int minLength = Math.min(absTargets.length, absBases.length);
 
-        for (int i = lastCommonRoot + 1; i < absBases.length; i++) {
-            relativePath = relativePath + ".." + separator;
-        }
-
-        for (int i = lastCommonRoot + 1; i < absTargets.length; i++) {
-            relativePath = relativePath + absTargets[i];
-            if (i != absTargets.length - 1) {
-                relativePath = relativePath + separator;
+            int lastCommonRoot = -1;
+            for (int i = 0; i < minLength; i++) {
+                if (absTargets[i].equals(absBases[i])) {
+                    lastCommonRoot = i;
+                } else {
+                    break;
+                }
             }
-        }
 
-        return new File(relativePath);
+            if (lastCommonRoot == -1) {
+                // This case can happen on Windows when drive of two file paths differ.
+                throw new IllegalArgumentException("no common root");
+            }
+
+            String relativePath = "";
+
+            for (int i = lastCommonRoot + 1; i < absBases.length; i++) {
+                relativePath = relativePath + ".." + separator;
+            }
+
+            for (int i = lastCommonRoot + 1; i < absTargets.length; i++) {
+                relativePath = relativePath + absTargets[i];
+                if (i != absTargets.length - 1) {
+                    relativePath = relativePath + separator;
+                }
+            }
+            return new File(relativePath);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format(
+                    "target: %s; baseDir: %s; separator: %s", target, baseDir, separator), e);
+        }
     }
 
     public static Manifest readManifestFromExternalJar(File jarFile) {
