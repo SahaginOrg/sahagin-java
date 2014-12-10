@@ -110,7 +110,7 @@ public class Config implements YamlConvertible {
         }
         String reportInputDataDirValue = YamlUtils.getStrValue(commonYamlObj, "reportInputDataDir", true);
         String reportOutputDirValue = YamlUtils.getStrValue(commonYamlObj, "reportOutputDir", true);
-        Boolean outputLogValue = YamlUtils.getBooleanValue(yamlObject, "outputLog", true);
+        Boolean outputLogValue = YamlUtils.getBooleanValue(commonYamlObj, "outputLog", true);
         if (reportInputDataDirValue != null) {
             reportInputDataDir = new File(reportInputDataDirValue);
         }
