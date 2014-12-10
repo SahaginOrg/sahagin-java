@@ -249,7 +249,7 @@ public class HtmlReport {
             try {
                 FileUtils.deleteDirectory(dir);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("fail to delete " + dir.getAbsolutePath(), e);
             }
         }
     }
