@@ -5,7 +5,7 @@
   </head>
   <body>
   #foreach( $reportLink in $reportLinks )
-    <a href="${reportLink.getPath()}" title="${reportLink.getTitle()}" target="_blank">${reportLink.getTitle()}</a><br/>
+    <a href="${reportLink.getPath()}" title="${reportLink.getTitle()}">${reportLink.getTitle()}</a><br/>
   #end
   </body>
 </html>
