@@ -1,6 +1,7 @@
 # Sahagin
 
 Make your Selenium Script more readable and maintainable!
+
 Sahagin provides highly readable HTML test script viewer and test result report.
 
 Sahagin only supports JUnit4 and Selenium WebDriver Java binding in the current latest version.
@@ -75,7 +76,6 @@ You don't need to add annotations to all your classes and methods.
 ```java
 import org.sahagin.java.external.Page;
 import org.sahagin.java.external.TestDoc;
-...
 
 @Page("Data input page")
 public class DataInputPage {
@@ -93,11 +93,9 @@ Set a WebDriver instance used to take screen captures.
 
 ```java
 import org.sahagin.java.external.webdriver.WebDriverAdapter;
-...
 
 public class SampleTest {
-  ...
-  
+
   @Before
   public void setUp() {
       driver = new FirefoxDriver(); // or any other driver you want to use
@@ -106,11 +104,11 @@ public class SampleTest {
   }
 
 }
-
 ```
 
 ## 4. Creeate sahagin.yml
 Create a file sahagin.yml on the Java project root directory.
+
 Then change the "testDir" value to the root directory your test files are located.
 
 ```yaml
@@ -125,6 +123,7 @@ java:
 
 ## 5. Run test and generate report
 Run your JUnit tests.
+
 Then you will find the report sahagin-rerpot/index.html on the Java project root directory.
 
 ## 6. Jenkins plug-in
