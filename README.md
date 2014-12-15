@@ -117,7 +117,8 @@ Then change the "testDir" value to the root directory your test files are locate
 java:
   # Root directory of test Java files
   # (absolute path or relative path from this YAML file).
-  # All methods and classes annotated by @Page or @TestDoc must be located under this directory.
+  # All methods and classes annotated by @Page or @TestDoc 
+  # must be located under this directory.
   testDir: src/test/java
 ```
 
