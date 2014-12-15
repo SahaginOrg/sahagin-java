@@ -6,7 +6,7 @@
   </properties>
   <groupId>org.sahagin</groupId>
   <artifactId>sahagin</artifactId>
-  <version>0.1</version>
+  <version>0.2-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Sahagin</name>
   <description>Sahagin makes your Selenium script more readable and maintainable.</description>
@@ -151,19 +151,6 @@
           </execution>
         </executions>
       </plugin>
-      
-      <!-- TODO only for debug -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.14</version>
-        <configuration>
-          <argLine>
-            -javaagent:${settings.localRepository}/org/sahagin/sahagin/0.1-SNAPSHOT/sahagin-0.1-SNAPSHOT.jar=src/sahagin.yml
-          </argLine>
-        </configuration>
-      </plugin>
-
     </plugins>
   </build>
 </project>
