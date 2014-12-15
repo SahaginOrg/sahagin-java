@@ -100,6 +100,7 @@ public class Config implements YamlConvertible {
         Map<String, Object> javaYamlObj = YamlUtils.getYamlObjectValue(yamlObject, "java");
         // testDir for java is mandatory
         // (since cannot get source code path on run time)
+        // TODO support array testDir value (so, testDir can be string or string array)
         testDir = new File(YamlUtils.getStrValue(javaYamlObj, "testDir"));
 
         // common and it's child settings is not mandatory

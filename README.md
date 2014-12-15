@@ -106,8 +106,8 @@ public class SampleTest {
 }
 ```
 
-## 4. Creeate sahagin.yml
-Create a file sahagin.yml on the Java project root directory.
+## 4. Create sahagin.yml
+Create a file "sahagin.yml" on the Java project root directory.
 
 Then change the "testDir" value to the root directory your test files are located.
 
