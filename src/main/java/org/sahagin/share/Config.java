@@ -98,6 +98,8 @@ public class Config implements YamlConvertible {
     public void fromYamlObject(Map<String, Object> yamlObject)
             throws YamlConvertException {
         Map<String, Object> javaYamlObj = YamlUtils.getYamlObjectValue(yamlObject, "java");
+        // testDir for java is mandatory
+        // (since cannot get source code path on run time)
         testDir = new File(YamlUtils.getStrValue(javaYamlObj, "testDir"));
 
         // common and it's child settings is not mandatory
