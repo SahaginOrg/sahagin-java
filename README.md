@@ -88,7 +88,7 @@ public class DataInputPage {
 }
 ```
 
-## 3. Set WebDriver instance before each test method
+## 3. Set WebDriver instance before each test method is called
 Set a WebDriver instance used to take screen captures.
 
 ```java
