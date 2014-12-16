@@ -112,24 +112,6 @@ public class YamlUtils {
         return getIntValue(yamlObject, key, false);
     }
 
-    // for null, returns empty list
-    public static List<String> getStrListValue(Map<String, Object> yamlObject, String key,
-            boolean allowsEmpty) throws YamlConvertException {
-        Object obj = getObjectValue(yamlObject, key, allowsEmpty);
-        @SuppressWarnings("unchecked")
-        List<String> result = (List<String>) obj;
-        if (result == null) {
-            result = new ArrayList<String>(0);
-        }
-        return result;
-    }
-
-    // for null or not found, returns empty list
-    public static List<String> getStrListValue(Map<String, Object> yamlObject, String key)
-            throws YamlConvertException {
-        return getStrListValue(yamlObject, key, false);
-    }
-
     // for null, returns empty map
     public static Map<String, Object> getYamlObjectValue(Map<String, Object> yamlObject,
             String key, boolean allowsEmpty) throws YamlConvertException {
@@ -146,6 +128,24 @@ public class YamlUtils {
     public static Map<String, Object> getYamlObjectValue(Map<String, Object> yamlObject,
             String key) throws YamlConvertException {
         return getYamlObjectValue(yamlObject, key, false);
+    }
+
+    // for null, returns empty list
+    public static List<String> getStrListValue(Map<String, Object> yamlObject, String key,
+            boolean allowsEmpty) throws YamlConvertException {
+        Object obj = getObjectValue(yamlObject, key, allowsEmpty);
+        @SuppressWarnings("unchecked")
+        List<String> result = (List<String>) obj;
+        if (result == null) {
+            result = new ArrayList<String>(0);
+        }
+        return result;
+    }
+
+    // for null or not found, returns empty list
+    public static List<String> getStrListValue(Map<String, Object> yamlObject, String key)
+            throws YamlConvertException {
+        return getStrListValue(yamlObject, key, false);
     }
 
     // for null, returns empty list

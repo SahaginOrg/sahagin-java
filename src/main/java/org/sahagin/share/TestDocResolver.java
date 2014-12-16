@@ -13,11 +13,14 @@ import org.sahagin.share.srctree.code.UnknownCode;
 
 // TODO convert {method} to method name (this specification is from Allure framework)
 // TODO cannot get argVariables for the files out of Config.testDir
+// TODO throw error if placeholders are used in the class TestDoc
 
 public class TestDocResolver {
     private static final Pattern PLACEHOLDER = Pattern.compile("\\{[^\\{\\}]+\\}");
     private static final String MSG_INVALID_PLACEHOLDER
     = "TestDoc of \"%s\" contains invalid keyword \"%s\"";
+    private static final String MSG_THIS_FOR_FUNCTION
+    = "Can not use \"this\" keyword for function";
 
     // returns invalid placeholder keyword in TestFunction if found.
     // returns null if not found
@@ -37,7 +40,9 @@ public class TestDocResolver {
                 // TODO index check
             } catch (NumberFormatException e) {
                 // not index pattern
-                if (!func.getArgVariables().contains(matched)) {
+                if (matched.equals("this")) {
+                    continue;
+                } else if (!func.getArgVariables().contains(matched)) {
                     return matched;
                 }
             }
@@ -63,18 +68,40 @@ public class TestDocResolver {
             while (matcher.find()) {
                 String variable = matcher.group();
                 variable = variable.substring(1, variable.length() - 1) ; // trim head and tail braces
-                int varIndex;
+                int varIndex = -1;
+                boolean isIndexPattern = false;
+
                 try {
                     varIndex = Integer.parseInt(variable);
+                    isIndexPattern = true;
                 } catch (NumberFormatException e) {
                     // not index pattern
-                    varIndex = func.getArgVariables().indexOf(variable);
                 }
-                if (varIndex < 0 || varIndex >= funcInvoke.getArgs().size()) {
-                    throw new IllegalTestScriptException(String.format(
-                            MSG_INVALID_PLACEHOLDER, func.getQualifiedName(), variable));
+
+                Code variableCode;
+                if (!isIndexPattern && variable.equals("this")) {
+                    if (!(funcInvoke instanceof SubMethodInvoke)) {
+                        throw new IllegalTestScriptException(MSG_THIS_FOR_FUNCTION);
+                    }
+                    SubMethodInvoke methodInvoke = (SubMethodInvoke) funcInvoke;
+                    variableCode = methodInvoke.getThisInstance();
+                    if (variableCode == null) {
+                        // When called inside the class on which this method is defined,
+                        // set the class name for {this} keyword
+                        variableCode = new UnknownCode();
+                        variableCode.setOriginal(methodInvoke.getSubMethod().getTestClass().getSimpleName());
+                    }
+                } else {
+                    if (!isIndexPattern) {
+                        varIndex = func.getArgVariables().indexOf(variable);
+                    }
+                    if (varIndex < 0 || varIndex >= funcInvoke.getArgs().size()) {
+                        throw new IllegalTestScriptException(String.format(
+                                MSG_INVALID_PLACEHOLDER, func.getQualifiedName(), variable));
+                    }
+                    variableCode = funcInvoke.getArgs().get(varIndex);
                 }
-                matcher.appendReplacement(buf, funcTestDocSub(funcInvoke.getArgs().get(varIndex)));
+                matcher.appendReplacement(buf, funcTestDocSub(variableCode));
             }
             matcher.appendTail(buf);
             return buf.toString();

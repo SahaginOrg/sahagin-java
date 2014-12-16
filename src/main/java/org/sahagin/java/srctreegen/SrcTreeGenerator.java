@@ -125,7 +125,7 @@ public class SrcTreeGenerator {
 
     // Get all root methods and its class as TestRootClass.
     // Each TestRootClass owns only TestRootMethod, and TestSubMethod information is not set yet.
-    // methods does not have codeBody information yet.
+    // methods does not have code information yet.
     private class CollectRootVisitor extends ASTVisitor {
         private TestClassTable rootClassTable;
         private TestFuncTable rootMethodTable;
@@ -308,20 +308,21 @@ public class SrcTreeGenerator {
         }
     }
 
-    private class CollectCodeBodyVisitor extends ASTVisitor {
+    private class CollectCodeVisitor extends ASTVisitor {
         private TestFuncTable rootMethodTable;
         private TestFuncTable subMethodTable;
         private CompilationUnit compilationUnit;
 
-        // set code body information to method table
-        public CollectCodeBodyVisitor(TestFuncTable rootMethodTable, TestFuncTable subMethodTable,
+        // set code information to method table
+        public CollectCodeVisitor(TestFuncTable rootMethodTable, TestFuncTable subMethodTable,
                 CompilationUnit compilationUnit) {
             this.rootMethodTable = rootMethodTable;
             this.subMethodTable = subMethodTable;
             this.compilationUnit = compilationUnit;
         }
 
-        private Code methodBindingCode(IMethodBinding binding, List<?> arguments, String original) {
+        private Code methodBindingCode(IMethodBinding binding,
+                Expression thisInstance, List<?> arguments, String original) {
             if (binding == null) {
                 UnknownCode unknownCode = new UnknownCode();
                 unknownCode.setOriginal(original);
@@ -345,6 +346,7 @@ public class SrcTreeGenerator {
             SubMethodInvoke subMethodInvoke = new SubMethodInvoke();
             subMethodInvoke.setSubFunctionKey(invocationFunc.getKey());
             subMethodInvoke.setSubFunction(invocationFunc);
+            subMethodInvoke.setThisInstance(expressionCode(thisInstance));
             for (Object arg : arguments) {
                 Expression exp = (Expression) arg;
                 subMethodInvoke.addArg(expressionCode(exp));
@@ -370,11 +372,12 @@ public class SrcTreeGenerator {
             } else if (expression instanceof MethodInvocation) {
                 MethodInvocation invocation = (MethodInvocation) expression;
                 IMethodBinding binding = invocation.resolveMethodBinding();
-                return methodBindingCode(binding, invocation.arguments(), expression.toString().trim());
+                return methodBindingCode(binding, invocation.getExpression(),
+                        invocation.arguments(), expression.toString().trim());
             } else if (expression instanceof ClassInstanceCreation) {
                 ClassInstanceCreation creation = (ClassInstanceCreation) expression;
                 IMethodBinding binding = creation.resolveConstructorBinding();
-                return methodBindingCode(binding, creation.arguments(), expression.toString().trim());
+                return methodBindingCode(binding, null, creation.arguments(), expression.toString().trim());
             } else{
                 UnknownCode unknownCode = new UnknownCode();
                 unknownCode.setOriginal(expression.toString().trim());
@@ -426,18 +429,18 @@ public class SrcTreeGenerator {
         }
     }
 
-    private class CollectCodeBodyRequestor extends FileASTRequestor {
+    private class CollectCodeRequestor extends FileASTRequestor {
         private TestFuncTable rootMethodTable;
         private TestFuncTable subMethodTable;
 
-        public CollectCodeBodyRequestor(TestFuncTable rootMethodTable, TestFuncTable subMethodTable) {
+        public CollectCodeRequestor(TestFuncTable rootMethodTable, TestFuncTable subMethodTable) {
             this.rootMethodTable = rootMethodTable;
             this.subMethodTable = subMethodTable;
         }
 
         @Override
         public void acceptAST(String sourceFilePath, CompilationUnit ast) {
-            ast.accept(new CollectCodeBodyVisitor(rootMethodTable, subMethodTable, ast));
+            ast.accept(new CollectCodeVisitor(rootMethodTable, subMethodTable, ast));
         }
     }
 
@@ -461,10 +464,10 @@ public class SrcTreeGenerator {
                 rootRequestor.getRootMethodTable(), subRequestor.getSubMethodTable());
         setter.set(additionalTestDocs);
 
-        // collect code body
-        CollectCodeBodyRequestor codeBodyRequestor = new CollectCodeBodyRequestor(
+        // collect code
+        CollectCodeRequestor codeRequestor = new CollectCodeRequestor(
                 rootRequestor.getRootMethodTable(), subRequestor.getSubMethodTable());
-        parseAST(srcFiles, srcEncoding, classPathEntries, codeBodyRequestor);
+        parseAST(srcFiles, srcEncoding, classPathEntries, codeRequestor);
 
         SrcTree result = new SrcTree();
         result.setRootClassTable(rootRequestor.getRootClassTable());
