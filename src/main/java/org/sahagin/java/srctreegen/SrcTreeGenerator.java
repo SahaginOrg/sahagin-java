@@ -326,7 +326,7 @@ public class SrcTreeGenerator {
         }
 
         private Code methodBindingCode(IMethodBinding binding,
-                Expression thisInstance, List<?> arguments, String original) {
+                Expression thisInstance, List<?> arguments, String original, TestFunction parentFunc) {
             if (binding == null) {
                 UnknownCode unknownCode = new UnknownCode();
                 unknownCode.setOriginal(original);
@@ -350,10 +350,10 @@ public class SrcTreeGenerator {
             SubMethodInvoke subMethodInvoke = new SubMethodInvoke();
             subMethodInvoke.setSubFunctionKey(invocationFunc.getKey());
             subMethodInvoke.setSubFunction(invocationFunc);
-            subMethodInvoke.setThisInstance(expressionCode(thisInstance, invocationFunc));
+            subMethodInvoke.setThisInstance(expressionCode(thisInstance, parentFunc));
             for (Object arg : arguments) {
                 Expression exp = (Expression) arg;
-                subMethodInvoke.addArg(expressionCode(exp, invocationFunc));
+                subMethodInvoke.addArg(expressionCode(exp, parentFunc));
             }
             subMethodInvoke.setOriginal(original);
             return subMethodInvoke;
@@ -404,11 +404,12 @@ public class SrcTreeGenerator {
                 MethodInvocation invocation = (MethodInvocation) expression;
                 IMethodBinding binding = invocation.resolveMethodBinding();
                 return methodBindingCode(binding, invocation.getExpression(),
-                        invocation.arguments(), expression.toString().trim());
+                        invocation.arguments(), expression.toString().trim(), parentFunc);
             } else if (expression instanceof ClassInstanceCreation) {
                 ClassInstanceCreation creation = (ClassInstanceCreation) expression;
                 IMethodBinding binding = creation.resolveConstructorBinding();
-                return methodBindingCode(binding, null, creation.arguments(), expression.toString().trim());
+                return methodBindingCode(binding, null, creation.arguments(),
+                        expression.toString().trim(), parentFunc);
             } else if (expression instanceof SimpleName) {
                SimpleName simpleName = (SimpleName) expression;
                IBinding binding = simpleName.resolveBinding();

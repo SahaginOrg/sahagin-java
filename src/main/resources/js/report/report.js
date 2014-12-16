@@ -217,7 +217,7 @@ function loadCodeBodyHiddenNode(tr) {
   var parentFuncArgTestDocs = new Array();
   var funcArgTestDocDivs = $("#funcArgTestDocs .hiddenFuncArgTestDoc[data-tt-id='" + trTtId + "']");
   for (var i = 0; i < funcArgTestDocDivs.length; i++) {
-    parentFuncArgTestDocs.push(funcArgTestDocDivs.text());
+    parentFuncArgTestDocs.push(funcArgTestDocDivs.eq(i).text());
   }
 
   var childNodeHtml = '';

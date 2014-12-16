@@ -325,6 +325,7 @@ public class HtmlReport {
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/yaml/yaml-utils.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/code.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/string-code.js");
+        extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/func-argument.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/unknown-code.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/sub-function-invoke.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/sub-method-invoke.js");
