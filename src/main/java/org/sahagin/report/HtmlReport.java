@@ -13,6 +13,7 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.output.FileWriterWithEncoding;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
@@ -20,6 +21,8 @@ import org.openqa.selenium.io.IOUtils;
 import org.sahagin.share.CommonPath;
 import org.sahagin.share.CommonUtils;
 import org.sahagin.share.IllegalDataStructureException;
+import org.sahagin.share.IllegalTestScriptException;
+import org.sahagin.share.TestDocResolver;
 import org.sahagin.share.runresults.LineScreenCapture;
 import org.sahagin.share.runresults.RootFuncRunResult;
 import org.sahagin.share.runresults.RunFailure;
@@ -129,10 +132,43 @@ public class HtmlReport {
         return 0;
     }
 
-    private ReportCodeLine generateReportCodeLine(CodeLine codeLine, List<StackLine> stackLines,
-            RunFailure runFailure, String ttId, String parentTtId) {
+    private String pageTestDoc(CodeLine codeLine) {
+        String pageTestDoc = TestDocResolver.pageTestDoc(codeLine.getCode());
+        if (pageTestDoc == null || pageTestDoc.equals("")) {
+            return "-";
+        } else {
+            return pageTestDoc;
+        }
+    }
+
+    private String placeholderResolvedTestDoc(CodeLine codeLine, List<String> parentFuncArgTestDocs)
+            throws IllegalTestScriptException {
+        String funcTestDoc = TestDocResolver.placeholderResolvedFuncTestDoc(
+                codeLine.getCode(), parentFuncArgTestDocs);
+        if (funcTestDoc == null) {
+            return "";
+        }
+        return funcTestDoc;
+    }
+
+    private ReportCodeLine generateReportCodeLine(CodeLine codeLine, List<String> parentFuncArgTestDocs,
+            List<StackLine> stackLines, RunFailure runFailure, String ttId, String parentTtId)
+                    throws IllegalTestScriptException {
+        if (parentFuncArgTestDocs == null) {
+            throw new NullPointerException();
+        }
+        if (stackLines == null) {
+            throw new NullPointerException();
+        }
         ReportCodeLine result = new ReportCodeLine();
         result.setCodeLine(codeLine);
+        String pageTestDoc = pageTestDoc(codeLine);
+        result.setPagetTestDoc(pageTestDoc);
+        String testDoc = placeholderResolvedTestDoc(codeLine, parentFuncArgTestDocs);
+        result.setTestDoc(testDoc);
+        List<String> funcArgTestDocs
+        = TestDocResolver.placeholderResolvedFuncArgTestDocs(codeLine.getCode(), parentFuncArgTestDocs);
+        result.addAllFuncArgTestDocs(funcArgTestDocs);
         result.setStackLines(stackLines);
         result.setTtId(ttId);
         result.setParentTtId(parentTtId);
@@ -168,7 +204,7 @@ public class HtmlReport {
 
     // runFailure... set null if not error
     private List<ReportCodeLine> generateReportCodeBody(
-            TestFunction rootFunction, RunFailure runFailure) {
+            TestFunction rootFunction, RunFailure runFailure) throws IllegalTestScriptException {
         List<ReportCodeLine> result = new ArrayList<ReportCodeLine>(rootFunction.getCodeBody().size());
         for (int i = 0; i < rootFunction.getCodeBody().size(); i++) {
             CodeLine codeLine = rootFunction.getCodeBody().get(i);
@@ -180,12 +216,13 @@ public class HtmlReport {
             rootStackLines.add(rootStackLine);
 
             ReportCodeLine reportCodeLine = generateReportCodeLine(
-                    codeLine, rootStackLines, runFailure, rootTtId, null);
+                    codeLine, new ArrayList<String>(0), rootStackLines, runFailure, rootTtId, null);
             result.add(reportCodeLine);
 
             // add direct child to HTML report
             if (codeLine.getCode() instanceof SubFunctionInvoke) {
                 SubFunctionInvoke invoke = (SubFunctionInvoke) codeLine.getCode();
+                List<String> parentFuncArgTestDocs = reportCodeLine.getFuncArgTestDocs();
                 List<CodeLine> codeBody = invoke.getSubFunction().getCodeBody();
                 for (int j = 0; j < codeBody.size(); j++) {
                     CodeLine childCodeLine = codeBody.get(j);
@@ -197,7 +234,8 @@ public class HtmlReport {
                     childStackLines.add(rootStackLine);
 
                     ReportCodeLine childReportCodeLine = generateReportCodeLine(
-                            childCodeLine, childStackLines, runFailure, rootTtId + "_" + j, rootTtId);
+                            childCodeLine, parentFuncArgTestDocs, childStackLines,
+                            runFailure, rootTtId + "_" + j, rootTtId);
                     result.add(childReportCodeLine);
                 }
             }
@@ -254,9 +292,13 @@ public class HtmlReport {
         }
     }
 
+    private void escapePut(VelocityContext context, String key, String value) {
+        context.put(key, StringEscapeUtils.escapeHtml(value));
+    }
+
     // each report HTML file is {methodQualifiedParentPath}/{methodSimpleName}.html
     public void generate(File reportInputDataDir, File reportOutputDir)
-            throws IllegalDataStructureException {
+            throws IllegalDataStructureException, IllegalTestScriptException {
         deleteDirIfExists(reportOutputDir); // delete previous execution output
         SrcTree srcTree = generateSrcTree(reportInputDataDir);
         RunResults runResults = generateRunResults(reportInputDataDir, srcTree);
@@ -271,6 +313,7 @@ public class HtmlReport {
             throw new RuntimeException(e);
         }
         VelocityContext srcTreeContext = new VelocityContext();
+        // don't need HTML encode
         srcTreeContext.put("yamlStr", srcTreeYamlStr);
         File srcTreeYamlJsFile = new File(htmlExternalResRootDir, "js/report/src-tree-yaml.js");
         generateVelocityOutput(srcTreeContext, "/template/src-tree-yaml.js.vm", srcTreeYamlJsFile);
@@ -337,30 +380,30 @@ public class HtmlReport {
 
             VelocityContext funcContext = new VelocityContext();
             if (rootFunc.getTestDoc() == null) {
-                funcContext.put("title", rootFunc.getSimpleName());
+                escapePut(funcContext, "title", rootFunc.getSimpleName());
             } else {
-                funcContext.put("title", rootFunc.getTestDoc());
+                escapePut(funcContext, "title", rootFunc.getTestDoc());
             }
 
-            funcContext.put("externalResourceRootDir", CommonUtils.relativize(
+            escapePut(funcContext, "externalResourceRootDir", CommonUtils.relativize(
                     CommonPath.htmlExternalResourceRootDir(reportOutputDir), funcReportParentDir).getPath());
             if (!(rootFunc instanceof TestMethod)) {
                 throw new RuntimeException("not supported yet: " + rootFunc);
             }
 
-            funcContext.put("className", method.getTestClass().getQualifiedName());
-            funcContext.put("classTestDoc", method.getTestClass().getTestDoc());
-            funcContext.put("funcName", rootFunc.getSimpleName());
-            funcContext.put("funcTestDoc", rootFunc.getTestDoc());
+            escapePut(funcContext, "className", method.getTestClass().getQualifiedName());
+            escapePut(funcContext, "classTestDoc", method.getTestClass().getTestDoc());
+            escapePut(funcContext, "funcName", rootFunc.getSimpleName());
+            escapePut(funcContext, "funcTestDoc", rootFunc.getTestDoc());
 
             RootFuncRunResult runResult = runResults.getRunResultByRootFunction(rootFunc);
             RunFailure runFailure = getRunFailure(runResult);
             if (runFailure == null) {
-                funcContext.put("errMsg", null);
-                funcContext.put("errLineTtId", "");
+                escapePut(funcContext, "errMsg", null);
+                escapePut(funcContext, "errLineTtId", "");
             } else {
-                funcContext.put("errMsg", runFailure.getMessage().trim());
-                funcContext.put("errLineTtId", generateTtId(runFailure.getStackLines()));
+                escapePut(funcContext, "errMsg", runFailure.getMessage().trim());
+                escapePut(funcContext, "errLineTtId", generateTtId(runFailure.getStackLines()));
             }
 
             List<ReportCodeLine> reportCodeBody = generateReportCodeBody(rootFunc, runFailure);
@@ -385,6 +428,7 @@ public class HtmlReport {
             reportLink.setPath(CommonUtils.relativize(funcReportFile, reportMainDir).getPath());
             reportLinks.add(reportLink);
         }
+        // TODO HTML encode all codeBody, captures, reportLinks values
 
         // generate main index.html report
         VelocityContext mainContext = new VelocityContext();

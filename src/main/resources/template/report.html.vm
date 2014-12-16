@@ -7,6 +7,7 @@
     <script src="${externalResourceRootDir}/js/share/yaml/yaml-utils.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/code/code.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/code/string-code.js"></script>
+    <script src="${externalResourceRootDir}/js/share/srctree/code/func-argument.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/code/unknown-code.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/code/sub-function-invoke.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/code/sub-method-invoke.js"></script>
@@ -60,12 +61,13 @@
             #set( $lineClass = "notRunLine" )
           #end
           #if( ${codeLine.getParentTtId()} )
-          <tr data-tt-id="${codeLine.getTtId()}" data-tt-parent-id="${codeLine.getParentTtId()}" data-func-key="${codeLine.getFunctionKey()}" class='${lineClass}'>
+            #set( $dataTtParentId = "data-tt-parent-id=${codeLine.getParentTtId()}" )
           #else
-          <tr data-tt-id="${codeLine.getTtId()}" data-func-key="${codeLine.getFunctionKey()}" class='${lineClass}'>
+            #set( $dataTtParentId = "" )
           #end
+          <tr data-tt-id="${codeLine.getTtId()}" ${dataTtParentId} data-func-key="${codeLine.getFunctionKey()}" class="${lineClass}">
             <td>${codeLine.getPageTestDoc()}</td>
-            <td>${codeLine.getPlaceholderResolvedTestDoc()}</td>
+            <td>${codeLine.getTestDoc()}</td>
             <td>${codeLine.getCodeLine().getCode().getOriginal()}</td>
           </tr>
         #end
@@ -91,5 +93,12 @@
       <span id="err_msg">${errMsg}</span>
     </div>
     #end
+    <div id="funcArgTestDocs">
+    #foreach( $codeLine in $codeBody )
+    #foreach ( $funcArgTestDoc in ${codeLine.getFuncArgTestDocs()} )
+      <div class="hiddenFuncArgTestDoc" data-tt-id="${codeLine.getTtId()}">${funcArgTestDoc}</div>
+    #end
+    #end
+    </div>
   </body>
 </html>

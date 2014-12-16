@@ -20,10 +20,17 @@
 .notRunLine {
   background-color: #e7e8e2;
 }
-	
+
+#funcArgTestDocs {
+  display: none;
+}
+
+.hiddenFuncArgTestDoc {
+  display: none;
+}
 
 #err_msg_container {
-	width: 50%
+  width: 50%
 }
 
 #err_msg {

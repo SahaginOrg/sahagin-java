@@ -22,6 +22,7 @@ public abstract class Code implements YamlConvertible {
 
     protected abstract String getType();
 
+    @Override
     public Map<String, Object> toYamlObject() {
         Map<String, Object> result = new HashMap<String, Object>(8);
         result.put("type", getType());
@@ -29,6 +30,7 @@ public abstract class Code implements YamlConvertible {
         return result;
     }
 
+    @Override
     public void fromYamlObject(Map<String, Object> yamlObject) throws YamlConvertException {
         YamlUtils.strValueEqualsCheck(yamlObject, "type", getType());
         original = YamlUtils.getStrValue(yamlObject, "original");
@@ -40,6 +42,8 @@ public abstract class Code implements YamlConvertible {
         Code result;
         if (StringCode.TYPE.equals(type)) {
             result = new StringCode();
+        } else if (FuncArgument.TYPE.equals(type)) {
+            result = new FuncArgument();
         } else if (SubFunctionInvoke.TYPE.equals(type)) {
             result = new SubFunctionInvoke();
         } else if (SubMethodInvoke.TYPE.equals(type)) {

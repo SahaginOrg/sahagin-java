@@ -1,11 +1,14 @@
 package org.sahagin.share;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.sahagin.share.srctree.PageClass;
 import org.sahagin.share.srctree.TestFunction;
 import org.sahagin.share.srctree.code.Code;
+import org.sahagin.share.srctree.code.FuncArgument;
 import org.sahagin.share.srctree.code.StringCode;
 import org.sahagin.share.srctree.code.SubFunctionInvoke;
 import org.sahagin.share.srctree.code.SubMethodInvoke;
@@ -14,6 +17,7 @@ import org.sahagin.share.srctree.code.UnknownCode;
 // TODO convert {method} to method name (this specification is from Allure framework)
 // TODO cannot get argVariables for the files out of Config.testDir
 // TODO throw error if placeholders are used in the class TestDoc
+// TODO throw IllegalDataStructureException if FuncArgument argIndex is out of bounds
 
 public class TestDocResolver {
     private static final Pattern PLACEHOLDER = Pattern.compile("\\{[^\\{\\}]+\\}");
@@ -51,9 +55,13 @@ public class TestDocResolver {
     }
 
     // returns original if TestDoc value not found
-    private static String funcTestDocSub(Code code) throws IllegalTestScriptException {
+    private static String funcTestDocSub(Code code, List<String> placeholderResolvedParentFuncArgTestDocs)
+            throws IllegalTestScriptException {
         if (code instanceof StringCode) {
             return ((StringCode) code).getValue();
+        } else if (code instanceof FuncArgument) {
+            FuncArgument funcArg = (FuncArgument) code;
+            return placeholderResolvedParentFuncArgTestDocs.get(funcArg.getArgIndex());
         } else if (code instanceof SubFunctionInvoke) {
             SubFunctionInvoke funcInvoke = (SubFunctionInvoke) code;
             TestFunction func = funcInvoke.getSubFunction();
@@ -101,7 +109,8 @@ public class TestDocResolver {
                     }
                     variableCode = funcInvoke.getArgs().get(varIndex);
                 }
-                matcher.appendReplacement(buf, funcTestDocSub(variableCode));
+                matcher.appendReplacement(buf, funcTestDocSub(
+                        variableCode, placeholderResolvedParentFuncArgTestDocs));
             }
             matcher.appendTail(buf);
             return buf.toString();
@@ -110,12 +119,27 @@ public class TestDocResolver {
         }
     }
 
-    public static String placeholderResolvedFuncTestDoc(Code code)
+    public static List<String> placeholderResolvedFuncArgTestDocs(Code code,
+            List<String> placeholderResolvedParentFuncArgTestDocs) throws IllegalTestScriptException {
+        if (!(code instanceof SubFunctionInvoke)) {
+            return new ArrayList<String>(0);
+        }
+        SubFunctionInvoke funcInvoke = (SubFunctionInvoke) code;
+        List<String> result = new ArrayList<String>(funcInvoke.getArgs().size());
+        for (Code arg : funcInvoke.getArgs()) {
+            String argStr = funcTestDocSub(arg, placeholderResolvedParentFuncArgTestDocs);
+            result.add(argStr);
+        }
+        return result;
+    }
+
+    public static String placeholderResolvedFuncTestDoc(
+            Code code, List<String> placeholderResolvedParentFuncArgTestDocs)
             throws IllegalTestScriptException {
         if (code instanceof UnknownCode) {
             return null; // UnknownCode TestDoc is null
         } else {
-            return funcTestDocSub(code);
+            return funcTestDocSub(code, placeholderResolvedParentFuncArgTestDocs);
         }
     }
 
@@ -153,6 +177,7 @@ public class TestDocResolver {
         if (!(code instanceof SubMethodInvoke)) {
             return null;
         }
+        // TODO if invoke code is A.B.C(..), page documents in A or B are not checked
         SubMethodInvoke invoke = (SubMethodInvoke) code;
         return methodInvokePageTestDocRecursive(invoke);
     }

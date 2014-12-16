@@ -23,10 +23,13 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FileASTRequestor;
+import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
+import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
@@ -48,6 +51,7 @@ import org.sahagin.share.srctree.TestFunction;
 import org.sahagin.share.srctree.TestMethod;
 import org.sahagin.share.srctree.code.Code;
 import org.sahagin.share.srctree.code.CodeLine;
+import org.sahagin.share.srctree.code.FuncArgument;
 import org.sahagin.share.srctree.code.StringCode;
 import org.sahagin.share.srctree.code.SubMethodInvoke;
 import org.sahagin.share.srctree.code.UnknownCode;
@@ -346,16 +350,43 @@ public class SrcTreeGenerator {
             SubMethodInvoke subMethodInvoke = new SubMethodInvoke();
             subMethodInvoke.setSubFunctionKey(invocationFunc.getKey());
             subMethodInvoke.setSubFunction(invocationFunc);
-            subMethodInvoke.setThisInstance(expressionCode(thisInstance));
+            subMethodInvoke.setThisInstance(expressionCode(thisInstance, invocationFunc));
             for (Object arg : arguments) {
                 Expression exp = (Expression) arg;
-                subMethodInvoke.addArg(expressionCode(exp));
+                subMethodInvoke.addArg(expressionCode(exp, invocationFunc));
             }
             subMethodInvoke.setOriginal(original);
             return subMethodInvoke;
         }
 
-        private Code expressionCode(Expression expression) {
+        private Code generateParamVarCode(Expression expression,
+                IVariableBinding paramVarBinding, TestFunction parentFunc) {
+            int argIndex;
+            if (parentFunc == null) {
+                argIndex = -1;
+            } else {
+                String varName = paramVarBinding.getName();
+                argIndex = parentFunc.getArgVariables().indexOf(varName);
+            }
+
+            if (argIndex == -1) {
+                // when fails to resolve parameter variable
+                return generateUnknownCode(expression);
+            }
+
+            FuncArgument funcArg = new FuncArgument();
+            funcArg.setOriginal(expression.toString().trim());
+            funcArg.setArgIndex(argIndex);
+            return funcArg;
+        }
+
+        private UnknownCode generateUnknownCode(Expression expression) {
+            UnknownCode unknownCode = new UnknownCode();
+            unknownCode.setOriginal(expression.toString().trim());
+            return unknownCode;
+        }
+
+        private Code expressionCode(Expression expression, TestFunction parentFunc) {
             if (expression == null) {
                 StringCode strCode = new StringCode();
                 strCode.setValue(null);
@@ -368,7 +399,7 @@ public class SrcTreeGenerator {
                 return strCode;
             } else if (expression instanceof Assignment) {
                 Assignment assignment = (Assignment) expression;
-                return expressionCode(assignment.getRightHandSide());
+                return expressionCode(assignment.getRightHandSide(), parentFunc);
             } else if (expression instanceof MethodInvocation) {
                 MethodInvocation invocation = (MethodInvocation) expression;
                 IMethodBinding binding = invocation.resolveMethodBinding();
@@ -378,10 +409,21 @@ public class SrcTreeGenerator {
                 ClassInstanceCreation creation = (ClassInstanceCreation) expression;
                 IMethodBinding binding = creation.resolveConstructorBinding();
                 return methodBindingCode(binding, null, creation.arguments(), expression.toString().trim());
+            } else if (expression instanceof SimpleName) {
+               SimpleName simpleName = (SimpleName) expression;
+               IBinding binding = simpleName.resolveBinding();
+               if (binding instanceof IVariableBinding) {
+                   IVariableBinding varBinding = (IVariableBinding) binding;
+                   if (varBinding.isParameter()) {
+                       return generateParamVarCode(expression, varBinding, parentFunc);
+                   } else {
+                       return generateUnknownCode(expression);
+                   }
+               } else {
+                   return generateUnknownCode(expression);
+               }
             } else{
-                UnknownCode unknownCode = new UnknownCode();
-                unknownCode.setOriginal(expression.toString().trim());
-                return unknownCode;
+                return generateUnknownCode(expression);
             }
         }
 
@@ -404,13 +446,13 @@ public class SrcTreeGenerator {
                 Code code;
                 if (statementNode instanceof ExpressionStatement) {
                     Expression expression = ((ExpressionStatement)statementNode).getExpression();
-                    code = expressionCode(expression);
+                    code = expressionCode(expression, testFunc);
                 } else if (statementNode instanceof VariableDeclarationStatement) {
                     // TODO assume single VariableDeclarationFragment
                     VariableDeclarationFragment varFrag
                     = (VariableDeclarationFragment)(((VariableDeclarationStatement)statementNode).fragments().get(0));
                     Expression expression = varFrag.getInitializer();
-                    code = expressionCode(expression);
+                    code = expressionCode(expression, testFunc);
                 } else {
                     code = new UnknownCode();
                     code.setOriginal(statementNode.toString().trim());

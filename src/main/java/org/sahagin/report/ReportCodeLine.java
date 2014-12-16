@@ -1,11 +1,9 @@
 package org.sahagin.report;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.sahagin.share.IllegalTestScriptException;
-import org.sahagin.share.TestDocResolver;
 import org.sahagin.share.runresults.StackLine;
-import org.sahagin.share.srctree.code.Code;
 import org.sahagin.share.srctree.code.CodeLine;
 import org.sahagin.share.srctree.code.SubFunctionInvoke;
 
@@ -14,6 +12,11 @@ import org.sahagin.share.srctree.code.SubFunctionInvoke;
  */
 public class ReportCodeLine {
     private CodeLine codeLine;
+    private String pagetTestDoc;
+    // placeholder must have been resolved
+    private String testDoc;
+    // placeholder must have been resolved
+    private List<String> funcArgTestDocs = new ArrayList<String>(4);
     private List<StackLine> stackLines;
     private boolean hasError = false;
     private boolean alreadyRun = false;
@@ -28,24 +31,6 @@ public class ReportCodeLine {
         return invoke.getSubFunctionKey();
     }
 
-    public String getPageTestDoc() {
-        String pageTestDoc = TestDocResolver.pageTestDoc(codeLine.getCode());
-        if (pageTestDoc == null || pageTestDoc.equals("")) {
-            return "-";
-        } else {
-            return pageTestDoc;
-        }
-    }
-
-    public String getPlaceholderResolvedTestDoc() throws IllegalTestScriptException {
-        Code code = codeLine.getCode();
-        String funcTestDoc = TestDocResolver.placeholderResolvedFuncTestDoc(code);
-        if (funcTestDoc == null) {
-            return "";
-        }
-        return funcTestDoc;
-    }
-
     public String getOriginal() {
         return codeLine.getCode().getOriginal();
     }
@@ -56,6 +41,36 @@ public class ReportCodeLine {
 
     public void setCodeLine(CodeLine codeLine) {
         this.codeLine = codeLine;
+    }
+
+    public String getPageTestDoc() {
+        return pagetTestDoc;
+    }
+
+    public void setPagetTestDoc(String pagetTestDoc) {
+        this.pagetTestDoc = pagetTestDoc;
+    }
+
+    public String getTestDoc() {
+        return testDoc;
+    }
+
+    public void setTestDoc(String testDoc) {
+        this.testDoc = testDoc;
+    }
+
+    public List<String> getFuncArgTestDocs() {
+        return funcArgTestDocs;
+    }
+
+    public void addFuncArgTestDoc(String funcArgTestDoc) {
+        this.funcArgTestDocs.add(funcArgTestDoc);
+    }
+
+    public void addAllFuncArgTestDocs(List<String> funcArgTestDocs) {
+        for (String funcArgTestDoc : funcArgTestDocs) {
+            this.funcArgTestDocs.add(funcArgTestDoc);
+        }
     }
 
     public List<StackLine> getStackLines() {

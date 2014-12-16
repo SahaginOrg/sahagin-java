@@ -5,6 +5,7 @@ import java.io.File;
 import org.sahagin.report.HtmlReport;
 import org.sahagin.share.Config;
 import org.sahagin.share.IllegalDataStructureException;
+import org.sahagin.share.IllegalTestScriptException;
 import org.sahagin.share.Logging;
 import org.sahagin.share.yaml.YamlConvertException;
 
@@ -38,7 +39,8 @@ public class SahaginMain {
     }
 
     // first argument is action name (now "report" only), second argument is configuration file path
-    public static void main(String[] args) throws YamlConvertException {
+    public static void main(String[] args)
+            throws YamlConvertException, IllegalDataStructureException, IllegalTestScriptException {
         if (args.length == 0) {
             throw new IllegalArgumentException(MSG_NO_COMMAND_LINE_ARGUMENT);
         }
@@ -72,13 +74,9 @@ public class SahaginMain {
         }
     }
 
-    private static void report(Config config) {
+    private static void report(Config config) throws IllegalDataStructureException, IllegalTestScriptException {
         HtmlReport report = new HtmlReport();
-        try {
-            report.generate(config.getRootBaseReportInputDataDir(), config.getRootBaseReportOutputDir());
-        } catch (IllegalDataStructureException e) {
-            throw new RuntimeException(e);
-        }
+        report.generate(config.getRootBaseReportInputDataDir(), config.getRootBaseReportOutputDir());
     }
 
 }

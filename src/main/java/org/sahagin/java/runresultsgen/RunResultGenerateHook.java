@@ -13,6 +13,7 @@ import org.sahagin.report.HtmlReport;
 import org.sahagin.share.CommonPath;
 import org.sahagin.share.Config;
 import org.sahagin.share.IllegalDataStructureException;
+import org.sahagin.share.IllegalTestScriptException;
 import org.sahagin.share.Logging;
 import org.sahagin.share.runresults.LineScreenCapture;
 import org.sahagin.share.runresults.RootFuncRunResult;
@@ -78,6 +79,8 @@ public class RunResultGenerateHook {
                 try {
                     report.generate(config.getRootBaseReportInputDataDir(), config.getRootBaseReportOutputDir());
                 } catch (IllegalDataStructureException e) {
+                    throw new RuntimeException(e);
+                } catch (IllegalTestScriptException e) {
                     throw new RuntimeException(e);
                 }
             }

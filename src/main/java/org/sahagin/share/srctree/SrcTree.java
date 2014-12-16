@@ -175,6 +175,7 @@ public class SrcTree implements YamlConvertible {
             SubMethodInvoke invoke = (SubMethodInvoke) code;
             TestMethod testMethod = getTestMethodByKey(invoke.getSubMethodKey());
             invoke.setSubMethod(testMethod);
+            resolveTestFunction(invoke.getThisInstance());
             for (Code arg : invoke.getArgs()) {
                 resolveTestFunction(arg);
             }
