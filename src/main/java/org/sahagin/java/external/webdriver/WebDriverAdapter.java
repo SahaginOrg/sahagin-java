@@ -60,9 +60,27 @@ public class WebDriverAdapter implements Adapter {
 
         @Override
         public void funcAdd(AdditionalTestDocs docs) {
-            // TODO cannot handle methods defined on subclass
+            // TODO cannot handle methods defined on subclass?
             // TODO multiple language support
+
+            // alphabetical order
+
+            docs.methodAdd("org.openqa.selenium.By", "className", "クラス名 = {0}");
+            docs.methodAdd("org.openqa.selenium.By", "cssSelector", "css = {0}");
+            docs.methodAdd("org.openqa.selenium.By", "id", "id = {0}");
+            docs.methodAdd("org.openqa.selenium.By", "linkText", "テキスト = {0}");
+            docs.methodAdd("org.openqa.selenium.By", "name", "name = {0}");
+            docs.methodAdd("org.openqa.selenium.By", "partialLinkText", "テキスト = {0}(部分一致)");
+            docs.methodAdd("org.openqa.selenium.By", "tagName", "タグ名 = {0}");
+            docs.methodAdd("org.openqa.selenium.By", "xpath", "xpath = {0}");
+            docs.methodAdd("org.openqa.selenium.WebDriver", "findElement", "要素「{0}」");
             docs.methodAdd("org.openqa.selenium.WebDriver", "get", "「{0}」にページ遷移");
+            docs.methodAdd("org.openqa.selenium.WebElement", "clear", "{this}のテキストをクリア");
+            docs.methodAdd("org.openqa.selenium.WebElement", "click", "{this}をクリック");
+            docs.methodAdd("org.openqa.selenium.WebElement", "getAttribute", "{this}の属性「{0}」の値");
+            docs.methodAdd("org.openqa.selenium.WebElement", "getText", "{this}の表示テキスト");
+            docs.methodAdd("org.openqa.selenium.WebElement", "isSelected", "{this}が選択されているか");
+            docs.methodAdd("org.openqa.selenium.WebElement", "sendKeys", "{this}に「{0}」を入力");
         }
     }
 
