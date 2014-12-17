@@ -115,9 +115,19 @@ public class TestClassFileTransformer implements ClassFileTransformer {
                 if (subMethod.isEmpty()) {
                     continue; // cannot hook empty method
                 }
+                int funcDeclaredStartLine;
+                int funcDeclaredEndLine;
+                try {
+                    funcDeclaredStartLine = declareStartLine(subMethod);
+                    funcDeclaredEndLine = declareEndLine(subMethod);
+                } catch (RuntimeException e) {
+                    // Maybe when this class is frozen.
+                    // Since frozen classes are maybe system class, just ignore this exception
+                    return null;
+                }
                 String subMethodName = qualifiedName(subMethod);
                 TestFunction subFunction = StackLineUtils.getTestFunction(
-                        srcTree, subMethodName, declareStartLine(subMethod), declareEndLine(subMethod));
+                        srcTree, subMethodName, funcDeclaredStartLine, funcDeclaredEndLine);
                 if (subFunction == null) {
                     continue;
                 }
@@ -162,10 +172,14 @@ public class TestClassFileTransformer implements ClassFileTransformer {
             }
             return ctClass.toBytecode();
         } catch (CannotCompileException e) {
-            e.printStackTrace(); // print error since exception in transform method is just ignored
+            // print error since exception in transform method is just ignored
+            System.err.println("exception on " + className);
+            e.printStackTrace();
             throw new IllegalClassFormatException(e.getLocalizedMessage());
         } catch (Exception e) {
-            e.printStackTrace(); // print error since exception in transform method is just ignored
+            // print error since exception in transform method is just ignored
+            System.err.println("exception on " + className);
+            e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
             IOUtils.closeQuietly(stream);
