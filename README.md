@@ -19,7 +19,7 @@ Add dependency to your pom.xml file.
     <dependency>
       <groupId>org.sahagin</groupId>  
        <artifactId>sahagin</artifactId>  
-       <version>0.1</version> 
+       <version>0.2</version> 
     </dependency>
   </dependencies>
 ```
@@ -34,7 +34,7 @@ and add test execution JVM argument.
       <version>any other version (2.14, etc)</version>
       <configuration>
         <argLine>
-          -javaagent:${settings.localRepository}/org/sahagin/sahagin/0.1/sahagin-0.1.jar
+          -javaagent:${settings.localRepository}/org/sahagin/sahagin/0.2/sahagin-0.2.jar
         </argLine>
       </configuration>
     </plugin>
@@ -46,7 +46,7 @@ Add dependency to your build.gradle file.
 
 ```groovy
 dependencies {
-    compile 'org.sahagin:sahagin:0.1'
+    compile 'org.sahagin:sahagin:0.2'
 }
 ```
 
@@ -57,7 +57,7 @@ test {
     doFirst {
         // search sahagin jar file in the local cache
         def sahaginJar = project.configurations.testCompile.find {
-            it.name.startsWith('sahagin-0.1') 
+            it.name.startsWith('sahagin-0.2') 
         }
         jvmArgs '-javaagent:' + sahaginJar
     }
