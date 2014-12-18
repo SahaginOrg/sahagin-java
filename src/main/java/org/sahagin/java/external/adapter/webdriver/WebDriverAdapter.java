@@ -1,14 +1,14 @@
-package org.sahagin.java.external.webdriver;
+package org.sahagin.java.external.adapter.webdriver;
 
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.SessionNotFoundException;
-import org.sahagin.java.adapter.Adapter;
-import org.sahagin.java.adapter.AdapterContainer;
-import org.sahagin.java.adapter.AdditionalTestDocsAdapter;
-import org.sahagin.java.adapter.ScreenCaptureAdapter;
 import org.sahagin.java.additionaltestdoc.AdditionalTestDocs;
+import org.sahagin.java.external.adapter.Adapter;
+import org.sahagin.java.external.adapter.AdapterContainer;
+import org.sahagin.java.external.adapter.AdditionalTestDocsAdapter;
+import org.sahagin.java.external.adapter.ScreenCaptureAdapter;
 
 // TODO chromedriver has these problem (this is not sahagin problem, but the on of chromedriver)
 // - cannot capture entire page

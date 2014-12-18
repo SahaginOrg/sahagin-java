@@ -14,8 +14,8 @@ import javassist.CtClass;
 import javassist.CtMethod;
 
 import org.openqa.selenium.io.IOUtils;
-import org.sahagin.java.adapter.AdapterContainer;
 import org.sahagin.java.external.TestDoc;
+import org.sahagin.java.external.adapter.AdapterContainer;
 import org.sahagin.share.IllegalTestScriptException;
 import org.sahagin.share.srctree.SrcTree;
 import org.sahagin.share.srctree.TestFunction;

@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.openqa.selenium.io.IOUtils;
-import org.sahagin.java.adapter.AdapterContainer;
+import org.sahagin.java.external.adapter.AdapterContainer;
 import org.sahagin.report.HtmlReport;
 import org.sahagin.share.CommonPath;
 import org.sahagin.share.Config;

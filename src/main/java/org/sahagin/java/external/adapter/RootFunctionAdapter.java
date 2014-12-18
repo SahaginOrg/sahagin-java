@@ -1,4 +1,4 @@
-package org.sahagin.java.adapter;
+package org.sahagin.java.external.adapter;
 
 import javassist.CtMethod;
 

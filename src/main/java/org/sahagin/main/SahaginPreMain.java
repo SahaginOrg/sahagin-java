@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.lang.instrument.Instrumentation;
 
 import org.apache.commons.io.FileUtils;
-import org.sahagin.java.adapter.AdapterContainer;
-import org.sahagin.java.external.junit4.JUnit4Adapter;
-import org.sahagin.java.external.webdriver.WebDriverAdapter;
+import org.sahagin.java.external.adapter.AdapterContainer;
+import org.sahagin.java.external.adapter.junit4.JUnit4Adapter;
+import org.sahagin.java.external.adapter.webdriver.WebDriverAdapter;
 import org.sahagin.java.runresultsgen.TestClassFileTransformer;
 import org.sahagin.java.srctreegen.SrcTreeGenerator;
 import org.sahagin.share.CommonPath;
