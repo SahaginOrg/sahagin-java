@@ -5,6 +5,10 @@
   height: 250px;
 }
 
+body {
+  background-color: #fcfcff;
+}
+
 #script_table {
   margin: 0px;
 }

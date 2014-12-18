@@ -3,7 +3,7 @@
     <meta charset="utf-8">
     <title>Sahagin Test Report</title>
   </head>
-  <body>
+  <body style="background-color: #fcfcff">
   #foreach( $reportLink in $reportLinks )
     <a href="${reportLink.getPath()}" title="${reportLink.getTitle()}">${reportLink.getTitle()}</a><br/>
   #end
