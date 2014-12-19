@@ -1,10 +1,10 @@
-package org.sahagin.java.srctreegen;
+package org.sahagin.runlib.srctreegen;
 
-import org.sahagin.java.additionaltestdoc.AdditionalClassTestDoc;
-import org.sahagin.java.additionaltestdoc.AdditionalFuncTestDoc;
-import org.sahagin.java.additionaltestdoc.AdditionalMethodTestDoc;
-import org.sahagin.java.additionaltestdoc.AdditionalPage;
-import org.sahagin.java.additionaltestdoc.AdditionalTestDocs;
+import org.sahagin.runlib.additionaltestdoc.AdditionalClassTestDoc;
+import org.sahagin.runlib.additionaltestdoc.AdditionalFuncTestDoc;
+import org.sahagin.runlib.additionaltestdoc.AdditionalMethodTestDoc;
+import org.sahagin.runlib.additionaltestdoc.AdditionalPage;
+import org.sahagin.runlib.additionaltestdoc.AdditionalTestDocs;
 import org.sahagin.share.srctree.PageClass;
 import org.sahagin.share.srctree.TestClass;
 import org.sahagin.share.srctree.TestClassTable;

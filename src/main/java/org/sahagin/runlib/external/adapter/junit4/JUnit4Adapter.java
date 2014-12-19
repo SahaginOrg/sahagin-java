@@ -1,15 +1,15 @@
-package org.sahagin.java.external.adapter.junit4;
+package org.sahagin.runlib.external.adapter.junit4;
 
 import javassist.CtMethod;
 
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.junit.Test;
-import org.sahagin.java.external.adapter.Adapter;
-import org.sahagin.java.external.adapter.AdapterContainer;
-import org.sahagin.java.external.adapter.AdditionalTestDocsAdapter;
-import org.sahagin.java.external.adapter.RootFunctionAdapter;
-import org.sahagin.java.additionaltestdoc.AdditionalTestDocs;
-import org.sahagin.java.srctreegen.ASTUtils;
+import org.sahagin.runlib.additionaltestdoc.AdditionalTestDocs;
+import org.sahagin.runlib.external.adapter.Adapter;
+import org.sahagin.runlib.external.adapter.AdapterContainer;
+import org.sahagin.runlib.external.adapter.AdditionalTestDocsAdapter;
+import org.sahagin.runlib.external.adapter.RootFunctionAdapter;
+import org.sahagin.runlib.srctreegen.ASTUtils;
 
 public class JUnit4Adapter implements Adapter {
 

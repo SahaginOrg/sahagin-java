@@ -1,4 +1,4 @@
-package org.sahagin.java.runresultsgen;
+package org.sahagin.runlib.runresultsgen;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -8,8 +8,8 @@ import java.util.logging.Logger;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.openqa.selenium.io.IOUtils;
-import org.sahagin.java.external.adapter.AdapterContainer;
 import org.sahagin.report.HtmlReport;
+import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.share.CommonPath;
 import org.sahagin.share.Config;
 import org.sahagin.share.IllegalDataStructureException;

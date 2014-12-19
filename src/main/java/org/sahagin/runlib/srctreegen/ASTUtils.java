@@ -1,12 +1,12 @@
-package org.sahagin.java.srctreegen;
+package org.sahagin.runlib.srctreegen;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.jdt.core.dom.IAnnotationBinding;
 import org.eclipse.jdt.core.dom.IMemberValuePairBinding;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
-import org.sahagin.java.external.Page;
-import org.sahagin.java.external.TestDoc;
+import org.sahagin.runlib.external.Page;
+import org.sahagin.runlib.external.TestDoc;
 
 public class ASTUtils {
 

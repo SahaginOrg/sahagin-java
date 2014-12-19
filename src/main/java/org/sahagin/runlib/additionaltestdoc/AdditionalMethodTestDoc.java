@@ -1,4 +1,4 @@
-package org.sahagin.java.additionaltestdoc;
+package org.sahagin.runlib.additionaltestdoc;
 
 public class AdditionalMethodTestDoc extends AdditionalFuncTestDoc {
     private String classQualifiedName;

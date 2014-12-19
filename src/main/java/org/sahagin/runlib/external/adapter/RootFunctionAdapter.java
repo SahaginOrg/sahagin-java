@@ -1,4 +1,4 @@
-package org.sahagin.java.external.adapter;
+package org.sahagin.runlib.external.adapter;
 
 import javassist.CtMethod;
 

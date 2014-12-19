@@ -1,6 +1,6 @@
-package org.sahagin.java.external.adapter;
+package org.sahagin.runlib.external.adapter;
 
-import org.sahagin.java.additionaltestdoc.AdditionalTestDocs;
+import org.sahagin.runlib.additionaltestdoc.AdditionalTestDocs;
 
 public interface AdditionalTestDocsAdapter {
 

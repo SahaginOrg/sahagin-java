@@ -1,4 +1,4 @@
-package org.sahagin.java.additionaltestdoc;
+package org.sahagin.runlib.additionaltestdoc;
 
 import java.util.ArrayList;
 import java.util.List;

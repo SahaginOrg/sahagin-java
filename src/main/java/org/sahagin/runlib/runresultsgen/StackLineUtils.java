@@ -1,4 +1,4 @@
-package org.sahagin.java.runresultsgen;
+package org.sahagin.runlib.runresultsgen;
 
 import java.util.ArrayList;
 import java.util.List;

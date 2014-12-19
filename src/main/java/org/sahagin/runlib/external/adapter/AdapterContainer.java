@@ -1,7 +1,7 @@
-package org.sahagin.java.external.adapter;
+package org.sahagin.runlib.external.adapter;
 
 import org.eclipse.jdt.core.dom.IMethodBinding;
-import org.sahagin.java.additionaltestdoc.AdditionalTestDocs;
+import org.sahagin.runlib.additionaltestdoc.AdditionalTestDocs;
 
 import javassist.CtMethod;
 

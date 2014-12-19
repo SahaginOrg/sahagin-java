@@ -1,10 +1,8 @@
-package org.sahagin.java.additionaltestdoc;
+package org.sahagin.runlib.additionaltestdoc;
 
-// TODO cannot handle overloaded method
-public class AdditionalFuncTestDoc {
+public class AdditionalClassTestDoc {
     private String qualifiedName;
     private String testDoc;
-    private boolean stepInCapture = false;
 
     public String getSimpleName() {
         if (qualifiedName == null) {
@@ -31,14 +29,6 @@ public class AdditionalFuncTestDoc {
 
     public void setTestDoc(String testDoc) {
         this.testDoc = testDoc;
-    }
-
-    public boolean isStepInCapture() {
-        return stepInCapture;
-    }
-
-    public void setStepInCapture(boolean stepInCapture) {
-        this.stepInCapture = stepInCapture;
     }
 
 }

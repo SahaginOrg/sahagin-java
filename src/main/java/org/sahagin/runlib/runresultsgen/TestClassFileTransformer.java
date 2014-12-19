@@ -1,4 +1,4 @@
-package org.sahagin.java.runresultsgen;
+package org.sahagin.runlib.runresultsgen;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -14,8 +14,8 @@ import javassist.CtClass;
 import javassist.CtMethod;
 
 import org.openqa.selenium.io.IOUtils;
-import org.sahagin.java.external.TestDoc;
-import org.sahagin.java.external.adapter.AdapterContainer;
+import org.sahagin.runlib.external.TestDoc;
+import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.share.IllegalTestScriptException;
 import org.sahagin.share.srctree.SrcTree;
 import org.sahagin.share.srctree.TestFunction;

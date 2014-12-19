@@ -1,3 +1,3 @@
-package org.sahagin.java.additionaltestdoc;
+package org.sahagin.runlib.additionaltestdoc;
 
 public class AdditionalPage extends AdditionalClassTestDoc {}
