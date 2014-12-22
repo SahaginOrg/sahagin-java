@@ -356,7 +356,11 @@ public class SrcTreeGenerator {
             SubMethodInvoke subMethodInvoke = new SubMethodInvoke();
             subMethodInvoke.setSubFunctionKey(invocationFunc.getKey());
             subMethodInvoke.setSubFunction(invocationFunc);
-            subMethodInvoke.setThisInstance(expressionCode(thisInstance, parentFunc));
+            if (thisInstance == null) {
+                subMethodInvoke.setThisInstance(null);
+            } else {
+                subMethodInvoke.setThisInstance(expressionCode(thisInstance, parentFunc));
+            }
             for (Object arg : arguments) {
                 Expression exp = (Expression) arg;
                 subMethodInvoke.addArg(expressionCode(exp, parentFunc));
