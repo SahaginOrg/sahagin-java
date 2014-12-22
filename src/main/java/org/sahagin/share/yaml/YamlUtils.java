@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -112,19 +111,16 @@ public class YamlUtils {
         return getIntValue(yamlObject, key, false);
     }
 
-    // for null, returns empty map
+    // returns null for empty
     public static Map<String, Object> getYamlObjectValue(Map<String, Object> yamlObject,
             String key, boolean allowsEmpty) throws YamlConvertException {
         Object obj = getObjectValue(yamlObject, key, allowsEmpty);
         @SuppressWarnings("unchecked")
         Map<String, Object> result = (Map<String, Object>) obj;
-        if (result == null) {
-            result = new HashMap<String, Object>(0);
-        }
         return result;
     }
 
-    // for null or not found, returns empty list
+    // for null or not found, returns null
     public static Map<String, Object> getYamlObjectValue(Map<String, Object> yamlObject,
             String key) throws YamlConvertException {
         return getYamlObjectValue(yamlObject, key, false);
