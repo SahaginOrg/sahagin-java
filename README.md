@@ -4,7 +4,7 @@ Make your Selenium Script more readable and maintainable!
 
 Sahagin provides highly readable HTML test script viewer and test result report.
 
-Sahagin only supports JUnit4 and Selenium WebDriver Java binding in the current latest version.
+Sahagin is now beta version, and only supports JUnit4 and Selenium WebDriver Java binding in the current latest version.
 If you want support for other languages or test frameworks, please request us by creating new [issue](https://github.com/SahaginOrg/sahagin-java/issues).
 
 # Getting started
@@ -19,7 +19,7 @@ Add dependency to your pom.xml file.
     <dependency>
       <groupId>org.sahagin</groupId>  
        <artifactId>sahagin</artifactId>  
-       <version>0.2</version> 
+       <version>0.2.1</version> 
     </dependency>
   </dependencies>
 ```
@@ -34,7 +34,7 @@ and add test execution JVM argument.
       <version>any other version (2.14, etc)</version>
       <configuration>
         <argLine>
-          -javaagent:${settings.localRepository}/org/sahagin/sahagin/0.2/sahagin-0.2.jar
+          -javaagent:${settings.localRepository}/org/sahagin/sahagin/0.2.1/sahagin-0.2.1.jar
         </argLine>
       </configuration>
     </plugin>
@@ -46,7 +46,7 @@ Add dependency to your build.gradle file.
 
 ```groovy
 dependencies {
-    compile 'org.sahagin:sahagin:0.2'
+    compile 'org.sahagin:sahagin:0.2.1'
 }
 ```
 
@@ -57,7 +57,7 @@ test {
     doFirst {
         // search sahagin jar file in the local cache
         def sahaginJar = project.configurations.testCompile.find {
-            it.name.startsWith('sahagin-0.2') 
+            it.name.startsWith('sahagin-0.2.1') 
         }
         jvmArgs '-javaagent:' + sahaginJar
     }
@@ -65,8 +65,8 @@ test {
 
 ```
 
-### If you use Ant or use Jar directory
-Comming soon.
+### If you use jar file directory
+Download sahagin-0.2.1.zip from [here](https://github.com/SahaginOrg/sahagin-java/releases/tag/0.2.1) and add all jar files in the zip file to the Java class path.
 
 ## 2. Add annotations
 Add @Page annotations to your page object class declarations, and add @TestDoc annotations to your page object methods or any other methods.
@@ -74,14 +74,19 @@ Add @Page annotations to your page object class declarations, and add @TestDoc a
 You don't need to add annotations to all your classes and methods.
 
 ```java
-import org.sahagin.java.external.Page;
-import org.sahagin.java.external.TestDoc;
+import org.sahagin.runlib.external.Page;
+import org.sahagin.runlib.external.TestDoc;
 
 @Page("Data input page")
 public class DataInputPage {
     
     @TestDoc("Set user name {user}")
     public void setUserName(String user) {
+        ....
+    }
+    
+    @TestDoc("user name")
+    public String getUserName() {
         ....
     }
 
@@ -92,7 +97,7 @@ public class DataInputPage {
 Set a WebDriver instance used to take screen captures.
 
 ```java
-import org.sahagin.java.external.webdriver.WebDriverAdapter;
+import org.sahagin.runlib.external.adapter.webdriver.WebDriverAdapter;
 
 public class SampleTest {
 
