@@ -60,8 +60,14 @@ public class SrcTreeGenerator {
     private static Logger logger = Logging.getLogger(SrcTreeGenerator.class.getName());
     private AdditionalTestDocs additionalTestDocs;
 
+    // additionalTestDocs can be null
     public SrcTreeGenerator(AdditionalTestDocs additionalTestDocs) {
-        this.additionalTestDocs = additionalTestDocs;
+        if (additionalTestDocs == null) {
+            // use empty additionalTestDocs
+            this.additionalTestDocs = new AdditionalTestDocs();
+        } else {
+            this.additionalTestDocs = additionalTestDocs;
+        }
     }
 
     // result first value .. TestDoc value. return null if no TestDoc found
