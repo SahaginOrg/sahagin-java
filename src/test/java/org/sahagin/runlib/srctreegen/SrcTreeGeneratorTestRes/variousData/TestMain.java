@@ -1,0 +1,51 @@
+package org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData;
+
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.sahagin.runlib.external.TestDoc;
+import static org.hamcrest.core.Is.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+
+
+// This is not a test which checks some thing.
+// This is input file for SrcTreeGeneratorTest
+public class TestMain {
+    WebDriver wd;
+
+    @SuppressWarnings("static-access")
+    @Test
+    public void testMethod1() {
+        TestSub.subMethod();
+        testDocMethod();
+        noTestDocMethod();
+
+        TestPage page = new TestPage();
+        page.inenrClassCall();
+        TestPage.staticMethod();
+        page.staticMethod();
+        page.argMethod("AAA", 999);
+        page.argMethod(null, 0);
+        page.recurseMethodCall();
+        page.nest1("DDD");
+        assertThat(page.getData(), is("EEE"));
+        assertEquals(page.getData(), "EEE");
+        if (wd == null) {
+            return;
+        }
+        wd.get("***.com");
+        wd.findElement(By.id("FFF")).click();
+        wd.findElement(By.cssSelector("GGG")).sendKeys("HHH");
+    }
+
+    @Test
+    @TestDoc("Doc:TestMethod2")
+    public void testMethod2() {}
+
+    @TestDoc("Doc:testDocMethod")
+    public void testDocMethod() {}
+
+    public void noTestDocMethod() {}
+
+}
