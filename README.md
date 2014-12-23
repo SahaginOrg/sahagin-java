@@ -19,7 +19,7 @@ Add dependency to your pom.xml file.
     <dependency>
       <groupId>org.sahagin</groupId>  
        <artifactId>sahagin</artifactId>  
-       <version>0.2.1</version> 
+       <version>0.2.2</version> 
     </dependency>
   </dependencies>
 ```
@@ -31,10 +31,10 @@ and add test execution JVM argument.
     <plugin>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-surefire-plugin</artifactId>
-      <version>any other version (2.14, etc)</version>
+      <version>any other version (2.18, etc)</version>
       <configuration>
         <argLine>
-          -javaagent:${settings.localRepository}/org/sahagin/sahagin/0.2.1/sahagin-0.2.1.jar
+          -javaagent:${settings.localRepository}/org/sahagin/sahagin/0.2.2/sahagin-0.2.2.jar
         </argLine>
       </configuration>
     </plugin>
@@ -46,7 +46,7 @@ Add dependency to your build.gradle file.
 
 ```groovy
 dependencies {
-    compile 'org.sahagin:sahagin:0.2.1'
+    compile 'org.sahagin:sahagin:0.2.2'
 }
 ```
 
@@ -57,7 +57,7 @@ test {
     doFirst {
         // search sahagin jar file in the local cache
         def sahaginJar = project.configurations.testCompile.find {
-            it.name.startsWith('sahagin-0.2.1') 
+            it.name.startsWith('sahagin-0.2.2') 
         }
         jvmArgs '-javaagent:' + sahaginJar
     }
@@ -66,7 +66,7 @@ test {
 ```
 
 ### If you use jar file directory
-Download sahagin-0.2.1.zip from [here](https://github.com/SahaginOrg/sahagin-java/releases/tag/0.2.1) and add all jar files in the zip file to the Java class path.
+Download sahagin-0.2.2.zip from [here](https://github.com/SahaginOrg/sahagin-java/releases/tag/0.2.2) and add all jar files in the zip file to the Java class path.
 
 ## 2. Add annotations
 Add @Page annotations to your page object class declarations, and add @TestDoc annotations to your page object methods or any other methods.
