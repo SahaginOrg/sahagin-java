@@ -18,6 +18,8 @@ public class Config implements YamlConvertible {
     private File reportInputDataDir = REPORT_INPUDT_DATA_DIR_DEFAULT;
     private File reportOutputDir = REPORT_OUTPUDT_DATA_DIR_DEFAULT;
     private boolean outputLog = false; // TODO provisional. this is only for debugging
+    // if true, don't generate report, generate only report input
+    private boolean runTestOnly = false;
 
     public static Config generateFromYamlConfig(File yamlConfigFile) throws YamlConvertException {
         Map<String, Object> configYamlObj = YamlUtils.load(yamlConfigFile);
@@ -80,6 +82,14 @@ public class Config implements YamlConvertible {
         this.outputLog = outputLog;
     }
 
+    public boolean isRunTestOnly() {
+        return runTestOnly;
+    }
+
+    public void setRunTestOnly(boolean runTestOnly) {
+        this.runTestOnly = runTestOnly;
+    }
+
     @Override
     public Map<String, Object> toYamlObject() {
         Map<String, Object> javaConf = new HashMap<String, Object>(4);
@@ -88,6 +98,7 @@ public class Config implements YamlConvertible {
         commonConf.put("reportInputDataDir", reportInputDataDir.getPath());
         commonConf.put("reportOutputDir", reportOutputDir.getPath());
         commonConf.put("outputLog", outputLog);
+        commonConf.put("runTestOnly", runTestOnly);
         Map<String, Object> result = new HashMap<String, Object>(2);
         result.put("java", javaConf);
         result.put("common", commonConf);
@@ -107,6 +118,7 @@ public class Config implements YamlConvertible {
         reportInputDataDir = REPORT_INPUDT_DATA_DIR_DEFAULT;
         reportOutputDir = REPORT_OUTPUDT_DATA_DIR_DEFAULT;
         outputLog = false;
+        runTestOnly = false;
         Map<String, Object> commonYamlObj = YamlUtils.getYamlObjectValue(yamlObject, "common", true);
         if (commonYamlObj == null) {
             return;
@@ -114,6 +126,7 @@ public class Config implements YamlConvertible {
         String reportInputDataDirValue = YamlUtils.getStrValue(commonYamlObj, "reportInputDataDir", true);
         String reportOutputDirValue = YamlUtils.getStrValue(commonYamlObj, "reportOutputDir", true);
         Boolean outputLogValue = YamlUtils.getBooleanValue(commonYamlObj, "outputLog", true);
+        Boolean runTestOnlyValue = YamlUtils.getBooleanValue(commonYamlObj, "runTestOnly", true);
         if (reportInputDataDirValue != null) {
             reportInputDataDir = new File(reportInputDataDirValue);
         }
@@ -121,7 +134,10 @@ public class Config implements YamlConvertible {
             reportOutputDir = new File(reportOutputDirValue);
         }
         if (outputLogValue != null) {
-            outputLog = true;
+            outputLog = outputLogValue;
+        }
+        if (runTestOnlyValue != null) {
+            runTestOnly = runTestOnlyValue;
         }
     }
 

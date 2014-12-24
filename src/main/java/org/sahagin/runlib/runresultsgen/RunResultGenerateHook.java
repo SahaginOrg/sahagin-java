@@ -71,20 +71,22 @@ public class RunResultGenerateHook {
             throw new RuntimeException(e);
         }
 
-        // set up shutdown hook which generates HTML report
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override
-            public void run() {
-                HtmlReport report = new HtmlReport();
-                try {
-                    report.generate(config.getRootBaseReportInputDataDir(), config.getRootBaseReportOutputDir());
-                } catch (IllegalDataStructureException e) {
-                    throw new RuntimeException(e);
-                } catch (IllegalTestScriptException e) {
-                    throw new RuntimeException(e);
+        if (!config.isRunTestOnly()) {
+            // set up shutdown hook which generates HTML report
+            Runtime.getRuntime().addShutdownHook(new Thread() {
+                @Override
+                public void run() {
+                    HtmlReport report = new HtmlReport();
+                    try {
+                        report.generate(config.getRootBaseReportInputDataDir(), config.getRootBaseReportOutputDir());
+                    } catch (IllegalDataStructureException e) {
+                        throw new RuntimeException(e);
+                    } catch (IllegalTestScriptException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
-            }
-        });
+            });
+        }
 
         initialized = true;
     }
