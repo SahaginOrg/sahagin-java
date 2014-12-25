@@ -10,7 +10,7 @@ import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.runlib.external.adapter.AdditionalTestDocsAdapter;
 import org.sahagin.runlib.external.adapter.ScreenCaptureAdapter;
 
-// TODO chromedriver has these problem (this is not sahagin problem, but the on of chromedriver)
+// TODO chromedriver has these problem (this is not sahagin problem, but the one of chromedriver)
 // - cannot capture entire page
 // - screen shot is executed asynchronously, so often fails to capture screen after action
 
@@ -63,8 +63,7 @@ public class WebDriverAdapter implements Adapter {
             // TODO cannot handle methods defined on subclass?
             // TODO multiple language support
 
-            // alphabetical order
-
+            // define in alphabetical order
             docs.methodAdd("org.openqa.selenium.By", "className", "クラス名 = {0}");
             docs.methodAdd("org.openqa.selenium.By", "cssSelector", "css = {0}");
             docs.methodAdd("org.openqa.selenium.By", "id", "id = {0}");

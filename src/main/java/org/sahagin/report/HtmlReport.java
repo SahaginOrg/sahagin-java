@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.output.FileWriterWithEncoding;
@@ -22,6 +23,7 @@ import org.sahagin.share.CommonPath;
 import org.sahagin.share.CommonUtils;
 import org.sahagin.share.IllegalDataStructureException;
 import org.sahagin.share.IllegalTestScriptException;
+import org.sahagin.share.Logging;
 import org.sahagin.share.TestDocResolver;
 import org.sahagin.share.runresults.LineScreenCapture;
 import org.sahagin.share.runresults.RootFuncRunResult;
@@ -40,6 +42,7 @@ import org.sahagin.share.yaml.YamlUtils;
 //TODO support method optional argument
 
 public class HtmlReport {
+    private static Logger logger = Logging.getLogger(HtmlReport.class.getName());
 
     public HtmlReport() {
         // stop generating velocity.log
@@ -77,6 +80,10 @@ public class HtmlReport {
         noImageCapture.setPath(noImageFilePath);
         noImageCapture.setTtId("noImage");
         reportCaptures.add(noImageCapture);
+
+        logger.info("inputCaptureRootDir: " + inputCaptureRootDir);
+        logger.info("reportOutputDir: " + reportOutputDir);
+        logger.info("funcReportParentDir: " + funcReportParentDir);
 
         // add each line screen capture
         for (LineScreenCapture lineScreenCapture : lineScreenCaptures) {

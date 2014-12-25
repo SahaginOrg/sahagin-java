@@ -50,7 +50,7 @@ public class JUnit4Adapter implements Adapter {
             // TODO cannot handle methods defined on subclass
             // TODO multiple language support
 
-            // alphabetical order
+            // define in alphabetical order
             docs.methodAdd("org.hamcrest.core.Is", "is", "「{0}」に等しい");
             docs.methodAdd("org.hamcrest.CoreMatchers", "is", "「{0}」に等しい");
             docs.methodAdd("org.junit.Assert", "assertEquals", "「{0}」が「{1}」に等しいことをチェック");
