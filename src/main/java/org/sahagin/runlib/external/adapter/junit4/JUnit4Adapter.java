@@ -52,6 +52,7 @@ public class JUnit4Adapter implements Adapter {
 
             // alphabetical order
             docs.methodAdd("org.hamcrest.core.Is", "is", "「{0}」に等しい");
+            docs.methodAdd("org.hamcrest.CoreMatchers", "is", "「{0}」に等しい");
             docs.methodAdd("org.junit.Assert", "assertEquals", "「{0}」が「{1}」に等しいことをチェック");
             docs.methodAdd("org.junit.Assert", "assertThat", "「{0}」が{1}ことをチェック");
         }
