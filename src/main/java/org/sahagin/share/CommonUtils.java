@@ -10,11 +10,30 @@ import java.util.jar.Manifest;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOCase;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.openqa.selenium.io.IOUtils;
 
 public class CommonUtils {
 
+    private static boolean filePathEquals(String path1, String path2) {
+        // Mac is case-insensitive, but IOCase.SYSTEM.isCaseSenstive returns true,
+        // so don't use this value for Mac.
+        // (TODO but Mac can become case-sensitive if an user changes system setting..)
+        if (SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_MAC_OSX) {
+            return StringUtils.equalsIgnoreCase(path1, path2);
+        }
+        if (IOCase.SYSTEM.isCaseSensitive()) {
+            return StringUtils.equals(path1, path2);
+        } else {
+            return StringUtils.equalsIgnoreCase(path1, path2);
+        }
+    }
+
+
     // cannot use Path.relativize since Sahagin support Java 1.6 or later
+    // TODO ignore case for windows
     public static File relativize(File target, File baseDir) {
         String separator = File.separator;
         try {
@@ -25,7 +44,7 @@ public class CommonUtils {
             absBasePath = FilenameUtils.normalizeNoEndSeparator(
                     FilenameUtils.separatorsToSystem(absBasePath));
 
-            if (absTargetPath.equals(absBasePath)) {
+            if (filePathEquals(absTargetPath, absBasePath)) {
                 throw new IllegalArgumentException("target and base are equal: " + absTargetPath);
             }
 
@@ -36,7 +55,7 @@ public class CommonUtils {
 
             int lastCommonRoot = -1;
             for (int i = 0; i < minLength; i++) {
-                if (absTargets[i].equals(absBases[i])) {
+                if (filePathEquals(absTargets[i], absBases[i])) {
                     lastCommonRoot = i;
                 } else {
                     break;
