@@ -3,5 +3,4 @@ jdk:
   - openjdk6
   - openjdk7
 
-script:
-  mvn package -B
+script: mvn package -B
