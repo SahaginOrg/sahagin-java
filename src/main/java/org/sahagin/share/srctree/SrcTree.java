@@ -79,7 +79,7 @@ public class SrcTree implements YamlConvertible {
         result.put("rootFuncTable", rootFuncTableYamlObj);
         result.put("subClassTable", subClassTableYamlObj);
         result.put("subFuncTable", subFuncTableYamlObj);
-        result.put("sahagin-version", "0.2.1"); // TODO hard coded..
+        result.put("sahaginVersion", "0.2.3"); // TODO hard coded..
 
         return result;
     }

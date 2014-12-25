@@ -54,7 +54,7 @@ public class RootFuncRunResult implements YamlConvertible {
         result.put("rootFunctionKey", rootFunctionKey);
         result.put("runFailures", YamlUtils.toYamlObjectList(runFailures));
         result.put("lineScreenCaptures", YamlUtils.toYamlObjectList(lineScreenCaptures));
-        result.put("sahagin-version", "0.2.1"); // TODO hard coded..
+        result.put("sahaginVersion", "0.2.3"); // TODO hard coded..
         return result;
     }
 

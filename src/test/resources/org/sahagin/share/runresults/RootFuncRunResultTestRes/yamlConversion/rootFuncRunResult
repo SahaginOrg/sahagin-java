@@ -26,7 +26,7 @@ runFailures:
     \tat org.apache.maven.surefire.booter.ForkedBooter.invokeProviderInSameClassLoader(ForkedBooter.java:203)\n\
     \tat org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:155)\n\
     \tat org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:103)\n"
-sahagin-version: 0.2.1
+sahaginVersion: "*"
 rootFunctionKey: Lorg/sahagin/runlib/runresultsgen/RunResultGenerateHookTestRes/test/TestMain;.noTestDocMethodFailTest()V
 lineScreenCaptures:
 - path: /Users/itonozomi/sahagin-java/work/org/sahagin/runlib/runresultsgen/RunResultGenerateHookTestRes/test/sahagin-report-input/captures/org.sahagin.runlib.runresultsgen.RunResultGenerateHookTestRes.test.TestMain/noTestDocMethodFailTest/001.png

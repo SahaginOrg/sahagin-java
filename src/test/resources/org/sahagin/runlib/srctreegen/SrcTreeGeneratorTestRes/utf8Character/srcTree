@@ -36,7 +36,7 @@ subClassTable:
     key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/utf8Character/ページクラス;
     methodKeys: [Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/utf8Character/ページクラス;.ページメソッド()V]
     name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.utf8Character.ページクラス
-sahagin-version: "*"
+sahaginVersion: "*"
 rootClassTable:
   classes:
   - testDoc: Doc:メインクラス

@@ -1,5 +1,5 @@
 runFailures: []
-sahagin-version: "*"
+sahaginVersion: "*"
 rootFunctionKey: Lorg/sahagin/runlib/runresultsgen/RunResultGenerateHookTestRes/test/TestMain;.stepInCaptureTest()V
 lineScreenCaptures:
 - path: "*/captures/org.sahagin.runlib.runresultsgen.RunResultGenerateHookTestRes.test.TestMain/stepInCaptureTest/001.png"
