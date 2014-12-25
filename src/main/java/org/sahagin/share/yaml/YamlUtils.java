@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.io.IOUtils;
+import org.sahagin.share.CaptureStyle;
 import org.yaml.snakeyaml.Yaml;
 
 public class YamlUtils {
@@ -17,6 +18,8 @@ public class YamlUtils {
     private static final String MSG_MUST_BE_BOOLEAN
     = "value for \"%s\" must be \"true\" or \"false\", but is \"%s\"";
     private static final String MSG_VALUE_NOT_INT = "can't convert value to int; key: %s; vaule: %s";
+    private static final String MSG_VALUE_NOT_CAPTURE_STYLE
+    = "can't convert value to CaptureStyle; key: %s; vaule: %s";
     private static final String MSG_NOT_EQUALS_TO_EXPECTED = "\"%s\" is not equals to \"%s\"";
 
     // if allowsEmpty and key entry is not found, just returns null.
@@ -109,6 +112,32 @@ public class YamlUtils {
     public static Integer getIntValue(Map<String, Object> yamlObject, String key)
             throws YamlConvertException {
         return getIntValue(yamlObject, key, false);
+    }
+
+    // if allowsEmpty, returns null for the case no key entry or null value
+    public static CaptureStyle getCaptureStyleValue(Map<String, Object> yamlObject,
+            String key, boolean allowsEmpty) throws YamlConvertException {
+        Object obj = getObjectValue(yamlObject, key, allowsEmpty);
+        if (obj == null && allowsEmpty) {
+            return null;
+        }
+        String objStr;
+        if (obj == null) {
+            objStr = null;
+        } else {
+            objStr = obj.toString();
+        }
+        CaptureStyle result = CaptureStyle.getEnum(objStr);
+        if (result != null) {
+            return result;
+        } else {
+            throw new YamlConvertException(String.format(MSG_VALUE_NOT_CAPTURE_STYLE, key, objStr));
+        }
+    }
+
+    public static CaptureStyle getCaptureStyleValue(Map<String, Object> yamlObject,
+            String key) throws YamlConvertException {
+        return getCaptureStyleValue(yamlObject, key, false);
     }
 
     // returns null for empty

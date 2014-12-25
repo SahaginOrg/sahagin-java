@@ -1,10 +1,12 @@
 package org.sahagin.runlib.additionaltestdoc;
 
+import org.sahagin.share.CaptureStyle;
+
 // TODO cannot handle overloaded method
 public class AdditionalFuncTestDoc {
     private String qualifiedName;
     private String testDoc;
-    private boolean stepInCapture = false;
+    private CaptureStyle captureStyle = CaptureStyle.THIS_LINE;
 
     public String getSimpleName() {
         if (qualifiedName == null) {
@@ -33,12 +35,12 @@ public class AdditionalFuncTestDoc {
         this.testDoc = testDoc;
     }
 
-    public boolean isStepInCapture() {
-        return stepInCapture;
+    public CaptureStyle getCaptureStyle() {
+        return captureStyle;
     }
 
-    public void setStepInCapture(boolean stepInCapture) {
-        this.stepInCapture = stepInCapture;
+    public void setCaptureStyle(CaptureStyle captureStyle) {
+        this.captureStyle = captureStyle;
     }
 
 }

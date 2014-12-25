@@ -321,6 +321,7 @@ public class HtmlReport {
         // set up HTML external files
         // TODO all file paths are hard coded. this is very poor logic..
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/common-utils.js");
+        extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/capture-style.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/yaml/js-yaml.min.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/yaml/yaml-utils.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/code.js");

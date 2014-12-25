@@ -5,8 +5,10 @@ import org.eclipse.jdt.core.dom.IAnnotationBinding;
 import org.eclipse.jdt.core.dom.IMemberValuePairBinding;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
+import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.sahagin.runlib.external.Page;
 import org.sahagin.runlib.external.TestDoc;
+import org.sahagin.share.CaptureStyle;
 
 public class ASTUtils {
 
@@ -52,40 +54,66 @@ public class ASTUtils {
         for (IMemberValuePairBinding value : annotation.getDeclaredMemberValuePairs()) {
             if (value.getName() != null && value.getName().equals(varName)) {
                 assert value.getValue() != null; // annotation value cannot be null
+                assert !(value.getValue() instanceof IVariableBinding);
                 return value.getValue();
             }
         }
         return null;
     }
 
+    // - for example, returns string "STEP_IN" for CaptureStyle.STEP_IN
+    // returns null if specified varName annotation is not found
+    public static String getEnumAnnotationFieldName(IAnnotationBinding annotation, String varName) {
+        if (annotation == null) {
+            throw new NullPointerException();
+        }
+        if (varName == null) {
+            throw new NullPointerException();
+        }
+        for (IMemberValuePairBinding value : annotation.getDeclaredMemberValuePairs()) {
+            if (value.getName() != null && value.getName().equals(varName)) {
+                assert value.getValue() != null; // annotation value cannot be null
+                assert value.getValue() instanceof IVariableBinding;
+                IVariableBinding varBinding = (IVariableBinding) value.getValue();
+                assert varBinding.isEnumConstant();
+                return varBinding.getName();
+            }
+        }
+        return null;
+    }
+
+
     // first... value
-    // second... stepInCapture flag.
+    // second... captureStyle value.
     // return null if no TestDoc found
-    public static Pair<String, Boolean> getTestDoc(IAnnotationBinding[] annotations) {
-        IAnnotationBinding annotation = ASTUtils.getAnnotationBinding(
+    public static Pair<String, CaptureStyle> getTestDoc(IAnnotationBinding[] annotations) {
+        IAnnotationBinding annotation = getAnnotationBinding(
                 annotations, TestDoc.class);
         if (annotation == null) {
             return null;
         }
-        Object value = ASTUtils.getAnnotationValue(annotation, "value");
-        Object stepInCaptureObj = ASTUtils.getAnnotationValue(annotation, "stepInCapture");
-        boolean stepInCapture;
-        if (stepInCaptureObj == null) {
-            stepInCapture = false; // default value
+        Object value = getAnnotationValue(annotation, "value");
+        String fieldName = getEnumAnnotationFieldName(annotation, "capture");
+        CaptureStyle captureStyle;
+        if (fieldName == null) {
+            captureStyle = CaptureStyle.THIS_LINE; // default value
         } else {
-            stepInCapture = (Boolean) stepInCaptureObj;
+            captureStyle = CaptureStyle.valueOf(fieldName);
+            if (captureStyle == null) {
+                throw new RuntimeException("invalid captureStyle: " + fieldName);
+            }
         }
-        return Pair.of((String) value, stepInCapture);
+        return Pair.of((String) value, captureStyle);
     }
 
     // return null if no Page found
     public static String getPageTestDoc(IAnnotationBinding[] annotations) {
-        IAnnotationBinding annotation = ASTUtils.getAnnotationBinding(
+        IAnnotationBinding annotation = getAnnotationBinding(
                 annotations, Page.class);
         if (annotation == null) {
             return null;
         }
-        Object value = ASTUtils.getAnnotationValue(annotation, "value");
+        Object value = getAnnotationValue(annotation, "value");
         return (String) value;
     }
 
@@ -96,7 +124,7 @@ public class ASTUtils {
 
     // return null if not found
     public static String getTestDoc(ITypeBinding type) {
-        Pair<String, Boolean> pair = getTestDoc(type.getAnnotations());
+        Pair<String, CaptureStyle> pair = getTestDoc(type.getAnnotations());
         if (pair != null) {
             return pair.getLeft();
         } else {
@@ -105,7 +133,7 @@ public class ASTUtils {
     }
 
     // return null if not found
-    public static Pair<String, Boolean> getTestDoc(IMethodBinding method) {
+    public static Pair<String, CaptureStyle> getTestDoc(IMethodBinding method) {
         return getTestDoc(method.getAnnotations());
     }
 

@@ -3,6 +3,7 @@
     <meta charset="utf-8">
     <title>${title}</title>
     <script src="${externalResourceRootDir}/js/share/common-utils.js"></script>
+    <script src="${externalResourceRootDir}/js/share/capture-style.js"></script>
     <script src="${externalResourceRootDir}/js/share/yaml/js-yaml.min.js"></script>
     <script src="${externalResourceRootDir}/js/share/yaml/yaml-utils.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/code/code.js"></script>

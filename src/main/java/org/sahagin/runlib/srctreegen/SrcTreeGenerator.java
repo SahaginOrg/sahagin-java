@@ -39,6 +39,7 @@ import org.sahagin.runlib.additionaltestdoc.AdditionalFuncTestDoc;
 import org.sahagin.runlib.additionaltestdoc.AdditionalPage;
 import org.sahagin.runlib.additionaltestdoc.AdditionalTestDocs;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
+import org.sahagin.share.CaptureStyle;
 import org.sahagin.share.CommonUtils;
 import org.sahagin.share.IllegalTestScriptException;
 import org.sahagin.share.Logging;
@@ -92,15 +93,15 @@ public class SrcTreeGenerator {
     }
 
     // value (return null if no TestDoc found) and stepInCapture value pair
-    private Pair<String, Boolean> getTestDoc(IMethodBinding method) {
-        Pair<String, Boolean> pair = ASTUtils.getTestDoc(method);
+    private Pair<String, CaptureStyle> getTestDoc(IMethodBinding method) {
+        Pair<String, CaptureStyle> pair = ASTUtils.getTestDoc(method);
         if (pair != null) {
             return pair;
         }
         AdditionalFuncTestDoc additional
         = additionalTestDocs.getFuncTestDoc(ASTUtils.qualifiedMethodName(method));
         if (additional != null) {
-            return Pair.of(additional.getTestDoc(), additional.isStepInCapture());
+            return Pair.of(additional.getTestDoc(), additional.getCaptureStyle());
         }
         return null;
     }
@@ -177,11 +178,11 @@ public class SrcTreeGenerator {
             TestMethod testMethod = new TestMethod();
             testMethod.setKey(methodBinding.getKey());
             testMethod.setQualifiedName(ASTUtils.qualifiedMethodName(methodBinding));
-            Pair<String, Boolean> pair = getTestDoc(methodBinding);
+            Pair<String, CaptureStyle> pair = getTestDoc(methodBinding);
             if (pair != null) {
                 // pair is null if the root method does not have TestDoc annotation
                 testMethod.setTestDoc(pair.getLeft());
-                testMethod.setStepInCapture(pair.getRight());
+                testMethod.setCaptureStyle(pair.getRight());
             }
             for (Object element : node.parameters()) {
                 if (!(element instanceof SingleVariableDeclaration)) {
@@ -271,9 +272,9 @@ public class SrcTreeGenerator {
             TestMethod testMethod = new TestMethod();
             testMethod.setKey(methodBinding.getKey());
             testMethod.setQualifiedName(ASTUtils.qualifiedMethodName(methodBinding));
-            Pair<String, Boolean> pair = getTestDoc(methodBinding);
+            Pair<String, CaptureStyle> pair = getTestDoc(methodBinding);
             testMethod.setTestDoc(pair.getLeft());
-            testMethod.setStepInCapture(pair.getRight());
+            testMethod.setCaptureStyle(pair.getRight());
             for (Object element : node.parameters()) {
                 if (!(element instanceof SingleVariableDeclaration)) {
                     throw new RuntimeException("not supported yet: " + element);

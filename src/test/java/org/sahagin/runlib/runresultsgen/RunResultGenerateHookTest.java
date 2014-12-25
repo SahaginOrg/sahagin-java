@@ -37,7 +37,7 @@ public class RunResultGenerateHookTest extends TestBase {
         YamlUtils.dump(conf.toYamlObject(), yamlFile);
 
         InvocationRequest request = new DefaultInvocationRequest();
-        request.setGoals(Arrays.asList("jar:jar", "test", "-q"));
+        request.setGoals(Arrays.asList("jar:jar", "test"));
         request.addShellEnvironment("MAVEN_INVOKER", "on");
         request.setOutputHandler(new InvocationOutputHandler() {
 

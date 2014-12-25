@@ -2,7 +2,7 @@ subFuncTable:
   functions:
   - codeBody: []
     name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.utf8Character.ページクラス.ページメソッド
-    stepInCapture: false
+    capture: thisLine
     argVariables: []
     classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/utf8Character/ページクラス;
     testDoc: ページメソッド
@@ -23,7 +23,7 @@ rootFuncTable:
         args: []
       endLine: "*"
     name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.utf8Character.メインクラス.テスト
-    stepInCapture: false
+    capture: thisLine
     argVariables: []
     classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/utf8Character/メインクラス;
     testDoc: Doc:テスト

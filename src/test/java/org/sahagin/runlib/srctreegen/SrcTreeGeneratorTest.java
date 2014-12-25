@@ -46,6 +46,7 @@ public class SrcTreeGeneratorTest extends TestBase {
     // - when arguments of SubFunctionInvoke is another SubFunctionInvoke
     // - testDoc placeholder (variable name and index and this)
     // - @Test, @TestDoc, @Page annotation
+    // - capture value of @TestDoc
     // - variable assignment with SubFunctionInvoke
     // - predefined methods ( assert, webDriver, findElement, by, click, sendKeys)
     // TODO this test checks multiple things,

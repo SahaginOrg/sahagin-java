@@ -10,6 +10,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.openqa.selenium.io.IOUtils;
 import org.sahagin.report.HtmlReport;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
+import org.sahagin.share.CaptureStyle;
 import org.sahagin.share.CommonPath;
 import org.sahagin.share.Config;
 import org.sahagin.share.IllegalDataStructureException;
@@ -258,10 +259,11 @@ public class RunResultGenerateHook {
 
     // if method is called from not stepInCapture line, then returns false.
     private static boolean canStepInCaptureTo(List<StackLine> stackLines) {
-        // stack bottom line ( = root line) is always regarded as stepInCapture true line
+        // stack bottom line ( = root line) is always regarded as stepIn true line
         for (int i = 0; i < stackLines.size() - 1; i++) {
             StackLine stackLine = stackLines.get(i);
-            if (!stackLine.getFunction().isStepInCapture()) {
+            CaptureStyle style = stackLine.getFunction().getCaptureStyle();
+            if (style != CaptureStyle.STEP_IN && style != CaptureStyle.STEP_IN_ONLY) {
                 return false;
             }
         }

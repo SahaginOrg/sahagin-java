@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.sahagin.share.CaptureStyle;
 import org.sahagin.share.srctree.code.CodeLine;
 import org.sahagin.share.yaml.YamlUtils;
 import org.sahagin.share.yaml.YamlConvertException;
@@ -18,7 +19,7 @@ public class TestFunction implements YamlConvertible {
     // qualifiedName is not necessarily unique
     private String qualifiedName;
     private String testDoc;
-    private boolean stepInCapture = false;
+    private CaptureStyle captureStyle = CaptureStyle.THIS_LINE;
     private List<String> argVariables = new ArrayList<String>(4);
     private List<CodeLine> codeBody = new ArrayList<CodeLine>(32);
 
@@ -57,12 +58,15 @@ public class TestFunction implements YamlConvertible {
         this.testDoc = testDoc;
     }
 
-    public boolean isStepInCapture() {
-        return stepInCapture;
+    public CaptureStyle getCaptureStyle() {
+        return captureStyle;
     }
 
-    public void setStepInCapture(boolean stepInCapture) {
-        this.stepInCapture = stepInCapture;
+    public void setCaptureStyle(CaptureStyle captureStyle) {
+        if (captureStyle == CaptureStyle.NONE || captureStyle == CaptureStyle.STEP_IN_ONLY) {
+            throw new RuntimeException("not supported yet: " + captureStyle);
+        }
+        this.captureStyle = captureStyle;
     }
 
     public List<String> getArgVariables() {
@@ -92,7 +96,7 @@ public class TestFunction implements YamlConvertible {
         result.put("key", key);
         result.put("name", qualifiedName);
         result.put("testDoc", testDoc);
-        result.put("stepInCapture", stepInCapture);
+        result.put("capture", captureStyle.getValue());
         result.put("argVariables", argVariables);
         result.put("codeBody", YamlUtils.toYamlObjectList(codeBody));
         return result;
@@ -105,7 +109,11 @@ public class TestFunction implements YamlConvertible {
         key = YamlUtils.getStrValue(yamlObject, "key");
         qualifiedName = YamlUtils.getStrValue(yamlObject, "name");
         testDoc = YamlUtils.getStrValue(yamlObject, "testDoc");
-        stepInCapture = YamlUtils.getBooleanValue(yamlObject, "stepInCapture");
+        // captureStyle is not mandatory
+        captureStyle = YamlUtils.getCaptureStyleValue(yamlObject, "capture", true);
+        if (captureStyle == null) {
+            captureStyle = CaptureStyle.THIS_LINE;
+        }
         argVariables = YamlUtils.getStrListValue(yamlObject, "argVariables");
         List<Map<String, Object>> codeBodyYamlObj = YamlUtils.getYamlObjectListValue(yamlObject, "codeBody");
         codeBody = new ArrayList<CodeLine>(codeBodyYamlObj.size());

@@ -2,7 +2,7 @@ subFuncTable:
   functions:
   - codeBody: []
     name: org.sahagin.runlib.srctreegen.srctreegeneratortestdata.variousData.TestMain.testDocMethod
-    stepInCapture: false
+    capture: thisLine
     argVariables: []
     classKey: Lorg/sahagin/runlib/srctreegen/variousdata/TestMain;
     testDoc: Doc:testDocMethod
@@ -10,7 +10,7 @@ subFuncTable:
     key: Lorg/sahagin/runlib/srctreegen/variousdata/TestMain;.testDocMethod()V
   - codeBody: []
     name: org.sahagin.runlib.srctreegen.srctreegeneratortestdata.variousData.TestPage.TestPage
-    stepInCapture: false
+    capture: thisLine
     argVariables: []
     classKey: Lorg/sahagin/runlib/srctreegen/variousdata/TestPage;
     testDoc: 'Doc: TestPage'
@@ -21,7 +21,7 @@ subFuncTable:
       code: {original: return "EEE";, type: unknown}
       endLine: 14
     name: org.sahagin.runlib.srctreegen.srctreegeneratortestdata.variousData.TestPage.getData
-    stepInCapture: false
+    capture: thisLine
     argVariables: []
     classKey: Lorg/sahagin/runlib/srctreegen/variousdata/TestPage;
     testDoc: data
@@ -29,7 +29,7 @@ subFuncTable:
     key: Lorg/sahagin/runlib/srctreegen/variousdata/TestPage;.getData()Ljava/lang/String;
   - codeBody: []
     name: org.sahagin.runlib.srctreegen.srctreegeneratortestdata.variousData.TestPage.argMethod
-    stepInCapture: false
+    capture: thisLine
     argVariables: [arg1, arg2]
     classKey: Lorg/sahagin/runlib/srctreegen/variousdata/TestPage;
     testDoc: Doc:argMethod:{arg1}:{arg2}:{0}:{1}:{this}
@@ -37,7 +37,7 @@ subFuncTable:
     key: Lorg/sahagin/runlib/srctreegen/variousdata/TestPage;.argMethod(Ljava/lang/String;I)V
   - codeBody: []
     name: org.sahagin.runlib.srctreegen.srctreegeneratortestdata.variousData.TestPage.staticMethod
-    stepInCapture: false
+    capture: thisLine
     argVariables: []
     classKey: Lorg/sahagin/runlib/srctreegen/variousdata/TestPage;
     testDoc: Doc:staticMethod
@@ -45,7 +45,7 @@ subFuncTable:
     key: Lorg/sahagin/runlib/srctreegen/variousdata/TestPage;.staticMethod()V
   - codeBody: []
     name: org.sahagin.runlib.srctreegen.srctreegeneratortestdata.variousData.TestPage.InnerClass.innerClassMethod
-    stepInCapture: false
+    capture: thisLine
     argVariables: []
     classKey: Lorg/sahagin/runlib/srctreegen/variousdata/TestPage$InnerClass;
     testDoc: Doc:innerClass
@@ -64,7 +64,7 @@ subFuncTable:
         args: []
       endLine: 33
     name: org.sahagin.runlib.srctreegen.srctreegeneratortestdata.variousData.TestPage.inenrClassCall
-    stepInCapture: false
+    capture: thisLine
     argVariables: []
     classKey: Lorg/sahagin/runlib/srctreegen/variousdata/TestPage;
     testDoc: Doc:innerTestCall
@@ -80,7 +80,7 @@ subFuncTable:
         - {argIndex: 0, original: arg, type: arg}
       endLine: 38
     name: org.sahagin.runlib.srctreegen.srctreegeneratortestdata.variousData.TestPage.nest1
-    stepInCapture: false
+    capture: thisLine
     argVariables: [arg]
     classKey: Lorg/sahagin/runlib/srctreegen/variousdata/TestPage;
     testDoc: Doc:nest1:{arg}
@@ -96,7 +96,7 @@ subFuncTable:
         - {argIndex: 0, original: arg, type: arg}
       endLine: 43
     name: org.sahagin.runlib.srctreegen.srctreegeneratortestdata.variousData.TestPage.nest2
-    stepInCapture: false
+    capture: thisLine
     argVariables: [arg]
     classKey: Lorg/sahagin/runlib/srctreegen/variousdata/TestPage;
     testDoc: Doc:nest2:{arg}
@@ -126,7 +126,7 @@ subFuncTable:
         - {argIndex: 0, original: arg, type: arg}
       endLine: 53
     name: org.sahagin.runlib.srctreegen.srctreegeneratortestdata.variousData.TestPage.nest3
-    stepInCapture: false
+    capture: thisLine
     argVariables: [arg]
     classKey: Lorg/sahagin/runlib/srctreegen/variousdata/TestPage;
     testDoc: Doc:nest3:{arg}
@@ -155,7 +155,7 @@ subFuncTable:
         args: []
       endLine: 63
     name: org.sahagin.runlib.srctreegen.srctreegeneratortestdata.variousData.TestPage.recurseMethodCall
-    stepInCapture: false
+    capture: thisLine
     argVariables: []
     classKey: Lorg/sahagin/runlib/srctreegen/variousdata/TestPage;
     testDoc: 'Doc: recurseMethodCall'
@@ -163,7 +163,7 @@ subFuncTable:
     key: Lorg/sahagin/runlib/srctreegen/variousdata/TestPage;.recurseMethodCall()V
   - codeBody: []
     name: org.sahagin.runlib.srctreegen.srctreegeneratortestdata.variousData.TestSub.subMethod
-    stepInCapture: false
+    capture: thisLine
     argVariables: []
     classKey: Lorg/sahagin/runlib/srctreegen/variousdata/TestSub;
     testDoc: 'Doc: subMethod'
@@ -282,7 +282,7 @@ rootFuncTable:
       code: {original: wd.findElement(By.cssSelector("GGG")).sendKeys("HHH");, type: unknown}
       endLine: 37
     name: org.sahagin.runlib.srctreegen.srctreegeneratortestdata.variousData.TestMain.testMethod1
-    stepInCapture: false
+    capture: thisLine
     argVariables: []
     classKey: Lorg/sahagin/runlib/srctreegen/variousdata/TestMain;
     testDoc: null
@@ -290,7 +290,7 @@ rootFuncTable:
     key: Lorg/sahagin/runlib/srctreegen/variousdata/TestMain;.testMethod1()V
   - codeBody: []
     name: org.sahagin.runlib.srctreegen.srctreegeneratortestdata.variousData.TestMain.testMethod2
-    stepInCapture: false
+    capture: thisLine
     argVariables: []
     classKey: Lorg/sahagin/runlib/srctreegen/variousdata/TestMain;
     testDoc: Doc:TestMethod2

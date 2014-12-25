@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.sahagin.runlib.external.TestDoc;
+import org.sahagin.share.CaptureStyle;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertEquals;
@@ -46,7 +47,7 @@ public class TestMain {
     @TestDoc("Doc:TestMethod2")
     public void testMethod2() {}
 
-    @TestDoc("Doc:testDocMethod")
+    @TestDoc(value = "Doc:testDocMethod", capture = CaptureStyle.STEP_IN)
     public void testDocMethod() {}
 
     public void noTestDocMethod() {}

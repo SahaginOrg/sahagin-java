@@ -18,6 +18,7 @@ import org.sahagin.runlib.external.TestDoc;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.runlib.external.adapter.ScreenCaptureAdapter;
 import org.sahagin.runlib.runresultsgen.RunResultGenerateHookTest;
+import org.sahagin.share.CaptureStyle;
 
 // this test is executed only called from RunResultGenerateHookTest
 public class TestMain extends TestBase {
@@ -68,7 +69,7 @@ public class TestMain extends TestBase {
         assertEquals(2, 2);
     }
 
-    @TestDoc(value = "Doc: stepInCaptureMethod", stepInCapture = true)
+    @TestDoc(value = "Doc: stepInCaptureMethod", capture = CaptureStyle.STEP_IN)
     public void stepInCaptureMethod() {
         assertEquals(2, 2);
         assertEquals(2, 2);
