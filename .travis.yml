@@ -2,3 +2,6 @@ language: java
 jdk:
   - openjdk6
   - openjdk7
+
+script:
+  mvn package -B
