@@ -1,0 +1,46 @@
+subFuncTable:
+  functions:
+  - codeBody: []
+    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.utf8Character.ページクラス.ページメソッド
+    stepInCapture: false
+    argVariables: []
+    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/utf8Character/ページクラス;
+    testDoc: ページメソッド
+    type: method
+    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/utf8Character/ページクラス;.ページメソッド()V
+rootFuncTable:
+  functions:
+  - codeBody:
+    - startLine: "*"
+      code: {original: ページクラス page=new ページクラス();, type: unknown}
+      endLine: "*"
+    - startLine: "*"
+      code:
+        original: page.ページメソッド();
+        type: method
+        methodKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/utf8Character/ページクラス;.ページメソッド()V
+        thisInstance: {original: page, type: unknown}
+        args: []
+      endLine: "*"
+    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.utf8Character.メインクラス.テスト
+    stepInCapture: false
+    argVariables: []
+    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/utf8Character/メインクラス;
+    testDoc: Doc:テスト
+    type: method
+    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/utf8Character/メインクラス;.テスト()V
+subClassTable:
+  classes:
+  - testDoc: Doc:ページクラス
+    type: page
+    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/utf8Character/ページクラス;
+    methodKeys: [Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/utf8Character/ページクラス;.ページメソッド()V]
+    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.utf8Character.ページクラス
+sahagin-version: "*"
+rootClassTable:
+  classes:
+  - testDoc: Doc:メインクラス
+    type: class
+    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/utf8Character/メインクラス;
+    methodKeys: [Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/utf8Character/メインクラス;.テスト()V]
+    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.utf8Character.メインクラス

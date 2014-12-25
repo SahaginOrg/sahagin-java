@@ -1,16 +1,19 @@
 package org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.sahagin.runlib.external.TestDoc;
-import static org.hamcrest.core.Is.*;
+
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 
 // This is not a test which checks some thing.
 // This is input file for SrcTreeGeneratorTest
+@Ignore
 public class TestMain {
     WebDriver wd;
 

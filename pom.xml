@@ -6,7 +6,7 @@
   </properties>
   <groupId>org.sahagin</groupId>
   <artifactId>sahagin</artifactId>
-  <version>0.2.2</version>
+  <version>0.2.3-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Sahagin</name>
   <description>Sahagin makes your Selenium script more readable and maintainable.</description>
@@ -77,15 +77,37 @@
       <artifactId>junit</artifactId>
       <version>[4.0,4.11]</version>
     </dependency>
+    <dependency>
+      <groupId>org.apache.maven.shared</groupId>
+      <artifactId>maven-invoker</artifactId>
+      <version>2.1.1</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.2</version>
         <configuration>
           <source>1.6</source>
           <target>1.6</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.18</version>
+        <configuration>
+          <systemPropertyVariables>
+            <!-- for Maven Invoker -->
+            <maven.home>${maven.home}</maven.home>
+          </systemPropertyVariables>
+          <!-- used some tests such as RunResultGenerateHookTest -->
+          <argLine>
+            ${sahagin.javaagent}
+          </argLine>
         </configuration>
       </plugin>
       <plugin>
@@ -98,6 +120,7 @@
               <Premain-Class>org.sahagin.main.SahaginPreMain</Premain-Class>
             </manifestEntries>
           </archive>
+          <finalName>${sahagin.jarname}</finalName>
         </configuration>
       </plugin>
       <plugin>

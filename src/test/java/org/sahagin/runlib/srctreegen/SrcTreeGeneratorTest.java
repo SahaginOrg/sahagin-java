@@ -2,8 +2,8 @@ package org.sahagin.runlib.srctreegen;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.sahagin.TestBase;
@@ -29,18 +29,10 @@ public class SrcTreeGeneratorTest extends TestBase {
         } catch (IllegalTestScriptException e) {
             throw new RuntimeException(e);
         }
-        File outputDir = mkWorkDir(methodName);
-        File actualSrcTreeFile = new File(outputDir, "actualSrcTree");
-        YamlUtils.dump(srcTree.toYamlObject(), actualSrcTreeFile);
-        File expectedSrcTreeFile = new File(testResourceDir(methodName), "expectedSrcTree");
-        // copy expected file next to actual file to make it easy for developers to check file difference
-        File copiedExpectedSrcTreeFile = new File(outputDir, "copiedExpectedSrcTree");
-        try {
-            FileUtils.copyFile(expectedSrcTreeFile, copiedExpectedSrcTreeFile);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        TestBase.assertFileContentsEquals(expectedSrcTreeFile, copiedExpectedSrcTreeFile);
+        Map<String, Object> actualYamlObj = srcTree.toYamlObject();
+        File expectedSrcTreeFile = new File(testResourceDir(methodName), "srcTree");
+        Map<String, Object> expectedYamlObj = YamlUtils.load(expectedSrcTreeFile);
+        assertYamlEquals(expectedYamlObj, actualYamlObj);
     }
 
     // this test checks:

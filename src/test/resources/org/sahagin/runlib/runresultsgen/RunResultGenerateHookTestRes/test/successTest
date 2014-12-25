@@ -1,0 +1,10 @@
+runFailures: []
+sahagin-version: "*"
+rootFunctionKey: Lorg/sahagin/runlib/runresultsgen/RunResultGenerateHookTestRes/test/TestMain;.successTest()V
+lineScreenCaptures:
+- path: "*/captures/org.sahagin.runlib.runresultsgen.RunResultGenerateHookTestRes.test.TestMain/successTest/001.png"
+  stackLines:
+  - {line: "*", codeBodyIndex: 1, functionKey: Lorg/sahagin/runlib/runresultsgen/RunResultGenerateHookTestRes/test/TestMain;.successTest()V}
+- path: "*/captures/org.sahagin.runlib.runresultsgen.RunResultGenerateHookTestRes.test.TestMain/successTest/002.png"
+  stackLines:
+  - {line: "*", codeBodyIndex: 2, functionKey: Lorg/sahagin/runlib/runresultsgen/RunResultGenerateHookTestRes/test/TestMain;.successTest()V}

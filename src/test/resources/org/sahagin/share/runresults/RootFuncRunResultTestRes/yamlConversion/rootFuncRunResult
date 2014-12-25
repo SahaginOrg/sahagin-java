@@ -1,0 +1,34 @@
+runFailures:
+- message: 'java.lang.AssertionError: expected:<1> but was:<2>'
+  stackLines:
+  - {line: 91, codeBodyIndex: 1, functionKey: Lorg/sahagin/runlib/runresultsgen/RunResultGenerateHookTestRes/test/TestMain;.noTestDocMethodFailTest()V}
+  stackTrace: "java.lang.AssertionError: expected:<1> but was:<2>\n\tat org.junit.Assert.fail(Assert.java:88)\n\
+    \tat org.junit.Assert.failNotEquals(Assert.java:743)\n\tat org.junit.Assert.assertEquals(Assert.java:118)\n\
+    \tat org.junit.Assert.assertEquals(Assert.java:555)\n\tat org.junit.Assert.assertEquals(Assert.java:542)\n\
+    \tat org.sahagin.runlib.runresultsgen.RunResultGenerateHookTestRes.test.TestMain.noTestDocMethod(TestMain.java:95)\n\
+    \tat org.sahagin.runlib.runresultsgen.RunResultGenerateHookTestRes.test.TestMain.noTestDocMethodFailTest(TestMain.java:91)\n\
+    \tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)\n\
+    \tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)\n\
+    \tat java.lang.reflect.Method.invoke(Method.java:597)\n\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:47)\n\
+    \tat org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)\n\
+    \tat org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:44)\n\
+    \tat org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)\n\
+    \tat org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)\n\
+    \tat org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:271)\n\tat org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:70)\n\
+    \tat org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:50)\n\
+    \tat org.junit.runners.ParentRunner$3.run(ParentRunner.java:238)\n\tat org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:63)\n\
+    \tat org.junit.runners.ParentRunner.runChildren(ParentRunner.java:236)\n\tat org.junit.runners.ParentRunner.access$000(ParentRunner.java:53)\n\
+    \tat org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:229)\n\tat org.junit.runners.ParentRunner.run(ParentRunner.java:309)\n\
+    \tat org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:283)\n\
+    \tat org.apache.maven.surefire.junit4.JUnit4Provider.executeWithRerun(JUnit4Provider.java:173)\n\
+    \tat org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:153)\n\
+    \tat org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:128)\n\
+    \tat org.apache.maven.surefire.booter.ForkedBooter.invokeProviderInSameClassLoader(ForkedBooter.java:203)\n\
+    \tat org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:155)\n\
+    \tat org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:103)\n"
+sahagin-version: 0.2.1
+rootFunctionKey: Lorg/sahagin/runlib/runresultsgen/RunResultGenerateHookTestRes/test/TestMain;.noTestDocMethodFailTest()V
+lineScreenCaptures:
+- path: /Users/itonozomi/sahagin-java/work/org/sahagin/runlib/runresultsgen/RunResultGenerateHookTestRes/test/sahagin-report-input/captures/org.sahagin.runlib.runresultsgen.RunResultGenerateHookTestRes.test.TestMain/noTestDocMethodFailTest/001.png
+  stackLines:
+  - {line: 91, codeBodyIndex: 1, functionKey: Lorg/sahagin/runlib/runresultsgen/RunResultGenerateHookTestRes/test/TestMain;.noTestDocMethodFailTest()V}

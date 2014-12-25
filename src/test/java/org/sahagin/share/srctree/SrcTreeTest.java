@@ -13,18 +13,12 @@ public class SrcTreeTest extends TestBase {
     // convert YAML -> srcTree -> YAML, then compare 2 YAML
     @Test
     public void yamlConversion() throws YamlConvertException {
-        File expected = new File(testResourceDir("yamlConversion"), "srcTree");
-        File actual = new File(mkWorkDir("yamlConversion"), "srcTree");
-
-        Map<String, Object> fromYamlObj = YamlUtils.load(expected);
+        File fromYamlFile = new File(testResourceDir("yamlConversion"), "srcTree");
+        Map<String, Object> fromYamlObj = YamlUtils.load(fromYamlFile);
         SrcTree srcTree = new SrcTree();
         srcTree.fromYamlObject(fromYamlObj);
         Map<String, Object> toYamlObj = srcTree.toYamlObject();
-        YamlUtils.dump(toYamlObj, actual);
-
-        TestBase.assertFileContentsEquals(expected, actual);
-
+        assertYamlEquals(fromYamlObj, toYamlObj);
     }
-
 
 }

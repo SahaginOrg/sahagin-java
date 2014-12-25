@@ -1,0 +1,11 @@
+runFailures:
+- message: 'java.lang.AssertionError: expected:<1> but was:<2>'
+  stackLines:
+  - {line: "*", codeBodyIndex: 1, functionKey: Lorg/sahagin/runlib/runresultsgen/RunResultGenerateHookTestRes/test/TestMain;.noTestDocMethodFailTest()V}
+  stackTrace: "*"
+sahagin-version: "*"
+rootFunctionKey: Lorg/sahagin/runlib/runresultsgen/RunResultGenerateHookTestRes/test/TestMain;.noTestDocMethodFailTest()V
+lineScreenCaptures:
+- path: "*/captures/org.sahagin.runlib.runresultsgen.RunResultGenerateHookTestRes.test.TestMain/noTestDocMethodFailTest/001.png"
+  stackLines:
+  - {line: "*", codeBodyIndex: 1, functionKey: Lorg/sahagin/runlib/runresultsgen/RunResultGenerateHookTestRes/test/TestMain;.noTestDocMethodFailTest()V}

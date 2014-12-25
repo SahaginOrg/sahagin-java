@@ -31,7 +31,7 @@ and add test execution JVM argument.
     <plugin>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-surefire-plugin</artifactId>
-      <version>any other version (2.18, etc)</version>
+      <version>2.18(or any other version)</version>
       <configuration>
         <argLine>
           -javaagent:${settings.localRepository}/org/sahagin/sahagin/0.2.2/sahagin-0.2.2.jar
