@@ -1,12 +1,9 @@
 language: java
+
 jdk:
   - openjdk6
   - openjdk7
   - oraclejdk8
-  
-os:
-  - linux
-  - osx
   
 # So that Travis CI does not ignore Java Maven Invoker class option.
 # See https://github.com/travis-ci/travis-ci/issues/1689
