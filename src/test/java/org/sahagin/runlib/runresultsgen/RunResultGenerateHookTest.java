@@ -82,7 +82,6 @@ public class RunResultGenerateHookTest extends TestBase {
             for (String stdOut : stdOuts) {
                 System.out.println(stdOut);
             }
-
             System.err.println("-------------- Maven standard error --------------");
             for (String stdErr : stdErrs) {
                 System.err.println(stdErr);
