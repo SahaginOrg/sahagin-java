@@ -18,6 +18,10 @@ import org.sahagin.share.srctree.TestClass;
 
 public class CommonUtils {
 
+    public static String sahaginVersion() {
+        return "0.2.3";
+    }
+
     // - nulls last
     // - returns positive if left > right, returns negative if left < right,
     //   0 if equals

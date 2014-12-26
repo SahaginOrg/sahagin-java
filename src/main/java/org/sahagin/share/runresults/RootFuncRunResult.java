@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.sahagin.share.CommonUtils;
 import org.sahagin.share.srctree.TestFunction;
 import org.sahagin.share.yaml.YamlUtils;
 import org.sahagin.share.yaml.YamlConvertException;
@@ -54,7 +55,7 @@ public class RootFuncRunResult implements YamlConvertible {
         result.put("rootFunctionKey", rootFunctionKey);
         result.put("runFailures", YamlUtils.toYamlObjectList(runFailures));
         result.put("lineScreenCaptures", YamlUtils.toYamlObjectList(lineScreenCaptures));
-        result.put("sahaginVersion", "0.2.3"); // TODO hard coded..
+        result.put("sahaginVersion", CommonUtils.sahaginVersion());
         return result;
     }
 

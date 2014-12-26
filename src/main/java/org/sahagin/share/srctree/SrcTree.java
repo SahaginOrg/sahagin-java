@@ -3,6 +3,7 @@ package org.sahagin.share.srctree;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.sahagin.share.CommonUtils;
 import org.sahagin.share.IllegalDataStructureException;
 import org.sahagin.share.srctree.code.Code;
 import org.sahagin.share.srctree.code.CodeLine;
@@ -86,7 +87,7 @@ public class SrcTree implements YamlConvertible {
         result.put("rootFuncTable", rootFuncTableYamlObj);
         result.put("subClassTable", subClassTableYamlObj);
         result.put("subFuncTable", subFuncTableYamlObj);
-        result.put("sahaginVersion", "0.2.3"); // TODO hard coded..
+        result.put("sahaginVersion", CommonUtils.sahaginVersion());
 
         return result;
     }
