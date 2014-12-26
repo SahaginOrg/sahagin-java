@@ -48,6 +48,8 @@ public abstract class TestBase {
     }
 
     public static void assertFileByteContentsEquals(File expected, File actual) {
+        assertTrue(expected.exists());
+        assertTrue(actual.exists());
         byte[] expectedBytes;
         byte[] actualBytes;
         try {
@@ -61,6 +63,8 @@ public abstract class TestBase {
 
     // TODO define custom matcher for file text
     public static void assertFileTextContentsEquals(File expected, File actual) {
+        assertTrue(expected.exists());
+        assertTrue(actual.exists());
         List<String> expectedLines;
         List<String> actualLines;
         try {
