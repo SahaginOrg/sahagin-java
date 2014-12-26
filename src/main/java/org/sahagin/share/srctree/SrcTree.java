@@ -54,6 +54,13 @@ public class SrcTree implements YamlConvertible {
         this.subFuncTable = subFuncTable;
     }
 
+    public void sort() {
+        rootClassTable.sort();
+        rootFuncTable.sort();
+        subClassTable.sort();
+        subFuncTable.sort();
+    }
+
     @Override
     public Map<String, Object> toYamlObject() {
         Map<String, Object> result = new HashMap<String, Object>(4);

@@ -29,6 +29,9 @@ public class SrcTreeGeneratorTest extends TestBase {
         } catch (IllegalTestScriptException e) {
             throw new RuntimeException(e);
         }
+        // To get the same order srcTree YAML regardless of the JDT or JDK implementation,
+        // sort before generating YAML file.
+        srcTree.sort();
         Map<String, Object> actualYamlObj = srcTree.toYamlObject();
         File expectedSrcTreeFile = new File(testResourceDir(methodName), "srcTree");
         Map<String, Object> expectedYamlObj = YamlUtils.load(expectedSrcTreeFile);

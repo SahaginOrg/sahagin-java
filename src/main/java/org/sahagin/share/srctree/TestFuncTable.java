@@ -1,10 +1,13 @@
 package org.sahagin.share.srctree;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.sahagin.share.CommonUtils;
 import org.sahagin.share.yaml.YamlUtils;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlConvertible;
@@ -44,6 +47,16 @@ public class TestFuncTable implements YamlConvertible {
             }
         }
         return result;
+    }
+
+    public void sort() {
+        Collections.sort(testFunctions, new Comparator<TestFunction>() {
+
+            @Override
+            public int compare(TestFunction left, TestFunction right) {
+                return CommonUtils.compare(left.getKey(), right.getKey());
+            }
+        });
     }
 
     @Override

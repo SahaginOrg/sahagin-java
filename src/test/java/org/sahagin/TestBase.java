@@ -137,9 +137,11 @@ public abstract class TestBase {
             return;
         }
 
-        if (expectedValue instanceof String) {
+        if (expectedValue == null) {
+            assertThat(keyPath, expectedValue, is(nullValue()));
+        } else if (expectedValue instanceof String) {
             String regExp = toRegExp((String) expectedValue);
-            if (!actualValue.toString().matches(regExp)) {
+            if (actualValue == null || !actualValue.toString().matches(regExp)) {
                 fail(keyPath + "; expected: " + expectedValue + "; actual: " + actualValue);
             }
         } else  {

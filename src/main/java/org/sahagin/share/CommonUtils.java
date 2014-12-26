@@ -14,8 +14,25 @@ import org.apache.commons.io.IOCase;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.openqa.selenium.io.IOUtils;
+import org.sahagin.share.srctree.TestClass;
 
 public class CommonUtils {
+
+    // - nulls last
+    // - returns positive if left > right, returns negative if left < right,
+    //   0 if equals
+    public static int compare(String left, String right) {
+        if (left == null) {
+            if (right == null) {
+                return 0;
+            } else {
+                return 1; // nulls last
+            }
+        } else if (right == null) {
+            return -1; // nulls last
+        }
+        return left.compareTo(right);
+    }
 
     private static boolean filePathEquals(String path1, String path2) {
         // Mac is case-insensitive, but IOCase.SYSTEM.isCaseSenstive returns true,
@@ -30,7 +47,6 @@ public class CommonUtils {
             return StringUtils.equalsIgnoreCase(path1, path2);
         }
     }
-
 
     // cannot use Path.relativize since Sahagin support Java 1.6 or later
     // TODO ignore case for windows
