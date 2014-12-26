@@ -1,7 +1,9 @@
 package org.sahagin.runlib.runresultsgen;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
@@ -39,18 +41,20 @@ public class RunResultGenerateHookTest extends TestBase {
         InvocationRequest request = new DefaultInvocationRequest();
         request.setGoals(Arrays.asList("jar:jar", "test"));
         request.addShellEnvironment("MAVEN_INVOKER", "on");
+        final List<String> stdOuts = new ArrayList<String>(1024);
         request.setOutputHandler(new InvocationOutputHandler() {
 
             @Override
-            public void consumeLine(String arg0) {
-                // ignore standard output
+            public void consumeLine(String arg) {
+                stdOuts.add(arg);
             }
         });
+        final List<String> stdErrs = new ArrayList<String>(1024);
         request.setErrorHandler(new InvocationOutputHandler() {
 
             @Override
-            public void consumeLine(String arg0) {
-                // ignore standard error
+            public void consumeLine(String arg) {
+                stdErrs.add(arg);
             }
         });
         String jarnameOpt = "-Dsahagin.jarname=sahagin-temp-for-test";
@@ -64,14 +68,30 @@ public class RunResultGenerateHookTest extends TestBase {
         invoker.execute(request);
 
         File reportInputDir = conf.getRootBaseReportInputDataDir();
-        captureAssertion("noTestDocMethodFailTest", reportInputDir, 1);
-        captureAssertion("stepInCaptureTest", reportInputDir, 4);
-        captureAssertion("successTest", reportInputDir, 2);
-        captureAssertion("testDocMethodFailTest", reportInputDir, 1);
-        testResultAssertion("noTestDocMethodFailTest", reportInputDir);
-        testResultAssertion("stepInCaptureTest", reportInputDir);
-        testResultAssertion("successTest", reportInputDir);
-        testResultAssertion("testDocMethodFailTest", reportInputDir);
+        try {
+            captureAssertion("noTestDocMethodFailTest", reportInputDir, 1);
+            captureAssertion("stepInCaptureTest", reportInputDir, 4);
+            captureAssertion("successTest", reportInputDir, 2);
+            captureAssertion("testDocMethodFailTest", reportInputDir, 1);
+            testResultAssertion("noTestDocMethodFailTest", reportInputDir);
+            testResultAssertion("stepInCaptureTest", reportInputDir);
+            testResultAssertion("successTest", reportInputDir);
+            testResultAssertion("testDocMethodFailTest", reportInputDir);
+        } catch (AssertionError e) {
+            System.out.println("-------------- Maven standard out --------------");
+            for (String stdOut : stdOuts) {
+                System.out.println(stdOut);
+            }
+            System.out.println("------------------------------------------------");
+
+            System.err.println("-------------- Maven standard error --------------");
+            for (String stdErr : stdErrs) {
+                System.err.println(stdErr);
+            }
+            System.err.println("--------------------------------------------------");
+
+            throw e;
+        }
     }
 
     private void captureAssertion(String methodName, File reportInputDir, int counterMax) {
