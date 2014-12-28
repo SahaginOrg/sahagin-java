@@ -159,8 +159,8 @@ public class HtmlReport {
     }
 
     private ReportCodeLine generateReportCodeLine(CodeLine codeLine, List<String> parentFuncArgTestDocs,
-            List<StackLine> stackLines, RunFailure runFailure, String ttId, String parentTtId)
-                    throws IllegalTestScriptException {
+            List<StackLine> stackLines, RunFailure runFailure, boolean executed,
+            String ttId, String parentTtId) throws IllegalTestScriptException {
         if (parentFuncArgTestDocs == null) {
             throw new NullPointerException();
         }
@@ -184,15 +184,15 @@ public class HtmlReport {
             errStackLines = runFailure.getStackLines();
         }
         int errCompare = compareToErrStackLines(stackLines, errStackLines);
-        if (errCompare < 0) {
+        if (!executed || errCompare > 0) {
             result.setHasError(false);
-            result.setAlreadyRun(true);
+            result.setAlreadyRun(false);
         } else if (errCompare == 0) {
             result.setHasError(true);
             result.setAlreadyRun(true);
-        } else if (errCompare > 0) {
+        } else if (errCompare < 0) {
             result.setHasError(false);
-            result.setAlreadyRun(false);
+            result.setAlreadyRun(true);
         } else {
             throw new RuntimeException("implementation error");
         }
@@ -211,7 +211,8 @@ public class HtmlReport {
 
     // runFailure... set null if not error
     private List<ReportCodeLine> generateReportCodeBody(
-            TestFunction rootFunction, RunFailure runFailure) throws IllegalTestScriptException {
+            TestFunction rootFunction, RunFailure runFailure, boolean executed)
+                    throws IllegalTestScriptException {
         List<ReportCodeLine> result = new ArrayList<ReportCodeLine>(rootFunction.getCodeBody().size());
         for (int i = 0; i < rootFunction.getCodeBody().size(); i++) {
             CodeLine codeLine = rootFunction.getCodeBody().get(i);
@@ -222,8 +223,8 @@ public class HtmlReport {
             List<StackLine> rootStackLines = new ArrayList<StackLine>(1);
             rootStackLines.add(rootStackLine);
 
-            ReportCodeLine reportCodeLine = generateReportCodeLine(
-                    codeLine, new ArrayList<String>(0), rootStackLines, runFailure, rootTtId, null);
+            ReportCodeLine reportCodeLine = generateReportCodeLine(codeLine,
+                    new ArrayList<String>(0), rootStackLines, runFailure, executed, rootTtId, null);
             result.add(reportCodeLine);
 
             // add direct child to HTML report
@@ -242,7 +243,7 @@ public class HtmlReport {
 
                     ReportCodeLine childReportCodeLine = generateReportCodeLine(
                             childCodeLine, parentFuncArgTestDocs, childStackLines,
-                            runFailure, rootTtId + "_" + j, rootTtId);
+                            runFailure, executed, rootTtId + "_" + j, rootTtId);
                     result.add(childReportCodeLine);
                 }
             }
@@ -406,6 +407,7 @@ public class HtmlReport {
             escapePut(funcContext, "funcTestDoc", rootFunc.getTestDoc());
 
             RootFuncRunResult runResult = runResults.getRunResultByRootFunction(rootFunc);
+            boolean executed = (runResult != null);
             RunFailure runFailure = getRunFailure(runResult);
             if (runFailure == null) {
                 escapePut(funcContext, "errMsg", null);
@@ -415,7 +417,8 @@ public class HtmlReport {
                 escapePut(funcContext, "errLineTtId", generateTtId(runFailure.getStackLines()));
             }
 
-            List<ReportCodeLine> reportCodeBody = generateReportCodeBody(rootFunc, runFailure);
+            List<ReportCodeLine> reportCodeBody
+            = generateReportCodeBody(rootFunc, runFailure, executed);
             funcContext.put("codeBody", reportCodeBody);
 
             List<LineScreenCapture> lineScreenCaptures;
