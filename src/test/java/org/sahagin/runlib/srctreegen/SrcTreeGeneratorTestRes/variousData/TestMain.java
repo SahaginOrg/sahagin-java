@@ -4,8 +4,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.sahagin.runlib.external.CaptureStyle;
 import org.sahagin.runlib.external.TestDoc;
-import org.sahagin.share.CaptureStyle;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertEquals;

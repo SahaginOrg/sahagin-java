@@ -1,4 +1,4 @@
-package org.sahagin.share;
+package org.sahagin.runlib.external;
 
 public enum CaptureStyle {
 

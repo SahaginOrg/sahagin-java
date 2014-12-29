@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.sahagin.share.CaptureStyle;
+import org.sahagin.runlib.external.CaptureStyle;
 import org.sahagin.share.srctree.code.CodeLine;
 import org.sahagin.share.yaml.YamlUtils;
 import org.sahagin.share.yaml.YamlConvertException;

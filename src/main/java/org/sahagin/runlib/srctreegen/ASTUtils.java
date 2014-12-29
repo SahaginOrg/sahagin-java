@@ -6,9 +6,9 @@ import org.eclipse.jdt.core.dom.IMemberValuePairBinding;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
+import org.sahagin.runlib.external.CaptureStyle;
 import org.sahagin.runlib.external.Page;
 import org.sahagin.runlib.external.TestDoc;
-import org.sahagin.share.CaptureStyle;
 
 public class ASTUtils {
 

@@ -1,6 +1,6 @@
 package org.sahagin.runlib.additionaltestdoc;
 
-import org.sahagin.share.CaptureStyle;
+import org.sahagin.runlib.external.CaptureStyle;
 
 // TODO cannot handle overloaded method
 public class AdditionalFuncTestDoc {

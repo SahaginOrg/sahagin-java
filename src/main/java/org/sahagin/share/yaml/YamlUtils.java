@@ -10,7 +10,7 @@ import java.util.Map;
 import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.io.IOUtils;
-import org.sahagin.share.CaptureStyle;
+import org.sahagin.runlib.external.CaptureStyle;
 import org.yaml.snakeyaml.Yaml;
 
 public class YamlUtils {
