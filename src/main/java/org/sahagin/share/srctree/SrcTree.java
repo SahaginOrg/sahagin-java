@@ -17,6 +17,8 @@ public class SrcTree implements YamlConvertible {
     private static final String MSG_CLASS_NOT_FOUND = "class not found; key: %s";
     private static final String MSG_FUNCTION_NOT_FOUND = "function not found; key: %s";
     private static final String MSG_NOT_METHOD = "function \"%s\" is not a method";
+    private static final String MSG_SRC_TREE_FORMAT_MISMATCH
+    = "expected formatVersion is \"%s\", but actual is \"%s\"";
 
     private TestClassTable rootClassTable;
     private TestFuncTable rootFuncTable;
@@ -120,6 +122,14 @@ public class SrcTree implements YamlConvertible {
             subFuncTable = new TestFuncTable();
             subFuncTable.fromYamlObject(subFuncTableYamlObj);
         }
+
+        String formatVersion = YamlUtils.getStrValue(yamlObject, "formatVersion");
+        // "*" means arbitrary version (this is only for testing sahagin itself)
+        if (!formatVersion.equals("*")
+                && !formatVersion.equals(CommonUtils.formatVersion())) {
+            throw new YamlConvertException(String.format
+                    (MSG_SRC_TREE_FORMAT_MISMATCH, CommonUtils.formatVersion(), formatVersion));
+        }
     }
 
     public TestClass getTestClassByKey(String testClassKey) throws IllegalDataStructureException {
@@ -138,7 +148,8 @@ public class SrcTree implements YamlConvertible {
         throw new IllegalDataStructureException(String.format(MSG_CLASS_NOT_FOUND, testClassKey));
     }
 
-    public TestFunction getTestFunctionByKey(String testFunctionKey) throws IllegalDataStructureException {
+    public TestFunction getTestFunctionByKey(String testFunctionKey)
+            throws IllegalDataStructureException {
         if (subFuncTable != null) {
             TestFunction subFunc = subFuncTable.getByKey(testFunctionKey);
             if (subFunc != null) {

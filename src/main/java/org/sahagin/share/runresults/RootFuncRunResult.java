@@ -12,6 +12,9 @@ import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlConvertible;
 
 public class RootFuncRunResult implements YamlConvertible {
+    private static final String MSG_SRC_TREE_FORMAT_MISMATCH
+    = "expected formatVersion is \"%s\", but actual is \"%s\"";
+
     private String rootFunctionKey;
     private TestFunction rootFunction;
     private List<RunFailure> runFailures = new ArrayList<RunFailure>(16);
@@ -78,6 +81,13 @@ public class RootFuncRunResult implements YamlConvertible {
             LineScreenCapture lineScreenCapture = new LineScreenCapture();
             lineScreenCapture.fromYamlObject(lineScreenCaptureYamlObj);
             lineScreenCaptures.add(lineScreenCapture);
+        }
+        String formatVersion = YamlUtils.getStrValue(yamlObject, "formatVersion");
+        // "*" means arbitrary version (this is only for testing sahagin itself)
+        if (!formatVersion.equals("*")
+                && !formatVersion.equals(CommonUtils.formatVersion())) {
+            throw new YamlConvertException(String.format
+                    (MSG_SRC_TREE_FORMAT_MISMATCH, CommonUtils.formatVersion(), formatVersion));
         }
     }
 
