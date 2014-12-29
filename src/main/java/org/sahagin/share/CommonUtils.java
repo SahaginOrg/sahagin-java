@@ -14,11 +14,10 @@ import org.apache.commons.io.IOCase;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.openqa.selenium.io.IOUtils;
-import org.sahagin.share.srctree.TestClass;
 
 public class CommonUtils {
 
-    public static String sahaginVersion() {
+    public static String formatVersion() {
         return "0.2.3";
     }
 

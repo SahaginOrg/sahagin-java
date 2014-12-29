@@ -319,7 +319,7 @@ subClassTable:
     key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestSub;
     methodKeys: [Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestSub;.subMethod()V]
     name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData.TestSub
-sahaginVersion: "*"
+formatVersion: "*"
 rootClassTable:
   classes:
   - testDoc: null

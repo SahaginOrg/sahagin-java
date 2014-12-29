@@ -3,7 +3,7 @@ runFailures:
   stackLines:
   - {line: "*", codeBodyIndex: 1, functionKey: Lorg/sahagin/runlib/runresultsgen/RunResultGenerateHookTestRes/test/TestMain;.noTestDocMethodFailTest()V}
   stackTrace: "*"
-sahaginVersion: "*"
+formatVersion: "*"
 rootFunctionKey: Lorg/sahagin/runlib/runresultsgen/RunResultGenerateHookTestRes/test/TestMain;.noTestDocMethodFailTest()V
 lineScreenCaptures:
 - path: "*/captures/org.sahagin.runlib.runresultsgen.RunResultGenerateHookTestRes.test.TestMain/noTestDocMethodFailTest/001.png"
