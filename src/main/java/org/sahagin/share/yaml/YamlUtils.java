@@ -3,6 +3,7 @@ package org.sahagin.share.yaml;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.io.IOUtils;
 import org.sahagin.runlib.external.CaptureStyle;
+import org.sahagin.runlib.external.Locale;
 import org.yaml.snakeyaml.Yaml;
 
 public class YamlUtils {
@@ -20,6 +22,8 @@ public class YamlUtils {
     private static final String MSG_VALUE_NOT_INT = "can't convert value to int; key: %s; vaule: %s";
     private static final String MSG_VALUE_NOT_CAPTURE_STYLE
     = "can't convert value to CaptureStyle; key: %s; vaule: %s";
+    private static final String MSG_VALUE_NOT_LOCALE
+    = "can't convert value to Locale; key: %s; vaule: %s";
     private static final String MSG_NOT_EQUALS_TO_EXPECTED = "\"%s\" is not equals to \"%s\"";
 
     // if allowsEmpty and key entry is not found, just returns null.
@@ -140,6 +144,31 @@ public class YamlUtils {
         return getCaptureStyleValue(yamlObject, key, false);
     }
 
+    public static Locale getLocaleValue(Map<String, Object> yamlObject, String key, boolean allowsEmpty)
+            throws YamlConvertException {
+        Object obj = getObjectValue(yamlObject, key, allowsEmpty);
+        if (obj == null && allowsEmpty) {
+            return null;
+        }
+        String objStr;
+        if (obj == null) {
+            objStr = null;
+        } else {
+            objStr = obj.toString();
+        }
+        Locale result = Locale.getEnum(objStr);
+        if (result != null) {
+            return result;
+        } else {
+            throw new YamlConvertException(String.format(MSG_VALUE_NOT_LOCALE, key, objStr));
+        }
+    }
+
+    public static Locale getLocaleValue(Map<String, Object> yamlObject,
+            String key) throws YamlConvertException {
+        return getLocaleValue(yamlObject, key, false);
+    }
+
     // returns null for empty
     public static Map<String, Object> getYamlObjectValue(Map<String, Object> yamlObject,
             String key, boolean allowsEmpty) throws YamlConvertException {
@@ -200,21 +229,26 @@ public class YamlUtils {
         return result;
     }
 
-    public static Map<String, Object> load(File yamlFile) {
+    // this method does not close the stream
+    public static Map<String, Object> load(InputStream input) {
         Yaml yaml = new Yaml();
-        FileInputStream in = null;
+        Object rawYamlObj = yaml.load(input);
+        @SuppressWarnings("unchecked")
+        Map<String, Object> yamlObj = (Map<String, Object>) rawYamlObj;
+        return yamlObj;
+    }
+
+    public static Map<String, Object> load(File yamlFile) {
+        FileInputStream input = null;
         Map<String, Object> result = null;
         try {
-            in = new FileInputStream(yamlFile);
-            Object rawYamlObj = yaml.load(in);
-            @SuppressWarnings("unchecked")
-            Map<String, Object> yamlObj = (Map<String, Object>) rawYamlObj;
-            result = yamlObj;
-            in.close();
+            input = new FileInputStream(yamlFile);
+            result = load(input);
+            input.close();
         } catch (IOException e) {
             throw new RuntimeException("exception for " + yamlFile.getAbsolutePath(), e);
         } finally {
-            IOUtils.closeQuietly(in);
+            IOUtils.closeQuietly(input);
         }
         return result;
     }

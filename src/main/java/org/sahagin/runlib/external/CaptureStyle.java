@@ -26,7 +26,7 @@ public enum CaptureStyle {
 
     public static CaptureStyle getEnum(String value) {
         for (CaptureStyle style : values()) {
-            if (style.value.equals(value)) {
+            if (style.getValue().equals(value)) {
                 return style;
             }
         }
