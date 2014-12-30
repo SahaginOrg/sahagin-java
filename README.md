@@ -21,7 +21,7 @@ Add dependency to your pom.xml file.
     <dependency>
       <groupId>org.sahagin</groupId>  
        <artifactId>sahagin</artifactId>  
-       <version>0.2.3</version> 
+       <version>0.2.4</version> 
     </dependency>
   </dependencies>
 ```
@@ -36,7 +36,7 @@ and add test execution JVM argument.
       <version>2.18(or any other version)</version>
       <configuration>
         <argLine>
-          -javaagent:${settings.localRepository}/org/sahagin/sahagin/0.2.3/sahagin-0.2.3.jar
+          -javaagent:${settings.localRepository}/org/sahagin/sahagin/0.2.4/sahagin-0.2.4.jar
         </argLine>
       </configuration>
     </plugin>
@@ -48,7 +48,7 @@ Add dependency to your build.gradle file.
 
 ```groovy
 dependencies {
-    compile 'org.sahagin:sahagin:0.2.3'
+    compile 'org.sahagin:sahagin:0.2.4'
 }
 ```
 
@@ -59,7 +59,7 @@ test {
     doFirst {
         // search sahagin jar file in the local cache
         def sahaginJar = project.configurations.testCompile.find {
-            it.name.startsWith('sahagin-0.2.3') 
+            it.name.startsWith('sahagin-0.2.4') 
         }
         jvmArgs '-javaagent:' + sahaginJar
     }
@@ -68,7 +68,7 @@ test {
 ```
 
 ### If you use jar file directory
-Download sahagin-0.2.3.zip from [here](https://github.com/SahaginOrg/sahagin-java/releases/tag/0.2.3) and add all jar files in the zip file to the Java class path.
+Download sahagin-0.2.4.zip from [here](https://github.com/SahaginOrg/sahagin-java/releases/tag/0.2.4) and add all jar files in the zip file to the Java class path.
 
 ## 2. Add annotations
 Add @Page annotations to your page object class declarations, and add @TestDoc annotations to your page object methods or any other methods.
