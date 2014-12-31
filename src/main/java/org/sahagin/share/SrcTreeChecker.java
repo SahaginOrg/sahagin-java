@@ -1,6 +1,7 @@
 package org.sahagin.share;
 
 import org.sahagin.share.srctree.SrcTree;
+import org.sahagin.share.srctree.TestClass;
 import org.sahagin.share.srctree.TestFunction;
 
 public class SrcTreeChecker {
@@ -13,6 +14,11 @@ public class SrcTreeChecker {
 
     public static void check(SrcTree srcTree) throws IllegalTestScriptException {
         for (TestFunction func : srcTree.getRootFuncTable().getTestFunctions()) {
+            if (func.getTestDoc() != null && func.getTestDoc().contains("\\")) {
+                // TODO support back slash
+                throw new RuntimeException(String.format(
+                        "back slash is not supported: %s", func.getTestDoc()));
+            }
             String invalidKeyword = TestDocResolver.searchInvalidPlaceholder(func);
             if (invalidKeyword != null) {
                 throw new IllegalTestScriptException(String.format(MSG_INVALID_PLACEHOLDER,
@@ -20,10 +26,29 @@ public class SrcTreeChecker {
             }
         }
         for (TestFunction func : srcTree.getSubFuncTable().getTestFunctions()) {
+            if (func.getTestDoc() != null && func.getTestDoc().contains("\\")) {
+                // TODO support back slash
+                throw new RuntimeException(String.format(
+                        "back slash is not supported: %s", func.getTestDoc()));
+            }
             String invalidKeyword = TestDocResolver.searchInvalidPlaceholder(func);
             if (invalidKeyword != null) {
                 throw new IllegalTestScriptException(String.format(MSG_INVALID_PLACEHOLDER,
                         func.getQualifiedName(), invalidKeyword));
+            }
+        }
+        for (TestClass testClass: srcTree.getRootClassTable().getTestClasses()) {
+            if (testClass.getTestDoc() != null && testClass.getTestDoc().contains("\\")) {
+                // TODO support back slash
+                throw new RuntimeException(String.format(
+                        "back slash is not supported: %s", testClass.getTestDoc()));
+            }
+        }
+        for (TestClass testClass: srcTree.getSubClassTable().getTestClasses()) {
+            if (testClass.getTestDoc() != null && testClass.getTestDoc().contains("\\")) {
+                // TODO support back slash
+                throw new RuntimeException(String.format(
+                        "back slash is not supported: %s", testClass.getTestDoc()));
             }
         }
     }
