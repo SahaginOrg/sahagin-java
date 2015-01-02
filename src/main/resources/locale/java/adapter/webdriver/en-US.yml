@@ -1,0 +1,17 @@
+func:
+  org.openqa.selenium.By.className: class name = {0}
+  org.openqa.selenium.By.cssSelector: css = {0}
+  org.openqa.selenium.By.id: id = {0}
+  org.openqa.selenium.By.linkText: text = {0}
+  org.openqa.selenium.By.name: name = {0}
+  org.openqa.selenium.By.partialLinkText: text = {0}(partial match)
+  org.openqa.selenium.By.xpath: xpath = {0}
+  org.openqa.selenium.By.tagName: tag name = {0}
+  org.openqa.selenium.WebDriver.findElement: element "{0}"
+  org.openqa.selenium.WebDriver.get: go to the page "{0}"
+  org.openqa.selenium.WebElement.clear: clear the text of {this}
+  org.openqa.selenium.WebElement.click: click {this}
+  org.openqa.selenium.WebElement.getAttribute: the attribute {0} of {this}
+  org.openqa.selenium.WebElement.getText: the text of {this}
+  org.openqa.selenium.WebElement.isSelected: is {this} selected
+  org.openqa.selenium.WebElement.sendKeys: send keys "{0}" to {this}

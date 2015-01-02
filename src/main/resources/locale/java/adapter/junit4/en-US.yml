@@ -1,0 +1,5 @@
+func:
+  org.hamcrest.core.Is.is: equals to "{0}"
+  org.hamcrest.CoreMatchers.is: equals to "{0}"
+  org.junit.Assert.assertEquals: check if "{0}" equals to "{1}"
+  org.junit.Assert.assertThat: check if "{0}" {1}

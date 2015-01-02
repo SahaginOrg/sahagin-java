@@ -33,4 +33,12 @@ public class CommonPath {
         return new File(reportOutputDir, "captures");
     }
 
+    public static String standardAdapdaterLocaleResDirPath() {
+        return "/locale/java/adapter";
+    }
+
+    public static String standardSystemLocaleResDirPath() {
+        return "/locale/java/system";
+    }
+
 }
