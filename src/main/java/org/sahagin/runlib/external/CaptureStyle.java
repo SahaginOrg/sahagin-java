@@ -20,6 +20,10 @@ public enum CaptureStyle {
         this.value = value;
     }
 
+    public static CaptureStyle getDefault() {
+        return CaptureStyle.THIS_LINE;
+    }
+
     public String getValue() {
         return value;
     }

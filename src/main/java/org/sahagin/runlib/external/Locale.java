@@ -34,6 +34,10 @@ public enum Locale {
         this.country = country;
     }
 
+    public static Locale getDefault() {
+        return Locale.DEFAULT;
+    }
+
     public String getValue() {
         return language + "-" + country;
     }
@@ -71,7 +75,7 @@ public enum Locale {
             }
         }
 
-        return Locale.DEFAULT;
+        return Locale.getDefault();
     }
 
 }
