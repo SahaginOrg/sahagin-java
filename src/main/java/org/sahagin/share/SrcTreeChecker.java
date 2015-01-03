@@ -8,6 +8,9 @@ public class SrcTreeChecker {
     // TODO throw error if sub class has root method
     // TODO throw error if class for root method is not root class
     // TODO throw error if root class is page class
+    // TODO throw error if captureStyle value is defined on @TestDoce inside the @TestDocs
+    // TODO throw error if @TestDoc and @TestDocs are defined on the same place
+    // TODO throw error if @TestDoc and @Page are defined on the same place
 
     private static final String MSG_INVALID_PLACEHOLDER
     = "TestDoc of \"%s\" contains invalid keyword \"%s\"";

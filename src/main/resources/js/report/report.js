@@ -1,19 +1,35 @@
-// global slider object
+/**
+ * global slider object
+ * @type {Object}
+ */
 var slider = null;
-// global srcTree object;
+
+/**
+ * global srcTree object
+ * @type {Object}
+ */
 var srcTree = null;
 
-// slideIndex..integer
+/**
+ * @param {number} slideIndex
+ * @returns {string}
+ */
 function getSlideTtId(slideIndex) {
   return $(".bxslider div.scrollContainer").eq(slideIndex).attr("data-tt-id");
 };
 
-// trObject..jQuery object for table tr element
+/**
+ * @param {Object} trObject jQuery object for table tr element
+ * @returns {string}
+ */
 function getTrTtId(trObject) {
   return trObject.attr("data-tt-id");
 };
 
-// -1 means not found
+/**
+ * @param {string} ttId
+ * @returns {number} -1 means not found
+ */
 function getTtIdSlideIndex(ttId) {
   var slideObj = $(".bxslider div.scrollContainer[data-tt-id='" + ttId + "']");
   if (slideObj.length == 0) {
@@ -22,17 +38,25 @@ function getTtIdSlideIndex(ttId) {
   return $(".bxslider div.scrollContainer").index(slideObj);
 };
 
-// returns jQuery object for tr
+/**
+ * @param {string} ttId
+ * @returns {Object} jQuery object for tr
+ */
 function getTtIdTr(ttId) {
   return $("#script_table tbody tr[data-tt-id='" + ttId + "'");
 };
 
-// returns empty object if no tr is selected
+/**
+ * @returns {Object} empty object if no tr is selected
+ */
 function getSelectedTr() {
   return $("#script_table tbody tr.selected");
 };
 
-// returns empty object if no next tr exists
+/**
+ * @param {Object} trObject
+ * @returns {Object} empty object if no next tr exists
+ */
 function getNextTr(trObject) {
   if (!trObject || trObject.length == 0) {
     throw new Error("null argument");
@@ -45,7 +69,10 @@ function getNextTr(trObject) {
   }
 };
 
-// returns empty object if no previous tr exists
+/**
+ * @param {Object} trObject
+ * @returns {Object} empty object if no previous tr exists
+ */
 function getPrevTr(trObject) {
   if (!trObject || trObject.length == 0) {
     throw new Error("null argument");
@@ -58,8 +85,10 @@ function getPrevTr(trObject) {
   }
 };
 
-// do nothing if selected tr does not exist or next tr does not exist
-// return true if selction is actually changed
+/**
+ * do nothing if selected tr does not exist or next tr does not exist
+ * @returns {boolean} return true if selection is actually changed
+ */
 function changeTrSelectionToNext() {
   var selected = getSelectedTr();
   if (selected.length == 0) {
@@ -73,8 +102,10 @@ function changeTrSelectionToNext() {
   return true;
 };
 
-// do nothing if selected tr does not exist or previous tr does not exist.
-// return true if selction is actually changed
+/**
+ * do nothing if selected tr does not exist or previous tr does not exist
+ * @returns {boolean} return true if selection is actually changed
+ */
 function changeTrSelectionToPrev() {
   var selected = getSelectedTr();
   if (selected.length == 0) {
@@ -88,14 +119,18 @@ function changeTrSelectionToPrev() {
   return true;
 };
 
-// trObject..jQuery object for table tr element
+/**
+ * @param {Object} trObject jQuery object for table tr element
+ */
 function selectTr(trObject) {
   // clear all current selections
   $("tr.selected").removeClass("selected");
   trObject.addClass("selected");
 };
 
-// change current slide index to the index for the selected tr
+/**
+ * change current slide index to the index for the selected tr
+ */
 function syncSlideIndexToSelectedTr() {
   var selected = getSelectedTr();
   if (selected.length == 0) {
@@ -112,7 +147,10 @@ function syncSlideIndexToSelectedTr() {
   slider.goToSlide(slideIndex);
 };
 
-// positive value means down direction scroll
+/**
+ * @param {Object} trObject
+ * @returns {number} positive value means down direction scroll
+ */
 function requiredScrollOffsetToShowTr(trObject) {
   var trTop = trObject.position().top;
   var trBottom = trTop + trObject.height();
@@ -125,6 +163,9 @@ function requiredScrollOffsetToShowTr(trObject) {
   }
 };
 
+/**
+ * 
+ */
 function scrollToShowSelectedTr() {
   var selectedTr = getSelectedTr();
   if (selectedTr.length == 0) {
@@ -138,6 +179,9 @@ function scrollToShowSelectedTr() {
   }
 };
 
+/**
+ * 
+ */
 function expandSelectedTr() {
   var selectedTr = getSelectedTr();
   if (selectedTr.length == 0) {
@@ -146,6 +190,9 @@ function expandSelectedTr() {
   $("#script_table").treetable("expandNode", getTrTtId(selectedTr));
 }
 
+/**
+ * 
+ */
 function collapseSelectedTr() {
   var selectedTr = getSelectedTr();
   if (selectedTr.length == 0) {
@@ -154,9 +201,13 @@ function collapseSelectedTr() {
   $("#script_table").treetable("collapseNode", getTrTtId(selectedTr));
 }
 
-// returns 0 if lineTtId == errLineTtId (means error line),
-// returns positive if lineTtId > errLineTtId (means not executed),
-// returns negative if lineTtd < errLineTtId (means already executed)
+/**
+ * @param {string} lineTtId
+ * @param {string} errLineTtId
+ * @returns {number} 0 if lineTtId == errLineTtId (means error line),
+ * positive if lineTtId > errLineTtId (means not executed),
+ * negative if lineTtd < errLineTtId (means already executed)
+ */
 function compareToErrTtId(lineTtId, errLineTtId) {
   if (errLineTtId == null || errLineTtId == "") {
     return -1; // already executed
@@ -182,6 +233,9 @@ function compareToErrTtId(lineTtId, errLineTtId) {
   return 0;
 }
 
+/**
+ * @returns {Object} get global srcTree object
+ */
 function getSrcTree() {
   if (srcTree == null) {
     var yamlObj = jsyaml.safeLoad(sahagin.srcTreeYamlStr);
@@ -194,6 +248,10 @@ function getSrcTree() {
   return srcTree;
 }
 
+/**
+ * @param {sahagin.Code} code
+ * @returns {string}
+ */
 function getFunctionKey(code) {
   if (!(code instanceof sahagin.SubFunctionInvoke)) {
     return '';
@@ -202,7 +260,10 @@ function getFunctionKey(code) {
   return invoke.getSubFunctionKey();
 }
 
-// add tr's codeBody node
+/**
+ * add tr's codeBody node
+ * @param {Object} tr
+ */
 function loadCodeBodyHiddenNode(tr) {
   var trFuncKey = tr.attr("data-func-key")
   if (trFuncKey == '') {
