@@ -96,7 +96,7 @@ public class ASTUtils {
         String fieldName = getEnumAnnotationFieldName(annotation, "capture");
         CaptureStyle captureStyle;
         if (fieldName == null) {
-            captureStyle = CaptureStyle.THIS_LINE; // default value
+            captureStyle = CaptureStyle.getDefault();
         } else {
             captureStyle = CaptureStyle.valueOf(fieldName);
             if (captureStyle == null) {

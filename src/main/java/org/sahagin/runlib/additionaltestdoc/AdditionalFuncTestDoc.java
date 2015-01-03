@@ -6,7 +6,7 @@ import org.sahagin.runlib.external.CaptureStyle;
 public class AdditionalFuncTestDoc {
     private String qualifiedName;
     private String testDoc;
-    private CaptureStyle captureStyle = CaptureStyle.THIS_LINE;
+    private CaptureStyle captureStyle = CaptureStyle.getDefault();
 
     public String getSimpleName() {
         if (qualifiedName == null) {

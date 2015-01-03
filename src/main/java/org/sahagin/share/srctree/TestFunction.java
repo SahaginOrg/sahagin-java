@@ -19,7 +19,7 @@ public class TestFunction implements YamlConvertible {
     // qualifiedName is not necessarily unique
     private String qualifiedName;
     private String testDoc;
-    private CaptureStyle captureStyle = CaptureStyle.THIS_LINE;
+    private CaptureStyle captureStyle = CaptureStyle.getDefault();
     private List<String> argVariables = new ArrayList<String>(4);
     private List<CodeLine> codeBody = new ArrayList<CodeLine>(32);
 
@@ -112,7 +112,7 @@ public class TestFunction implements YamlConvertible {
         // captureStyle is not mandatory
         captureStyle = YamlUtils.getCaptureStyleValue(yamlObject, "capture", true);
         if (captureStyle == null) {
-            captureStyle = CaptureStyle.THIS_LINE;
+            captureStyle = CaptureStyle.getDefault();
         }
         argVariables = YamlUtils.getStrListValue(yamlObject, "argVariables");
         List<Map<String, Object>> codeBodyYamlObj = YamlUtils.getYamlObjectListValue(yamlObject, "codeBody");
