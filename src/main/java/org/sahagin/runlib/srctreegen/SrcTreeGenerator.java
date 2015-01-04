@@ -92,10 +92,10 @@ public class SrcTreeGenerator {
         return Pair.of(null, false);
     }
 
-    // value (return null if no TestDoc found) and stepInCapture value pair
+    // null pair if not found
     private Pair<String, CaptureStyle> getTestDoc(IMethodBinding method) {
         Pair<String, CaptureStyle> pair = ASTUtils.getTestDoc(method);
-        if (pair != null) {
+        if (pair.getLeft() != null) {
             return pair;
         }
         AdditionalFuncTestDoc additional
@@ -103,7 +103,7 @@ public class SrcTreeGenerator {
         if (additional != null) {
             return Pair.of(additional.getTestDoc(), additional.getCaptureStyle());
         }
-        return null;
+        return Pair.of(null, null);
     }
 
     private boolean isSubFunction(IMethodBinding methodBinding) {
@@ -111,7 +111,7 @@ public class SrcTreeGenerator {
         if (AdapterContainer.globalInstance().isRootFunction(methodBinding)) {
             return false;
         }
-        return getTestDoc(methodBinding) != null;
+        return getTestDoc(methodBinding).getLeft() != null;
     }
 
     // srcFiles..parse target files
@@ -179,7 +179,7 @@ public class SrcTreeGenerator {
             testMethod.setKey(methodBinding.getKey());
             testMethod.setQualifiedName(ASTUtils.qualifiedMethodName(methodBinding));
             Pair<String, CaptureStyle> pair = getTestDoc(methodBinding);
-            if (pair != null) {
+            if (pair.getLeft() != null) {
                 // pair is null if the root method does not have TestDoc annotation
                 testMethod.setTestDoc(pair.getLeft());
                 testMethod.setCaptureStyle(pair.getRight());

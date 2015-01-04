@@ -1,5 +1,8 @@
 package org.sahagin.runlib.external;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum Locale {
 
     DEFAULT("default", "DEFAULT"),
@@ -26,6 +29,8 @@ public enum Locale {
 
     ZH_TW("zh", "TW");
 
+    private static List<Locale> ACCEPTABLE_LOCALES = null;
+    private static java.util.Locale SYSTEM_LOCALE = java.util.Locale.getDefault();
     private String language;
     private String country;
 
@@ -59,23 +64,43 @@ public enum Locale {
         return null;
     }
 
-    public static Locale getClosestLanguageLocale(java.util.Locale locale) {
-        // search exactly matched locale
+    public static void setSystemLocale(java.util.Locale locale) {
+    	if (locale == null) {
+    		throw new NullPointerException();
+    	}
+    	SYSTEM_LOCALE = locale;
+    	setAcceptableLocales();
+    }
+
+    // first element is used first
+    public static List<Locale> getAcceptableLocales() {
+    	if (ACCEPTABLE_LOCALES == null) {
+    		setAcceptableLocales();
+    	}
+    	return ACCEPTABLE_LOCALES;
+    }
+    
+    // search locale for java.util.Locale
+    private static Locale getLocale(java.util.Locale locale) {
         for (Locale lang : values()) {
             if (lang.language.equals(locale.getLanguage())
                     && lang.country.equals(locale.getCountry())) {
                 return lang;
             }
         }
-
-        // search language matched locale
-        for (Locale lang : values()) {
-            if (lang.language.equals(locale.getLanguage())) {
-                return lang;
-            }
-        }
-
-        return Locale.getDefault();
+        return null;
+    }
+    
+    private static void setAcceptableLocales() {
+		ACCEPTABLE_LOCALES = new ArrayList<Locale>(4);
+		Locale current = getLocale(SYSTEM_LOCALE);
+		if (current != null) {
+			ACCEPTABLE_LOCALES.add(current);
+		}
+		ACCEPTABLE_LOCALES.add(Locale.DEFAULT);
+		if (current != Locale.EN_US) {
+			ACCEPTABLE_LOCALES.add(Locale.EN_US);
+		}
     }
 
 }
