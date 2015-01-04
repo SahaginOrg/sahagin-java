@@ -8,6 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.sahagin.TestBase;
 import org.sahagin.runlib.external.adapter.junit4.JUnit4Adapter;
+import org.sahagin.share.AcceptableLocales;
 import org.sahagin.share.IllegalTestScriptException;
 import org.sahagin.share.srctree.SrcTree;
 import org.sahagin.share.yaml.YamlUtils;
@@ -22,7 +23,8 @@ public class SrcTreeGeneratorTest extends TestBase {
 
     private void testMain(String methodName) {
         File testDir = testJavaResourceDir(methodName);
-        SrcTreeGenerator gen = new SrcTreeGenerator(null);
+        AcceptableLocales locales = AcceptableLocales.getInstance(null);
+        SrcTreeGenerator gen = new SrcTreeGenerator(null, locales);
         SrcTree srcTree;
         try {
             srcTree = gen.generateWithRuntimeClassPath(testDir, "UTF-8");

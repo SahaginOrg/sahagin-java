@@ -40,6 +40,7 @@ import org.sahagin.runlib.additionaltestdoc.AdditionalPage;
 import org.sahagin.runlib.additionaltestdoc.AdditionalTestDocs;
 import org.sahagin.runlib.external.CaptureStyle;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
+import org.sahagin.share.AcceptableLocales;
 import org.sahagin.share.CommonUtils;
 import org.sahagin.share.IllegalTestScriptException;
 import org.sahagin.share.Logging;
@@ -60,27 +61,29 @@ import org.sahagin.share.srctree.code.UnknownCode;
 public class SrcTreeGenerator {
     private static Logger logger = Logging.getLogger(SrcTreeGenerator.class.getName());
     private AdditionalTestDocs additionalTestDocs;
+    private AcceptableLocales locales;
 
     // additionalTestDocs can be null
-    public SrcTreeGenerator(AdditionalTestDocs additionalTestDocs) {
+    public SrcTreeGenerator(AdditionalTestDocs additionalTestDocs, AcceptableLocales locales) {
         if (additionalTestDocs == null) {
             // use empty additionalTestDocs
             this.additionalTestDocs = new AdditionalTestDocs();
         } else {
             this.additionalTestDocs = additionalTestDocs;
         }
+        this.locales = locales;
     }
 
     // result first value .. TestDoc value. return null if no TestDoc found
     // result second value.. isPage
     private Pair<String, Boolean> getTestDoc(ITypeBinding type) {
         // Page testDoc is prior to TestDoc value
-        String pageTestDoc = ASTUtils.getPageTestDoc(type);
+        String pageTestDoc = ASTUtils.getPageTestDoc(type, locales);
         if (pageTestDoc != null) {
             return Pair.of(pageTestDoc, true);
         }
 
-        String testDoc = ASTUtils.getTestDoc(type);
+        String testDoc = ASTUtils.getTestDoc(type, locales);
         if (testDoc != null) {
             return Pair.of(testDoc, false);
         }
@@ -94,7 +97,7 @@ public class SrcTreeGenerator {
 
     // null pair if not found
     private Pair<String, CaptureStyle> getTestDoc(IMethodBinding method) {
-        Pair<String, CaptureStyle> pair = ASTUtils.getTestDoc(method);
+        Pair<String, CaptureStyle> pair = ASTUtils.getTestDoc(method, locales);
         if (pair.getLeft() != null) {
             return pair;
         }

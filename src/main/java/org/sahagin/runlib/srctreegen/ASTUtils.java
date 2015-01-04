@@ -15,8 +15,10 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.sahagin.runlib.external.CaptureStyle;
 import org.sahagin.runlib.external.Locale;
 import org.sahagin.runlib.external.Page;
+import org.sahagin.runlib.external.Pages;
 import org.sahagin.runlib.external.TestDoc;
 import org.sahagin.runlib.external.TestDocs;
+import org.sahagin.share.AcceptableLocales;
 
 public class ASTUtils {
 
@@ -151,7 +153,7 @@ public class ASTUtils {
             }
         }
         
-        // get resultTestDocValues
+        // get resultTestDocMap
         Map<Locale, String> resultTestDocMap 
         = new HashMap<Locale, String>(allTestDocAnnotations.size());
         for (IAnnotationBinding eachTestDocAnnotation : allTestDocAnnotations) {
@@ -163,10 +165,47 @@ public class ASTUtils {
         return Pair.of(resultTestDocMap, resultCaptureStyle);
     }
     
+    // return empty list and null pair if no Page is found
+    private static Map<Locale, String> getAllPageTestDocs(
+            IAnnotationBinding[] annotations) {
+        IAnnotationBinding pageAnnotation = getAnnotationBinding(annotations, Page.class);
+        IAnnotationBinding pagesAnnotation = getAnnotationBinding(annotations, Pages.class);
+        if (pageAnnotation != null && pagesAnnotation != null) {
+            // TODO throw IllegalTestScriptException
+            throw new RuntimeException("don't use @Page and @Pages at the same place");
+        }
+
+        // all testDoc value on @Page and @Pages
+        List<IAnnotationBinding> allPageAnnotations = new ArrayList<IAnnotationBinding>(2);
+
+        if (pageAnnotation != null) {
+            // get @Page
+            allPageAnnotations.add(pageAnnotation);
+        } else if (pagesAnnotation != null) {
+            // get @Page from @Pages
+            Object value = getAnnotationValue(pagesAnnotation, "value");
+            IAnnotationBinding[] pagesAnnotationValues = (IAnnotationBinding[]) value;
+            allPageAnnotations.addAll(Arrays.asList(pagesAnnotationValues));
+        }
+        
+        // get resultPageMap
+        Map<Locale, String> resultPageMap 
+        = new HashMap<Locale, String>(allPageAnnotations.size());
+        for (IAnnotationBinding eachPageAnnotation : allPageAnnotations) {
+            Object value = getAnnotationValue(eachPageAnnotation, "value");
+            Locale locale = getAnnotationLocaleValue(eachPageAnnotation, "locale");
+            resultPageMap.put(locale, (String) value);
+        }
+
+        return resultPageMap;
+    }
+
+    
     // first... value
     // second... captureStyle value.
     // return null pair if no TestDoc is found
-    private static Pair<String, CaptureStyle> getTestDoc(IAnnotationBinding[] annotations) {
+    private static Pair<String, CaptureStyle> getTestDoc(
+    		IAnnotationBinding[] annotations, AcceptableLocales locales) {
     	Pair<Map<Locale, String>, CaptureStyle> allTestDocs = getAllTestDocs(annotations);
     	Map<Locale, String> testDocMap = allTestDocs.getLeft();
         if (testDocMap.isEmpty()) {
@@ -174,8 +213,7 @@ public class ASTUtils {
         }
         
     	String testDoc = null;
-        List<Locale> locales = Locale.getAcceptableLocales();
-        for (Locale locale : locales) {
+        for (Locale locale : locales.getLocales()) {
         	String value = testDocMap.get(locale);
         	if (value != null) {
         		testDoc = value;
@@ -190,30 +228,37 @@ public class ASTUtils {
     }
 
     // return null if no Page found
-    public static String getPageTestDoc(IAnnotationBinding[] annotations) {
-        IAnnotationBinding annotation = getAnnotationBinding(
-                annotations, Page.class);
-        if (annotation == null) {
+    private static String getPageTestDoc(
+    		IAnnotationBinding[] annotations, AcceptableLocales locales) {
+    	Map<Locale, String> allPages = getAllPageTestDocs(annotations);
+        if (allPages.isEmpty()) {
             return null;
         }
-        Object value = getAnnotationValue(annotation, "value");
-        return (String) value;
+        
+        for (Locale locale : locales.getLocales()) {
+        	String value = allPages.get(locale);
+        	if (value != null) {
+        		return value;
+        	}
+        }
+        return null;
     }
 
     // return null if not found
-    public static String getPageTestDoc(ITypeBinding type) {
-        return getPageTestDoc(type.getAnnotations());
+    public static String getPageTestDoc(ITypeBinding type, AcceptableLocales locales) {
+        return getPageTestDoc(type.getAnnotations(), locales);
     }
 
     // return null if not found
-    public static String getTestDoc(ITypeBinding type) {
-        Pair<String, CaptureStyle> pair = getTestDoc(type.getAnnotations());
+    public static String getTestDoc(ITypeBinding type, AcceptableLocales locales) {
+        Pair<String, CaptureStyle> pair = getTestDoc(type.getAnnotations(), locales);
         return pair.getLeft();
     }
 
     // return null pair if not found
-    public static Pair<String, CaptureStyle> getTestDoc(IMethodBinding method) {
-        return getTestDoc(method.getAnnotations());
+    public static Pair<String, CaptureStyle> getTestDoc(
+    		IMethodBinding method, AcceptableLocales locales) {
+        return getTestDoc(method.getAnnotations(), locales);
     }
 
     // method name with qualified class name

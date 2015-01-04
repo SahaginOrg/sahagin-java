@@ -10,6 +10,7 @@ import org.sahagin.runlib.external.adapter.junit4.JUnit4Adapter;
 import org.sahagin.runlib.external.adapter.webdriver.WebDriverAdapter;
 import org.sahagin.runlib.runresultsgen.TestClassFileTransformer;
 import org.sahagin.runlib.srctreegen.SrcTreeGenerator;
+import org.sahagin.share.AcceptableLocales;
 import org.sahagin.share.CommonPath;
 import org.sahagin.share.Config;
 import org.sahagin.share.IllegalTestScriptException;
@@ -50,9 +51,10 @@ public class SahaginPreMain {
     }
 
     private static SrcTree generateAndDumpSrcTree(Config config) throws IllegalTestScriptException {
+    	AcceptableLocales locales = AcceptableLocales.getInstance(config.getUserLocale());
         // generate and dump srcTree
         SrcTreeGenerator generator = new SrcTreeGenerator(
-                AdapterContainer.globalInstance().getAdditionalTestDocs());
+                AdapterContainer.globalInstance().getAdditionalTestDocs(), locales);
         File srcTreeFile = CommonPath.srcTreeFile(config.getRootBaseReportInputDataDir());
         SrcTree srcTree = generator.generateWithRuntimeClassPath(config.getRootBaseTestDir(), "UTF-8");
         SrcTreeChecker.check(srcTree);
