@@ -70,6 +70,8 @@ test {
 ### If you use jar file directory
 Download sahagin-0.2.5.zip from [here](https://github.com/SahaginOrg/sahagin-java/releases/tag/0.2.5) and add all jar files in the zip file to the Java class path.
 
+You must add JVM argument "-javaagent:\<path to sahagin-0.2.5.jar\>" when you run JUnit tests.
+
 ## 2. Add annotations
 Add @Page annotations to your page object class declarations, and add @TestDoc annotations to your page object methods or any other methods.
 
@@ -130,12 +132,18 @@ java:
 ```
 
 ## 5. Run test and generate report
-Run your JUnit tests.
+Run your JUnit tests with your pom.xml or build.gradle.
 
 Then you will find the report sahagin-rerpot/index.html on the Java project root directory.
 
 ## 6. Jenkins plug-in
 
-Coming soon.
-
+1. Open **Manage Jenkins** > **Manage Plugins** > **Available**
+2. Find **Sahagin Plugin** and install it. The latest version of the plugin is 0.2.5
+3. Restart Jenkins.
+4. Open project configuration page.
+5. Add Post-build Action **Publish Sahagin HTML report**.
+6. If you have added Post-build Action **Publish JUnit test result report**, add Additional test report feature **Add Sahagin test report link to each test result**.
+7. Run your JUnit tests on Jenkins with your pom.xml or build.gradle.
+8. You will find Sahagin HTML report link on the project test result.
 
