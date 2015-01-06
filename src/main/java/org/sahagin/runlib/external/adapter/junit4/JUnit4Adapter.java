@@ -24,7 +24,8 @@ public class JUnit4Adapter implements Adapter {
 
         @Override
         public boolean isRootFunction(IMethodBinding methodBinding) {
-            return ASTUtils.getAnnotationBinding(methodBinding.getAnnotations(), Test.class) != null;
+            return ASTUtils.getAnnotationBinding(
+                    methodBinding.getAnnotations(), Test.class) != null;
         }
 
         @Override
@@ -40,22 +41,23 @@ public class JUnit4Adapter implements Adapter {
 
     private static class AdditionalTestDocsAdapterImpl extends ResourceAdditionalTestDocsAdapter {
 
-		@Override
-		public String resourceDirPath() {
-			return CommonPath.standardAdapdaterLocaleResDirPath() + "/junit4";
-		}
+        @Override
+        public String resourceDirPath() {
+            return CommonPath.standardAdapdaterLocaleResDirPath() + "/junit4";
+        }
 
-		@Override
-        public void classAdd() {}
+        @Override
+        public void classAdd() {
+        }
 
         @Override
         public void funcAdd() {
-        	// TODO cannot handle methods defined on subclass
+            // TODO cannot handle methods defined on subclass
 
-        	// in alphabetical order
-        	methodAdd("org.hamcrest.core.Is", "is");
-        	methodAdd("org.hamcrest.CoreMatchers", "is");
-        	methodAdd("org.junit.Assert", "assertEquals");
+            // in alphabetical order
+            methodAdd("org.hamcrest.core.Is", "is");
+            methodAdd("org.hamcrest.CoreMatchers", "is");
+            methodAdd("org.junit.Assert", "assertEquals");
             methodAdd("org.junit.Assert", "assertThat");
         }
 

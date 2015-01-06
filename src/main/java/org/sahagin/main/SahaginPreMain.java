@@ -34,9 +34,9 @@ public class SahaginPreMain {
             configFilePath = agentArgs;
         }
         Config config = Config.generateFromYamlConfig(new File(configFilePath));
-    	AcceptableLocales locales = AcceptableLocales.getInstance(config.getUserLocale());
+        AcceptableLocales locales = AcceptableLocales.getInstance(config.getUserLocale());
         // TODO change adapter according to the configuration value
-    	AdapterContainer.globalInitialize(locales);
+        AdapterContainer.globalInitialize(locales);
         new JUnit4Adapter().initialSetAdapter();
         new WebDriverAdapter().initialSetAdapter();
 
@@ -52,8 +52,8 @@ public class SahaginPreMain {
         inst.addTransformer(transformer);
     }
 
-    private static SrcTree generateAndDumpSrcTree(Config config, AcceptableLocales locales) 
-    		throws IllegalTestScriptException {
+    private static SrcTree generateAndDumpSrcTree(Config config, AcceptableLocales locales)
+            throws IllegalTestScriptException {
         // generate and dump srcTree
         SrcTreeGenerator generator = new SrcTreeGenerator(
                 AdapterContainer.globalInstance().getAdditionalTestDocs(), locales);

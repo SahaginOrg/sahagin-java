@@ -18,8 +18,8 @@ public class SrcTreeGeneratorTest extends TestBase {
 
     @BeforeClass
     public static void setUpClass() throws IOException {
-    	AcceptableLocales locales = AcceptableLocales.getInstance(null);
-    	AdapterContainer.globalInitialize(locales);
+        AcceptableLocales locales = AcceptableLocales.getInstance(null);
+        AdapterContainer.globalInitialize(locales);
         // set RootFunctionAdapter
         new JUnit4Adapter().initialSetAdapter();
     }

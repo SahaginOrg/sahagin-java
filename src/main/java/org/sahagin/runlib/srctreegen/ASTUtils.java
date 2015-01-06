@@ -205,41 +205,41 @@ public class ASTUtils {
     // second... captureStyle value.
     // return null pair if no TestDoc is found
     private static Pair<String, CaptureStyle> getTestDoc(
-    		IAnnotationBinding[] annotations, AcceptableLocales locales) {
-    	Pair<Map<Locale, String>, CaptureStyle> allTestDocs = getAllTestDocs(annotations);
-    	Map<Locale, String> testDocMap = allTestDocs.getLeft();
+            IAnnotationBinding[] annotations, AcceptableLocales locales) {
+        Pair<Map<Locale, String>, CaptureStyle> allTestDocs = getAllTestDocs(annotations);
+        Map<Locale, String> testDocMap = allTestDocs.getLeft();
         if (testDocMap.isEmpty()) {
             return Pair.of(null, null);
         }
         
-    	String testDoc = null;
+        String testDoc = null;
         for (Locale locale : locales.getLocales()) {
-        	String value = testDocMap.get(locale);
-        	if (value != null) {
-        		testDoc = value;
-        		break;
-        	}
+            String value = testDocMap.get(locale);
+            if (value != null) {
+                testDoc = value;
+                break;
+            }
         }
         if (testDoc == null) {
-        	return Pair.of(null, null);
+            return Pair.of(null, null);
         } else {
-        	return Pair.of(testDoc, allTestDocs.getRight());
+            return Pair.of(testDoc, allTestDocs.getRight());
         }
     }
 
     // return null if no Page found
     private static String getPageTestDoc(
-    		IAnnotationBinding[] annotations, AcceptableLocales locales) {
-    	Map<Locale, String> allPages = getAllPageTestDocs(annotations);
+            IAnnotationBinding[] annotations, AcceptableLocales locales) {
+        Map<Locale, String> allPages = getAllPageTestDocs(annotations);
         if (allPages.isEmpty()) {
             return null;
         }
         
         for (Locale locale : locales.getLocales()) {
-        	String value = allPages.get(locale);
-        	if (value != null) {
-        		return value;
-        	}
+            String value = allPages.get(locale);
+            if (value != null) {
+                return value;
+            }
         }
         return null;
     }
@@ -257,7 +257,7 @@ public class ASTUtils {
 
     // return null pair if not found
     public static Pair<String, CaptureStyle> getTestDoc(
-    		IMethodBinding method, AcceptableLocales locales) {
+            IMethodBinding method, AcceptableLocales locales) {
         return getTestDoc(method.getAnnotations(), locales);
     }
 

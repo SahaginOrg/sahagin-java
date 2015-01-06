@@ -70,15 +70,15 @@ implements AdditionalTestDocsAdapter {
         classTestDocInstance.setQualifiedName(qualifiedName);
         String testDoc = ""; // set empty string if no locale data is found
         for (Locale locale : locales.getLocales()) {
-        	Map<String, Object> map = localeClassYamlObjMap.get(locale);
-        	if (map == null) {
-        		continue;
-        	}
-        	Object value = map.get(qualifiedName);
-        	if (value != null) {
-        		testDoc = (String) value;
-        		break;
-        	}
+            Map<String, Object> map = localeClassYamlObjMap.get(locale);
+            if (map == null) {
+                continue;
+            }
+            Object value = map.get(qualifiedName);
+            if (value != null) {
+                testDoc = (String) value;
+                break;
+            }
         }
         classTestDocInstance.setTestDoc(testDoc);
         docs.classAdd(classTestDocInstance);
@@ -95,23 +95,23 @@ implements AdditionalTestDocsAdapter {
     public abstract void classAdd();
 
     protected final void methodAdd(String classQualifiedName, 
-    		String methodSimpleName, CaptureStyle captureStyle) {
-    	AdditionalMethodTestDoc methodTestDocInstance = new AdditionalMethodTestDoc();
-    	String methodQualifiedName = classQualifiedName + "." + methodSimpleName;
+            String methodSimpleName, CaptureStyle captureStyle) {
+        AdditionalMethodTestDoc methodTestDocInstance = new AdditionalMethodTestDoc();
+        String methodQualifiedName = classQualifiedName + "." + methodSimpleName;
         methodTestDocInstance.setClassQualifiedName(classQualifiedName);
         methodTestDocInstance.setQualifiedName(methodQualifiedName);
         methodTestDocInstance.setCaptureStyle(captureStyle);
         String testDoc = ""; // set empty string if no locale data is found
         for (Locale locale : locales.getLocales()) {
-        	Map<String, Object> map = localeFuncYamlObjMap.get(locale);
-        	if (map == null) {
-        		continue;
-        	}
-        	Object value = map.get(methodQualifiedName);
-        	if (value != null) {
-        		testDoc = (String) value;
-        		break;
-        	}
+            Map<String, Object> map = localeFuncYamlObjMap.get(locale);
+            if (map == null) {
+                continue;
+            }
+            Object value = map.get(methodQualifiedName);
+            if (value != null) {
+                testDoc = (String) value;
+                break;
+            }
         }
         methodTestDocInstance.setTestDoc(testDoc);
         docs.funcAdd(methodTestDocInstance);

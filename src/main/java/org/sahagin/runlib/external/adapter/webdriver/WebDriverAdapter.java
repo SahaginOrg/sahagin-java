@@ -28,7 +28,8 @@ public class WebDriverAdapter implements Adapter {
         container.setScreenCaptureAdapter(new ScreenCaptureAdapterImpl(driver));
     }
 
-    public static class ScreenCaptureAdapterImpl implements ScreenCaptureAdapter {
+    public static class ScreenCaptureAdapterImpl implements
+            ScreenCaptureAdapter {
         private WebDriver driver;
 
         public ScreenCaptureAdapterImpl(WebDriver driver) {
@@ -44,7 +45,8 @@ public class WebDriverAdapter implements Adapter {
                 return null;
             }
             try {
-                return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+                return ((TakesScreenshot) driver)
+                        .getScreenshotAs(OutputType.BYTES);
             } catch (SessionNotFoundException e) {
                 // just do nothing if WebDriver instance is in invalid state
                 return null;
@@ -53,15 +55,18 @@ public class WebDriverAdapter implements Adapter {
 
     }
 
-    private static class AdditionalTestDocsAdapterImpl extends ResourceAdditionalTestDocsAdapter {
-
-		@Override
-		public String resourceDirPath() {
-			return CommonPath.standardAdapdaterLocaleResDirPath() + "/webdriver";
-		}
+    private static class AdditionalTestDocsAdapterImpl extends
+            ResourceAdditionalTestDocsAdapter {
 
         @Override
-        public void classAdd() {}
+        public String resourceDirPath() {
+            return CommonPath.standardAdapdaterLocaleResDirPath()
+                    + "/webdriver";
+        }
+
+        @Override
+        public void classAdd() {
+        }
 
         @Override
         public void funcAdd() {
@@ -85,7 +90,7 @@ public class WebDriverAdapter implements Adapter {
             methodAdd("org.openqa.selenium.WebElement", "isSelected");
             methodAdd("org.openqa.selenium.WebElement", "sendKeys");
         }
-        
+
     }
 
 }

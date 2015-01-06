@@ -93,23 +93,23 @@ public class Config implements YamlConvertible {
         this.runTestOnly = runTestOnly;
     }
 
-	public Locale getUserLocale() {
-		return userLocale;
-	}
-	
-	public boolean usesSystemLocale() {
-		return usesSystemLocale;
-	}
+    public Locale getUserLocale() {
+        return userLocale;
+    }
+    
+    public boolean usesSystemLocale() {
+        return usesSystemLocale;
+    }
 
-	public void setUserLocale(Locale userLocale) {
-		this.userLocale = userLocale;
-		usesSystemLocale = false;
-	}
-	
-	public void setUserLocaleFromSystemLocale() {
-		this.userLocale = Locale.getSystemLocale();
-		usesSystemLocale = true;
-	}
+    public void setUserLocale(Locale userLocale) {
+        this.userLocale = userLocale;
+        usesSystemLocale = false;
+    }
+    
+    public void setUserLocaleFromSystemLocale() {
+        this.userLocale = Locale.getSystemLocale();
+        usesSystemLocale = true;
+    }
 
     @Override
     public Map<String, Object> toYamlObject() {
@@ -121,9 +121,9 @@ public class Config implements YamlConvertible {
         commonConf.put("outputLog", outputLog);
         commonConf.put("runTestOnly", runTestOnly);
         if (usesSystemLocale) {
-        	commonConf.put("userLocale", "system");        	
+            commonConf.put("userLocale", "system");            
         } else {
-        	commonConf.put("userLocale", userLocale.getValue());
+            commonConf.put("userLocale", userLocale.getValue());
         }
         Map<String, Object> result = new HashMap<String, Object>(2);
         result.put("java", javaConf);
@@ -157,29 +157,29 @@ public class Config implements YamlConvertible {
         if (reportOutputDirValue != null) {
             reportOutputDir = new File(reportOutputDirValue);
         } else {
-        	reportOutputDir = REPORT_OUTPUDT_DATA_DIR_DEFAULT;
+            reportOutputDir = REPORT_OUTPUDT_DATA_DIR_DEFAULT;
         }
         
         Boolean outputLogValue = YamlUtils.getBooleanValue(commonYamlObj, "outputLog", true);
         if (outputLogValue != null) {
             outputLog = outputLogValue;
         } else {
-        	outputLog = false;
+            outputLog = false;
         }
         
         Boolean runTestOnlyValue = YamlUtils.getBooleanValue(commonYamlObj, "runTestOnly", true);
         if (runTestOnlyValue != null) {
             runTestOnly = runTestOnlyValue;
         } else {
-        	runTestOnly = false;
+            runTestOnly = false;
         }
         
         String userLocaleValueStr = YamlUtils.getStrValue(commonYamlObj, "userLocale", true);
         if (userLocaleValueStr == null || userLocaleValueStr.equals("system")) {
-        	usesSystemLocale = true;
-        	userLocale = Locale.getSystemLocale();
+            usesSystemLocale = true;
+            userLocale = Locale.getSystemLocale();
         } else {
-        	usesSystemLocale = false;
+            usesSystemLocale = false;
             userLocale = YamlUtils.getLocaleValue(commonYamlObj, "userLocale");            
         }
     }

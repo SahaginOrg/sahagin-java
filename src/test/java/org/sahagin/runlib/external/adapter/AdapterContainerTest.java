@@ -13,31 +13,37 @@ import org.sahagin.share.AcceptableLocales;
 
 public class AdapterContainerTest {
 
-	@Test
-	public void testDocSetUpByEnUs() {
-    	AcceptableLocales locales = AcceptableLocales.getInstance(Locale.EN_US);
-    	AdapterContainer.globalInitialize(locales);
+    @Test
+    public void testDocSetUpByEnUs() {
+        AcceptableLocales locales = AcceptableLocales.getInstance(Locale.EN_US);
+        AdapterContainer.globalInitialize(locales);
         new JUnit4Adapter().initialSetAdapter();
         new WebDriverAdapter().initialSetAdapter();
-        AdditionalTestDocs testDocs = AdapterContainer.globalInstance().getAdditionalTestDocs();
-        AdditionalFuncTestDoc assertThatTestDoc = testDocs.getFuncTestDoc("org.junit.Assert.assertThat");
-        AdditionalFuncTestDoc clickTestDoc = testDocs.getFuncTestDoc("org.openqa.selenium.WebElement.click");
+        AdditionalTestDocs testDocs
+        = AdapterContainer.globalInstance().getAdditionalTestDocs();
+        AdditionalFuncTestDoc assertThatTestDoc
+        = testDocs.getFuncTestDoc("org.junit.Assert.assertThat");
+        AdditionalFuncTestDoc clickTestDoc
+        = testDocs.getFuncTestDoc("org.openqa.selenium.WebElement.click");
         assertThat(assertThatTestDoc.getCaptureStyle(), is(CaptureStyle.THIS_LINE));
         assertThat(assertThatTestDoc.getTestDoc(), is("check if \"{0}\" {1}"));
         assertThat(clickTestDoc.getTestDoc(), is("click {this}"));
-	}
+    }
 
-	@Test
-	public void testDocSetUpByJaJp() {
-    	AcceptableLocales locales = AcceptableLocales.getInstance(Locale.JA_JP);
-    	AdapterContainer.globalInitialize(locales);
+    @Test
+    public void testDocSetUpByJaJp() {
+        AcceptableLocales locales = AcceptableLocales.getInstance(Locale.JA_JP);
+        AdapterContainer.globalInitialize(locales);
         new JUnit4Adapter().initialSetAdapter();
         new WebDriverAdapter().initialSetAdapter();
-        AdditionalTestDocs testDocs = AdapterContainer.globalInstance().getAdditionalTestDocs();
-        AdditionalFuncTestDoc assertThatTestDoc = testDocs.getFuncTestDoc("org.junit.Assert.assertThat");
-        AdditionalFuncTestDoc clickTestDoc = testDocs.getFuncTestDoc("org.openqa.selenium.WebElement.click");
+        AdditionalTestDocs testDocs
+        = AdapterContainer.globalInstance().getAdditionalTestDocs();
+        AdditionalFuncTestDoc assertThatTestDoc
+        = testDocs.getFuncTestDoc("org.junit.Assert.assertThat");
+        AdditionalFuncTestDoc clickTestDoc
+        = testDocs.getFuncTestDoc("org.openqa.selenium.WebElement.click");
         assertThat(assertThatTestDoc.getCaptureStyle(), is(CaptureStyle.THIS_LINE));
         assertThat(assertThatTestDoc.getTestDoc(), is("「{0}」が{1}ことをチェック"));
         assertThat(clickTestDoc.getTestDoc(), is("{this}をクリック"));
-	}
+    }
 }

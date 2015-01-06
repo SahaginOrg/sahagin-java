@@ -72,7 +72,7 @@ public enum Locale {
     
     // returns null if not Locale found
     public static Locale getSystemLocale() {
-    	return getLocale(java.util.Locale.getDefault());
+        return getLocale(java.util.Locale.getDefault());
     }
 
 }

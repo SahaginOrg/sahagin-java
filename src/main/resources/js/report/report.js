@@ -342,7 +342,7 @@ $(document).ready(function() {
       }
       if (!selectedTr.hasClass("loaded")) {
         selectedTr.addClass("loaded");
-      	var ttId = getTrTtId(selectedTr);
+        var ttId = getTrTtId(selectedTr);
         var children = $("tr[data-tt-parent-id='" + ttId + "']");
         // TODO value of children.length may change after loadCodeBodyNode is called ??
         var childrenLength = children.length;
