@@ -7,6 +7,7 @@ import java.util.Map;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.sahagin.TestBase;
+import org.sahagin.runlib.external.Locale;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.runlib.external.adapter.junit4.JUnit4Adapter;
 import org.sahagin.share.AcceptableLocales;
@@ -24,9 +25,9 @@ public class SrcTreeGeneratorTest extends TestBase {
         new JUnit4Adapter().initialSetAdapter();
     }
 
-    private void testMain(String methodName) {
+    private void testMain(String methodName, Locale userLocale) {
         File testDir = testJavaResourceDir(methodName);
-        AcceptableLocales locales = AcceptableLocales.getInstance(null);
+        AcceptableLocales locales = AcceptableLocales.getInstance(userLocale);
         SrcTreeGenerator gen = new SrcTreeGenerator(null, locales);
         SrcTree srcTree;
         try {
@@ -61,12 +62,22 @@ public class SrcTreeGeneratorTest extends TestBase {
     // so split to multiple test method when srcTree YAML format is fixed.
     @Test
     public void variousData() {
-        testMain("variousData");
+        testMain("variousData", null);
     }
 
     @Test
     public void utf8Character() {
-        testMain("utf8Character");
+        testMain("utf8Character", null);
+    }
+
+    @Test
+    public void defaultLocale() {
+        testMain("defaultLocale", null);
+    }
+
+    @Test
+    public void jaJpLocale() {
+        testMain("jaJpLocale", Locale.JA_JP);
     }
 
 }

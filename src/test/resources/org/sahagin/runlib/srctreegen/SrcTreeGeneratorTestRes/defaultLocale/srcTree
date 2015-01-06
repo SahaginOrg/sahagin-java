@@ -1,0 +1,46 @@
+subFuncTable:
+  functions:
+  - codeBody: []
+    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.defaultLocale.TestMain.defaultTestDocMethod
+    capture: thisLine
+    argVariables: []
+    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/defaultLocale/TestMain;
+    testDoc: Doc:default
+    type: method
+    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/defaultLocale/TestMain;.defaultTestDocMethod()V
+  - codeBody: []
+    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.defaultLocale.TestMain.enUsTestDocMethod
+    capture: thisLine
+    argVariables: []
+    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/defaultLocale/TestMain;
+    testDoc: Doc:en-US
+    type: method
+    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/defaultLocale/TestMain;.enUsTestDocMethod()V
+  - codeBody: []
+    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.defaultLocale.TestMain.jaJpTestDocMethod
+    capture: thisLine
+    argVariables: []
+    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/defaultLocale/TestMain;
+    testDoc: ''
+    type: method
+    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/defaultLocale/TestMain;.jaJpTestDocMethod()V
+  - codeBody: []
+    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.defaultLocale.TestMain.testDocsMethod
+    capture: thisLine
+    argVariables: []
+    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/defaultLocale/TestMain;
+    testDoc: Docs:default
+    type: method
+    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/defaultLocale/TestMain;.testDocsMethod()V
+rootFuncTable:
+  functions: []
+formatVersion: "*"
+subClassTable:
+  classes:
+  - testDoc: Pages:default
+    type: page
+    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/defaultLocale/TestMain;
+    methodKeys: "*"
+    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.defaultLocale.TestMain
+rootClassTable:
+  classes: []

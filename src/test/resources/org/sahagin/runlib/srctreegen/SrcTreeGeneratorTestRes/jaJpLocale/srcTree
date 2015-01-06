@@ -1,0 +1,46 @@
+subFuncTable:
+  functions:
+  - codeBody: []
+    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.jaJpLocale.TestMain.defaultTestDocMethod
+    capture: thisLine
+    argVariables: []
+    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/jaJpLocale/TestMain;
+    testDoc: Doc:default
+    type: method
+    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/jaJpLocale/TestMain;.defaultTestDocMethod()V
+  - codeBody: []
+    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.jaJpLocale.TestMain.enUsTestDocMethod
+    capture: thisLine
+    argVariables: []
+    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/jaJpLocale/TestMain;
+    testDoc: Doc:en-US
+    type: method
+    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/jaJpLocale/TestMain;.enUsTestDocMethod()V
+  - codeBody: []
+    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.jaJpLocale.TestMain.jaJpTestDocMethod
+    capture: thisLine
+    argVariables: []
+    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/jaJpLocale/TestMain;
+    testDoc: Doc:ja-JP
+    type: method
+    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/jaJpLocale/TestMain;.jaJpTestDocMethod()V
+  - codeBody: []
+    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.jaJpLocale.TestMain.testDocsMethod
+    capture: thisLine
+    argVariables: []
+    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/jaJpLocale/TestMain;
+    testDoc: Docs:ja-JP
+    type: method
+    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/jaJpLocale/TestMain;.testDocsMethod()V
+rootFuncTable:
+  functions: []
+formatVersion: "*"
+subClassTable:
+  classes:
+  - testDoc: Pages:ja-JP
+    type: page
+    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/jaJpLocale/TestMain;
+    methodKeys: "*"
+    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.jaJpLocale.TestMain
+rootClassTable:
+  classes: []
