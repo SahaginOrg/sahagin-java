@@ -11,6 +11,7 @@ public class SrcTreeChecker {
     // TODO throw error if captureStyle value is defined on @TestDoce inside the @TestDocs
     // TODO throw error if @TestDoc and @TestDocs are defined on the same place
     // TODO throw error if @TestDoc and @Page are defined on the same place
+    // TODO throw error if @TestDocs value array is empty
 
     private static final String MSG_INVALID_PLACEHOLDER
     = "TestDoc of \"%s\" contains invalid keyword \"%s\"";

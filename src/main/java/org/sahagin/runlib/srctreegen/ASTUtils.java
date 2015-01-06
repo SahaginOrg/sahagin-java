@@ -1,7 +1,6 @@
 package org.sahagin.runlib.srctreegen;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +90,7 @@ public class ASTUtils {
         }
         return null;
     }
-    
+
     // returns default value if varName value is not specified
     public static CaptureStyle getAnnotationCaptureStyleValue(
             IAnnotationBinding annotation, String varName) {
@@ -119,7 +118,7 @@ public class ASTUtils {
         }
         return resultLocale;
     }
-    
+
     // return empty list and null pair if no TestDoc is found
     private static Pair<Map<Locale, String>, CaptureStyle> getAllTestDocs(
             IAnnotationBinding[] annotations) {
@@ -141,20 +140,21 @@ public class ASTUtils {
         } else if (testDocsAnnotation != null) {
             // get @TestDoc from @TestDocs
             Object value = getAnnotationValue(testDocsAnnotation, "value");
-            IAnnotationBinding[] testDocsAnnotationValues = (IAnnotationBinding[]) value;
-            allTestDocAnnotations.addAll(Arrays.asList(testDocsAnnotationValues));
-            resultCaptureStyle = getAnnotationCaptureStyleValue(testDocsAnnotation, "capture");
-            for (IAnnotationBinding eachTestDocAnnotation : testDocsAnnotationValues) {
-                if (getEnumAnnotationFieldName(eachTestDocAnnotation, "capture") != null) {
+            Object[] values = (Object[]) value;
+            for (Object element : values) {
+                IAnnotationBinding binding = (IAnnotationBinding) element;
+                if (getEnumAnnotationFieldName(binding, "capture") != null) {
                     // TODO throw IllegalTestScriptException
                     throw new RuntimeException(
                             "capture must be set on not @TestDoc but @TestDocs");
                 }
+                allTestDocAnnotations.add(binding);
             }
+            resultCaptureStyle = getAnnotationCaptureStyleValue(testDocsAnnotation, "capture");
         }
-        
+
         // get resultTestDocMap
-        Map<Locale, String> resultTestDocMap 
+        Map<Locale, String> resultTestDocMap
         = new HashMap<Locale, String>(allTestDocAnnotations.size());
         for (IAnnotationBinding eachTestDocAnnotation : allTestDocAnnotations) {
             Object value = getAnnotationValue(eachTestDocAnnotation, "value");
@@ -164,7 +164,7 @@ public class ASTUtils {
 
         return Pair.of(resultTestDocMap, resultCaptureStyle);
     }
-    
+
     // return empty list and null pair if no Page is found
     private static Map<Locale, String> getAllPageTestDocs(
             IAnnotationBinding[] annotations) {
@@ -184,12 +184,14 @@ public class ASTUtils {
         } else if (pagesAnnotation != null) {
             // get @Page from @Pages
             Object value = getAnnotationValue(pagesAnnotation, "value");
-            IAnnotationBinding[] pagesAnnotationValues = (IAnnotationBinding[]) value;
-            allPageAnnotations.addAll(Arrays.asList(pagesAnnotationValues));
+            Object[] values = (Object[]) value;
+            for (Object element : values) {
+                allPageAnnotations.add((IAnnotationBinding) element);
+            }
         }
-        
+
         // get resultPageMap
-        Map<Locale, String> resultPageMap 
+        Map<Locale, String> resultPageMap
         = new HashMap<Locale, String>(allPageAnnotations.size());
         for (IAnnotationBinding eachPageAnnotation : allPageAnnotations) {
             Object value = getAnnotationValue(eachPageAnnotation, "value");
@@ -200,7 +202,7 @@ public class ASTUtils {
         return resultPageMap;
     }
 
-    
+
     // first... value
     // second... captureStyle value.
     // return null pair if no TestDoc is found
@@ -209,9 +211,9 @@ public class ASTUtils {
         Pair<Map<Locale, String>, CaptureStyle> allTestDocs = getAllTestDocs(annotations);
         Map<Locale, String> testDocMap = allTestDocs.getLeft();
         if (testDocMap.isEmpty()) {
-            return Pair.of(null, null);
+            return Pair.of(null, null); // no @TestDoc found
         }
-        
+
         String testDoc = null;
         for (Locale locale : locales.getLocales()) {
             String value = testDocMap.get(locale);
@@ -221,7 +223,8 @@ public class ASTUtils {
             }
         }
         if (testDoc == null) {
-            return Pair.of(null, null);
+            // set empty string if no locale matched data is found
+            return Pair.of("", allTestDocs.getRight());
         } else {
             return Pair.of(testDoc, allTestDocs.getRight());
         }
@@ -232,16 +235,17 @@ public class ASTUtils {
             IAnnotationBinding[] annotations, AcceptableLocales locales) {
         Map<Locale, String> allPages = getAllPageTestDocs(annotations);
         if (allPages.isEmpty()) {
-            return null;
+            return null; // no @Page found
         }
-        
+
         for (Locale locale : locales.getLocales()) {
             String value = allPages.get(locale);
             if (value != null) {
                 return value;
             }
         }
-        return null;
+        // set empty string if no locale matched data is found
+        return "";
     }
 
     // return null if not found
