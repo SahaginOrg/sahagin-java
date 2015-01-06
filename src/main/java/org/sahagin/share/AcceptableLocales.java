@@ -8,6 +8,9 @@ import org.sahagin.runlib.external.Locale;
 public class AcceptableLocales {
 	private List<Locale> locales = new ArrayList<Locale>(4);
 	
+	// private constructor
+	private AcceptableLocales() {}
+	
     public static AcceptableLocales getInstance(Locale userLocale) {
     	AcceptableLocales result = new AcceptableLocales();
 		if (userLocale != null) {

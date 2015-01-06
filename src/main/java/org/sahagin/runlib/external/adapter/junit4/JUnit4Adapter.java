@@ -4,12 +4,12 @@ import javassist.CtMethod;
 
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.junit.Test;
-import org.sahagin.runlib.additionaltestdoc.AdditionalTestDocs;
 import org.sahagin.runlib.external.adapter.Adapter;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
-import org.sahagin.runlib.external.adapter.AdditionalTestDocsAdapter;
+import org.sahagin.runlib.external.adapter.ResourceAdditionalTestDocsAdapter;
 import org.sahagin.runlib.external.adapter.RootFunctionAdapter;
 import org.sahagin.runlib.srctreegen.ASTUtils;
+import org.sahagin.share.CommonPath;
 
 public class JUnit4Adapter implements Adapter {
 
@@ -38,23 +38,25 @@ public class JUnit4Adapter implements Adapter {
 
     }
 
-    private static class AdditionalTestDocsAdapterImpl implements AdditionalTestDocsAdapter {
+    private static class AdditionalTestDocsAdapterImpl extends ResourceAdditionalTestDocsAdapter {
+
+		@Override
+		public String resourceDirPath() {
+			return CommonPath.standardAdapdaterLocaleResDirPath() + "/junit4";
+		}
+
+		@Override
+        public void classAdd() {}
 
         @Override
-        public void classAdd(AdditionalTestDocs docs) {
-            docs.classAdd("org.junit.Assert", "値チェック");
-        }
+        public void funcAdd() {
+        	// TODO cannot handle methods defined on subclass
 
-        @Override
-        public void funcAdd(AdditionalTestDocs docs) {
-            // TODO cannot handle methods defined on subclass
-            // TODO multiple language support
-
-            // define in alphabetical order
-            docs.methodAdd("org.hamcrest.core.Is", "is", "「{0}」に等しい");
-            docs.methodAdd("org.hamcrest.CoreMatchers", "is", "「{0}」に等しい");
-            docs.methodAdd("org.junit.Assert", "assertEquals", "「{0}」が「{1}」に等しいことをチェック");
-            docs.methodAdd("org.junit.Assert", "assertThat", "「{0}」が{1}ことをチェック");
+        	// in alphabetical order
+        	methodAdd("org.hamcrest.core.Is", "is");
+        	methodAdd("org.hamcrest.CoreMatchers", "is");
+        	methodAdd("org.junit.Assert", "assertEquals");
+            methodAdd("org.junit.Assert", "assertThat");
         }
 
     }

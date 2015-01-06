@@ -2,19 +2,38 @@ package org.sahagin.runlib.external.adapter;
 
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.sahagin.runlib.additionaltestdoc.AdditionalTestDocs;
+import org.sahagin.share.AcceptableLocales;
 
 import javassist.CtMethod;
 
 public class AdapterContainer {
     private static AdapterContainer globalInstance = new AdapterContainer();
+    private boolean initialized = false;
+    private AcceptableLocales locales;
     private RootFunctionAdapter rootFunctionAdapter;
     private ScreenCaptureAdapter screenCaptureAdapter;
     private AdditionalTestDocs additionalTestDocs = new AdditionalTestDocs();
 
     // make constructor private
-    private AdapterContainer() { }
+    private AdapterContainer() {}
+    
+    private void initialize(AcceptableLocales locales) {
+    	if (locales == null) {
+    		throw new NullPointerException();
+    	}
+    	this.locales = locales;
+    	initialized = true;
+    }
+    
+    // some method call of this class requires initialization before calling the method
+    public static void globalInitialize(AcceptableLocales locales) {
+    	globalInstance.initialize(locales);
+    }
 
     public static AdapterContainer globalInstance() {
+    	if (globalInstance == null) {
+    		throw new IllegalStateException("globalInitialize is not called yet");
+    	}
         return globalInstance;
     }
 
@@ -52,10 +71,10 @@ public class AdapterContainer {
         if (additionalTestDocsAdapter == null) {
             throw new NullPointerException();
         }
-        // last set data is referred first
-        additionalTestDocsAdapter.classAdd(additionalTestDocs);
-        additionalTestDocsAdapter.funcAdd(additionalTestDocs);
-
+        if (!initialized) {
+        	throw new IllegalStateException("initialize not called");
+        }
+        additionalTestDocsAdapter.add(additionalTestDocs, locales);
     }
 
     public AdditionalTestDocs getAdditionalTestDocs() {

@@ -4,11 +4,11 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.SessionNotFoundException;
-import org.sahagin.runlib.additionaltestdoc.AdditionalTestDocs;
 import org.sahagin.runlib.external.adapter.Adapter;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
-import org.sahagin.runlib.external.adapter.AdditionalTestDocsAdapter;
+import org.sahagin.runlib.external.adapter.ResourceAdditionalTestDocsAdapter;
 import org.sahagin.runlib.external.adapter.ScreenCaptureAdapter;
+import org.sahagin.share.CommonPath;
 
 // TODO chromedriver has these problem (this is not sahagin problem, but the one of chromedriver)
 // - cannot capture entire page
@@ -53,34 +53,39 @@ public class WebDriverAdapter implements Adapter {
 
     }
 
-    private static class AdditionalTestDocsAdapterImpl implements AdditionalTestDocsAdapter {
+    private static class AdditionalTestDocsAdapterImpl extends ResourceAdditionalTestDocsAdapter {
+
+		@Override
+		public String resourceDirPath() {
+			return CommonPath.standardAdapdaterLocaleResDirPath() + "/webdriver";
+		}
 
         @Override
-        public void classAdd(AdditionalTestDocs docs) {}
+        public void classAdd() {}
 
         @Override
-        public void funcAdd(AdditionalTestDocs docs) {
+        public void funcAdd() {
             // TODO cannot handle methods defined on subclass?
-            // TODO multiple language support
 
-            // define in alphabetical order
-            docs.methodAdd("org.openqa.selenium.By", "className", "クラス名 = {0}");
-            docs.methodAdd("org.openqa.selenium.By", "cssSelector", "css = {0}");
-            docs.methodAdd("org.openqa.selenium.By", "id", "id = {0}");
-            docs.methodAdd("org.openqa.selenium.By", "linkText", "テキスト = {0}");
-            docs.methodAdd("org.openqa.selenium.By", "name", "name = {0}");
-            docs.methodAdd("org.openqa.selenium.By", "partialLinkText", "テキスト = {0}(部分一致)");
-            docs.methodAdd("org.openqa.selenium.By", "tagName", "タグ名 = {0}");
-            docs.methodAdd("org.openqa.selenium.By", "xpath", "xpath = {0}");
-            docs.methodAdd("org.openqa.selenium.WebDriver", "findElement", "要素「{0}」");
-            docs.methodAdd("org.openqa.selenium.WebDriver", "get", "「{0}」にページ遷移");
-            docs.methodAdd("org.openqa.selenium.WebElement", "clear", "{this}のテキストをクリア");
-            docs.methodAdd("org.openqa.selenium.WebElement", "click", "{this}をクリック");
-            docs.methodAdd("org.openqa.selenium.WebElement", "getAttribute", "{this}の属性「{0}」の値");
-            docs.methodAdd("org.openqa.selenium.WebElement", "getText", "{this}の表示テキスト");
-            docs.methodAdd("org.openqa.selenium.WebElement", "isSelected", "{this}が選択されているか");
-            docs.methodAdd("org.openqa.selenium.WebElement", "sendKeys", "{this}に「{0}」を入力");
+            // in alphabetical order
+            methodAdd("org.openqa.selenium.By", "className");
+            methodAdd("org.openqa.selenium.By", "cssSelector");
+            methodAdd("org.openqa.selenium.By", "id");
+            methodAdd("org.openqa.selenium.By", "linkText");
+            methodAdd("org.openqa.selenium.By", "name");
+            methodAdd("org.openqa.selenium.By", "partialLinkText");
+            methodAdd("org.openqa.selenium.By", "tagName");
+            methodAdd("org.openqa.selenium.By", "xpath");
+            methodAdd("org.openqa.selenium.WebDriver", "findElement");
+            methodAdd("org.openqa.selenium.WebDriver", "get");
+            methodAdd("org.openqa.selenium.WebElement", "clear");
+            methodAdd("org.openqa.selenium.WebElement", "click");
+            methodAdd("org.openqa.selenium.WebElement", "getAttribute");
+            methodAdd("org.openqa.selenium.WebElement", "getText");
+            methodAdd("org.openqa.selenium.WebElement", "isSelected");
+            methodAdd("org.openqa.selenium.WebElement", "sendKeys");
         }
+        
     }
 
 }

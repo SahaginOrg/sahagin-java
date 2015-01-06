@@ -9,9 +9,9 @@ func:
   org.openqa.selenium.By.tagName: タグ名 = {0}
   org.openqa.selenium.WebDriver.findElement: 要素「{0}」
   org.openqa.selenium.WebDriver.get: 「{0}」にページ遷移
-  org.openqa.selenium.WebElement.clear: {this}のテキストをクリア
-  org.openqa.selenium.WebElement.click: {this}をクリック
-  org.openqa.selenium.WebElement.getAttribute: {this}の属性「{0}」
-  org.openqa.selenium.WebElement.getText: {this}の表示テキスト
-  org.openqa.selenium.WebElement.isSelected: {this}が選択されているか
-  org.openqa.selenium.WebElement.sendKeys: {this}に「{0}」を入力
+  org.openqa.selenium.WebElement.clear: "{this}のテキストをクリア"
+  org.openqa.selenium.WebElement.click: "{this}をクリック"
+  org.openqa.selenium.WebElement.getAttribute: "{this}の属性「{0}」"
+  org.openqa.selenium.WebElement.getText: "{this}の表示テキスト"
+  org.openqa.selenium.WebElement.isSelected: "{this}が選択されているか"
+  org.openqa.selenium.WebElement.sendKeys: "{this}に「{0}」を入力"

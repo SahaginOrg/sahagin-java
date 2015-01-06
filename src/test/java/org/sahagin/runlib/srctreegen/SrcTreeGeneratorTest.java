@@ -7,6 +7,7 @@ import java.util.Map;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.sahagin.TestBase;
+import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.runlib.external.adapter.junit4.JUnit4Adapter;
 import org.sahagin.share.AcceptableLocales;
 import org.sahagin.share.IllegalTestScriptException;
@@ -17,6 +18,8 @@ public class SrcTreeGeneratorTest extends TestBase {
 
     @BeforeClass
     public static void setUpClass() throws IOException {
+    	AcceptableLocales locales = AcceptableLocales.getInstance(null);
+    	AdapterContainer.globalInitialize(locales);
         // set RootFunctionAdapter
         new JUnit4Adapter().initialSetAdapter();
     }
