@@ -48,8 +48,8 @@ public abstract class TestBase {
     }
 
     public static void assertFileByteContentsEquals(File expected, File actual) {
-        assertTrue(expected.exists());
-        assertTrue(actual.exists());
+        assertTrue(expected + " does not exist", expected.exists());
+        assertTrue(actual + " does not exist", actual.exists());
         byte[] expectedBytes;
         byte[] actualBytes;
         try {
@@ -58,7 +58,8 @@ public abstract class TestBase {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        assertThat(expectedBytes, is(actualBytes));
+        assertThat("expected: " + expected + "; actual: " + actual,
+                expectedBytes, is(actualBytes));
     }
 
     // TODO define custom matcher for file text
@@ -156,7 +157,7 @@ public abstract class TestBase {
         } else {
             assertThat(keyPath, actual, is(notNullValue()));
         }
-        assertThat(actual.size(), is(expected.size()));
+        assertThat(keyPath, actual.size(), is(expected.size()));
         for (Map.Entry<String, Object> entry : expected.entrySet()) {
             assertTrue(keyPath, actual.containsKey(entry.getKey()));
             Object expectedValue = expected.get(entry.getKey());
