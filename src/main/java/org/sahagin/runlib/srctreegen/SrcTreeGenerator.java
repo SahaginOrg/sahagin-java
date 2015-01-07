@@ -18,6 +18,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Assignment;
+import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
@@ -160,8 +161,9 @@ public class SrcTreeGenerator {
             }
 
             ITypeBinding classBinding = methodBinding.getDeclaringClass();
-            if (!classBinding.isClass()) {
-                throw new RuntimeException("not supported yet: " + classBinding);
+            if (!classBinding.isClass() && !classBinding.isInterface()) {
+                // enum method, etc
+                return super.visit(node);
             }
 
             TestClass rootClass = rootClassTable.getByKey(classBinding.getKey());
@@ -251,8 +253,9 @@ public class SrcTreeGenerator {
             }
 
             ITypeBinding classBinding = methodBinding.getDeclaringClass();
-            if (!classBinding.isClass()) {
-                throw new RuntimeException("not supported yet: " + classBinding);
+            if (!classBinding.isClass() && !classBinding.isInterface()) {
+                // enum method, etc
+                return super.visit(node);
             }
 
             TestClass testClass = rootClassTable.getByKey(classBinding.getKey());
@@ -454,7 +457,12 @@ public class SrcTreeGenerator {
                 return super.visit(node);
             }
 
-            List<?> list = node.getBody().statements();
+            Block body = node.getBody();
+            if (body == null) {
+                // no body. Maybe abstract method or interface method
+                return super.visit(node);
+            }
+            List<?> list = body.statements();
             for (Object obj : list) {
                 assert obj instanceof ASTNode;
                 ASTNode statementNode = (ASTNode) obj;

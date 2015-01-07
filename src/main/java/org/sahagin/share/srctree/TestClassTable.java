@@ -12,6 +12,7 @@ import org.sahagin.share.yaml.YamlUtils;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlConvertible;
 
+//class or interface
 public class TestClassTable implements YamlConvertible {
     private List<TestClass> testClasses = new ArrayList<TestClass>(512);
 

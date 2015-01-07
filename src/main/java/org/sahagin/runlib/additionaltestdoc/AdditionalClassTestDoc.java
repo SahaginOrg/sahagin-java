@@ -1,5 +1,6 @@
 package org.sahagin.runlib.additionaltestdoc;
 
+//class or interface
 public class AdditionalClassTestDoc {
     private String qualifiedName;
     private String testDoc;

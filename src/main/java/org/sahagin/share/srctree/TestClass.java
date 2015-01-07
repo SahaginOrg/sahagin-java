@@ -9,6 +9,7 @@ import org.sahagin.share.yaml.YamlUtils;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlConvertible;
 
+// class or interface
 public class TestClass implements YamlConvertible {
     public static final String MSG_INVALID_TYPE = "invalid type: %s";
     public static final String TYPE = "class";
