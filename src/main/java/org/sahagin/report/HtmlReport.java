@@ -111,6 +111,14 @@ public class HtmlReport {
         return runResult.getRunFailures().get(0);
     }
 
+    private String stackLinesStr(List<StackLine> stackLines) {
+        String result = "";
+        for (int i = 0; i < stackLines.size(); i++) {
+            result = result + String.format("%s%n", stackLines.get(i).getFunctionKey());
+        }
+        return result;
+    }
+
     // returns 0 if stackLines == errStackLines (means error line),
     // returns positive if stackLines > errStackLines (means not executed),
     // returns negative if stackLines < errStackLines (means already executed)
@@ -124,7 +132,9 @@ public class HtmlReport {
 
         for (int i = 0; i < stackLines.size(); i++) {
             if (i >= errStackLines.size()) {
-                throw new IllegalArgumentException("stackLines and errStackLines mismatch");
+                throw new IllegalArgumentException(String.format(
+                        "stack mismatch:%n[stackLines]%n%s[errStackLines]%n%s",
+                        stackLinesStr(stackLines), stackLinesStr(errStackLines)));
             }
             int indexFromTail = stackLines.size() - 1 - i;
             int errIndexFromTail = errStackLines.size() - 1 - i;
