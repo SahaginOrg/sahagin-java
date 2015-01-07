@@ -40,8 +40,19 @@ public class SrcTreeGeneratorTest extends TestBase {
         srcTree.sort();
         Map<String, Object> actualYamlObj = srcTree.toYamlObject();
         File expectedSrcTreeFile = new File(testResourceDir(methodName), "srcTree");
+        if (!expectedSrcTreeFile.exists()) {
+            // output actual srcTree to use as expected srcTree
+            YamlUtils.dump(actualYamlObj, new File(mkWorkDir(methodName), "actualSrcTree"));
+            throw new RuntimeException(expectedSrcTreeFile + " does not exist");
+        }
         Map<String, Object> expectedYamlObj = YamlUtils.load(expectedSrcTreeFile);
-        assertYamlEquals(expectedYamlObj, actualYamlObj);
+        try {
+            assertYamlEquals(expectedYamlObj, actualYamlObj);
+        } catch (AssertionError e) {
+            // output actual srcTree for debugging later
+            YamlUtils.dump(actualYamlObj, new File(mkWorkDir(methodName), "actualSrcTree"));
+            throw e;
+        }
     }
 
     // this test checks:
@@ -78,6 +89,16 @@ public class SrcTreeGeneratorTest extends TestBase {
     @Test
     public void jaJpLocale() {
         testMain("jaJpLocale", Locale.JA_JP);
+    }
+
+    @Test
+    public void extendsTest() {
+        testMain("extendsTest", null);
+    }
+
+    @Test
+    public void implementsTest() {
+        testMain("implementsTest", null);
     }
 
 }

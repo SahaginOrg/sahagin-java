@@ -1,0 +1,106 @@
+subFuncTable:
+  functions:
+  - codeBody: []
+    name: "*.ImplementsPage.baseMethod"
+    capture: "*"
+    argVariables: [arg]
+    classKey: "*/ImplementsPage;"
+    testDoc: 'Doc: baseMethod: override: {arg}'
+    type: "*"
+    key: "*/ImplementsPage;.baseMethod(Ljava/lang/String;)V"
+  - codeBody: []
+    name: "*.ImplementsPage.childMethod"
+    capture: "*"
+    argVariables: [arg]
+    classKey: "*/ImplementsPage;"
+    testDoc: 'Doc: childMethod: {arg}'
+    type: "*"
+    key: "*/ImplementsPage;.childMethod(I)V"
+  - codeBody: []
+    name: "*.ImplementsPageBase.baseMethod"
+    capture: "*"
+    argVariables: [arg]
+    classKey: "*/ImplementsPageBase;"
+    testDoc: 'Doc: baseMethod: {arg}'
+    type: "*"
+    key: "*/ImplementsPageBase;.baseMethod(Ljava/lang/String;)V"
+  - codeBody: []
+    name: "*.ImplementsTestBase.testBaseMethod"
+    capture: "*"
+    argVariables: [arg]
+    classKey: "*/ImplementsTestBase;"
+    testDoc: 'Doc: testBaseMethod: {arg}'
+    type: "*"
+    key: "*/ImplementsTestBase;.testBaseMethod(Ljava/lang/String;)V"
+rootFuncTable:
+  functions:
+  - codeBody:
+    - startLine: "*"
+      code: {original: testBaseMethod("DEF");, type: unknown}
+      endLine: "*"
+    - startLine: "*"
+      code: {original: ImplementsPage pageInstance=new ImplementsPage();, type: unknown}
+      endLine: "*"
+    - startLine: "*"
+      code:
+        original: pageInstance.baseMethod("QQQ");
+        type: "*"
+        methodKey: "*/ImplementsPage;.baseMethod(Ljava/lang/String;)V"
+        thisInstance: {original: pageInstance, type: unknown}
+        args:
+        - {value: QQQ, original: '"QQQ"', type: string}
+      endLine: "*"
+    - startLine: "*"
+      code:
+        original: pageInstance.childMethod(-1);
+        type: "*"
+        methodKey: "*/ImplementsPage;.childMethod(I)V"
+        thisInstance: {original: pageInstance, type: unknown}
+        args:
+        - {original: '-1', type: unknown}
+      endLine: "*"
+    - startLine: "*"
+      code: {original: ImplementsPageBase baseInstance=new ImplementsPage();, type: unknown}
+      endLine: "*"
+    - startLine: "*"
+      code:
+        original: baseInstance.baseMethod("RRR");
+        type: "*"
+        methodKey: "*/ImplementsPageBase;.baseMethod(Ljava/lang/String;)V"
+        thisInstance: {original: baseInstance, type: unknown}
+        args:
+        - {value: RRR, original: '"RRR"', type: string}
+      endLine: "*"
+    name: "*.ImplementsTestMain.implementsTest"
+    capture: "*"
+    argVariables: []
+    classKey: "*/ImplementsTestMain;"
+    testDoc: null
+    type: "*"
+    key: "*/ImplementsTestMain;.implementsTest()V"
+formatVersion: "*"
+subClassTable:
+  classes:
+  - testDoc: 'Doc: ImplementsPage'
+    type: "*"
+    key: "*/ImplementsPage;"
+    methodKeys: ["*/ImplementsPage;.baseMethod(Ljava/lang/String;)V",
+      "*/ImplementsPage;.childMethod(I)V"]
+    name: "*.ImplementsPage"
+  - testDoc: 'Doc: ImplementsPageBase'
+    type: "*"
+    key: "*/ImplementsPageBase;"
+    methodKeys: ["*/ImplementsPageBase;.baseMethod(Ljava/lang/String;)V"]
+    name: "*.ImplementsPageBase"
+  - testDoc: 'Doc: ImplementsTestBase'
+    type: "*"
+    key: "*/ImplementsTestBase;"
+    methodKeys: ["*/ImplementsTestBase;.testBaseMethod(Ljava/lang/String;)V"]
+    name: "*.ImplementsTestBase"
+rootClassTable:
+  classes:
+  - testDoc: null
+    type: "*"
+    key: "*/ImplementsTestMain;"
+    methodKeys: ["*/ImplementsTestMain;.implementsTest()V"]
+    name: "*.ImplementsTestMain"

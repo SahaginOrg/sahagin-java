@@ -1,0 +1,156 @@
+subFuncTable:
+  functions:
+  - codeBody: []
+    name: "*ExtendsPage.abstractMethod"
+    capture: thisLine
+    argVariables: [arg]
+    classKey: "*/ExtendsPage;"
+    testDoc: 'Doc: abstractMethod: override: {arg}'
+    type: method
+    key: "*/ExtendsPage;.abstractMethod(I)V"
+  - codeBody:
+    - startLine: "*"
+      code: {original: super.overriddenMethod(arg);, type: unknown}
+      endLine: "*"
+    name: "*ExtendsPage.overriddenMethod"
+    capture: thisLine
+    argVariables: [arg]
+    classKey: "*/ExtendsPage;"
+    testDoc: 'Doc: overriddenMethod: override: {arg}'
+    type: method
+    key: "*/ExtendsPage;.overriddenMethod(Ljava/lang/String;)V"
+  - codeBody: []
+    name: "*.ExtendsPageBase.abstractMethod"
+    capture: thisLine
+    argVariables: [arg]
+    classKey: "*/ExtendsPageBase;"
+    testDoc: 'Doc: abstractMethod: {arg}'
+    type: method
+    key: "*/ExtendsPageBase;.abstractMethod(I)V"
+  - codeBody: []
+    name: "*ExtendsPageBase.finalMethod"
+    capture: thisLine
+    argVariables: [arg]
+    classKey: "*/ExtendsPageBase;"
+    testDoc: 'Doc: finalMethod: {arg}'
+    type: method
+    key: "*/ExtendsPageBase;.finalMethod(Ljava/lang/Object;)V"
+  - codeBody: []
+    name: "*ExtendsTestBase.testBaseMethod"
+    capture: thisLine
+    argVariables: [arg]
+    classKey: "*/ExtendsTestBase;"
+    testDoc: 'Doc: testBaseMethod: {arg}'
+    type: method
+    key: "*/ExtendsTestBase;.testBaseMethod(Ljava/lang/String;)V"
+  - codeBody:
+    - startLine: "*"
+      code: {original: super.testBaseMethod(arg);, type: unknown}
+      endLine: "*"
+    name: "*ExtendsTestMain.testBaseMethod"
+    capture: stepIn
+    argVariables: [arg]
+    classKey: "*/ExtendsTestMain;"
+    testDoc: 'Doc: testBaseMethod: override: {arg}'
+    type: method
+    key: "*/ExtendsTestMain;.testBaseMethod(Ljava/lang/String;)V"
+rootFuncTable:
+  functions:
+  - codeBody:
+    - startLine: "*"
+      code:
+        original: testBaseMethod("ABC");
+        type: method
+        methodKey: "*/ExtendsTestMain;.testBaseMethod(Ljava/lang/String;)V"
+        args:
+        - {value: ABC, original: '"ABC"', type: string}
+      endLine: "*"
+    - startLine: "*"
+      code: {original: ExtendsPage pageInstance=new ExtendsPage();, type: unknown}
+      endLine: "*"
+    - startLine: "*"
+      code:
+        original: pageInstance.abstractMethod(123);
+        type: method
+        methodKey: "*/ExtendsPage;.abstractMethod(I)V"
+        thisInstance: {original: pageInstance, type: unknown}
+        args:
+        - {original: '123', type: unknown}
+      endLine: "*"
+    - startLine: "*"
+      code:
+        original: pageInstance.finalMethod(null);
+        type: method
+        methodKey: "*/ExtendsPageBase;.finalMethod(Ljava/lang/Object;)V"
+        thisInstance: {original: pageInstance, type: unknown}
+        args:
+        - {original: 'null', type: unknown}
+      endLine: "*"
+    - startLine: "*"
+      code:
+        original: pageInstance.overriddenMethod("YYY");
+        type: method
+        methodKey: "*/ExtendsPage;.overriddenMethod(Ljava/lang/String;)V"
+        thisInstance: {original: pageInstance, type: unknown}
+        args:
+        - {value: YYY, original: '"YYY"', type: string}
+      endLine: "*"
+    - startLine: "*"
+      code: {original: ExtendsPageBase baseInstance=new ExtendsPage();, type: unknown}
+      endLine: "*"
+    - startLine: "*"
+      code:
+        original: baseInstance.abstractMethod(456);
+        type: method
+        methodKey: "*/ExtendsPageBase;.abstractMethod(I)V"
+        thisInstance: {original: baseInstance, type: unknown}
+        args:
+        - {original: '456', type: unknown}
+      endLine: "*"
+    - startLine: "*"
+      code:
+        original: baseInstance.finalMethod("WWW");
+        type: method
+        methodKey: "*/ExtendsPageBase;.finalMethod(Ljava/lang/Object;)V"
+        thisInstance: {original: baseInstance, type: unknown}
+        args:
+        - {value: WWW, original: '"WWW"', type: string}
+      endLine: "*"
+    - startLine: "*"
+      code: {original: baseInstance.overriddenMethod("ZZZ");, type: unknown}
+      endLine: "*"
+    name: "*ExtendsTestMain.extendsTest"
+    capture: thisLine
+    argVariables: []
+    classKey: "*/ExtendsTestMain;"
+    testDoc: null
+    type: method
+    key: "*/ExtendsTestMain;.extendsTest()V"
+formatVersion: "*"
+subClassTable:
+  classes:
+  - testDoc: 'Doc: ExtendsPage'
+    type: page
+    key: "*/ExtendsPage;"
+    methodKeys: ["*/ExtendsPage;.overriddenMethod(Ljava/lang/String;)V",
+      "*/ExtendsPage;.abstractMethod(I)V"]
+    name: "*.ExtendsPage"
+  - testDoc: null
+    type: class
+    key: "*/ExtendsPageBase;"
+    methodKeys: ["*/ExtendsPageBase;.abstractMethod(I)V",
+      "*/ExtendsPageBase;.finalMethod(Ljava/lang/Object;)V"]
+    name: "*.ExtendsPageBase"
+  - testDoc: 'Doc: ExtendsTestBase'
+    type: class
+    key: "*/ExtendsTestBase;"
+    methodKeys: ["*/ExtendsTestBase;.testBaseMethod(Ljava/lang/String;)V"]
+    name: "*.ExtendsTestBase"
+rootClassTable:
+  classes:
+  - testDoc: 'Doc: ExtendsTestMain'
+    type: class
+    key: "*/ExtendsTestMain;"
+    methodKeys: ["*/ExtendsTestMain;.extendsTest()V",
+      "*/ExtendsTestMain;.testBaseMethod(Ljava/lang/String;)V"]
+    name: "*ExtendsTestMain"
