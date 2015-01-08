@@ -14,21 +14,22 @@ If you want support for other languages or test frameworks, please request us by
 ## 1. Set up Java library
 
 ### If you use Maven
-Add dependency to your pom.xml file.
+Add dependency to your pom.xml file and add test execution JVM argument.
 
 ```xml
+  <properties>
+    <!-- use the current latest version --> 
+    <sahagin.version>0.2.5</sahagin.version>
+  </properties>
+  ...
   <dependencies>
     <dependency>
       <groupId>org.sahagin</groupId>  
        <artifactId>sahagin</artifactId>  
-       <version>0.2.5</version> 
+       <version>${sahagin.version}</version> 
     </dependency>
   </dependencies>
-```
-
-and add test execution JVM argument.
-
-```xml
+  ...
   <plugins>
     <plugin>
       <groupId>org.apache.maven.plugins</groupId>
@@ -36,7 +37,7 @@ and add test execution JVM argument.
       <version>2.18(or any other version)</version>
       <configuration>
         <argLine>
-          -javaagent:${settings.localRepository}/org/sahagin/sahagin/0.2.5/sahagin-0.2.5.jar
+          -javaagent:${settings.localRepository}/org/sahagin/sahagin/${sahagin.version}/sahagin-${sahagin.version}.jar
         </argLine>
       </configuration>
     </plugin>
@@ -44,22 +45,25 @@ and add test execution JVM argument.
 ```
 
 ### If you use Gradle
-Add dependency to your build.gradle file.
+Add dependency to your build.gradle file and add test execution JVM argument.
 
 ```groovy
+// use the current latest version
+def sahaginVersion = '0.2.5'
+
+...
+
 dependencies {
-    compile 'org.sahagin:sahagin:0.2.5'
+    compile 'org.sahagin:sahagin:' + sahaginVersion
 }
-```
 
-and add test execution JVM argument.
+...
 
-```groovy
 test {
     doFirst {
         // search sahagin jar file in the local cache
         def sahaginJar = project.configurations.testCompile.find {
-            it.name.startsWith('sahagin-0.2.5') 
+            it.name == 'sahagin-' + sahaginVersion + '.jar'
         }
         jvmArgs '-javaagent:' + sahaginJar
     }
