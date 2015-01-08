@@ -96,9 +96,11 @@ public class TestClassFileTransformer implements ClassFileTransformer {
             Class<?> classBeingRedefined,
             ProtectionDomain protectionDomain, byte[] classfileBuffer)
                     throws IllegalClassFormatException {
+        // TODO don't need to do anything for java package classes
         ClassPool classPool = ClassPool.getDefault();
         String hookClassName = RunResultGenerateHook.class.getCanonicalName();
         String initializeSrc = hookInitializeSrc();
+        boolean transformed = false;
         InputStream stream = null;
         try {
             stream = new ByteArrayInputStream(classfileBuffer);
@@ -139,6 +141,7 @@ public class TestClassFileTransformer implements ClassFileTransformer {
                             String.format("%s%s.beforeSubCodeBodyHook(\"%s\", %d, %d);",
                                     initializeSrc, hookClassName, subMethodName,
                                     codeLine.getStartLine(), actualInsertedLine));
+                    transformed = true;
                 }
             }
             CtClass exceptionType = classPool.get(Throwable.class.getCanonicalName());
@@ -168,9 +171,16 @@ public class TestClassFileTransformer implements ClassFileTransformer {
                 rootMethod.addCatch(
                         "{ " + initializeSrc + hookClassName + ".rootMethodErrorHook($e); throw $e; }", exceptionType);
                 rootMethod.insertAfter(initializeSrc + hookClassName + ".afterRootMethodHook();", true);
-
+                transformed = true;
             }
-            return ctClass.toBytecode();
+
+            // don't transform not changed ctClass
+            // (to improve performance and avoid unexpected error)
+            if (transformed) {
+                return ctClass.toBytecode();
+            } else {
+                return null;
+            }
         } catch (CannotCompileException e) {
             // print error since exception in transform method is just ignored
             System.err.println("exception on " + className);
