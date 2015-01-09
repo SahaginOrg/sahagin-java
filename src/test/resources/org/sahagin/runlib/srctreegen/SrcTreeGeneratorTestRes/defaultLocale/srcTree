@@ -1,37 +1,37 @@
 subFuncTable:
   functions:
   - codeBody: []
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.defaultLocale.TestMain.defaultTestDocMethod
+    name: "*.TestMain.defaultTestDocMethod"
     capture: thisLine
     argVariables: []
-    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/defaultLocale/TestMain;
+    classKey: "*/TestMain;"
     testDoc: Doc:default
     type: method
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/defaultLocale/TestMain;.defaultTestDocMethod()V
+    key: "*/TestMain;.defaultTestDocMethod()V"
   - codeBody: []
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.defaultLocale.TestMain.enUsTestDocMethod
+    name: "*.TestMain.enUsTestDocMethod"
     capture: thisLine
     argVariables: []
-    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/defaultLocale/TestMain;
+    classKey: "*/TestMain;"
     testDoc: Doc:en-US
     type: method
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/defaultLocale/TestMain;.enUsTestDocMethod()V
+    key: "*/TestMain;.enUsTestDocMethod()V"
   - codeBody: []
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.defaultLocale.TestMain.jaJpTestDocMethod
+    name: "*.TestMain.jaJpTestDocMethod"
     capture: thisLine
     argVariables: []
-    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/defaultLocale/TestMain;
+    classKey: "*/TestMain;"
     testDoc: ''
     type: method
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/defaultLocale/TestMain;.jaJpTestDocMethod()V
+    key: "*/TestMain;.jaJpTestDocMethod()V"
   - codeBody: []
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.defaultLocale.TestMain.testDocsMethod
+    name: "*.TestMain.testDocsMethod"
     capture: thisLine
     argVariables: []
-    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/defaultLocale/TestMain;
+    classKey: "*/TestMain;"
     testDoc: Docs:default
     type: method
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/defaultLocale/TestMain;.testDocsMethod()V
+    key: "*/TestMain;.testDocsMethod()V"
 rootFuncTable:
   functions: []
 formatVersion: "*"
@@ -39,8 +39,8 @@ subClassTable:
   classes:
   - testDoc: Pages:default
     type: page
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/defaultLocale/TestMain;
+    key: "*/TestMain;"
     methodKeys: "*"
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.defaultLocale.TestMain
+    name: "*.TestMain"
 rootClassTable:
   classes: []

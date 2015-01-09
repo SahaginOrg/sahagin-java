@@ -1,13 +1,13 @@
 subFuncTable:
   functions:
   - codeBody: []
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.utf8Character.ページクラス.ページメソッド
+    name: "*.ページクラス.ページメソッド"
     capture: thisLine
     argVariables: []
-    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/utf8Character/ページクラス;
+    classKey: "*/ページクラス;"
     testDoc: ページメソッド
     type: method
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/utf8Character/ページクラス;.ページメソッド()V
+    key: "*/ページクラス;.ページメソッド()V"
 rootFuncTable:
   functions:
   - codeBody:
@@ -18,29 +18,29 @@ rootFuncTable:
       code:
         original: page.ページメソッド();
         type: method
-        methodKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/utf8Character/ページクラス;.ページメソッド()V
+        methodKey: "*/ページクラス;.ページメソッド()V"
         thisInstance: {original: page, type: unknown}
         args: []
       endLine: "*"
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.utf8Character.メインクラス.テスト
+    name: "*.メインクラス.テスト"
     capture: thisLine
     argVariables: []
-    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/utf8Character/メインクラス;
+    classKey: "*/メインクラス;"
     testDoc: Doc:テスト
     type: method
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/utf8Character/メインクラス;.テスト()V
+    key: "*/メインクラス;.テスト()V"
 subClassTable:
   classes:
   - testDoc: Doc:ページクラス
     type: page
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/utf8Character/ページクラス;
-    methodKeys: [Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/utf8Character/ページクラス;.ページメソッド()V]
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.utf8Character.ページクラス
+    key: "*/ページクラス;"
+    methodKeys: ["*/ページクラス;.ページメソッド()V"]
+    name: "*.ページクラス"
 formatVersion: "*"
 rootClassTable:
   classes:
   - testDoc: Doc:メインクラス
     type: class
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/utf8Character/メインクラス;
-    methodKeys: [Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/utf8Character/メインクラス;.テスト()V]
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.utf8Character.メインクラス
+    key: "*/メインクラス;"
+    methodKeys: ["*/メインクラス;.テスト()V"]
+    name: "*.メインクラス"

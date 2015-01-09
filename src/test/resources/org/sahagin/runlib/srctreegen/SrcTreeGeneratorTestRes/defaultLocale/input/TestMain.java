@@ -1,5 +1,4 @@
-package org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.defaultLocale;
-
+package org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.defaultLocale.input;
 import org.sahagin.runlib.external.Locale;
 import org.sahagin.runlib.external.Page;
 import org.sahagin.runlib.external.Pages;

@@ -1,4 +1,4 @@
-package org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.jaJpLocale;
+package org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.jaJpLocale.input;
 
 import org.sahagin.runlib.external.Locale;
 import org.sahagin.runlib.external.Page;

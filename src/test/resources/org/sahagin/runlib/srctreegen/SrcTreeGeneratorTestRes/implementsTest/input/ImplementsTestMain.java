@@ -1,4 +1,4 @@
-package org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.implementsTest;
+package org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.implementsTest.input;
 
 import org.junit.Test;
 

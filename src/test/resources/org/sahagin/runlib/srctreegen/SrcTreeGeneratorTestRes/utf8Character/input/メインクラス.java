@@ -1,4 +1,4 @@
-package org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.utf8Character;
+package org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.utf8Character.input;
 
 import org.junit.Test;
 import org.sahagin.runlib.external.TestDoc;

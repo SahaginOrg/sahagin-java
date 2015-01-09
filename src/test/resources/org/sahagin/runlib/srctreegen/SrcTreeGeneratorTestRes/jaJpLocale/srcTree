@@ -1,37 +1,37 @@
 subFuncTable:
   functions:
   - codeBody: []
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.jaJpLocale.TestMain.defaultTestDocMethod
+    name: "*.TestMain.defaultTestDocMethod"
     capture: thisLine
     argVariables: []
-    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/jaJpLocale/TestMain;
+    classKey: "*/TestMain;"
     testDoc: Doc:default
     type: method
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/jaJpLocale/TestMain;.defaultTestDocMethod()V
+    key: "*/TestMain;.defaultTestDocMethod()V"
   - codeBody: []
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.jaJpLocale.TestMain.enUsTestDocMethod
+    name: "*.TestMain.enUsTestDocMethod"
     capture: thisLine
     argVariables: []
-    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/jaJpLocale/TestMain;
+    classKey: "*/TestMain;"
     testDoc: Doc:en-US
     type: method
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/jaJpLocale/TestMain;.enUsTestDocMethod()V
+    key: "*/TestMain;.enUsTestDocMethod()V"
   - codeBody: []
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.jaJpLocale.TestMain.jaJpTestDocMethod
+    name: "*.TestMain.jaJpTestDocMethod"
     capture: thisLine
     argVariables: []
-    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/jaJpLocale/TestMain;
+    classKey: "*/TestMain;"
     testDoc: Doc:ja-JP
     type: method
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/jaJpLocale/TestMain;.jaJpTestDocMethod()V
+    key: "*/TestMain;.jaJpTestDocMethod()V"
   - codeBody: []
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.jaJpLocale.TestMain.testDocsMethod
+    name: "*.TestMain.testDocsMethod"
     capture: thisLine
     argVariables: []
-    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/jaJpLocale/TestMain;
+    classKey: "*/TestMain;"
     testDoc: Docs:ja-JP
     type: method
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/jaJpLocale/TestMain;.testDocsMethod()V
+    key: "*/TestMain;.testDocsMethod()V"
 rootFuncTable:
   functions: []
 formatVersion: "*"
@@ -39,8 +39,8 @@ subClassTable:
   classes:
   - testDoc: Pages:ja-JP
     type: page
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/jaJpLocale/TestMain;
+    key: "*/TestMain;"
     methodKeys: "*"
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.jaJpLocale.TestMain
+    name: "*.TestMain"
 rootClassTable:
   classes: []

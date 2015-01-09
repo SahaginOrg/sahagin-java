@@ -1,4 +1,4 @@
-package org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData;
+package org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData.input;
 
 import org.junit.Test;
 import org.openqa.selenium.By;

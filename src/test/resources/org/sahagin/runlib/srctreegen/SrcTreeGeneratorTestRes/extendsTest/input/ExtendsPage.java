@@ -1,4 +1,4 @@
-package org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.extendsTest;
+package org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.extendsTest.input;
 
 import org.sahagin.runlib.external.Page;
 import org.sahagin.runlib.external.Pages;

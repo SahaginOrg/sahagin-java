@@ -1,4 +1,4 @@
-package org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.extendsTest;
+package org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.extendsTest.input;
 
 import org.junit.Test;
 import org.sahagin.runlib.external.CaptureStyle;

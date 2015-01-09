@@ -1,48 +1,48 @@
 subFuncTable:
   functions:
   - codeBody: []
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData.TestMain.testDocMethod
+    name: "*.TestMain.testDocMethod"
     capture: stepIn
     argVariables: []
-    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestMain;
+    classKey: "*/TestMain;"
     testDoc: Doc:testDocMethod
     type: method
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestMain;.testDocMethod()V
+    key: "*/TestMain;.testDocMethod()V"
   - codeBody: []
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData.TestPage.InnerClass.innerClassMethod
+    name: "*.TestPage.InnerClass.innerClassMethod"
     capture: thisLine
     argVariables: []
-    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage$InnerClass;
+    classKey: "*/TestPage$InnerClass;"
     testDoc: Doc:innerClass
     type: method
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage$InnerClass;.innerClassMethod()V
+    key: "*/TestPage$InnerClass;.innerClassMethod()V"
   - codeBody: []
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData.TestPage.TestPage
+    name: "*.TestPage.TestPage"
     capture: thisLine
     argVariables: []
-    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;
+    classKey: "*/TestPage;"
     testDoc: 'Doc: TestPage'
     type: method
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.()V
+    key: "*/TestPage;.()V"
   - codeBody: []
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData.TestPage.argMethod
+    name: "*.TestPage.argMethod"
     capture: thisLine
     argVariables: [arg1, arg2]
-    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;
+    classKey: "*/TestPage;"
     testDoc: Doc:argMethod:{arg1}:{arg2}:{0}:{1}:{this}
     type: method
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.argMethod(Ljava/lang/String;I)V
+    key: "*/TestPage;.argMethod(Ljava/lang/String;I)V"
   - codeBody:
     - startLine: "*"
       code: {original: return "EEE";, type: unknown}
       endLine: "*"
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData.TestPage.getData
+    name: "*.TestPage.getData"
     capture: thisLine
     argVariables: []
-    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;
+    classKey: "*/TestPage;"
     testDoc: data
     type: method
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.getData()Ljava/lang/String;
+    key: "*/TestPage;.getData()Ljava/lang/String;"
   - codeBody:
     - startLine: "*"
       code: {original: InnerClass innerClass=new InnerClass();, type: unknown}
@@ -51,49 +51,49 @@ subFuncTable:
       code:
         original: innerClass.innerClassMethod();
         type: method
-        methodKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage$InnerClass;.innerClassMethod()V
+        methodKey: "*/TestPage$InnerClass;.innerClassMethod()V"
         thisInstance: {original: innerClass, type: unknown}
         args: []
       endLine: "*"
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData.TestPage.inenrClassCall
+    name: "*.TestPage.inenrClassCall"
     capture: thisLine
     argVariables: []
-    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;
+    classKey: "*/TestPage;"
     testDoc: Doc:innerTestCall
     type: method
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.inenrClassCall()V
+    key: "*/TestPage;.inenrClassCall()V"
   - codeBody:
     - startLine: "*"
       code:
         original: nest2(arg);
         type: method
-        methodKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.nest2(Ljava/lang/String;)V
+        methodKey: "*/TestPage;.nest2(Ljava/lang/String;)V"
         args:
         - {argIndex: 0, original: arg, type: arg}
       endLine: "*"
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData.TestPage.nest1
+    name: "*.TestPage.nest1"
     capture: thisLine
     argVariables: [arg]
-    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;
+    classKey: "*/TestPage;"
     testDoc: Doc:nest1:{arg}
     type: method
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.nest1(Ljava/lang/String;)V
+    key: "*/TestPage;.nest1(Ljava/lang/String;)V"
   - codeBody:
     - startLine: "*"
       code:
         original: nest3(arg);
         type: method
-        methodKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.nest3(Ljava/lang/String;)V
+        methodKey: "*/TestPage;.nest3(Ljava/lang/String;)V"
         args:
         - {argIndex: 0, original: arg, type: arg}
       endLine: "*"
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData.TestPage.nest2
+    name: "*.TestPage.nest2"
     capture: thisLine
     argVariables: [arg]
-    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;
+    classKey: "*/TestPage;"
     testDoc: Doc:nest2:{arg}
     type: method
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.nest2(Ljava/lang/String;)V
+    key: "*/TestPage;.nest2(Ljava/lang/String;)V"
   - codeBody:
     - startLine: "*"
       code: {original: int i=0;, type: unknown}
@@ -113,17 +113,17 @@ subFuncTable:
       code:
         original: nest1(arg);
         type: method
-        methodKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.nest1(Ljava/lang/String;)V
+        methodKey: "*/TestPage;.nest1(Ljava/lang/String;)V"
         args:
         - {argIndex: 0, original: arg, type: arg}
       endLine: "*"
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData.TestPage.nest3
+    name: "*.TestPage.nest3"
     capture: thisLine
     argVariables: [arg]
-    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;
+    classKey: "*/TestPage;"
     testDoc: Doc:nest3:{arg}
     type: method
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.nest3(Ljava/lang/String;)V
+    key: "*/TestPage;.nest3(Ljava/lang/String;)V"
   - codeBody:
     - startLine: "*"
       code: {original: int i=0;, type: unknown}
@@ -143,32 +143,32 @@ subFuncTable:
       code:
         original: recurseMethodCall();
         type: method
-        methodKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.recurseMethodCall()V
+        methodKey: "*/TestPage;.recurseMethodCall()V"
         args: []
       endLine: "*"
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData.TestPage.recurseMethodCall
+    name: "*.TestPage.recurseMethodCall"
     capture: thisLine
     argVariables: []
-    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;
+    classKey: "*/TestPage;"
     testDoc: 'Doc: recurseMethodCall'
     type: method
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.recurseMethodCall()V
+    key: "*/TestPage;.recurseMethodCall()V"
   - codeBody: []
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData.TestPage.staticMethod
+    name: "*.TestPage.staticMethod"
     capture: thisLine
     argVariables: []
-    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;
+    classKey: "*/TestPage;"
     testDoc: Doc:staticMethod
     type: method
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.staticMethod()V
+    key: "*/TestPage;.staticMethod()V"
   - codeBody: []
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData.TestSub.subMethod
+    name: "*.TestSub.subMethod"
     capture: thisLine
     argVariables: []
-    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestSub;
+    classKey: "*/TestSub;"
     testDoc: 'Doc: subMethod'
     type: method
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestSub;.subMethod()V
+    key: "*/TestSub;.subMethod()V"
 rootFuncTable:
   functions:
   - codeBody:
@@ -176,7 +176,7 @@ rootFuncTable:
       code:
         original: TestSub.subMethod();
         type: method
-        methodKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestSub;.subMethod()V
+        methodKey: "*/TestSub;.subMethod()V"
         thisInstance: {original: TestSub, type: unknown}
         args: []
       endLine: "*"
@@ -184,7 +184,7 @@ rootFuncTable:
       code:
         original: testDocMethod();
         type: method
-        methodKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestMain;.testDocMethod()V
+        methodKey: "*/TestMain;.testDocMethod()V"
         args: []
       endLine: "*"
     - startLine: "*"
@@ -194,14 +194,14 @@ rootFuncTable:
       code:
         original: TestPage page=new TestPage();
         type: method
-        methodKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.()V
+        methodKey: "*/TestPage;.()V"
         args: []
       endLine: "*"
     - startLine: "*"
       code:
         original: page.inenrClassCall();
         type: method
-        methodKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.inenrClassCall()V
+        methodKey: "*/TestPage;.inenrClassCall()V"
         thisInstance: {original: page, type: unknown}
         args: []
       endLine: "*"
@@ -209,7 +209,7 @@ rootFuncTable:
       code:
         original: TestPage.staticMethod();
         type: method
-        methodKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.staticMethod()V
+        methodKey: "*/TestPage;.staticMethod()V"
         thisInstance: {original: TestPage, type: unknown}
         args: []
       endLine: "*"
@@ -217,7 +217,7 @@ rootFuncTable:
       code:
         original: page.staticMethod();
         type: method
-        methodKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.staticMethod()V
+        methodKey: "*/TestPage;.staticMethod()V"
         thisInstance: {original: page, type: unknown}
         args: []
       endLine: "*"
@@ -225,7 +225,7 @@ rootFuncTable:
       code:
         original: page.argMethod("AAA",999);
         type: method
-        methodKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.argMethod(Ljava/lang/String;I)V
+        methodKey: "*/TestPage;.argMethod(Ljava/lang/String;I)V"
         thisInstance: {original: page, type: unknown}
         args:
         - {value: AAA, original: '"AAA"', type: string}
@@ -235,7 +235,7 @@ rootFuncTable:
       code:
         original: page.argMethod(null,0);
         type: method
-        methodKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.argMethod(Ljava/lang/String;I)V
+        methodKey: "*/TestPage;.argMethod(Ljava/lang/String;I)V"
         thisInstance: {original: page, type: unknown}
         args:
         - {original: 'null', type: unknown}
@@ -245,7 +245,7 @@ rootFuncTable:
       code:
         original: page.recurseMethodCall();
         type: method
-        methodKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.recurseMethodCall()V
+        methodKey: "*/TestPage;.recurseMethodCall()V"
         thisInstance: {original: page, type: unknown}
         args: []
       endLine: "*"
@@ -253,7 +253,7 @@ rootFuncTable:
       code:
         original: page.nest1("DDD");
         type: method
-        methodKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.nest1(Ljava/lang/String;)V
+        methodKey: "*/TestPage;.nest1(Ljava/lang/String;)V"
         thisInstance: {original: page, type: unknown}
         args:
         - {value: DDD, original: '"DDD"', type: string}
@@ -281,50 +281,43 @@ rootFuncTable:
     - startLine: "*"
       code: {original: wd.findElement(By.cssSelector("GGG")).sendKeys("HHH");, type: unknown}
       endLine: "*"
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData.TestMain.testMethod1
+    name: "*.TestMain.testMethod1"
     capture: thisLine
     argVariables: []
-    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestMain;
+    classKey: "*/TestMain;"
     testDoc: null
     type: method
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestMain;.testMethod1()V
+    key: "*/TestMain;.testMethod1()V"
   - codeBody: []
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData.TestMain.testMethod2
+    name: "*.TestMain.testMethod2"
     capture: thisLine
     argVariables: []
-    classKey: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestMain;
+    classKey: "*/TestMain;"
     testDoc: Doc:TestMethod2
     type: method
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestMain;.testMethod2()V
+    key: "*/TestMain;.testMethod2()V"
 subClassTable:
   classes:
   - testDoc: null
     type: class
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage$InnerClass;
-    methodKeys: [Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage$InnerClass;.innerClassMethod()V]
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData.TestPage.InnerClass
+    key: "*/TestPage$InnerClass;"
+    methodKeys: ["*/TestPage$InnerClass;.innerClassMethod()V"]
+    name: "*.TestPage.InnerClass"
   - testDoc: Doc:TestPage
     type: page
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;
-    methodKeys: [Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.()V, Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.getData()Ljava/lang/String;,
-      Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.argMethod(Ljava/lang/String;I)V,
-      Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.staticMethod()V, Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.inenrClassCall()V,
-      Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.nest1(Ljava/lang/String;)V,
-      Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.nest2(Ljava/lang/String;)V,
-      Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.nest3(Ljava/lang/String;)V,
-      Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestPage;.recurseMethodCall()V]
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData.TestPage
+    key: "*/TestPage;"
+    methodKeys: "*"
+    name: "*.TestPage"
   - testDoc: null
     type: class
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestSub;
-    methodKeys: [Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestSub;.subMethod()V]
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData.TestSub
+    key: "*/TestSub;"
+    methodKeys: ["*/TestSub;.subMethod()V"]
+    name: "*.TestSub"
 formatVersion: "*"
 rootClassTable:
   classes:
   - testDoc: null
     type: class
-    key: Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestMain;
-    methodKeys: [Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestMain;.testMethod1()V,
-      Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestMain;.testMethod2()V, Lorg/sahagin/runlib/srctreegen/SrcTreeGeneratorTestRes/variousData/TestMain;.testDocMethod()V]
-    name: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData.TestMain
+    key: "*/TestMain;"
+    methodKeys: "*"
+    name: "*.TestMain"
