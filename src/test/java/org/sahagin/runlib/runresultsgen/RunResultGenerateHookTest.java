@@ -40,6 +40,7 @@ public class RunResultGenerateHookTest extends TestBase {
 
         InvocationRequest request = new DefaultInvocationRequest();
         request.setGoals(Arrays.asList("jar:jar", "test"));
+        request.setProfiles(Arrays.asList("sahagin-jar-integration-test"));
         request.addShellEnvironment("MAVEN_INVOKER", "on");
         final List<String> stdOuts = new ArrayList<String>(1024);
         request.setOutputHandler(new InvocationOutputHandler() {
@@ -57,12 +58,9 @@ public class RunResultGenerateHookTest extends TestBase {
                 stdErrs.add(arg);
             }
         });
-        String jarnameOpt = "-Dsahagin.jarname=sahagin-temp-for-test";
-        // TODO output directory name "target" is hard coded
-        String javaagentOpt
-        = "-Dsahagin.javaagent=-javaagent:target/sahagin-temp-for-test.jar=" + yamlFile.getPath();
+        String yamlPathOpt = "-Dsahagin.test.yaml.path=" + yamlFile.getPath();
         String testOpt = "-Dtest=" + TestMain.class.getCanonicalName();
-        request.setMavenOpts(jarnameOpt + " " + javaagentOpt + " " + testOpt);
+        request.setMavenOpts(yamlPathOpt + " " + testOpt);
 
         Invoker invoker = new DefaultInvoker();
         invoker.execute(request);

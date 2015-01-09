@@ -84,6 +84,7 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  
   <build>
     <plugins>
       <plugin>
@@ -101,13 +102,9 @@
         <version>2.18</version>
         <configuration>
           <systemPropertyVariables>
-            <!-- for Maven Invoker -->
+            <!-- give Maven home for child Maven Invoker -->
             <maven.home>${maven.home}</maven.home>
           </systemPropertyVariables>
-          <!-- used some tests such as RunResultGenerateHookTest -->
-          <argLine>
-            ${sahagin.javaagent}
-          </argLine>
         </configuration>
       </plugin>
       <plugin>
@@ -120,7 +117,6 @@
               <Premain-Class>org.sahagin.main.SahaginPreMain</Premain-Class>
             </manifestEntries>
           </archive>
-          <finalName>${sahagin.jarname}</finalName>
         </configuration>
       </plugin>
       <plugin>
@@ -136,8 +132,34 @@
       </plugin>
     </plugins>
   </build>
+  
   <!-- signing, source attachment, javadoc are executed only when releasing jar -->
   <profiles>
+  
+    <profile>
+      <id>sahagin-jar-integration-test</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <argLine>
+                -javaagent:target/sahagin-temp-for-test.jar=${sahagin.test.yaml.path}
+              </argLine>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <configuration>
+              <finalName>sahagin-temp-for-test</finalName>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    
     <profile>
       <id>release-sign-artifacts</id>
       <activation>
@@ -191,5 +213,6 @@
         </plugins>
       </build>
     </profile>
+    
   </profiles>
 </project>
