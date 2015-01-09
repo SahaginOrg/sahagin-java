@@ -26,12 +26,12 @@ public class SrcTreeGeneratorTest extends TestBase {
     }
 
     private void testMain(String methodName, Locale userLocale) {
-        File testDir = testJavaResourceDir(methodName);
+        File testSrcDir = new File(testResourceDir(methodName), "input");
         AcceptableLocales locales = AcceptableLocales.getInstance(userLocale);
         SrcTreeGenerator gen = new SrcTreeGenerator(null, locales);
         SrcTree srcTree;
         try {
-            srcTree = gen.generateWithRuntimeClassPath(testDir, "UTF-8");
+            srcTree = gen.generateWithRuntimeClassPath(testSrcDir, "UTF-8");
         } catch (IllegalTestScriptException e) {
             throw new RuntimeException(e);
         }
