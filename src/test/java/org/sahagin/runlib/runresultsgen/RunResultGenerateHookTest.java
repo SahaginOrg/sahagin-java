@@ -1,11 +1,15 @@
 package org.sahagin.runlib.runresultsgen;
 
+import static org.junit.Assert.fail;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.DefaultInvoker;
 import org.apache.maven.shared.invoker.InvocationOutputHandler;
@@ -14,7 +18,6 @@ import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
 import org.junit.Test;
 import org.sahagin.TestBase;
-import org.sahagin.runlib.runresultsgen.RunResultGenerateHookTestRes.test.TestMain;
 import org.sahagin.share.CommonPath;
 import org.sahagin.share.Config;
 import org.sahagin.share.yaml.YamlConvertException;
@@ -22,49 +25,95 @@ import org.sahagin.share.yaml.YamlUtils;
 
 public class RunResultGenerateHookTest extends TestBase {
 
-    public static final File getTestCapturePath(int counter) {
-        RunResultGenerateHookTest instance = new RunResultGenerateHookTest();
-        return new File(instance.testResourceDir("test"), counter + ".png");
+    public static File getTestCapturePath(File capturesDir, int counter) {
+        return new File(capturesDir, counter + ".png");
     }
 
-    // TODO calling another maven process make it hard to analyze this test result..
-    // Execute this test by Maven, or set system property maven.home or set environment value M2_HOME
-    @Test
-    public void test() throws MavenInvocationException, YamlConvertException {
-        File workDir = mkWorkDir("test").getAbsoluteFile();
-        File yamlFile = new File(workDir, "sahagin.yml");
-        Config conf = new Config(workDir);
-        conf.setTestDir(testJavaResourceDir("test").getAbsoluteFile());
-        conf.setRunTestOnly(true);
-        YamlUtils.dump(conf.toYamlObject(), yamlFile);
+    private class MavenInvokeResult {
+        private String invokerName;
+        private final List<String> stdOuts = new ArrayList<String>(1024);
+        private final List<String> stdErrs = new ArrayList<String>(1024);
+        private boolean succeeded = false;
 
-        InvocationRequest request = new DefaultInvocationRequest();
-        request.setGoals(Arrays.asList("jar:jar", "test"));
-        request.setProfiles(Arrays.asList("sahagin-jar-integration-test"));
-        request.addShellEnvironment("MAVEN_INVOKER", "on");
-        final List<String> stdOuts = new ArrayList<String>(1024);
+        private MavenInvokeResult(String invokerName) {
+            this.invokerName = invokerName;
+        }
+
+        private void printStdOursAndErrs() {
+            System.out.println("---- Maven Invoker [" + invokerName + "] std out ----");
+            for (String stdOut : stdOuts) {
+                System.out.println(stdOut);
+            }
+            System.err.println("---- Maven Invoker [" + invokerName + "] std error ----");
+            for (String stdErr : stdErrs) {
+                System.err.println(stdErr);
+            }
+            System.err.println("-------------------------------------------");
+        }
+    }
+
+    // returns stdOut and stdErr pair
+    // - output and error handler will be set to the request
+    private MavenInvokeResult mavenInvoke(InvocationRequest request, String name) {
+        final MavenInvokeResult result = new MavenInvokeResult(name);
         request.setOutputHandler(new InvocationOutputHandler() {
 
             @Override
             public void consumeLine(String arg) {
-                stdOuts.add(arg);
+                result.stdOuts.add(arg);
             }
         });
-        final List<String> stdErrs = new ArrayList<String>(1024);
         request.setErrorHandler(new InvocationOutputHandler() {
 
             @Override
             public void consumeLine(String arg) {
-                stdErrs.add(arg);
+                result.stdErrs.add(arg);
             }
         });
-        String yamlPathOpt = "-Dsahagin.test.yaml.path=" + yamlFile.getPath();
-        String testOpt = "-Dtest=" + TestMain.class.getCanonicalName();
-        request.setMavenOpts(yamlPathOpt + " " + testOpt);
 
         Invoker invoker = new DefaultInvoker();
-        invoker.execute(request);
+        try {
+            result.succeeded = (invoker.execute(request).getExitCode() == 0);
+        } catch (MavenInvocationException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
 
+    // Execute this test by Maven, or set system property maven.home or set environment value M2_HOME
+    @Test
+    public void test() throws MavenInvocationException, YamlConvertException, IOException {
+        // generate sahagin temp jar for test from the already generated class files
+        InvocationRequest jarGenRequest = new DefaultInvocationRequest();
+        jarGenRequest.setProfiles(Arrays.asList("sahagin-temp-jar-gen"));
+        jarGenRequest.setGoals(Arrays.asList("jar:jar"));
+        MavenInvokeResult jarGenResult = mavenInvoke(jarGenRequest, "jarGen");
+        if (!jarGenResult.succeeded) {
+            jarGenResult.printStdOursAndErrs();
+            fail("fail to generate jar");
+        }
+
+        // set up test data on the working directory
+        File workDir = mkWorkDir().getAbsoluteFile();
+        Config conf = new Config(workDir);
+        conf.setTestDir(new File(workDir, "src/test/java"));
+        conf.setRunTestOnly(true);
+        YamlUtils.dump(conf.toYamlObject(), new File(workDir, "sahagin.yml"));
+        FileUtils.copyFile(new File("pom.xml"), new File(workDir, "pom.xml"));
+        FileUtils.copyDirectory(testResourceDir("src"), new File(workDir, "src"));
+        FileUtils.copyDirectory(testResourceDir("expected/captures"), new File(workDir, "captures"));
+
+        // execute test on the working directory
+        InvocationRequest testRequest = new DefaultInvocationRequest();
+        testRequest.setGoals(Arrays.asList("clean", "test"));
+        testRequest.setProfiles(Arrays.asList("sahagin-jar-test"));
+        String jarPathOpt = "-Dsahagin.temp.jar="
+                + new File("target/sahagin-temp.jar").getAbsolutePath();
+        testRequest.setMavenOpts(jarPathOpt);
+        testRequest.setBaseDirectory(workDir);
+        MavenInvokeResult testResult = mavenInvoke(testRequest, "test");
+
+        // check test output
         File reportInputDir = conf.getRootBaseReportInputDataDir();
         try {
             captureAssertion("noTestDocMethodFailTest", reportInputDir, 1);
@@ -76,26 +125,17 @@ public class RunResultGenerateHookTest extends TestBase {
             testResultAssertion("successTest", reportInputDir);
             testResultAssertion("testDocMethodFailTest", reportInputDir);
         } catch (AssertionError e) {
-            System.out.println("-------------- Maven standard out --------------");
-            for (String stdOut : stdOuts) {
-                System.out.println(stdOut);
-            }
-            System.err.println("-------------- Maven standard error --------------");
-            for (String stdErr : stdErrs) {
-                System.err.println(stdErr);
-            }
-            System.err.println("--------------------------------------------------");
-
+            testResult.printStdOursAndErrs();
             throw e;
         }
     }
 
     private void captureAssertion(String methodName, File reportInputDir, int counterMax) {
-        File testMainCaptureDir = new File(
-                CommonPath.inputCaptureRootDir(reportInputDir), TestMain.class.getCanonicalName());
+        File capturesDir = new File(mkWorkDir(), "captures");
+        File testMainCaptureDir
+        = new File(CommonPath.inputCaptureRootDir(reportInputDir), "TestMain");
         for (int i = 1; i <= counterMax; i++) {
-            assertFileByteContentsEquals(
-                    getTestCapturePath(i),
+            assertFileByteContentsEquals(getTestCapturePath(capturesDir, i),
                     new File(testMainCaptureDir, String.format("%s/00%d.png", methodName, i)));
         }
         // TODO assert file for counterMax + 1 does not exist
@@ -103,10 +143,10 @@ public class RunResultGenerateHookTest extends TestBase {
 
     private void testResultAssertion(String methodName, File reportInputDir)
             throws YamlConvertException {
-        File testMainResultDir = new File(
-                CommonPath.runResultRootDir(reportInputDir), TestMain.class.getCanonicalName());
+        File testMainResultDir
+        = new File(CommonPath.runResultRootDir(reportInputDir), "TestMain");
         Map<String, Object> actualYamlObj = YamlUtils.load(new File(testMainResultDir, methodName));
-        Map<String, Object> expectedYamlObj = YamlUtils.load(new File(testResourceDir("test"), methodName));
+        Map<String, Object> expectedYamlObj = YamlUtils.load(new File(testResourceDir("expected"), methodName));
         assertYamlEquals(expectedYamlObj, actualYamlObj);
     }
 

@@ -1,10 +1,6 @@
-package org.sahagin.runlib.runresultsgen.RunResultGenerateHookTestRes.test;
-
 import static org.junit.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assume.*;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -13,20 +9,17 @@ import java.io.IOException;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.sahagin.TestBase;
 import org.sahagin.runlib.external.CaptureStyle;
 import org.sahagin.runlib.external.TestDoc;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.runlib.external.adapter.ScreenCaptureAdapter;
-import org.sahagin.runlib.runresultsgen.RunResultGenerateHookTest;
 
-// this test is executed only called from RunResultGenerateHookTest
-public class TestMain extends TestBase {
+public class TestMain {
 
-    public int counter = 1;
-
-    private boolean calledFromMavenInvoker() {
-        return System.getenv("MAVEN_INVOKER") != null;
+    private int counter = 1;
+    
+    private File getTestCapturePath(int counter) {
+        return new File("captures", counter + ".png");
     }
 
     @Before
@@ -36,7 +29,7 @@ public class TestMain extends TestBase {
 
             @Override
             public byte[] captueScreen() {
-                File captureFile = RunResultGenerateHookTest.getTestCapturePath(counter);
+                File captureFile = getTestCapturePath(counter);
                 counter++;
                 try {
                     return IOUtils.toByteArray(new FileInputStream(captureFile));
@@ -51,14 +44,12 @@ public class TestMain extends TestBase {
 
     @Test
     public void successTest() {
-        assumeTrue(calledFromMavenInvoker());
         assertEquals(1, 1);
         assertThat(1 + 1, is(2));
     }
 
     @Test
     public void stepInCaptureTest() {
-        assumeTrue(calledFromMavenInvoker());
         noStepInCaptureMethod();
         stepInCaptureMethod();
     }
@@ -77,7 +68,6 @@ public class TestMain extends TestBase {
 
     @Test
     public void testDocMethodFailTest() {
-        assumeTrue(calledFromMavenInvoker());
         testDocMethod();
     }
 
@@ -88,7 +78,6 @@ public class TestMain extends TestBase {
 
     @Test
     public void noTestDocMethodFailTest() {
-        assumeTrue(calledFromMavenInvoker());
         noTestDocMethod();
     }
 

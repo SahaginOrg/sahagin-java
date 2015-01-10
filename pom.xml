@@ -135,9 +135,32 @@
   
   <!-- signing, source attachment, javadoc are executed only when releasing jar -->
   <profiles>
-  
+
     <profile>
-      <id>sahagin-jar-integration-test</id>
+      <id>sahagin-temp-jar-gen</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <configuration>
+              <finalName>sahagin-temp</finalName>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>  
+    <profile>
+      <id>sahagin-jar-test</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.sahagin</groupId>
+          <artifactId>sahagin-temp</artifactId>
+          <version>1.0</version>
+          <scope>system</scope>
+          <systemPath>${sahagin.temp.jar}</systemPath>
+        </dependency>
+      </dependencies>
       <build>
         <plugins>
           <plugin>
@@ -145,15 +168,8 @@
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
               <argLine>
-                -javaagent:target/sahagin-temp-for-test.jar=${sahagin.test.yaml.path}
+                -javaagent:${sahagin.temp.jar}
               </argLine>
-            </configuration>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <configuration>
-              <finalName>sahagin-temp-for-test</finalName>
             </configuration>
           </plugin>
         </plugins>

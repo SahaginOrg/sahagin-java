@@ -1,0 +1,10 @@
+runFailures: []
+formatVersion: "*"
+rootFunctionKey: "*TestMain;.successTest()V"
+lineScreenCaptures:
+- path: "*/captures/*TestMain/successTest/001.png"
+  stackLines:
+  - {line: "*", codeBodyIndex: 0, functionKey: "*TestMain;.successTest()V"}
+- path: "*/captures/*TestMain/successTest/002.png"
+  stackLines:
+  - {line: "*", codeBodyIndex: 1, functionKey: "*TestMain;.successTest()V"}

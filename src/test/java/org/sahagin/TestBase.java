@@ -10,21 +10,11 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 
 public abstract class TestBase {
-    private static final String TEST_JAVA_RESOURCE_ROOT = "src/test/java";
     private static final String TEST_RESOURCE_ROOT = "src/test/resources/";
     private static final String WORK_ROOT = "work/";
 
     private String classFullPath() {
         return this.getClass().getCanonicalName().replace(".", "/");
-    }
-
-    // test input java files located not on resource directory but on test directory
-    public final File testJavaResourceDir() {
-        return new File(TEST_JAVA_RESOURCE_ROOT, classFullPath() + "Res");
-    }
-
-    public final File testJavaResourceDir(String methodName) {
-        return new File(TEST_JAVA_RESOURCE_ROOT, classFullPath() + "Res/" + methodName);
     }
 
     public final File testResourceDir() {
