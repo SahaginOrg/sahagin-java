@@ -133,7 +133,7 @@ public class RunResultGenerateHookTest extends TestBase {
     private void captureAssertion(String methodName, File reportInputDir, int counterMax) {
         File capturesDir = new File(mkWorkDir(), "captures");
         File testMainCaptureDir
-        = new File(CommonPath.inputCaptureRootDir(reportInputDir), "TestMain");
+        = new File(CommonPath.inputCaptureRootDir(reportInputDir), "normal.TestMain");
         for (int i = 1; i <= counterMax; i++) {
             assertFileByteContentsEquals(getTestCapturePath(capturesDir, i),
                     new File(testMainCaptureDir, String.format("%s/00%d.png", methodName, i)));
@@ -144,9 +144,9 @@ public class RunResultGenerateHookTest extends TestBase {
     private void testResultAssertion(String methodName, File reportInputDir)
             throws YamlConvertException {
         File testMainResultDir
-        = new File(CommonPath.runResultRootDir(reportInputDir), "TestMain");
+        = new File(CommonPath.runResultRootDir(reportInputDir), "normal.TestMain");
         Map<String, Object> actualYamlObj = YamlUtils.load(new File(testMainResultDir, methodName));
-        Map<String, Object> expectedYamlObj = YamlUtils.load(new File(testResourceDir("expected"), methodName));
+        Map<String, Object> expectedYamlObj = YamlUtils.load(new File(testResourceDir("expected/normal"), methodName));
         assertYamlEquals(expectedYamlObj, actualYamlObj);
     }
 

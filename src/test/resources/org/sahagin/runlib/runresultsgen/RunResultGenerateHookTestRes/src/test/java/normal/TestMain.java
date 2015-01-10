@@ -1,3 +1,5 @@
+package normal;
+
 import static org.junit.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
@@ -17,7 +19,7 @@ import org.sahagin.runlib.external.adapter.ScreenCaptureAdapter;
 public class TestMain {
 
     private int counter = 1;
-    
+
     private File getTestCapturePath(int counter) {
         return new File("captures", counter + ".png");
     }
