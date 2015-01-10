@@ -1,0 +1,13 @@
+runFailures: []
+formatVersion: "*"
+rootFunctionKey: "*ImplementsTest;.implementsTest()V"
+lineScreenCaptures:
+- path: "*/captures/*ImplementsTest/implementsTest/001.png"
+  stackLines:
+  - {line: "*", codeBodyIndex: 2, functionKey: "*ImplementsTest;.implementsTest()V"}
+- path: "*/captures/*ImplementsTest/implementsTest/002.png"
+  stackLines:
+  - {line: "*", codeBodyIndex: 3, functionKey: "*ImplementsTest;.implementsTest()V"}
+- path: "*/captures/*ImplementsTest/implementsTest/003.png"
+  stackLines:
+  - {line: "*", codeBodyIndex: 5, functionKey: "*ImplementsTest;.implementsTest()V"}

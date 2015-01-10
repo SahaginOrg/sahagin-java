@@ -1,0 +1,19 @@
+runFailures: []
+formatVersion: "*"
+rootFunctionKey: "*ExtendsTest;.extendsTest()V"
+lineScreenCaptures:
+- path: "*/captures/*ExtendsTest/extendsTest/001.png"
+  stackLines:
+  - {line: "*", codeBodyIndex: 0, functionKey: "*ExtendsTest;.extendsTest()V"}
+- path: "*/captures/*ExtendsTest/extendsTest/002.png"
+  stackLines:
+  - {line: "*", codeBodyIndex: 2, functionKey: "*ExtendsTest;.extendsTest()V"}
+- path: "*/captures/*ExtendsTest/extendsTest/003.png"
+  stackLines:
+  - {line: "*", codeBodyIndex: 3, functionKey: "*ExtendsTest;.extendsTest()V"}
+- path: "*/captures/*ExtendsTest/extendsTest/004.png"
+  stackLines:
+  - {line: "*", codeBodyIndex: 4, functionKey: "*ExtendsTest;.extendsTest()V"}
+- path: "*/captures/*ExtendsTest/extendsTest/005.png"
+  stackLines:
+  - {line: "*", codeBodyIndex: 7, functionKey: "*ExtendsTest;.extendsTest()V"}

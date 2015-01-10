@@ -25,7 +25,7 @@ import org.sahagin.share.yaml.YamlUtils;
 
 public class RunResultGenerateHookTest extends TestBase {
 
-    public static File getTestCapturePath(File capturesDir, int counter) {
+    private static File getTestCapturePath(File capturesDir, int counter) {
         return new File(capturesDir, counter + ".png");
     }
 
@@ -80,6 +80,28 @@ public class RunResultGenerateHookTest extends TestBase {
         return result;
     }
 
+    private void captureAssertion(String className, String methodName,
+            File reportInputDir, int counterMax) {
+        File capturesDir = new File(mkWorkDir(), "captures");
+        File testMainCaptureDir
+        = new File(CommonPath.inputCaptureRootDir(reportInputDir), className);
+        for (int i = 1; i <= counterMax; i++) {
+            assertFileByteContentsEquals(getTestCapturePath(capturesDir, i),
+                    new File(testMainCaptureDir, String.format("%s/00%d.png", methodName, i)));
+        }
+        // TODO assert file for counterMax + 1 does not exist
+    }
+
+    private void testResultAssertion(String className, String methodName,
+            File reportInputDir) throws YamlConvertException {
+        File testMainResultDir
+        = new File(CommonPath.runResultRootDir(reportInputDir), className);
+        Map<String, Object> actualYamlObj = YamlUtils.load(new File(testMainResultDir, methodName));
+        Map<String, Object> expectedYamlObj = YamlUtils.load(
+                new File(new File(testResourceDir("expected"), className),  methodName));
+        assertYamlEquals(expectedYamlObj, actualYamlObj);
+    }
+
     // Execute this test by Maven, or set system property maven.home or set environment value M2_HOME
     @Test
     public void test() throws MavenInvocationException, YamlConvertException, IOException {
@@ -116,38 +138,27 @@ public class RunResultGenerateHookTest extends TestBase {
         // check test output
         File reportInputDir = conf.getRootBaseReportInputDataDir();
         try {
-            captureAssertion("noTestDocMethodFailTest", reportInputDir, 1);
-            captureAssertion("stepInCaptureTest", reportInputDir, 4);
-            captureAssertion("successTest", reportInputDir, 2);
-            captureAssertion("testDocMethodFailTest", reportInputDir, 1);
-            testResultAssertion("noTestDocMethodFailTest", reportInputDir);
-            testResultAssertion("stepInCaptureTest", reportInputDir);
-            testResultAssertion("successTest", reportInputDir);
-            testResultAssertion("testDocMethodFailTest", reportInputDir);
+            String normalTest = "normal.TestMain";
+            captureAssertion(normalTest, "noTestDocMethodFailTest", reportInputDir, 1);
+            captureAssertion(normalTest, "stepInCaptureTest", reportInputDir, 4);
+            captureAssertion(normalTest, "successTest", reportInputDir, 2);
+            captureAssertion(normalTest, "testDocMethodFailTest", reportInputDir, 1);
+            testResultAssertion(normalTest, "noTestDocMethodFailTest", reportInputDir);
+            testResultAssertion(normalTest, "stepInCaptureTest", reportInputDir);
+            testResultAssertion(normalTest, "successTest", reportInputDir);
+            testResultAssertion(normalTest, "testDocMethodFailTest", reportInputDir);
+
+            String extendsTest = "extendstest.ExtendsTest";
+            captureAssertion(extendsTest, "extendsTest", reportInputDir, 5);
+            testResultAssertion(extendsTest, "extendsTest", reportInputDir);
+
+            String implementsTest = "implementstest.ImplementsTest";
+            captureAssertion(implementsTest, "implementsTest", reportInputDir, 3);
+            testResultAssertion(implementsTest, "implementsTest", reportInputDir);
         } catch (AssertionError e) {
             testResult.printStdOursAndErrs();
             throw e;
         }
-    }
-
-    private void captureAssertion(String methodName, File reportInputDir, int counterMax) {
-        File capturesDir = new File(mkWorkDir(), "captures");
-        File testMainCaptureDir
-        = new File(CommonPath.inputCaptureRootDir(reportInputDir), "normal.TestMain");
-        for (int i = 1; i <= counterMax; i++) {
-            assertFileByteContentsEquals(getTestCapturePath(capturesDir, i),
-                    new File(testMainCaptureDir, String.format("%s/00%d.png", methodName, i)));
-        }
-        // TODO assert file for counterMax + 1 does not exist
-    }
-
-    private void testResultAssertion(String methodName, File reportInputDir)
-            throws YamlConvertException {
-        File testMainResultDir
-        = new File(CommonPath.runResultRootDir(reportInputDir), "normal.TestMain");
-        Map<String, Object> actualYamlObj = YamlUtils.load(new File(testMainResultDir, methodName));
-        Map<String, Object> expectedYamlObj = YamlUtils.load(new File(testResourceDir("expected/normal"), methodName));
-        assertYamlEquals(expectedYamlObj, actualYamlObj);
     }
 
 }
