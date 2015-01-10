@@ -123,7 +123,7 @@ public class RunResultGenerateHookTest extends TestBase {
         conf.setRunTestOnly(true);
         YamlUtils.dump(conf.toYamlObject(), new File(workDir, "sahagin.yml"));
         FileUtils.copyFile(new File("pom.xml"), new File(workDir, "pom.xml"));
-        FileUtils.copyDirectory(testResourceDir("src"), new File(workDir, "src"));
+        FileUtils.copyDirectory(testResourceDir("java6/src"), new File(workDir, "src"));
         FileUtils.copyDirectory(testResourceDir("expected/captures"), new File(workDir, "captures"));
 
         // execute test on the working directory

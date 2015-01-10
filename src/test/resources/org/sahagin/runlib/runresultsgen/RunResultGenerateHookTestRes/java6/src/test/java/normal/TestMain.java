@@ -7,9 +7,10 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 import org.sahagin.runlib.external.CaptureStyle;
 import org.sahagin.runlib.external.TestDoc;
-import base.TestBase;
 
-public class TestMain extends TestBase {
+import base.Java6TestBase;
+
+public class TestMain extends Java6TestBase {
 
     @Test
     public void successTest() {
