@@ -25,10 +25,28 @@ public abstract class TestBase {
         return new File(TEST_RESOURCE_ROOT, classFullPath() + "Res/" + methodName);
     }
 
+    public final void clearWorkDir() {
+        File workDir = new File(WORK_ROOT, classFullPath() + "Res");
+        try {
+            FileUtils.deleteDirectory(workDir);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public final File mkWorkDir() {
         File workDir = new File(WORK_ROOT, classFullPath() + "Res");
         workDir.mkdirs();
         return workDir;
+    }
+
+    public final void clearWorkDir(String methodName) {
+        File workDir = new File(WORK_ROOT, classFullPath() + "Res/" + methodName);
+        try {
+            FileUtils.deleteDirectory(workDir);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public final File mkWorkDir(String methodName) {

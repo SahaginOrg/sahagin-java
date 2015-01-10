@@ -116,6 +116,7 @@ public class RunResultGenerateHookTest extends TestBase {
         }
 
         // set up test data on the working directory
+        clearWorkDir();
         File workDir = mkWorkDir().getAbsoluteFile();
         Config conf = new Config(workDir);
         conf.setTestDir(new File(workDir, "src/test/java"));
