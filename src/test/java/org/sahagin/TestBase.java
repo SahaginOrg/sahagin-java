@@ -21,8 +21,8 @@ public abstract class TestBase {
         return new File(TEST_RESOURCE_ROOT, classFullPath() + "Res");
     }
 
-    public final File testResourceDir(String methodName) {
-        return new File(TEST_RESOURCE_ROOT, classFullPath() + "Res/" + methodName);
+    public final File testResourceDir(String subDirName) {
+        return new File(TEST_RESOURCE_ROOT, classFullPath() + "Res/" + subDirName);
     }
 
     public final void clearWorkDir() {
@@ -40,8 +40,8 @@ public abstract class TestBase {
         return workDir;
     }
 
-    public final void clearWorkDir(String methodName) {
-        File workDir = new File(WORK_ROOT, classFullPath() + "Res/" + methodName);
+    public final void clearWorkDir(String subDirName) {
+        File workDir = new File(WORK_ROOT, classFullPath() + "Res/" + subDirName);
         try {
             FileUtils.deleteDirectory(workDir);
         } catch (IOException e) {
@@ -49,8 +49,8 @@ public abstract class TestBase {
         }
     }
 
-    public final File mkWorkDir(String methodName) {
-        File workDir = new File(WORK_ROOT, classFullPath() + "Res/" + methodName);
+    public final File mkWorkDir(String subDirName) {
+        File workDir = new File(WORK_ROOT, classFullPath() + "Res/" + subDirName);
         workDir.mkdirs();
         return workDir;
     }

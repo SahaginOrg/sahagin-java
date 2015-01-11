@@ -25,8 +25,8 @@ public class SrcTreeGeneratorTest extends TestBase {
         new JUnit4Adapter().initialSetAdapter();
     }
 
-    private void testMain(String methodName, Locale userLocale) {
-        File testSrcDir = new File(testResourceDir(methodName), "input");
+    private void testMain(String subDirName, Locale userLocale) {
+        File testSrcDir = new File(testResourceDir(subDirName), "input");
         AcceptableLocales locales = AcceptableLocales.getInstance(userLocale);
         SrcTreeGenerator gen = new SrcTreeGenerator(null, locales);
         SrcTree srcTree;
@@ -39,10 +39,10 @@ public class SrcTreeGeneratorTest extends TestBase {
         // sort before generating YAML file.
         srcTree.sort();
         Map<String, Object> actualYamlObj = srcTree.toYamlObject();
-        File expectedSrcTreeFile = new File(testResourceDir(methodName), "srcTree");
+        File expectedSrcTreeFile = new File(testResourceDir(subDirName), "srcTree");
         if (!expectedSrcTreeFile.exists()) {
             // output actual srcTree to use as expected srcTree
-            YamlUtils.dump(actualYamlObj, new File(mkWorkDir(methodName), "actualSrcTree"));
+            YamlUtils.dump(actualYamlObj, new File(mkWorkDir(subDirName), "actualSrcTree"));
             throw new RuntimeException(expectedSrcTreeFile + " does not exist");
         }
         Map<String, Object> expectedYamlObj = YamlUtils.load(expectedSrcTreeFile);
@@ -50,7 +50,7 @@ public class SrcTreeGeneratorTest extends TestBase {
             assertYamlEquals(expectedYamlObj, actualYamlObj);
         } catch (AssertionError e) {
             // output actual srcTree for debugging later
-            YamlUtils.dump(actualYamlObj, new File(mkWorkDir(methodName), "actualSrcTree"));
+            YamlUtils.dump(actualYamlObj, new File(mkWorkDir(subDirName), "actualSrcTree"));
             throw e;
         }
     }

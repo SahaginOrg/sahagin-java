@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.DefaultInvoker;
 import org.apache.maven.shared.invoker.InvocationOutputHandler;
@@ -23,6 +24,8 @@ import org.sahagin.share.Config;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlUtils;
 
+// This test must be executed by Maven,
+// or executed with the system property maven.home or set environment value M2_HOME
 public class RunResultGenerateHookTest extends TestBase {
 
     private static File getTestCapturePath(File capturesDir, int counter) {
@@ -80,9 +83,9 @@ public class RunResultGenerateHookTest extends TestBase {
         return result;
     }
 
-    private void captureAssertion(String className, String methodName,
+    private void captureAssertion(String subDirName, String className, String methodName,
             File reportInputDir, int counterMax) {
-        File capturesDir = new File(mkWorkDir(), "captures");
+        File capturesDir = new File(mkWorkDir(subDirName), "captures");
         File testMainCaptureDir
         = new File(CommonPath.inputCaptureRootDir(reportInputDir), className);
         for (int i = 1; i <= counterMax; i++) {
@@ -102,9 +105,7 @@ public class RunResultGenerateHookTest extends TestBase {
         assertYamlEquals(expectedYamlObj, actualYamlObj);
     }
 
-    // Execute this test by Maven, or set system property maven.home or set environment value M2_HOME
-    @Test
-    public void test() throws MavenInvocationException, YamlConvertException, IOException {
+    private void generateTempJar() {
         // generate sahagin temp jar for test from the already generated class files
         InvocationRequest jarGenRequest = new DefaultInvocationRequest();
         jarGenRequest.setProfiles(Arrays.asList("sahagin-temp-jar-gen"));
@@ -114,50 +115,82 @@ public class RunResultGenerateHookTest extends TestBase {
             jarGenResult.printStdOursAndErrs();
             fail("fail to generate jar");
         }
+    }
 
-        // set up test data on the working directory
-        clearWorkDir();
-        File workDir = mkWorkDir().getAbsoluteFile();
+    private Pair<MavenInvokeResult, Config> invokeChildTest(String subDirName, String additionalProfile)
+            throws IOException {
+        // set up working directory
+        clearWorkDir(subDirName);
+        File workDir = mkWorkDir(subDirName).getAbsoluteFile();
         Config conf = new Config(workDir);
         conf.setTestDir(new File(workDir, "src/test/java"));
         conf.setRunTestOnly(true);
         YamlUtils.dump(conf.toYamlObject(), new File(workDir, "sahagin.yml"));
         FileUtils.copyFile(new File("pom.xml"), new File(workDir, "pom.xml"));
-        FileUtils.copyDirectory(testResourceDir("java6/src"), new File(workDir, "src"));
+        FileUtils.copyDirectory(testResourceDir(subDirName + "/src"), new File(workDir, "src"));
         FileUtils.copyDirectory(testResourceDir("expected/captures"), new File(workDir, "captures"));
 
-        // execute test on the working directory
+        // execute test
         InvocationRequest testRequest = new DefaultInvocationRequest();
         testRequest.setGoals(Arrays.asList("clean", "test"));
-        testRequest.setProfiles(Arrays.asList("sahagin-jar-test"));
+        if (additionalProfile == null) {
+            testRequest.setProfiles(Arrays.asList("sahagin-jar-test"));
+        } else {
+            testRequest.setProfiles(Arrays.asList("sahagin-jar-test", additionalProfile));
+        }
         String jarPathOpt = "-Dsahagin.temp.jar="
                 + new File("target/sahagin-temp.jar").getAbsolutePath();
         testRequest.setMavenOpts(jarPathOpt);
         testRequest.setBaseDirectory(workDir);
         MavenInvokeResult testResult = mavenInvoke(testRequest, "test");
 
+        return Pair.of(testResult, conf);
+    }
+
+    @Test
+    public void java6() throws MavenInvocationException, YamlConvertException, IOException {
+        String subDirName = "java6";
+        generateTempJar();
+        Pair<MavenInvokeResult, Config> pair = invokeChildTest(subDirName, null);
+
         // check test output
-        File reportInputDir = conf.getRootBaseReportInputDataDir();
+        File reportInputDir = pair.getRight().getRootBaseReportInputDataDir();
         try {
             String normalTest = "normal.TestMain";
-            captureAssertion(normalTest, "noTestDocMethodFailTest", reportInputDir, 1);
-            captureAssertion(normalTest, "stepInCaptureTest", reportInputDir, 4);
-            captureAssertion(normalTest, "successTest", reportInputDir, 2);
-            captureAssertion(normalTest, "testDocMethodFailTest", reportInputDir, 1);
+            captureAssertion(subDirName, normalTest, "noTestDocMethodFailTest", reportInputDir, 1);
+            captureAssertion(subDirName, normalTest, "stepInCaptureTest", reportInputDir, 4);
+            captureAssertion(subDirName, normalTest, "successTest", reportInputDir, 2);
+            captureAssertion(subDirName, normalTest, "testDocMethodFailTest", reportInputDir, 1);
             testResultAssertion(normalTest, "noTestDocMethodFailTest", reportInputDir);
             testResultAssertion(normalTest, "stepInCaptureTest", reportInputDir);
             testResultAssertion(normalTest, "successTest", reportInputDir);
             testResultAssertion(normalTest, "testDocMethodFailTest", reportInputDir);
 
             String extendsTest = "extendstest.ExtendsTest";
-            captureAssertion(extendsTest, "extendsTest", reportInputDir, 5);
+            captureAssertion(subDirName, extendsTest, "extendsTest", reportInputDir, 5);
             testResultAssertion(extendsTest, "extendsTest", reportInputDir);
 
             String implementsTest = "implementstest.ImplementsTest";
-            captureAssertion(implementsTest, "implementsTest", reportInputDir, 3);
+            captureAssertion(subDirName, implementsTest, "implementsTest", reportInputDir, 3);
             testResultAssertion(implementsTest, "implementsTest", reportInputDir);
         } catch (AssertionError e) {
-            testResult.printStdOursAndErrs();
+            pair.getLeft().printStdOursAndErrs();
+            throw e;
+        }
+    }
+
+    public void java8() throws IOException, YamlConvertException {
+        String subDirName = "java8";
+        generateTempJar();
+        Pair<MavenInvokeResult, Config> pair = invokeChildTest(subDirName, "java8-compile");
+
+     // check test output
+        File reportInputDir = pair.getRight().getRootBaseReportInputDataDir();
+        try {
+            String lambdaTest = "lambda.TestMain";
+            testResultAssertion(lambdaTest, "streamApiCall", reportInputDir);
+        } catch (AssertionError e) {
+            pair.getLeft().printStdOursAndErrs();
             throw e;
         }
     }
