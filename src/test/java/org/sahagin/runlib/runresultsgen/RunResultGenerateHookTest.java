@@ -1,9 +1,11 @@
 package org.sahagin.runlib.runresultsgen;
 
 import static org.junit.Assert.fail;
+import static org.junit.Assume.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -117,6 +119,26 @@ public class RunResultGenerateHookTest extends TestBase {
         }
     }
 
+    private String mavenJreVersion() {
+        InvocationRequest versionRequest = new DefaultInvocationRequest();
+        versionRequest.setGoals(Arrays.asList("-v"));
+        MavenInvokeResult versionResult = mavenInvoke(versionRequest, "version");
+        for (String stdOut : versionResult.stdOuts) {
+            String[] entries = stdOut.split(",");
+            for (String entry : entries) {
+                String[] keyValue = entry.split(":");
+                if (keyValue.length != 2) {
+                    continue;
+                }
+                if (keyValue[0].trim().equals("Java version")) {
+                    return keyValue[1].trim();
+                }
+            }
+        }
+        versionResult.printStdOutsAndErrs();
+        throw new RuntimeException(String.format("fails to get JRE verion"));
+    }
+
     private Pair<MavenInvokeResult, Config> invokeChildTest(
             String subDirName, String additionalProfile) throws IOException {
         // set up working directory
@@ -125,7 +147,6 @@ public class RunResultGenerateHookTest extends TestBase {
         Config conf = new Config(workDir);
         conf.setTestDir(new File(workDir, "src/test/java"));
         conf.setRunTestOnly(true);
-        conf.setOutputLog(true);
         YamlUtils.dump(conf.toYamlObject(), new File(workDir, "sahagin.yml"));
         FileUtils.copyFile(new File("pom.xml"), new File(workDir, "pom.xml"));
         FileUtils.copyDirectory(testResourceDir(subDirName + "/src"), new File(workDir, "src"));
@@ -182,6 +203,11 @@ public class RunResultGenerateHookTest extends TestBase {
 
     @Test
     public void java8() throws IOException, YamlConvertException {
+        // execute test only when Maven JRE version is equal or greater than 1.8
+        BigDecimal thisVersion = new BigDecimal(mavenJreVersion().substring(0, 3));
+        BigDecimal versionJava8 = new BigDecimal("1.8");
+        assumeTrue(thisVersion.compareTo(versionJava8) >= 0);
+
         String subDirName = "java8";
         generateTempJar(subDirName);
         Pair<MavenInvokeResult, Config> pair = invokeChildTest(subDirName, "java8-compile");
