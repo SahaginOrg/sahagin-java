@@ -38,9 +38,19 @@
   </distributionManagement>
   <dependencies>
     <dependency>
-      <groupId>org.eclipse.jdt</groupId>
+      <groupId>org.eclipse.tycho</groupId>
       <artifactId>org.eclipse.jdt.core</artifactId>
-      <version>3.7.1</version>
+      <version>3.10.0.v20140604-1726</version>      
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.core</groupId>
+      <artifactId>runtime</artifactId>
+      <version>3.10.0-v20140318-2214</version>
+    </dependency>
+    <dependency>
+	  <groupId>org.eclipse.birt.runtime</groupId>
+	  <artifactId>org.eclipse.core.resources</artifactId>
+	  <version>3.9.1.v20140825-1431</version>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
@@ -60,7 +70,7 @@
     <dependency>
       <groupId>org.javassist</groupId>
       <artifactId>javassist</artifactId>
-      <version>3.18.2-GA</version>
+      <version>3.19.0-GA</version>
     </dependency>
     <dependency>
       <groupId>org.yaml</groupId>

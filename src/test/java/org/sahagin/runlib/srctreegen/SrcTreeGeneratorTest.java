@@ -101,4 +101,9 @@ public class SrcTreeGeneratorTest extends TestBase {
         testMain("implementsTest", null);
     }
 
+    @Test
+    public void java8() {
+        testMain("java8", null);
+    }
+
 }

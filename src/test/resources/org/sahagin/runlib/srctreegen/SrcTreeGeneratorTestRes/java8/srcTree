@@ -1,0 +1,42 @@
+subFuncTable:
+  functions:
+  - testDoc: 'Doc: print'
+    classKey: "*TestMain;"
+    codeBody: []
+    name: "*TestMain.print"
+    capture: thisLine
+    argVariables: [str]
+    type: method
+    key: "*TestMain;.print(Ljava/lang/String;)V"
+rootFuncTable:
+  functions:
+  - testDoc: null
+    classKey: "*TestMain;"
+    codeBody:
+    - endLine: "*"
+      startLine: "*"
+      code: {original: List<String> slist=new ArrayList<String>(2);, type: unknown}
+    - endLine: "*"
+      startLine: "*"
+      code: {original: slist.add("a");, type: unknown}
+    - endLine: "*"
+      startLine: "*"
+      code: {original: slist.stream().forEach(s -> System.out.println(s));, type: unknown}
+    - endLine: "*"
+      startLine: "*"
+      code: {original: slist.stream().forEach(s -> print(s));, type: unknown}
+    name: "*.TestMain.streamApiCallTest"
+    capture: thisLine
+    argVariables: []
+    type: method
+    key: "*TestMain;.streamApiCallTest()V"
+rootClassTable:
+  classes:
+  - name: "*TestMain"
+    testDoc: null
+    methodKeys: "*"
+    type: class
+    key: "*TestMain;"
+formatVersion: "*"
+subClassTable:
+  classes: []

@@ -122,9 +122,9 @@ public class SrcTreeGenerator {
     // classPathEntries.. all class paths (class file containing directory or jar file) srcFiles depend
     private static void parseAST(
             String[] srcFiles, String srcEncoding, String[] classPathEntries, FileASTRequestor requestor) {
-        ASTParser parser = ASTParser.newParser(AST.JLS4);
+        ASTParser parser = ASTParser.newParser(AST.JLS8);
         Map<?, ?> options = JavaCore.getOptions();
-        JavaCore.setComplianceOptions(JavaCore.VERSION_1_5, options);
+        JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
         parser.setCompilerOptions(options);
         parser.setKind(ASTParser.K_COMPILATION_UNIT);
         parser.setResolveBindings(true);

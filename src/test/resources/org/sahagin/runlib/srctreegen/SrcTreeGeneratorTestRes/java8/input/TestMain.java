@@ -1,23 +1,17 @@
-package lambda;
+package org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.java8.input;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 import org.junit.Test;
 import org.sahagin.runlib.external.TestDoc;
 
-import base.Java8TestBase;
-
-
-public class TestMain extends Java8TestBase {
+public class TestMain {
 
     @Test
     public void streamApiCallTest() {
-        print("a");
         List<String> slist = new ArrayList<String>(2);
-        slist.add("b");
+        slist.add("a");
         slist.stream().forEach(s -> System.out.println(s));
         slist.stream().forEach(s -> print(s));
     }

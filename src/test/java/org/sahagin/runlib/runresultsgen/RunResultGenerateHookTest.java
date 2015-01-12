@@ -42,7 +42,7 @@ public class RunResultGenerateHookTest extends TestBase {
             this.invokerName = invokerName;
         }
 
-        private void printStdOursAndErrs() {
+        private void printStdOutsAndErrs() {
             System.out.println("---- Maven Invoker [" + invokerName + "] std out ----");
             for (String stdOut : stdOuts) {
                 System.out.println(stdOut);
@@ -105,26 +105,27 @@ public class RunResultGenerateHookTest extends TestBase {
         assertYamlEquals(expectedYamlObj, actualYamlObj);
     }
 
-    private void generateTempJar() {
+    private void generateTempJar(String subDirName) {
         // generate sahagin temp jar for test from the already generated class files
         InvocationRequest jarGenRequest = new DefaultInvocationRequest();
         jarGenRequest.setProfiles(Arrays.asList("sahagin-temp-jar-gen"));
         jarGenRequest.setGoals(Arrays.asList("jar:jar"));
-        MavenInvokeResult jarGenResult = mavenInvoke(jarGenRequest, "jarGen");
+        MavenInvokeResult jarGenResult = mavenInvoke(jarGenRequest, subDirName + ":jarGen");
         if (!jarGenResult.succeeded) {
-            jarGenResult.printStdOursAndErrs();
+            jarGenResult.printStdOutsAndErrs();
             fail("fail to generate jar");
         }
     }
 
-    private Pair<MavenInvokeResult, Config> invokeChildTest(String subDirName, String additionalProfile)
-            throws IOException {
+    private Pair<MavenInvokeResult, Config> invokeChildTest(
+            String subDirName, String additionalProfile) throws IOException {
         // set up working directory
         clearWorkDir(subDirName);
         File workDir = mkWorkDir(subDirName).getAbsoluteFile();
         Config conf = new Config(workDir);
         conf.setTestDir(new File(workDir, "src/test/java"));
         conf.setRunTestOnly(true);
+        conf.setOutputLog(true);
         YamlUtils.dump(conf.toYamlObject(), new File(workDir, "sahagin.yml"));
         FileUtils.copyFile(new File("pom.xml"), new File(workDir, "pom.xml"));
         FileUtils.copyDirectory(testResourceDir(subDirName + "/src"), new File(workDir, "src"));
@@ -142,7 +143,7 @@ public class RunResultGenerateHookTest extends TestBase {
                 + new File("target/sahagin-temp.jar").getAbsolutePath();
         testRequest.setMavenOpts(jarPathOpt);
         testRequest.setBaseDirectory(workDir);
-        MavenInvokeResult testResult = mavenInvoke(testRequest, "test");
+        MavenInvokeResult testResult = mavenInvoke(testRequest, subDirName + ":test");
 
         return Pair.of(testResult, conf);
     }
@@ -150,7 +151,7 @@ public class RunResultGenerateHookTest extends TestBase {
     @Test
     public void java6() throws MavenInvocationException, YamlConvertException, IOException {
         String subDirName = "java6";
-        generateTempJar();
+        generateTempJar(subDirName);
         Pair<MavenInvokeResult, Config> pair = invokeChildTest(subDirName, null);
 
         // check test output
@@ -174,23 +175,25 @@ public class RunResultGenerateHookTest extends TestBase {
             captureAssertion(subDirName, implementsTest, "implementsTest", reportInputDir, 3);
             testResultAssertion(implementsTest, "implementsTest", reportInputDir);
         } catch (AssertionError e) {
-            pair.getLeft().printStdOursAndErrs();
+            pair.getLeft().printStdOutsAndErrs();
             throw e;
         }
     }
 
+    @Test
     public void java8() throws IOException, YamlConvertException {
         String subDirName = "java8";
-        generateTempJar();
+        generateTempJar(subDirName);
         Pair<MavenInvokeResult, Config> pair = invokeChildTest(subDirName, "java8-compile");
 
-     // check test output
+        // check test output
         File reportInputDir = pair.getRight().getRootBaseReportInputDataDir();
         try {
             String lambdaTest = "lambda.TestMain";
-            testResultAssertion(lambdaTest, "streamApiCall", reportInputDir);
+            captureAssertion(subDirName, lambdaTest, "streamApiCallTest", reportInputDir, 1);
+            testResultAssertion(lambdaTest, "streamApiCallTest", reportInputDir);
         } catch (AssertionError e) {
-            pair.getLeft().printStdOursAndErrs();
+            pair.getLeft().printStdOutsAndErrs();
             throw e;
         }
     }
