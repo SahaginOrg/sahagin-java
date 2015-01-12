@@ -69,6 +69,7 @@ public class SrcTreeGeneratorTest extends TestBase {
     // - capture value of @TestDoc
     // - variable assignment with SubFunctionInvoke
     // - predefined methods ( assert, webDriver, findElement, by, click, sendKeys)
+    // - multiple lines statement
     // TODO this test checks multiple things,
     // so split to multiple test method when srcTree YAML format is fixed.
     @Test
