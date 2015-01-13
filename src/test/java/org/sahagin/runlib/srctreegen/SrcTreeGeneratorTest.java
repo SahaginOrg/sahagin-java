@@ -103,6 +103,11 @@ public class SrcTreeGeneratorTest extends TestBase {
     }
 
     @Test
+    public void exceptionHandler() {
+        testMain("exceptionHandler", null);
+    }
+
+    @Test
     public void java8() {
         testMain("java8", null);
     }

@@ -1,0 +1,32 @@
+subFuncTable: "*"
+rootFuncTable:
+  functions:
+  - codeBody:
+    - startLine: "*"
+      code:
+        original: "*"
+        type: unknown
+      endLine: "*"
+    name: "*.TestMain.multiCatchTest"
+    capture: thisLine
+    argVariables: []
+    classKey: "*/TestMain;"
+    testDoc: null
+    type: method
+    key: "*/TestMain;.multiCatchTest()V"
+  - codeBody:
+    - startLine: "*"
+      code:
+        original: "*"
+        type: unknown
+      endLine: "*"
+    name: "*.TestMain.tryFinallyTest"
+    capture: thisLine
+    argVariables: []
+    classKey: "*/TestMain;"
+    testDoc: null
+    type: method
+    key: "*/TestMain;.tryFinallyTest()V"
+formatVersion: "*"
+subClassTable: "*"
+rootClassTable: "*"
