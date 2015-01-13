@@ -1,6 +1,6 @@
 runFailures: []
 formatVersion: "*"
-rootFunctionKey: "*ExtendsTest;.extendsTest()V"
+rootFunctionKey: "*"
 lineScreenCaptures:
 - path: "*/captures/*ExtendsTest/extendsTest/001.png"
   stackLines:

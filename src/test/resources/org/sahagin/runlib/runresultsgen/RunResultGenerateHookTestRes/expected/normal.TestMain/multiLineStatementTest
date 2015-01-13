@@ -4,4 +4,4 @@ lineScreenCaptures:
   stackLines:
   - {codeBodyIndex: 0, functionKey: "*TestMain;.multiLineStatementTest()V", line: "*"}
 formatVersion: "*"
-rootFunctionKey: "*TestMain;.multiLineStatementTest()V"
+rootFunctionKey: "*"

@@ -1,6 +1,6 @@
 runFailures: []
 formatVersion: "*"
-rootFunctionKey: "*ImplementsTest;.implementsTest()V"
+rootFunctionKey: "*"
 lineScreenCaptures:
 - path: "*/captures/*ImplementsTest/implementsTest/001.png"
   stackLines:

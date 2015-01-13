@@ -1,6 +1,6 @@
 runFailures: []
 formatVersion: "*"
-rootFunctionKey: "*TestMain;.stepInCaptureTest()V"
+rootFunctionKey: "*"
 lineScreenCaptures:
 - path: "*/captures/*TestMain/stepInCaptureTest/001.png"
   stackLines:

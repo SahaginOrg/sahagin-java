@@ -4,7 +4,7 @@ runFailures:
   - {line: "*", codeBodyIndex: 0, functionKey: "*TestMain;.noTestDocMethodFailTest()V"}
   stackTrace: "*"
 formatVersion: "*"
-rootFunctionKey: "*TestMain;.noTestDocMethodFailTest()V"
+rootFunctionKey: "*"
 lineScreenCaptures:
 - path: "*/captures/*TestMain/noTestDocMethodFailTest/001.png"
   stackLines:

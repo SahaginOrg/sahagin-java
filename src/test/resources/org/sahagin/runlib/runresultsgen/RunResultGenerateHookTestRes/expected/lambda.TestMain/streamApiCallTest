@@ -4,4 +4,4 @@ lineScreenCaptures:
   stackLines:
   - {codeBodyIndex: 0, functionKey: Llambda/TestMain;.streamApiCallTest()V, line: "*"}
 formatVersion: "*"
-rootFunctionKey: "*TestMain;.streamApiCallTest()V"
+rootFunctionKey: "*"
