@@ -148,8 +148,8 @@ public class TestClassFileTransformer implements ClassFileTransformer {
                 for (CodeLine codeLine : subFunction.getCodeBody()) {
                     // insert hook to the next line of hook target line
                     // to take screen shot after the target line procedure has been finished
-                    int actualInsertedLine = subMethod.insertAt(codeLine.getStartLine() + 1, false, null);
-                    subMethod.insertAt(codeLine.getStartLine() + 1,
+                    int actualInsertedLine = subMethod.insertAt(codeLine.getEndLine() + 1, false, null);
+                    subMethod.insertAt(codeLine.getEndLine() + 1,
                             String.format("%s%s.beforeSubCodeBodyHook(\"%s\", %d, %d);",
                                     initializeSrc, hookClassName, subMethodName,
                                     codeLine.getStartLine(), actualInsertedLine));
@@ -172,8 +172,8 @@ public class TestClassFileTransformer implements ClassFileTransformer {
                 for (CodeLine codeLine : rootFunction.getCodeBody()) {
                     // insert hook to the next line of hook target line
                     // to take screen shot after the target line procedure has been finished
-                    int actualInsertedLine = rootMethod.insertAt(codeLine.getStartLine() + 1, false, null);
-                    rootMethod.insertAt(codeLine.getStartLine() + 1,
+                    int actualInsertedLine = rootMethod.insertAt(codeLine.getEndLine() + 1, false, null);
+                    rootMethod.insertAt(codeLine.getEndLine() + 1,
                             String.format("%s%s.beforeRootCodeBodyHook(\"%s\", %d, %d);",
                                     initializeSrc, hookClassName, rootMethodName,
                                     codeLine.getStartLine(), actualInsertedLine));

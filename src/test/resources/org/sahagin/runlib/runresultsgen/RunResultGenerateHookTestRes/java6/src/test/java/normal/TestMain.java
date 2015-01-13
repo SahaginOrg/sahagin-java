@@ -54,5 +54,11 @@ public class TestMain extends Java6TestBase {
     public void noTestDocMethod() {
         assertEquals(1, 2);
     }
+    
+    @Test
+    public void multiLineStatementTest() {
+        assertThat(
+                1, is(1));
+    }
 
 }
