@@ -4,7 +4,16 @@ jdk:
   - openjdk6
   - openjdk7
   - oraclejdk8
+
+env:
+  matrix:
+    - COMPILE_VERSION=java6-compile
+    - COMPILE_VERSION=java7-compile
+    - COMPILE_VERSION=java8-compile
   
 # So that Travis CI does not ignore Java Maven Invoker class option.
 # See https://github.com/travis-ci/travis-ci/issues/1689
 before_install: sudo rm /etc/mavenrc
+
+
+script: "mvn clean test -P ${COMPILE_VERSION}"
