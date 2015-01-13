@@ -1,6 +1,47 @@
-subFuncTable: "*"
+subFuncTable:
+  functions:
+  - testDoc: 'Doc: defaultMethod'
+    classKey: "*/TestMain$InterfaceWithDefault;"
+    codeBody: []
+    name: "*.TestMain.InterfaceWithDefault.defaultMethod"
+    capture: thisLine
+    argVariables: []
+    type: method
+    key: "*/TestMain$InterfaceWithDefault;.defaultMethod()V"
+  - testDoc: "*"
+    classKey: "*"
+    codeBody: "*"
+    name: "*.TestMain.print"
+    capture: "*"
+    argVariables: "*"
+    type: "*"
+    key: "*"
 rootFuncTable:
   functions:
+  - testDoc: null
+    classKey: "*/TestMain;"
+    codeBody:
+    - endLine: "*"
+      startLine: "*"
+      code:
+        original: |-
+          InterfaceWithDefault instance=new InterfaceWithDefault(){
+          }
+          ;
+        type: unknown
+    - endLine: "*"
+      startLine: "*"
+      code:
+        args: []
+        methodKey: "*/TestMain$InterfaceWithDefault;.defaultMethod()V"
+        original: instance.defaultMethod();
+        type: method
+        thisInstance: {original: instance, type: unknown}
+    name: "*.TestMain.defaultInterfaceTest"
+    capture: thisLine
+    argVariables: []
+    type: method
+    key: "*/TestMain;.defaultInterfaceTest()V"
   - testDoc: null
     classKey: "*TestMain;"
     codeBody:
@@ -23,4 +64,10 @@ rootFuncTable:
     key: "*TestMain;.streamApiCallTest()V"
 rootClassTable: "*"
 formatVersion: "*"
-subClassTable: "*"
+subClassTable:
+  classes:
+  - name: "*.TestMain.InterfaceWithDefault"
+    testDoc: null
+    methodKeys: ["*/TestMain$InterfaceWithDefault;.defaultMethod()V"]
+    type: class
+    key: "*/TestMain$InterfaceWithDefault;"
