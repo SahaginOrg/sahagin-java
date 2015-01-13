@@ -2,6 +2,6 @@ runFailures: []
 lineScreenCaptures:
 - path: "*/captures/*TestMain/streamApiCallTest/001.png"
   stackLines:
-  - {codeBodyIndex: 0, functionKey: Llambda/TestMain;.streamApiCallTest()V, line: "*"}
+  - {codeBodyIndex: 0, functionKey: "*TestMain;.streamApiCallTest()V", line: "*"}
 formatVersion: "*"
 rootFunctionKey: "*"

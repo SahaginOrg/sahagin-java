@@ -221,9 +221,9 @@ public class RunResultGenerateHookTest extends TestBase {
         // check test output
         File reportInputDir = pair.getRight().getRootBaseReportInputDataDir();
         try {
-            String lambdaTest = "lambda.TestMain";
-            captureAssertion(subDirName, lambdaTest, "streamApiCallTest", reportInputDir, 1);
-            testResultAssertion(lambdaTest, "streamApiCallTest", reportInputDir);
+            String java8featuresTest = "java8features.TestMain";
+            captureAssertion(subDirName, java8featuresTest, "streamApiCallTest", reportInputDir, 1);
+            testResultAssertion(java8featuresTest, "streamApiCallTest", reportInputDir);
         } catch (AssertionError e) {
             pair.getLeft().printStdOutsAndErrs();
             throw e;
