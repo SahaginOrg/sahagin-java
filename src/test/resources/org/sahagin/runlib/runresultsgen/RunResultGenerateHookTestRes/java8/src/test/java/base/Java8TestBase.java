@@ -16,6 +16,10 @@ public class Java8TestBase {
     private File getTestCapturePath(int counter) {
         return new File("captures", counter + ".png");
     }
+    
+    protected int nextCounter() {
+        return counter;
+    }
 
     @Before
     public void setUp() {

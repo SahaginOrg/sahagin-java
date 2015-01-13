@@ -6,7 +6,6 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 import org.sahagin.runlib.external.CaptureStyle;
-import org.sahagin.runlib.external.Page;
 import org.sahagin.runlib.external.TestDoc;
 
 import base.Java6TestBase;

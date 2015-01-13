@@ -206,6 +206,10 @@ public class RunResultGenerateHookTest extends TestBase {
             captureAssertion(subDirName, implementsTest, "implementsTest", reportInputDir, 3);
             testResultAssertion(implementsTest, "implementsTest", reportInputDir);
 
+            String captureTest = "capturetest.TestMain";
+            captureAssertion(subDirName, captureTest, "captureTest", reportInputDir, 5);
+            testResultAssertion(captureTest, "captureTest", reportInputDir);
+
             // multiStatementInALineTest
         } catch (AssertionError e) {
             pair.getLeft().printStdOutsAndErrs();

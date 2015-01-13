@@ -17,6 +17,10 @@ public class Java6TestBase {
         return new File("captures", counter + ".png");
     }
 
+    protected int nextCounter() {
+        return counter;
+    }
+
     @Before
     public void setUp() {
         // dummy screen capture handler for this test
