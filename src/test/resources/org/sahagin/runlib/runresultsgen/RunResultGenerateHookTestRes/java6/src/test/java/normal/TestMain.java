@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 import org.sahagin.runlib.external.CaptureStyle;
+import org.sahagin.runlib.external.Page;
 import org.sahagin.runlib.external.TestDoc;
 
 import base.Java6TestBase;
@@ -54,7 +55,39 @@ public class TestMain extends Java6TestBase {
     public void noTestDocMethod() {
         assertEquals(1, 2);
     }
-    
+
+    @Test
+    public void innerClassTest() {
+        InnerClass instance = new InnerClass();
+        instance.methodCall();
+    }
+
+    public class InnerClass {
+
+        @TestDoc("Doc: methodCall")
+        public void methodCall() {}
+
+    }
+
+    @Test
+    public void anonymousClassTest() {
+        anonymousCall(new AnonymousInterface() {
+            @Override
+            public void methodCall() {}
+        });
+    }
+
+    public interface AnonymousInterface {
+
+        @TestDoc("Doc: methodCall")
+        void methodCall();
+    }
+
+    @TestDoc("Doc: anonymousCall")
+    public void anonymousCall(AnonymousInterface instance) {
+        instance.methodCall();
+    }
+
     @Test
     public void multiLineStatementTest() {
         assertThat(

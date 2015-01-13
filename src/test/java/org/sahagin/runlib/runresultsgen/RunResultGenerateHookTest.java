@@ -183,11 +183,15 @@ public class RunResultGenerateHookTest extends TestBase {
             captureAssertion(subDirName, normalTest, "stepInCaptureTest", reportInputDir, 4);
             captureAssertion(subDirName, normalTest, "successTest", reportInputDir, 2);
             captureAssertion(subDirName, normalTest, "testDocMethodFailTest", reportInputDir, 1);
+            captureAssertion(subDirName, normalTest, "innerClassTest", reportInputDir, 1);
+            captureAssertion(subDirName, normalTest, "anonymousClassTest", reportInputDir, 1);
             captureAssertion(subDirName, normalTest, "multiLineStatementTest", reportInputDir, 1);
             testResultAssertion(normalTest, "noTestDocMethodFailTest", reportInputDir);
             testResultAssertion(normalTest, "stepInCaptureTest", reportInputDir);
             testResultAssertion(normalTest, "successTest", reportInputDir);
             testResultAssertion(normalTest, "testDocMethodFailTest", reportInputDir);
+            testResultAssertion(normalTest, "innerClassTest", reportInputDir);
+            testResultAssertion(normalTest, "anonymousClassTest", reportInputDir);
             testResultAssertion(normalTest, "multiLineStatementTest", reportInputDir);
 
             String extendsTest = "extendstest.ExtendsTest";

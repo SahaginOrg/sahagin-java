@@ -1,0 +1,7 @@
+runFailures: []
+lineScreenCaptures:
+- path: "*/captures/*.TestMain/innerClassTest/001.png"
+  stackLines:
+  - {codeBodyIndex: 1, functionKey: "*/TestMain;.innerClassTest()V", line: "*"}
+formatVersion: "*"
+rootFunctionKey: "*"
