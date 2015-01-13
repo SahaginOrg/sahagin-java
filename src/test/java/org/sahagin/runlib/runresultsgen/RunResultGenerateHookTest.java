@@ -223,7 +223,9 @@ public class RunResultGenerateHookTest extends TestBase {
         try {
             String java8featuresTest = "java8features.TestMain";
             captureAssertion(subDirName, java8featuresTest, "streamApiCallTest", reportInputDir, 1);
+            captureAssertion(subDirName, java8featuresTest, "defaultInterfaceTest", reportInputDir, 1);
             testResultAssertion(java8featuresTest, "streamApiCallTest", reportInputDir);
+            testResultAssertion(java8featuresTest, "defaultInterfaceTest", reportInputDir);
         } catch (AssertionError e) {
             pair.getLeft().printStdOutsAndErrs();
             throw e;

@@ -24,5 +24,17 @@ public class TestMain extends Java8TestBase {
 
     @TestDoc("Doc: print")
     public void print(String str) {}
+    
+    @Test
+    public void defaultInterfaceTest() {
+        InterfaceWithDefault instance = new InterfaceWithDefault() {};
+        instance.defaultMethod();
+    }
+
+    public interface InterfaceWithDefault {
+
+        @TestDoc("Doc: defaultMethod")
+        default void defaultMethod() {}
+    }
 
 }

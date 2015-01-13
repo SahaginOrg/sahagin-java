@@ -1,0 +1,7 @@
+runFailures: []
+lineScreenCaptures:
+- path: "*/captures/*TestMain/defaultInterfaceTest/001.png"
+  stackLines:
+  - {codeBodyIndex: 1, functionKey: "*TestMain;.defaultInterfaceTest()V", line: "*"}
+formatVersion: "*"
+rootFunctionKey: "*"
