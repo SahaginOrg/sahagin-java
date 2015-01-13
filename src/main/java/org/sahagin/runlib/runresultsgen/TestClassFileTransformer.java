@@ -157,9 +157,24 @@ public class TestClassFileTransformer implements ClassFileTransformer {
                 if (subFunction == null) {
                     continue;
                 }
-                for (CodeLine codeLine : subFunction.getCodeBody()) {
-                    // insert hook to the next line of hook target line
+                for (int i = 0; i < subFunction.getCodeBody().size(); i++) {
+                    CodeLine codeLine = subFunction.getCodeBody().get(i);
+                    if (i + 1 < subFunction.getCodeBody().size()) {
+                        CodeLine nextCodeLine = subFunction.getCodeBody().get(i + 1);
+                        assert codeLine.getEndLine() <= nextCodeLine.getStartLine();
+                        if (codeLine.getEndLine() == nextCodeLine.getStartLine()) {
+                            // - if multiple statements exist on a line, insert hook only after the last statement
+                            // - avoid insertion at the middle of the statement.
+                            //   The problem happens when multi-line statements are like:
+                            //   method(1);method(
+                            //           2);
+                            continue;
+                        }
+                    }
+
+                    // insert the hook code to the next line of the hook target line
                     // to take screen shot after the target line procedure has been finished
+                    // (the code inserted by the insertAt method is inserted just before the target line)
                     int actualInsertedLine = subMethod.insertAt(codeLine.getEndLine() + 1, false, null);
                     subMethod.insertAt(codeLine.getEndLine() + 1,
                             String.format("%s%s.beforeSubCodeBodyHook(\"%s\", %d, %d);",
@@ -181,9 +196,25 @@ public class TestClassFileTransformer implements ClassFileTransformer {
                     continue;
                 }
                 String rootMethodName = qualifiedName(rootMethod);
-                for (CodeLine codeLine : rootFunction.getCodeBody()) {
-                    // insert hook to the next line of hook target line
+                for (int i = 0; i < rootFunction.getCodeBody().size(); i++) {
+                    CodeLine codeLine = rootFunction.getCodeBody().get(i);
+                    if (i + 1 < rootFunction.getCodeBody().size()) {
+                        CodeLine nextCodeLine = rootFunction.getCodeBody().get(i + 1);
+                        assert codeLine.getEndLine() <= nextCodeLine.getStartLine();
+                        if (codeLine.getEndLine() == nextCodeLine.getStartLine()) {
+                            // - if multiple statements exist on a line, insert hook only after the last statement
+                            // - avoid insertion at the middle of the statement.
+                            //   The problem happens when multi-line statements are like:
+                            //   method(1);method(
+                            //           2);
+                            continue;
+                            // TODO screen capture is not taken correctly for multiple statements in a line
+                        }
+                    }
+
+                    // insert the hook code to the next line of the hook target line
                     // to take screen shot after the target line procedure has been finished
+                    // (the code inserted by the insertAt method is inserted just before the target line)
                     int actualInsertedLine = rootMethod.insertAt(codeLine.getEndLine() + 1, false, null);
                     rootMethod.insertAt(codeLine.getEndLine() + 1,
                             String.format("%s%s.beforeRootCodeBodyHook(\"%s\", %d, %d);",
@@ -219,4 +250,5 @@ public class TestClassFileTransformer implements ClassFileTransformer {
             IOUtils.closeQuietly(stream);
         }
     }
+
 }

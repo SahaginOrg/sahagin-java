@@ -19,6 +19,7 @@ public class TestMain {
     public void testMethod1() {
         TestSub.subMethod();
         testDocMethod();
+        testDocMethod();testDocMethod();
         noTestDocMethod();
 
         TestPage page = new TestPage();

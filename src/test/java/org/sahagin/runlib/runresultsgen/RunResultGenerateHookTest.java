@@ -193,6 +193,10 @@ public class RunResultGenerateHookTest extends TestBase {
             testResultAssertion(normalTest, "innerClassTest", reportInputDir);
             testResultAssertion(normalTest, "anonymousClassTest", reportInputDir);
             testResultAssertion(normalTest, "multiLineStatementTest", reportInputDir);
+            // Check only if test has been succeeded for the moment
+            // since other result such as screen captures are still buggy..
+            // TODO fix these bugs
+            testResultAssertion(normalTest, "multiStatementInALineTest", reportInputDir);
 
             String extendsTest = "extendstest.ExtendsTest";
             captureAssertion(subDirName, extendsTest, "extendsTest", reportInputDir, 5);
@@ -201,6 +205,8 @@ public class RunResultGenerateHookTest extends TestBase {
             String implementsTest = "implementstest.ImplementsTest";
             captureAssertion(subDirName, implementsTest, "implementsTest", reportInputDir, 3);
             testResultAssertion(implementsTest, "implementsTest", reportInputDir);
+
+            // multiStatementInALineTest
         } catch (AssertionError e) {
             pair.getLeft().printStdOutsAndErrs();
             throw e;

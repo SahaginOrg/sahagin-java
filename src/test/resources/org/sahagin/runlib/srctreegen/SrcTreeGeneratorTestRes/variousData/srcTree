@@ -188,6 +188,20 @@ rootFuncTable:
         args: []
       endLine: "*"
     - startLine: "*"
+      code:
+        original: testDocMethod();
+        type: method
+        methodKey: "*/TestMain;.testDocMethod()V"
+        args: []
+      endLine: "*"
+    - startLine: "*"
+      code:
+        original: testDocMethod();
+        type: method
+        methodKey: "*/TestMain;.testDocMethod()V"
+        args: []
+      endLine: "*"
+    - startLine: "*"
       code: {original: noTestDocMethod();, type: unknown}
       endLine: "*"
     - startLine: "*"

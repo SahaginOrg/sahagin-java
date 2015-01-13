@@ -94,4 +94,13 @@ public class TestMain extends Java6TestBase {
                 1, is(1));
     }
 
+    @Test
+    public void multiStatementInALineTest() {
+        assertThat(
+                1, is(1));assertThat(
+                        1, is(1));assertThat(
+                                1, is(1));
+        assertThat(1, is(1));assertThat(1, is(1));
+    }
+
 }
