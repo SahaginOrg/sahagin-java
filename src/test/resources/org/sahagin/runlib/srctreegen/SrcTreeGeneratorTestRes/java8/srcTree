@@ -1,7 +1,7 @@
 subFuncTable:
   functions:
   - testDoc: 'Doc: defaultMethod'
-    classKey: "*/TestMain$InterfaceWithDefault;"
+    classKey: "*TestMain$InterfaceWithDefault;"
     name: "*.TestMain.InterfaceWithDefault.defaultMethod"
   - name: "*.TestMain.print"
 rootFuncTable:
@@ -15,7 +15,7 @@ rootFuncTable:
         type: unknown
     - code:
         args: []
-        methodKey: "*/TestMain$InterfaceWithDefault;.defaultMethod()V"
+        methodKey: "*TestMain$InterfaceWithDefault;.defaultMethod()V"
         original: instance.defaultMethod();
         thisInstance: {original: instance, type: unknown}
     name: "*.TestMain.defaultInterfaceTest"
@@ -28,4 +28,4 @@ rootFuncTable:
 subClassTable:
   classes:
   - name: "*.TestMain.InterfaceWithDefault"
-    methodKeys: ["*/TestMain$InterfaceWithDefault;.defaultMethod()V"]
+    methodKeys: ["*TestMain$InterfaceWithDefault;.defaultMethod()V"]

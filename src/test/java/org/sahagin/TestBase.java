@@ -171,15 +171,15 @@ public abstract class TestBase {
             assertThat(keyPath, actual.size(), is(expected.size()));
         }
         for (Map.Entry<String, Object> entry : expected.entrySet()) {
-            assertTrue(keyPath, actual.containsKey(entry.getKey()));
-            Object expectedValue = expected.get(entry.getKey());
-            Object actualValue = actual.get(entry.getKey());
             String newKeyPath;
             if (keyPath == null) {
                 newKeyPath = entry.getKey();
             } else {
                 newKeyPath = keyPath + ">" + entry.getKey();
             }
+            assertTrue(newKeyPath, actual.containsKey(entry.getKey()));
+            Object expectedValue = expected.get(entry.getKey());
+            Object actualValue = actual.get(entry.getKey());
             assertYamlEachValueEquals(expectedValue, actualValue, newKeyPath, skipNoExpected);
         }
     }

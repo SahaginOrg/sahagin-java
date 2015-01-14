@@ -29,6 +29,6 @@ runFailures:
 formatVersion: "*"
 rootFunctionKey: Lorg/sahagin/runlib/runresultsgen/RunResultGenerateHookTestRes/test/TestMain;.noTestDocMethodFailTest()V
 lineScreenCaptures:
-- path: /Users/itonozomi/sahagin-java/work/org/sahagin/runlib/runresultsgen/RunResultGenerateHookTestRes/test/sahagin-report-input/captures/org.sahagin.runlib.runresultsgen.RunResultGenerateHookTestRes.test.TestMain/noTestDocMethodFailTest/001.png
+- path: 001.png
   stackLines:
   - {line: 91, codeBodyIndex: 1, functionKey: Lorg/sahagin/runlib/runresultsgen/RunResultGenerateHookTestRes/test/TestMain;.noTestDocMethodFailTest()V}

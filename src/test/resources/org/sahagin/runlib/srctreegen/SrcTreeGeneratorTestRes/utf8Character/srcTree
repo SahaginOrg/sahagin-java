@@ -1,30 +1,30 @@
 subFuncTable:
   functions:
   - name: "*.ページクラス.ページメソッド"
-    classKey: "*/ページクラス;"
+    classKey: "*ページクラス;"
     testDoc: ページメソッド
-    key: "*/ページクラス;.ページメソッド()V"
+    key: "*ページクラス;.ページメソッド()V"
 rootFuncTable:
   functions:
   - codeBody:
     - code: {original: ページクラス page=new ページクラス();, type: unknown}
     - code:
         original: page.ページメソッド();
-        methodKey: "*/ページクラス;.ページメソッド()V"
+        methodKey: "*ページクラス;.ページメソッド()V"
     name: "*.メインクラス.テスト"
-    classKey: "*/メインクラス;"
+    classKey: "*メインクラス;"
     testDoc: Doc:テスト
-    key: "*/メインクラス;.テスト()V"
+    key: "*メインクラス;.テスト()V"
 subClassTable:
   classes:
   - testDoc: Doc:ページクラス
-    key: "*/ページクラス;"
-    methodKeys: ["*/ページクラス;.ページメソッド()V"]
+    key: "*ページクラス;"
+    methodKeys: ["*ページクラス;.ページメソッド()V"]
     name: "*.ページクラス"
 formatVersion: "*"
 rootClassTable:
   classes:
   - testDoc: Doc:メインクラス
-    key: "*/メインクラス;"
-    methodKeys: ["*/メインクラス;.テスト()V"]
+    key: "*メインクラス;"
+    methodKeys: ["*メインクラス;.テスト()V"]
     name: "*.メインクラス"
