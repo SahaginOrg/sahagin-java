@@ -3,27 +3,27 @@ subFuncTable:
   - codeBody: []
     name: "*.ImplementsPage.baseMethod"
     argVariables: [arg]
-    classKey: "*/ImplementsPage;"
+    classKey: "*ImplementsPage;"
     testDoc: 'Doc: baseMethod: override: {arg}'
-    key: "*/ImplementsPage;.baseMethod(Ljava/lang/String;)V"
+    key: "*ImplementsPage;.baseMethod(Ljava/lang/String;)V"
   - codeBody: []
     name: "*.ImplementsPage.childMethod"
     argVariables: [arg]
-    classKey: "*/ImplementsPage;"
+    classKey: "*ImplementsPage;"
     testDoc: 'Doc: childMethod: {arg}'
-    key: "*/ImplementsPage;.childMethod(I)V"
+    key: "*ImplementsPage;.childMethod(I)V"
   - codeBody: []
     name: "*.ImplementsPageBase.baseMethod"
     argVariables: [arg]
-    classKey: "*/ImplementsPageBase;"
+    classKey: "*ImplementsPageBase;"
     testDoc: 'Doc: baseMethod: {arg}'
-    key: "*/ImplementsPageBase;.baseMethod(Ljava/lang/String;)V"
+    key: "*ImplementsPageBase;.baseMethod(Ljava/lang/String;)V"
   - codeBody: []
     name: "*.ImplementsTestBase.testBaseMethod"
     argVariables: [arg]
-    classKey: "*/ImplementsTestBase;"
+    classKey: "*ImplementsTestBase;"
     testDoc: 'Doc: testBaseMethod: {arg}'
-    key: "*/ImplementsTestBase;.testBaseMethod(Ljava/lang/String;)V"
+    key: "*ImplementsTestBase;.testBaseMethod(Ljava/lang/String;)V"
 rootFuncTable:
   functions:
   - codeBody:
@@ -31,46 +31,46 @@ rootFuncTable:
     - code: {original: ImplementsPage pageInstance=new ImplementsPage();, type: unknown}
     - code:
         original: pageInstance.baseMethod("QQQ");
-        methodKey: "*/ImplementsPage;.baseMethod(Ljava/lang/String;)V"
+        methodKey: "*ImplementsPage;.baseMethod(Ljava/lang/String;)V"
         thisInstance: {original: pageInstance, type: unknown}
         args:
         - {value: QQQ, original: '"QQQ"', type: string}
     - code:
         original: pageInstance.childMethod(-1);
-        methodKey: "*/ImplementsPage;.childMethod(I)V"
+        methodKey: "*ImplementsPage;.childMethod(I)V"
         thisInstance: {original: pageInstance, type: unknown}
         args:
         - {original: '-1', type: unknown}
     - code: {original: ImplementsPageBase baseInstance=new ImplementsPage();, type: unknown}
     - code:
         original: baseInstance.baseMethod("RRR");
-        methodKey: "*/ImplementsPageBase;.baseMethod(Ljava/lang/String;)V"
+        methodKey: "*ImplementsPageBase;.baseMethod(Ljava/lang/String;)V"
         thisInstance: {original: baseInstance, type: unknown}
         args:
         - {value: RRR, original: '"RRR"', type: string}
     name: "*.ImplementsTestMain.implementsTest"
     argVariables: []
-    classKey: "*/ImplementsTestMain;"
+    classKey: "*ImplementsTestMain;"
     testDoc: null
-    key: "*/ImplementsTestMain;.implementsTest()V"
+    key: "*ImplementsTestMain;.implementsTest()V"
 subClassTable:
   classes:
   - testDoc: 'Doc: ImplementsPage'
-    key: "*/ImplementsPage;"
-    methodKeys: ["*/ImplementsPage;.baseMethod(Ljava/lang/String;)V",
-      "*/ImplementsPage;.childMethod(I)V"]
+    key: "*ImplementsPage;"
+    methodKeys: ["*ImplementsPage;.baseMethod(Ljava/lang/String;)V",
+      "*ImplementsPage;.childMethod(I)V"]
     name: "*.ImplementsPage"
   - testDoc: 'Doc: ImplementsPageBase'
-    key: "*/ImplementsPageBase;"
-    methodKeys: ["*/ImplementsPageBase;.baseMethod(Ljava/lang/String;)V"]
+    key: "*ImplementsPageBase;"
+    methodKeys: ["*ImplementsPageBase;.baseMethod(Ljava/lang/String;)V"]
     name: "*.ImplementsPageBase"
   - testDoc: 'Doc: ImplementsTestBase'
-    key: "*/ImplementsTestBase;"
-    methodKeys: ["*/ImplementsTestBase;.testBaseMethod(Ljava/lang/String;)V"]
+    key: "*ImplementsTestBase;"
+    methodKeys: ["*ImplementsTestBase;.testBaseMethod(Ljava/lang/String;)V"]
     name: "*.ImplementsTestBase"
 rootClassTable:
   classes:
   - testDoc: null
-    key: "*/ImplementsTestMain;"
-    methodKeys: ["*/ImplementsTestMain;.implementsTest()V"]
+    key: "*ImplementsTestMain;"
+    methodKeys: ["*ImplementsTestMain;.implementsTest()V"]
     name: "*.ImplementsTestMain"
