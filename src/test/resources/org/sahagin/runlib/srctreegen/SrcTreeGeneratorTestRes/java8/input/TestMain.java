@@ -17,7 +17,7 @@ public class TestMain {
     }
 
     @TestDoc("Doc: print")
-    public void print(String str) {}
+    private void print(String str) {}
 
     @Test
     public void defaultInterfaceTest() {
@@ -25,7 +25,7 @@ public class TestMain {
         instance.defaultMethod();
     }
 
-    public interface InterfaceWithDefault {
+    private interface InterfaceWithDefault {
 
         @TestDoc("Doc: defaultMethod")
         default void defaultMethod() {}

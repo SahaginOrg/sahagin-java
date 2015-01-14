@@ -47,8 +47,8 @@ public class TestMain {
     public void testMethod2() {}
 
     @TestDoc(value = "Doc:testDocMethod", capture = CaptureStyle.STEP_IN)
-    public void testDocMethod() {}
+    private void testDocMethod() {}
 
-    public void noTestDocMethod() {}
+    private void noTestDocMethod() {}
 
 }

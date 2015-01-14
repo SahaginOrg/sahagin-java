@@ -20,10 +20,10 @@ public class TestPage {
     @TestDoc("Doc:staticMethod")
     public static void staticMethod() {}
 
-    public static class InnerClass {
+    private static class InnerClass {
 
         @TestDoc("Doc:innerClass")
-        public void innerClassMethod() {}
+        private void innerClassMethod() {}
 
     }
 
@@ -39,12 +39,12 @@ public class TestPage {
     }
 
     @TestDoc("Doc:nest2:{arg}")
-    public void nest2(String arg) {
+    private void nest2(String arg) {
         nest3(arg);
     }
 
     @TestDoc("Doc:nest3:{arg}")
-    public void nest3(String arg) {
+    private void nest3(String arg) {
         int i = 0;
         int j = 1;
         if (i != j) {
