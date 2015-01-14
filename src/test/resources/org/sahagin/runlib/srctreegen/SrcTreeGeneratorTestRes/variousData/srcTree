@@ -248,16 +248,16 @@ rootFuncTable:
     key: "*TestMain;.testMethod2()V"
 subClassTable:
   classes:
-  - testDoc: null
-    type: class
-    key: "*TestPage$InnerClass;"
-    methodKeys: ["*TestPage$InnerClass;.innerClassMethod()V"]
-    name: "*.TestPage.InnerClass"
   - testDoc: Doc:TestPage
     type: page
     key: "*TestPage;"
     methodKeys: "*"
     name: "*.TestPage"
+  - testDoc: null
+    type: class
+    key: "*TestPage$InnerClass;"
+    methodKeys: ["*TestPage$InnerClass;.innerClassMethod()V"]
+    name: "*.TestPage.InnerClass"
   - testDoc: null
     type: class
     key: "*TestSub;"

@@ -121,6 +121,7 @@ public class RunResultGenerateHookTest extends TestBase {
 
     private String mavenJreVersion() {
         InvocationRequest versionRequest = new DefaultInvocationRequest();
+        //versionRequest.setJavaHome(new File(System.getProperty("java.home")));
         versionRequest.setGoals(Arrays.asList("-v"));
         MavenInvokeResult versionResult = mavenInvoke(versionRequest, "version");
         for (String stdOut : versionResult.stdOuts) {
