@@ -19,7 +19,7 @@ Add dependency to your pom.xml file and add test execution JVM argument.
 ```xml
   <properties>
     <!-- use the current latest version --> 
-    <sahagin.version>0.2.5</sahagin.version>
+    <sahagin.version>0.3</sahagin.version>
   </properties>
   ...
   <dependencies>
@@ -49,7 +49,7 @@ Add dependency to your build.gradle file and add test execution JVM argument.
 
 ```groovy
 // use the current latest version
-def sahaginVersion = '0.2.5'
+def sahaginVersion = '0.3'
 
 ...
 
@@ -72,9 +72,9 @@ test {
 ```
 
 ### If you use jar file directory
-Download sahagin-0.2.5.zip from [here](https://github.com/SahaginOrg/sahagin-java/releases/tag/0.2.5) and add all jar files in the zip file to the Java class path.
+Download sahagin-0.3.zip from [here](https://github.com/SahaginOrg/sahagin-java/releases) and add all jar files in the zip file to the Java class path.
 
-You must add JVM argument "-javaagent:\<path to sahagin-0.2.5.jar\>" when you run JUnit tests.
+You must add JVM argument "-javaagent:\<path to sahagin-0.3.jar\>" when you run JUnit tests.
 
 ## 2. Add annotations
 Add @Page annotations to your page object class declarations, and add @TestDoc annotations to your page object methods or any other methods.
