@@ -47,7 +47,7 @@ public class SrcTreeGeneratorTest extends TestBase {
         }
         Map<String, Object> expectedYamlObj = YamlUtils.load(expectedSrcTreeFile);
         try {
-            assertYamlEquals(expectedYamlObj, actualYamlObj);
+            assertYamlEquals(expectedYamlObj, actualYamlObj, true);
         } catch (AssertionError e) {
             // output actual srcTree for debugging later
             YamlUtils.dump(actualYamlObj, new File(mkWorkDir(subDirName), "actualSrcTree"));

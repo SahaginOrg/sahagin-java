@@ -1,44 +1,15 @@
 subFuncTable:
   functions:
-  - codeBody: []
-    name: "*.TestMain.defaultTestDocMethod"
-    capture: thisLine
-    argVariables: []
-    classKey: "*/TestMain;"
+  - name: "*.TestMain.defaultTestDocMethod"
     testDoc: Doc:default
-    type: method
-    key: "*/TestMain;.defaultTestDocMethod()V"
-  - codeBody: []
-    name: "*.TestMain.enUsTestDocMethod"
-    capture: thisLine
-    argVariables: []
-    classKey: "*/TestMain;"
+  - name: "*.TestMain.enUsTestDocMethod"
     testDoc: Doc:en-US
-    type: method
-    key: "*/TestMain;.enUsTestDocMethod()V"
-  - codeBody: []
-    name: "*.TestMain.jaJpTestDocMethod"
-    capture: thisLine
-    argVariables: []
-    classKey: "*/TestMain;"
+  - name: "*.TestMain.jaJpTestDocMethod"
     testDoc: ''
-    type: method
-    key: "*/TestMain;.jaJpTestDocMethod()V"
-  - codeBody: []
-    name: "*.TestMain.testDocsMethod"
-    capture: thisLine
-    argVariables: []
-    classKey: "*/TestMain;"
+  - name: "*.TestMain.testDocsMethod"
     testDoc: Docs:default
-    type: method
-    key: "*/TestMain;.testDocsMethod()V"
-rootFuncTable: "*"
-formatVersion: "*"
 subClassTable:
   classes:
   - testDoc: Pages:default
     type: page
-    key: "*/TestMain;"
-    methodKeys: "*"
     name: "*.TestMain"
-rootClassTable: "*"

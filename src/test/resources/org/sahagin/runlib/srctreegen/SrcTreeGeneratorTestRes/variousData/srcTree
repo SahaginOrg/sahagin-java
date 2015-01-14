@@ -33,9 +33,7 @@ subFuncTable:
     type: method
     key: "*/TestPage;.argMethod(Ljava/lang/String;I)V"
   - codeBody:
-    - startLine: "*"
-      code: {original: return "EEE";, type: unknown}
-      endLine: "*"
+    - code: {original: return "EEE";, type: unknown}
     name: "*.TestPage.getData"
     capture: thisLine
     argVariables: []
@@ -44,17 +42,13 @@ subFuncTable:
     type: method
     key: "*/TestPage;.getData()Ljava/lang/String;"
   - codeBody:
-    - startLine: "*"
-      code: {original: InnerClass innerClass=new InnerClass();, type: unknown}
-      endLine: "*"
-    - startLine: "*"
-      code:
+    - code: {original: InnerClass innerClass=new InnerClass();, type: unknown}
+    - code:
         original: innerClass.innerClassMethod();
         type: method
         methodKey: "*/TestPage$InnerClass;.innerClassMethod()V"
         thisInstance: {original: innerClass, type: unknown}
         args: []
-      endLine: "*"
     name: "*.TestPage.inenrClassCall"
     capture: thisLine
     argVariables: []
@@ -63,14 +57,12 @@ subFuncTable:
     type: method
     key: "*/TestPage;.inenrClassCall()V"
   - codeBody:
-    - startLine: "*"
-      code:
+    - code:
         original: nest2(arg);
         type: method
         methodKey: "*/TestPage;.nest2(Ljava/lang/String;)V"
         args:
         - {argIndex: 0, original: arg, type: arg}
-      endLine: "*"
     name: "*.TestPage.nest1"
     capture: thisLine
     argVariables: [arg]
@@ -79,14 +71,12 @@ subFuncTable:
     type: method
     key: "*/TestPage;.nest1(Ljava/lang/String;)V"
   - codeBody:
-    - startLine: "*"
-      code:
+    - code:
         original: nest3(arg);
         type: method
         methodKey: "*/TestPage;.nest3(Ljava/lang/String;)V"
         args:
         - {argIndex: 0, original: arg, type: arg}
-      endLine: "*"
     name: "*.TestPage.nest2"
     capture: thisLine
     argVariables: [arg]
@@ -95,28 +85,20 @@ subFuncTable:
     type: method
     key: "*/TestPage;.nest2(Ljava/lang/String;)V"
   - codeBody:
-    - startLine: "*"
-      code: {original: int i=0;, type: unknown}
-      endLine: "*"
-    - startLine: "*"
-      code: {original: int j=1;, type: unknown}
-      endLine: "*"
-    - startLine: "*"
-      code:
+    - code: {original: int i=0;, type: unknown}
+    - code: {original: int j=1;, type: unknown}
+    - code:
         original: |-
           if (i != j) {
             return;
           }
         type: unknown
-      endLine: "*"
-    - startLine: "*"
-      code:
+    - code:
         original: nest1(arg);
         type: method
         methodKey: "*/TestPage;.nest1(Ljava/lang/String;)V"
         args:
         - {argIndex: 0, original: arg, type: arg}
-      endLine: "*"
     name: "*.TestPage.nest3"
     capture: thisLine
     argVariables: [arg]
@@ -125,27 +107,19 @@ subFuncTable:
     type: method
     key: "*/TestPage;.nest3(Ljava/lang/String;)V"
   - codeBody:
-    - startLine: "*"
-      code: {original: int i=0;, type: unknown}
-      endLine: "*"
-    - startLine: "*"
-      code: {original: int j=1;, type: unknown}
-      endLine: "*"
-    - startLine: "*"
-      code:
+    - code: {original: int i=0;, type: unknown}
+    - code: {original: int j=1;, type: unknown}
+    - code:
         original: |-
           if (i != j) {
             return;
           }
         type: unknown
-      endLine: "*"
-    - startLine: "*"
-      code:
+    - code:
         original: recurseMethodCall();
         type: method
         methodKey: "*/TestPage;.recurseMethodCall()V"
         args: []
-      endLine: "*"
     name: "*.TestPage.recurseMethodCall"
     capture: thisLine
     argVariables: []
@@ -172,71 +146,52 @@ subFuncTable:
 rootFuncTable:
   functions:
   - codeBody:
-    - startLine: "*"
-      code:
+    - code:
         original: TestSub.subMethod();
         type: method
         methodKey: "*/TestSub;.subMethod()V"
         thisInstance: {original: TestSub, type: unknown}
         args: []
-      endLine: "*"
-    - startLine: "*"
-      code:
+    - code:
         original: testDocMethod();
         type: method
         methodKey: "*/TestMain;.testDocMethod()V"
         args: []
-      endLine: "*"
-    - startLine: "*"
-      code:
+    - code:
         original: testDocMethod();
         type: method
         methodKey: "*/TestMain;.testDocMethod()V"
         args: []
-      endLine: "*"
-    - startLine: "*"
-      code:
+    - code:
         original: testDocMethod();
         type: method
         methodKey: "*/TestMain;.testDocMethod()V"
         args: []
-      endLine: "*"
-    - startLine: "*"
-      code: {original: noTestDocMethod();, type: unknown}
-      endLine: "*"
-    - startLine: "*"
-      code:
+    - code: {original: noTestDocMethod();, type: unknown}
+    - code:
         original: TestPage page=new TestPage();
         type: method
         methodKey: "*/TestPage;.()V"
         args: []
-      endLine: "*"
-    - startLine: "*"
-      code:
+    - code:
         original: page.inenrClassCall();
         type: method
         methodKey: "*/TestPage;.inenrClassCall()V"
         thisInstance: {original: page, type: unknown}
         args: []
-      endLine: "*"
-    - startLine: "*"
-      code:
+    - code:
         original: TestPage.staticMethod();
         type: method
         methodKey: "*/TestPage;.staticMethod()V"
         thisInstance: {original: TestPage, type: unknown}
         args: []
-      endLine: "*"
-    - startLine: "*"
-      code:
+    - code:
         original: page.staticMethod();
         type: method
         methodKey: "*/TestPage;.staticMethod()V"
         thisInstance: {original: page, type: unknown}
         args: []
-      endLine: "*"
-    - startLine: "*"
-      code:
+    - code:
         original: page.argMethod("AAA",999);
         type: method
         methodKey: "*/TestPage;.argMethod(Ljava/lang/String;I)V"
@@ -244,9 +199,7 @@ rootFuncTable:
         args:
         - {value: AAA, original: '"AAA"', type: string}
         - {original: '999', type: unknown}
-      endLine: "*"
-    - startLine: "*"
-      code:
+    - code:
         original: page.argMethod(null,0);
         type: method
         methodKey: "*/TestPage;.argMethod(Ljava/lang/String;I)V"
@@ -254,47 +207,30 @@ rootFuncTable:
         args:
         - {original: 'null', type: unknown}
         - {original: '0', type: unknown}
-      endLine: "*"
-    - startLine: "*"
-      code:
+    - code:
         original: page.recurseMethodCall();
         type: method
         methodKey: "*/TestPage;.recurseMethodCall()V"
         thisInstance: {original: page, type: unknown}
         args: []
-      endLine: "*"
-    - startLine: "*"
-      code:
+    - code:
         original: page.nest1("DDD");
         type: method
         methodKey: "*/TestPage;.nest1(Ljava/lang/String;)V"
         thisInstance: {original: page, type: unknown}
         args:
         - {value: DDD, original: '"DDD"', type: string}
-      endLine: "*"
-    - startLine: "*"
-      code: {original: 'assertThat(page.getData(),is("EEE"));', type: unknown}
-      endLine: "*"
-    - startLine: "*"
-      code: {original: 'assertEquals(page.getData(),"EEE");', type: unknown}
-      endLine: "*"
-    - startLine: "*"
-      code:
+    - code: {original: 'assertThat(page.getData(),is("EEE"));', type: unknown}
+    - code: {original: 'assertEquals(page.getData(),"EEE");', type: unknown}
+    - code:
         original: |-
           if (wd == null) {
             return;
           }
         type: unknown
-      endLine: "*"
-    - startLine: "*"
-      code: {original: wd.get("***.com");, type: unknown}
-      endLine: "*"
-    - startLine: "*"
-      code: {original: wd.findElement(By.id("FFF")).click();, type: unknown}
-      endLine: "*"
-    - startLine: "*"
-      code: {original: wd.findElement(By.cssSelector("GGG")).sendKeys("HHH");, type: unknown}
-      endLine: "*"
+    - code: {original: wd.get("***.com");, type: unknown}
+    - code: {original: wd.findElement(By.id("FFF")).click();, type: unknown}
+    - code: {original: wd.findElement(By.cssSelector("GGG")).sendKeys("HHH");, type: unknown}
     name: "*.TestMain.testMethod1"
     capture: thisLine
     argVariables: []
@@ -333,5 +269,4 @@ rootClassTable:
   - testDoc: null
     type: class
     key: "*/TestMain;"
-    methodKeys: "*"
     name: "*.TestMain"

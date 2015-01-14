@@ -1,38 +1,23 @@
 subFuncTable:
   functions:
-  - codeBody: []
-    name: "*.ページクラス.ページメソッド"
-    capture: thisLine
-    argVariables: []
+  - name: "*.ページクラス.ページメソッド"
     classKey: "*/ページクラス;"
     testDoc: ページメソッド
-    type: method
     key: "*/ページクラス;.ページメソッド()V"
 rootFuncTable:
   functions:
   - codeBody:
-    - startLine: "*"
-      code: {original: ページクラス page=new ページクラス();, type: unknown}
-      endLine: "*"
-    - startLine: "*"
-      code:
+    - code: {original: ページクラス page=new ページクラス();, type: unknown}
+    - code:
         original: page.ページメソッド();
-        type: method
         methodKey: "*/ページクラス;.ページメソッド()V"
-        thisInstance: {original: page, type: unknown}
-        args: []
-      endLine: "*"
     name: "*.メインクラス.テスト"
-    capture: thisLine
-    argVariables: []
     classKey: "*/メインクラス;"
     testDoc: Doc:テスト
-    type: method
     key: "*/メインクラス;.テスト()V"
 subClassTable:
   classes:
   - testDoc: Doc:ページクラス
-    type: page
     key: "*/ページクラス;"
     methodKeys: ["*/ページクラス;.ページメソッド()V"]
     name: "*.ページクラス"
@@ -40,7 +25,6 @@ formatVersion: "*"
 rootClassTable:
   classes:
   - testDoc: Doc:メインクラス
-    type: class
     key: "*/メインクラス;"
     methodKeys: ["*/メインクラス;.テスト()V"]
     name: "*.メインクラス"

@@ -128,11 +128,12 @@ public abstract class TestBase {
     }
 
     private void assertYamlEachValueEquals(Object expectedValue,
-            Object actualValue, String keyPath) {
+            Object actualValue, String keyPath, boolean skipNoExpected) {
         Map<String, Object> expectedValueAsYamlObj = toYamlObj(expectedValue);
         Map<String, Object> actualValueAsYamlObj = toYamlObj(actualValue);
         if (expectedValueAsYamlObj != null && actualValueAsYamlObj != null) {
-            assertYamlEqualsSub(expectedValueAsYamlObj, actualValueAsYamlObj, keyPath);
+            assertYamlEqualsSub(expectedValueAsYamlObj,
+                    actualValueAsYamlObj, keyPath, skipNoExpected);
             return;
         }
 
@@ -141,7 +142,8 @@ public abstract class TestBase {
         if (expectedValueAsList != null && actualValueAsList != null) {
             assertThat(keyPath, actualValueAsList.size(), is(expectedValueAsList.size()));
             for (int i = 0; i < expectedValueAsList.size(); i++) {
-                assertYamlEachValueEquals(expectedValueAsList.get(i), actualValueAsList.get(i), keyPath + "[" + i + "]");
+                assertYamlEachValueEquals(expectedValueAsList.get(i), actualValueAsList.get(i),
+                        keyPath + "[" + i + "]", skipNoExpected);
             }
             return;
         }
@@ -159,13 +161,15 @@ public abstract class TestBase {
     }
 
     private void assertYamlEqualsSub(Map<String, Object> expected,
-            Map<String, Object> actual, String keyPath) {
+            Map<String, Object> actual, String keyPath, boolean skipNoExpected) {
         if (expected == null) {
             assertThat(keyPath, actual, is(nullValue()));
         } else {
             assertThat(keyPath, actual, is(notNullValue()));
         }
-        assertThat(keyPath, actual.size(), is(expected.size()));
+        if (!skipNoExpected) {
+            assertThat(keyPath, actual.size(), is(expected.size()));
+        }
         for (Map.Entry<String, Object> entry : expected.entrySet()) {
             assertTrue(keyPath, actual.containsKey(entry.getKey()));
             Object expectedValue = expected.get(entry.getKey());
@@ -176,14 +180,21 @@ public abstract class TestBase {
             } else {
                 newKeyPath = keyPath + ">" + entry.getKey();
             }
-            assertYamlEachValueEquals(expectedValue, actualValue, newKeyPath);
+            assertYamlEachValueEquals(expectedValue, actualValue, newKeyPath, skipNoExpected);
         }
     }
 
     // TODO define custom matcher for YAML
     public void assertYamlEquals(Map<String, Object> expected, Map<String, Object> actual) {
-        assertYamlEqualsSub(expected, actual, null);
+        assertYamlEqualsSub(expected, actual, null, false);
     }
+
+    // TODO define custom matcher for YAML
+    public void assertYamlEquals(Map<String, Object> expected,
+            Map<String, Object> actual, boolean skipNoExpected) {
+        assertYamlEqualsSub(expected, actual, null, skipNoExpected);
+    }
+
 
     private String toRegExp(String normalStringContainingWildcard) {
         // by (?s) flag, this expression matches multiple lines string

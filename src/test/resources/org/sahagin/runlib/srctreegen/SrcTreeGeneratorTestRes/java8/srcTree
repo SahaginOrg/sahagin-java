@@ -2,72 +2,30 @@ subFuncTable:
   functions:
   - testDoc: 'Doc: defaultMethod'
     classKey: "*/TestMain$InterfaceWithDefault;"
-    codeBody: []
     name: "*.TestMain.InterfaceWithDefault.defaultMethod"
-    capture: thisLine
-    argVariables: []
-    type: method
-    key: "*/TestMain$InterfaceWithDefault;.defaultMethod()V"
-  - testDoc: "*"
-    classKey: "*"
-    codeBody: "*"
-    name: "*.TestMain.print"
-    capture: "*"
-    argVariables: "*"
-    type: "*"
-    key: "*"
+  - name: "*.TestMain.print"
 rootFuncTable:
   functions:
-  - testDoc: null
-    classKey: "*/TestMain;"
-    codeBody:
-    - endLine: "*"
-      startLine: "*"
-      code:
+  - codeBody:
+    - code:
         original: |-
           InterfaceWithDefault instance=new InterfaceWithDefault(){
           }
           ;
         type: unknown
-    - endLine: "*"
-      startLine: "*"
-      code:
+    - code:
         args: []
         methodKey: "*/TestMain$InterfaceWithDefault;.defaultMethod()V"
         original: instance.defaultMethod();
-        type: method
         thisInstance: {original: instance, type: unknown}
     name: "*.TestMain.defaultInterfaceTest"
-    capture: thisLine
-    argVariables: []
-    type: method
-    key: "*/TestMain;.defaultInterfaceTest()V"
-  - testDoc: null
-    classKey: "*TestMain;"
-    codeBody:
-    - endLine: "*"
-      startLine: "*"
-      code: {original: List<String> slist=new ArrayList<String>(2);, type: unknown}
-    - endLine: "*"
-      startLine: "*"
-      code: {original: slist.add("a");, type: unknown}
-    - endLine: "*"
-      startLine: "*"
-      code: {original: slist.stream().forEach(s -> System.out.println(s));, type: unknown}
-    - endLine: "*"
-      startLine: "*"
-      code: {original: slist.stream().forEach(s -> print(s));, type: unknown}
+  - codeBody:
+    - code: {original: List<String> slist=new ArrayList<String>(2);, type: unknown}
+    - code: {original: slist.add("a");, type: unknown}
+    - code: {original: slist.stream().forEach(s -> System.out.println(s));, type: unknown}
+    - code: {original: slist.stream().forEach(s -> print(s));, type: unknown}
     name: "*.TestMain.streamApiCallTest"
-    capture: thisLine
-    argVariables: []
-    type: method
-    key: "*TestMain;.streamApiCallTest()V"
-rootClassTable: "*"
-formatVersion: "*"
 subClassTable:
   classes:
   - name: "*.TestMain.InterfaceWithDefault"
-    testDoc: null
     methodKeys: ["*/TestMain$InterfaceWithDefault;.defaultMethod()V"]
-    type: class
-    key: "*/TestMain$InterfaceWithDefault;"
