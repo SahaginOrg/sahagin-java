@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.velocity.VelocityContext;
@@ -77,7 +78,8 @@ public class HtmlReport {
                 CommonPath.htmlExternalResourceRootDir(reportOutputDir), funcReportParentDir),
                 "images/noImage.png").getPath();
         ReportScreenCapture noImageCapture = new ReportScreenCapture();
-        noImageCapture.setPath(noImageFilePath);
+        // URL separator is always slash regardless of OS type
+        noImageCapture.setPath(FilenameUtils.separatorsToUnix(noImageFilePath));
         noImageCapture.setTtId("noImage");
         reportCaptures.add(noImageCapture);
 
@@ -93,7 +95,8 @@ public class HtmlReport {
             File absOutputCapturePath = new File(
                     CommonPath.htmlReportCaptureRootDir(reportOutputDir), relInputCapturePath.getPath());
             File relOutputCapturePath = CommonUtils.relativize(absOutputCapturePath, funcReportParentDir);
-            reportCapture.setPath(relOutputCapturePath.getPath());
+            // URL separator is always slash regardless of OS type
+            reportCapture.setPath(FilenameUtils.separatorsToUnix(relOutputCapturePath.getPath()));
             String ttId = generateTtId(lineScreenCapture.getStackLines());
             reportCapture.setTtId(ttId);
             reportCaptures.add(reportCapture);
@@ -405,8 +408,11 @@ public class HtmlReport {
                 escapePut(funcContext, "title", rootFunc.getTestDoc());
             }
 
-            escapePut(funcContext, "externalResourceRootDir", CommonUtils.relativize(
-                    CommonPath.htmlExternalResourceRootDir(reportOutputDir), funcReportParentDir).getPath());
+            String externalResourceRootDir =  CommonUtils.relativize(
+                    CommonPath.htmlExternalResourceRootDir(reportOutputDir), funcReportParentDir).getPath();
+            // URL separator is always slash regardless of OS type
+            escapePut(funcContext, "externalResourceRootDir", 
+                    FilenameUtils.separatorsToUnix(externalResourceRootDir));
             if (!(rootFunc instanceof TestMethod)) {
                 throw new RuntimeException("not supported yet: " + rootFunc);
             }
@@ -447,7 +453,9 @@ public class HtmlReport {
             // set reportLinks data
             ReportFuncLink reportLink = new ReportFuncLink();
             reportLink.setTitle(method.getQualifiedName());
-            reportLink.setPath(CommonUtils.relativize(funcReportFile, reportMainDir).getPath());
+            String reportLinkPath = CommonUtils.relativize(funcReportFile, reportMainDir).getPath();
+            // URL separator is always slash regardless of OS type
+            reportLink.setPath(FilenameUtils.separatorsToUnix(reportLinkPath));
             reportLinks.add(reportLink);
         }
         // TODO HTML encode all codeBody, captures, reportLinks values
