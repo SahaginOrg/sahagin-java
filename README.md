@@ -1,6 +1,6 @@
 # Sahagin
 
-![img](https://raw.github.com/SahaginOrg/sahagin-java/master/SahaginReport.jgp)
+![img](https://raw.github.com/SahaginOrg/sahagin-java/master/SahaginReport.jpg)
 
 Make your Selenium Script more readable and maintainable!
 
