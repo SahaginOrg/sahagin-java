@@ -114,6 +114,7 @@
           <systemPropertyVariables>
             <!-- give Maven home for child Maven Invoker -->
             <maven.home>${maven.home}</maven.home>
+            <sahagin.maven.java.home>${java.home}</sahagin.maven.java.home>
           </systemPropertyVariables>
         </configuration>
       </plugin>

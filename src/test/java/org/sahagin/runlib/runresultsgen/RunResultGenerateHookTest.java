@@ -110,6 +110,9 @@ public class RunResultGenerateHookTest extends TestBase {
     private void generateTempJar(String subDirName) {
         // generate sahagin temp jar for test from the already generated class files
         InvocationRequest jarGenRequest = new DefaultInvocationRequest();
+        if (System.getProperty("sahagin.maven.java.home") != null) {
+            jarGenRequest.setJavaHome(new File(System.getProperty("sahagin.maven.java.home")));
+        }
         jarGenRequest.setProfiles(Arrays.asList("sahagin-temp-jar-gen"));
         jarGenRequest.setGoals(Arrays.asList("jar:jar"));
         MavenInvokeResult jarGenResult = mavenInvoke(jarGenRequest, subDirName + ":jarGen");
@@ -121,7 +124,9 @@ public class RunResultGenerateHookTest extends TestBase {
 
     private String mavenJreVersion() {
         InvocationRequest versionRequest = new DefaultInvocationRequest();
-        //versionRequest.setJavaHome(new File(System.getProperty("java.home")));
+        if (System.getProperty("sahagin.maven.java.home") != null) {
+            versionRequest.setJavaHome(new File(System.getProperty("sahagin.maven.java.home")));
+        }
         versionRequest.setGoals(Arrays.asList("-v"));
         MavenInvokeResult versionResult = mavenInvoke(versionRequest, "version");
         for (String stdOut : versionResult.stdOuts) {
@@ -155,6 +160,9 @@ public class RunResultGenerateHookTest extends TestBase {
 
         // execute test
         InvocationRequest testRequest = new DefaultInvocationRequest();
+        if (System.getProperty("sahagin.maven.java.home") != null) {
+            testRequest.setJavaHome(new File(System.getProperty("sahagin.maven.java.home")));
+        }
         testRequest.setGoals(Arrays.asList("clean", "test"));
         if (additionalProfile == null) {
             testRequest.setProfiles(Arrays.asList("sahagin-jar-test"));
