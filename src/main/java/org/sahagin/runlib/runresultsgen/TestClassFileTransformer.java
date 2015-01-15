@@ -7,6 +7,7 @@ import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -17,12 +18,14 @@ import org.openqa.selenium.io.IOUtils;
 import org.sahagin.runlib.external.TestDoc;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.share.IllegalTestScriptException;
+import org.sahagin.share.Logging;
 import org.sahagin.share.srctree.SrcTree;
 import org.sahagin.share.srctree.TestFunction;
 import org.sahagin.share.srctree.code.CodeLine;
 import org.sahagin.share.yaml.YamlConvertException;
 
 public class TestClassFileTransformer implements ClassFileTransformer {
+    private static Logger logger = Logging.getLogger(TestClassFileTransformer.class.getName());
     private String configFilePath;
     private SrcTree srcTree;
 
@@ -232,6 +235,7 @@ public class TestClassFileTransformer implements ClassFileTransformer {
             // don't transform not changed ctClass
             // (to improve performance and avoid unexpected error)
             if (transformed) {
+                logger.info("transform " + className);
                 return ctClass.toBytecode();
             } else {
                 return null;
