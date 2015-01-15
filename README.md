@@ -1,5 +1,7 @@
 # Sahagin
 
+![img](https://raw.github.com/SahaginOrg/sahagin-java/master/SahaginReport.jgp)
+
 Make your Selenium Script more readable and maintainable!
 
 Sahagin provides highly readable HTML test script viewer and test result report.
