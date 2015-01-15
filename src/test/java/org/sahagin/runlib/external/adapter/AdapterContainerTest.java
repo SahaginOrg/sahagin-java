@@ -26,7 +26,7 @@ public class AdapterContainerTest {
         AdditionalFuncTestDoc clickTestDoc
         = testDocs.getFuncTestDoc("org.openqa.selenium.WebElement.click");
         assertThat(assertThatTestDoc.getCaptureStyle(), is(CaptureStyle.THIS_LINE));
-        assertThat(assertThatTestDoc.getTestDoc(), is("check if \"{0}\" {1}"));
+        assertThat(assertThatTestDoc.getTestDoc(), is("check that '{0}' {1}"));
         assertThat(clickTestDoc.getTestDoc(), is("click {this}"));
     }
 
