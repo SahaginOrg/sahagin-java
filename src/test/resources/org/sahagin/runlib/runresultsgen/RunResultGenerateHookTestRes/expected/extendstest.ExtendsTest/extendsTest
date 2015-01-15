@@ -1,19 +1,17 @@
 runFailures: []
-formatVersion: "*"
-rootFunctionKey: "*"
 lineScreenCaptures:
-- path: "*/captures/*ExtendsTest/extendsTest/001.png"
+- path: "*001.png"
   stackLines:
-  - {line: "*", codeBodyIndex: 0, functionKey: "*ExtendsTest;.extendsTest()V"}
-- path: "*/captures/*ExtendsTest/extendsTest/002.png"
+  - {codeBodyIndex: 0, functionKey: "*ExtendsTest;.extendsTest()V"}
+- path: "*002.png"
   stackLines:
-  - {line: "*", codeBodyIndex: 2, functionKey: "*ExtendsTest;.extendsTest()V"}
-- path: "*/captures/*ExtendsTest/extendsTest/003.png"
+  - {codeBodyIndex: 2, functionKey: "*ExtendsTest;.extendsTest()V"}
+- path: "*003.png"
   stackLines:
-  - {line: "*", codeBodyIndex: 3, functionKey: "*ExtendsTest;.extendsTest()V"}
-- path: "*/captures/*ExtendsTest/extendsTest/004.png"
+  - {codeBodyIndex: 3, functionKey: "*ExtendsTest;.extendsTest()V"}
+- path: "*004.png"
   stackLines:
-  - {line: "*", codeBodyIndex: 4, functionKey: "*ExtendsTest;.extendsTest()V"}
-- path: "*/captures/*ExtendsTest/extendsTest/005.png"
+  - {codeBodyIndex: 4, functionKey: "*ExtendsTest;.extendsTest()V"}
+- path: "*005.png"
   stackLines:
-  - {line: "*", codeBodyIndex: 7, functionKey: "*ExtendsTest;.extendsTest()V"}
+  - {codeBodyIndex: 7, functionKey: "*ExtendsTest;.extendsTest()V"}

@@ -27,7 +27,8 @@ import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlUtils;
 
 // This test must be executed by Maven,
-// or executed with the system property maven.home or set environment value M2_HOME
+// or executed with Maven home setting 
+// (system property maven.home or set environment value M2_HOME) and JAVA_HOME environment value
 public class RunResultGenerateHookTest extends TestBase {
 
     private static File getTestCapturePath(File capturesDir, int counter) {
@@ -104,7 +105,7 @@ public class RunResultGenerateHookTest extends TestBase {
         Map<String, Object> actualYamlObj = YamlUtils.load(new File(testMainResultDir, methodName));
         Map<String, Object> expectedYamlObj = YamlUtils.load(
                 new File(new File(testResourceDir("expected"), className),  methodName));
-        assertYamlEquals(expectedYamlObj, actualYamlObj);
+        assertYamlEquals(expectedYamlObj, actualYamlObj, true);
     }
 
     private void generateTempJar(String subDirName) {

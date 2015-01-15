@@ -1,7 +1,5 @@
 runFailures: []
 lineScreenCaptures:
-- path: "*/captures/*TestMain/streamApiCallTest/001.png"
+- path: "*001.png"
   stackLines:
-  - {codeBodyIndex: 0, functionKey: "*TestMain;.streamApiCallTest()V", line: "*"}
-formatVersion: "*"
-rootFunctionKey: "*"
+  - {codeBodyIndex: 0, functionKey: "*TestMain;.streamApiCallTest()V"}

@@ -1,18 +1,16 @@
 runFailures: []
-formatVersion: "*"
-rootFunctionKey: "*"
 lineScreenCaptures:
-- path: "*/captures/*TestMain/stepInCaptureTest/001.png"
+- path: "*001.png"
   stackLines:
-  - {line: "*", codeBodyIndex: 0, functionKey: "*TestMain;.stepInCaptureTest()V"}
-- path: "*/captures/*TestMain/stepInCaptureTest/002.png"
+  - {codeBodyIndex: 0, functionKey: "*TestMain;.stepInCaptureTest()V"}
+- path: "*002.png"
   stackLines:
-  - {line: "*", codeBodyIndex: 0, functionKey: "*TestMain;.stepInCaptureMethod()V"}
-  - {line: "*", codeBodyIndex: 1, functionKey: "*TestMain;.stepInCaptureTest()V"}
-- path: "*/captures/*TestMain/stepInCaptureTest/003.png"
+  - {codeBodyIndex: 0, functionKey: "*TestMain;.stepInCaptureMethod()V"}
+  - {codeBodyIndex: 1, functionKey: "*TestMain;.stepInCaptureTest()V"}
+- path: "*003.png"
   stackLines:
-  - {line: "*", codeBodyIndex: 1, functionKey: "*TestMain;.stepInCaptureMethod()V"}
-  - {line: "*", codeBodyIndex: 1, functionKey: "*TestMain;.stepInCaptureTest()V"}
-- path: "*/captures/*TestMain/stepInCaptureTest/004.png"
+  - {codeBodyIndex: 1, functionKey: "*TestMain;.stepInCaptureMethod()V"}
+  - {codeBodyIndex: 1, functionKey: "*TestMain;.stepInCaptureTest()V"}
+- path: "*004.png"
   stackLines:
-  - {line: "*", codeBodyIndex: 1, functionKey: "*TestMain;.stepInCaptureTest()V"}
+  - {codeBodyIndex: 1, functionKey: "*TestMain;.stepInCaptureTest()V"}
