@@ -27,7 +27,7 @@ import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlUtils;
 
 // This test must be executed by Maven,
-// or executed with Maven home setting 
+// or executed with Maven home setting
 // (system property maven.home or set environment value M2_HOME) and JAVA_HOME environment value
 public class RunResultGenerateHookTest extends TestBase {
 
@@ -220,7 +220,12 @@ public class RunResultGenerateHookTest extends TestBase {
             captureAssertion(subDirName, captureTest, "captureTest", reportInputDir, 5);
             testResultAssertion(captureTest, "captureTest", reportInputDir);
 
-            // multiStatementInALineTest
+            String multiExtendsTest1 = "multiextendstest.Test1";
+            captureAssertion(subDirName, multiExtendsTest1, "test1", reportInputDir, 1);
+            testResultAssertion(multiExtendsTest1, "test1", reportInputDir);
+            String multiExtendsTest2 = "multiextendstest.Test2";
+            captureAssertion(subDirName, multiExtendsTest2, "test2", reportInputDir, 1);
+            testResultAssertion(multiExtendsTest2, "test2", reportInputDir);
         } catch (AssertionError e) {
             pair.getLeft().printStdOutsAndErrs();
             throw e;

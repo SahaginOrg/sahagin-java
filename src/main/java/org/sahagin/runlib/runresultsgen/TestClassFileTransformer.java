@@ -7,6 +7,7 @@ import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javassist.CannotCompileException;
@@ -71,6 +72,11 @@ public class TestClassFileTransformer implements ClassFileTransformer {
         CtMethod[] allMethods = ctClass.getMethods();
         List<CtMethod> result = new ArrayList<CtMethod>(allMethods.length);
         for (CtMethod method : allMethods) {
+            if (!method.getDeclaringClass().getName().equals(ctClass.getName())) {
+                // methods defined on superclass are also included in the result list of
+                // CtClass.getMethods, so exclude such methods
+                continue;
+            }
             if (isSubMethod(method)) {
                 result.add(method);
             }
@@ -82,6 +88,11 @@ public class TestClassFileTransformer implements ClassFileTransformer {
         CtMethod[] allMethods = ctClass.getMethods();
         List<CtMethod> result = new ArrayList<CtMethod>(allMethods.length);
         for (CtMethod method : allMethods) {
+            if (!method.getDeclaringClass().getName().equals(ctClass.getName())) {
+                // methods defined on superclass are also included in the result list of
+                // CtClass.getMethods, so exclude such methods
+                continue;
+            }
             if (AdapterContainer.globalInstance().isRootFunction(method)) {
                 result.add(method);
             }
@@ -152,6 +163,7 @@ public class TestClassFileTransformer implements ClassFileTransformer {
                 } catch (RuntimeException e) {
                     // Maybe when this class is frozen.
                     // Since frozen classes are maybe system class, just ignore this exception
+                    logger.log(Level.INFO, "", e);
                     return null;
                 }
                 String subMethodName = qualifiedName(subMethod);

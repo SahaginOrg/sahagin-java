@@ -1,0 +1,5 @@
+runFailures: []
+lineScreenCaptures:
+- path: "*001.png"
+  stackLines:
+  - {codeBodyIndex: 0, functionKey: "*Test2;.test2()V"}
