@@ -9,7 +9,7 @@ Sahagin provides highly readable HTML test script viewer and test result report.
 ![img](https://raw.github.com/SahaginOrg/sahagin-java/master/SahaginReport.jpg)
 ***
 
-Sahagin advantages are:
+Sahagin's advantages are:
 
 - Generate easy-to-understand HTML report for non-programmers from the standard Selenium test code written in the programming language.
 - Automatically take screen captures for each test step and on test failures, and show it on the HTML report.
