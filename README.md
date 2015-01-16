@@ -1,13 +1,22 @@
 # Sahagin
 
-![img](https://raw.github.com/SahaginOrg/sahagin-java/master/SahaginReport.jpg)
-
 Make your Selenium Script more readable and maintainable!
 
 Sahagin provides highly readable HTML test script viewer and test result report.
 
-Sahagin is now beta version, and only supports JUnit4 and Selenium WebDriver Java binding in the current latest version.
-If you want support for other languages or test frameworks, please request us by creating new [issue](https://github.com/SahaginOrg/sahagin-java/issues).
+--------
+![img](https://raw.github.com/SahaginOrg/sahagin-java/master/SahaginReport.jpg)
+--------
+
+Sahagin advantages are:
+
+- Generate easy-to-understand HTML report for non-programmers from the standard Selenium test code written in the programming language.
+- Automatically take screen captures for each test step and on test failures, and show it on the HTML report.
+
+Sahagin is now beta version, and only supports Java in the current latest version.
+
+For more information, let's go to [Sahagin main features](https://github.com/SahaginOrg/sahagin-java/wiki/Sahagin-main-features).
+
 
 [![Build Status](https://travis-ci.org/SahaginOrg/sahagin-java.svg?branch=master)](https://travis-ci.org/SahaginOrg/sahagin-java)
 
