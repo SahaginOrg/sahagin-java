@@ -4,10 +4,7 @@ Make your Selenium Script more readable and maintainable!
 
 Sahagin provides highly readable HTML test script viewer and test result report.
 
-
-***
 <img src="https://github.com/SahaginOrg/sahagin-java/blob/master/SahaginReport.jpg" height="350px" />
-***
 
 Sahagin's advantages are:
 
