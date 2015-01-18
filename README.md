@@ -6,7 +6,7 @@ Sahagin provides highly readable HTML test script viewer and test result report.
 
 
 ***
-![img](https://raw.github.com/SahaginOrg/sahagin-java/master/SahaginReport.jpg)
+<img src="https://github.com/SahaginOrg/sahagin-java/blob/master/SahaginReport.jpg" height="350px" />
 ***
 
 Sahagin's advantages are:
