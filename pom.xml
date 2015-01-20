@@ -6,7 +6,7 @@
   </properties>
   <groupId>org.sahagin</groupId>
   <artifactId>sahagin</artifactId>
-  <version>0.3.1-SNAPSHOT</version>
+  <version>0.3.1</version>
   <packaging>jar</packaging>
   <name>Sahagin</name>
   <description>Sahagin makes your Selenium script more readable and maintainable.</description>
