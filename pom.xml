@@ -125,6 +125,7 @@
         <configuration>
           <archive>
             <manifestEntries>
+              <Main-Class>org.sahagin.main.SahaginMain</Main-Class>
               <Premain-Class>org.sahagin.main.SahaginPreMain</Premain-Class>
             </manifestEntries>
           </archive>
