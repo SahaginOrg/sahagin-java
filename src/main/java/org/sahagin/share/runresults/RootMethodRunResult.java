@@ -65,6 +65,13 @@ public class RootMethodRunResult implements YamlConvertible {
     @Override
     public void fromYamlObject(Map<String, Object> yamlObject)
             throws YamlConvertException {
+        String formatVersion = YamlUtils.getStrValue(yamlObject, "formatVersion");
+        // "*" means arbitrary version (this is only for testing sahagin itself)
+        if (!formatVersion.equals("*")
+                && !formatVersion.equals(CommonUtils.formatVersion())) {
+            throw new YamlConvertException(String.format
+                    (MSG_SRC_TREE_FORMAT_MISMATCH, CommonUtils.formatVersion(), formatVersion));
+        }
         rootMethodKey = YamlUtils.getStrValue(yamlObject, "rootMethodKey");
         List<Map<String, Object>> runFailuresYamlObj
         = YamlUtils.getYamlObjectListValue(yamlObject, "runFailures");
@@ -81,13 +88,6 @@ public class RootMethodRunResult implements YamlConvertible {
             LineScreenCapture lineScreenCapture = new LineScreenCapture();
             lineScreenCapture.fromYamlObject(lineScreenCaptureYamlObj);
             lineScreenCaptures.add(lineScreenCapture);
-        }
-        String formatVersion = YamlUtils.getStrValue(yamlObject, "formatVersion");
-        // "*" means arbitrary version (this is only for testing sahagin itself)
-        if (!formatVersion.equals("*")
-                && !formatVersion.equals(CommonUtils.formatVersion())) {
-            throw new YamlConvertException(String.format
-                    (MSG_SRC_TREE_FORMAT_MISMATCH, CommonUtils.formatVersion(), formatVersion));
         }
     }
 

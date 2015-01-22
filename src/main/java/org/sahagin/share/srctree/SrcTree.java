@@ -95,6 +95,14 @@ public class SrcTree implements YamlConvertible {
     @Override
     public void fromYamlObject(Map<String, Object> yamlObject)
             throws YamlConvertException {
+        String formatVersion = YamlUtils.getStrValue(yamlObject, "formatVersion");
+        // "*" means arbitrary version (this is only for testing sahagin itself)
+        if (!formatVersion.equals("*")
+                && !formatVersion.equals(CommonUtils.formatVersion())) {
+            throw new YamlConvertException(String.format
+                    (MSG_SRC_TREE_FORMAT_MISMATCH, CommonUtils.formatVersion(), formatVersion));
+        }
+
         rootClassTable = null;
         rootMethodTable = null;
         subClassTable = null;
@@ -119,14 +127,6 @@ public class SrcTree implements YamlConvertible {
         if (subMethodTableYamlObj != null) {
             subMethodTable = new TestMethodTable();
             subMethodTable.fromYamlObject(subMethodTableYamlObj);
-        }
-
-        String formatVersion = YamlUtils.getStrValue(yamlObject, "formatVersion");
-        // "*" means arbitrary version (this is only for testing sahagin itself)
-        if (!formatVersion.equals("*")
-                && !formatVersion.equals(CommonUtils.formatVersion())) {
-            throw new YamlConvertException(String.format
-                    (MSG_SRC_TREE_FORMAT_MISMATCH, CommonUtils.formatVersion(), formatVersion));
         }
     }
 
