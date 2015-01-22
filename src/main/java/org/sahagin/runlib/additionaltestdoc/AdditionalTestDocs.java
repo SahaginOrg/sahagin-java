@@ -3,6 +3,8 @@ package org.sahagin.runlib.additionaltestdoc;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class AdditionalTestDocs {
     private List<AdditionalClassTestDoc> classTestDocs
     = new ArrayList<AdditionalClassTestDoc>(128);
@@ -35,7 +37,7 @@ public class AdditionalTestDocs {
     public void methodAdd(String classQualifiedName, String simpleName, String testDoc) {
         AdditionalMethodTestDoc additionalMethodTestDoc = new AdditionalMethodTestDoc();
         additionalMethodTestDoc.setClassQualifiedName(classQualifiedName);
-        additionalMethodTestDoc.setQualifiedName(classQualifiedName + "." + simpleName);
+        additionalMethodTestDoc.setSimpleName(simpleName);
         additionalMethodTestDoc.setTestDoc(testDoc);
         methodTestDocs.add(additionalMethodTestDoc);
     }
@@ -56,14 +58,19 @@ public class AdditionalTestDocs {
     }
 
     // returns null if not found
-    public AdditionalMethodTestDoc getMethodTestDoc(String qualifiedMethodName) {
-        if (qualifiedMethodName == null) {
+    public AdditionalMethodTestDoc getMethodTestDoc(
+            String classQualifiedName, String methodSimpleName) {
+        if (classQualifiedName == null) {
+            throw new NullPointerException();
+        }
+        if (methodSimpleName == null) {
             throw new NullPointerException();
         }
         // last set data is referred first
         for (int i = methodTestDocs.size() - 1; i >= 0; i--) {
             AdditionalMethodTestDoc methodTestDoc = methodTestDocs.get(i);
-            if (qualifiedMethodName.equals(methodTestDoc.getQualifiedName())) {
+            if (StringUtils.equals(methodTestDoc.getClassQualifiedName(), classQualifiedName)
+                    && StringUtils.equals(methodTestDoc.getSimpleName(), methodSimpleName)) {
                 return methodTestDoc;
             }
         }

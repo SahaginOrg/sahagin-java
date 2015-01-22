@@ -5,9 +5,9 @@ rootMethodTable:
     - code:
         original: "*"
         type: unknown
-    name: "*.TestMain.multiCatchTest"
+    name: "multiCatchTest"
   - codeBody:
     - code:
         original: "*"
         type: unknown
-    name: "*.TestMain.tryFinallyTest"
+    name: "tryFinallyTest"

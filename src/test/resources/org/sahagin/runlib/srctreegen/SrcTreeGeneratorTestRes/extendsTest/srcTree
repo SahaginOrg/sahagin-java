@@ -1,7 +1,7 @@
 subMethodTable:
   methods:
   - codeBody: []
-    name: "*ExtendsPage.abstractMethod"
+    name: "abstractMethod"
     capture: thisLine
     argVariables: [arg]
     classKey: "*ExtendsPage;"
@@ -9,28 +9,28 @@ subMethodTable:
     key: "*ExtendsPage;.abstractMethod(I)V"
   - codeBody:
     - code: {original: super.overriddenMethod(arg);, type: unknown}
-    name: "*ExtendsPage.overriddenMethod"
+    name: "overriddenMethod"
     capture: thisLine
     argVariables: [arg]
     classKey: "*ExtendsPage;"
     testDoc: 'Doc: overriddenMethod: override: {arg}'
     key: "*ExtendsPage;.overriddenMethod(Ljava/lang/String;)V"
   - codeBody: []
-    name: "*.ExtendsPageBase.abstractMethod"
+    name: "abstractMethod"
     capture: thisLine
     argVariables: [arg]
     classKey: "*ExtendsPageBase;"
     testDoc: 'Doc: abstractMethod: {arg}'
     key: "*ExtendsPageBase;.abstractMethod(I)V"
   - codeBody: []
-    name: "*ExtendsPageBase.finalMethod"
+    name: "finalMethod"
     capture: thisLine
     argVariables: [arg]
     classKey: "*ExtendsPageBase;"
     testDoc: 'Doc: finalMethod: {arg}'
     key: "*ExtendsPageBase;.finalMethod(Ljava/lang/Object;)V"
   - codeBody: []
-    name: "*ExtendsTestBase.testBaseMethod"
+    name: "testBaseMethod"
     capture: thisLine
     argVariables: [arg]
     classKey: "*ExtendsTestBase;"
@@ -38,7 +38,7 @@ subMethodTable:
     key: "*ExtendsTestBase;.testBaseMethod(Ljava/lang/String;)V"
   - codeBody:
     - code: {original: super.testBaseMethod(arg);, type: unknown}
-    name: "*ExtendsTestMain.testBaseMethod"
+    name: "testBaseMethod"
     capture: stepIn
     argVariables: [arg]
     classKey: "*ExtendsTestMain;"
@@ -85,7 +85,7 @@ rootMethodTable:
         args:
         - {value: WWW, original: '"WWW"', type: string}
     - code: {original: baseInstance.overriddenMethod("ZZZ");, type: unknown}
-    name: "*ExtendsTestMain.extendsTest"
+    name: "extendsTest"
     capture: thisLine
     argVariables: []
     classKey: "*ExtendsTestMain;"
@@ -98,18 +98,18 @@ subClassTable:
     key: "*ExtendsPage;"
     methodKeys: ["*ExtendsPage;.overriddenMethod(Ljava/lang/String;)V",
       "*ExtendsPage;.abstractMethod(I)V"]
-    name: "*.ExtendsPage"
+    qname: "*.ExtendsPage"
   - testDoc: null
     type: class
     key: "*ExtendsPageBase;"
     methodKeys: ["*ExtendsPageBase;.abstractMethod(I)V",
       "*ExtendsPageBase;.finalMethod(Ljava/lang/Object;)V"]
-    name: "*.ExtendsPageBase"
+    qname: "*.ExtendsPageBase"
   - testDoc: 'Doc: ExtendsTestBase'
     type: class
     key: "*ExtendsTestBase;"
     methodKeys: ["*ExtendsTestBase;.testBaseMethod(Ljava/lang/String;)V"]
-    name: "*.ExtendsTestBase"
+    qname: "*.ExtendsTestBase"
 rootClassTable:
   classes:
   - testDoc: 'Doc: ExtendsTestMain'
@@ -117,4 +117,4 @@ rootClassTable:
     key: "*ExtendsTestMain;"
     methodKeys: ["*ExtendsTestMain;.extendsTest()V",
       "*ExtendsTestMain;.testBaseMethod(Ljava/lang/String;)V"]
-    name: "*ExtendsTestMain"
+    qname: "*ExtendsTestMain"

@@ -1,15 +1,15 @@
 subMethodTable:
   methods:
-  - name: "*.TestMain.defaultTestDocMethod"
+  - name: "defaultTestDocMethod"
     testDoc: Doc:default
-  - name: "*.TestMain.enUsTestDocMethod"
+  - name: "enUsTestDocMethod"
     testDoc: Doc:en-US
-  - name: "*.TestMain.jaJpTestDocMethod"
+  - name: "jaJpTestDocMethod"
     testDoc: ''
-  - name: "*.TestMain.testDocsMethod"
+  - name: "testDocsMethod"
     testDoc: Docs:default
 subClassTable:
   classes:
   - testDoc: Pages:default
     type: page
-    name: "*.TestMain"
+    qname: "*.TestMain"

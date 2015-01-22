@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.sahagin.share.CommonUtils;
 import org.sahagin.share.yaml.YamlUtils;
 import org.sahagin.share.yaml.YamlConvertException;
@@ -36,13 +37,17 @@ public class TestMethodTable implements YamlConvertible {
         return null;
     }
 
-    public List<TestMethod> getByQualifiedName(String qualifiedName) {
-        if (qualifiedName == null) {
+    public List<TestMethod> getByName(String classQualifiedName, String methodSimpleName) {
+        if (classQualifiedName == null) {
+            throw new NullPointerException();
+        }
+        if (methodSimpleName == null) {
             throw new NullPointerException();
         }
         List<TestMethod> result = new ArrayList<TestMethod>(1);
         for (TestMethod testMethod : testMethods) {
-            if (qualifiedName.equals(testMethod.getQualifiedName())) {
+            if (StringUtils.equals(classQualifiedName, testMethod.getTestClass().getQualifiedName())
+                    && StringUtils.equals(methodSimpleName, testMethod.getSimpleName())) {
                 result.add(testMethod);
             }
         }

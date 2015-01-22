@@ -100,7 +100,7 @@ public class AdditionalTestDocsSetter {
         newMethod.setTestClass(testClass);
         testClass.addTestMethod(newMethod);
         newMethod.setKey(additionalTestDocKey(testDoc.getQualifiedName()));
-        newMethod.setQualifiedName(testDoc.getQualifiedName());
+        newMethod.setSimpleName(testDoc.getSimpleName());
         newMethod.setTestDoc(testDoc.getTestDoc());
         subMethodTable.addTestMethod(newMethod);
         return newMethod;

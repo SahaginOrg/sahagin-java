@@ -5,7 +5,7 @@ import org.sahagin.runlib.external.CaptureStyle;
 // TODO cannot handle overloaded method
 public class AdditionalMethodTestDoc {
     private String classQualifiedName;
-    private String qualifiedName;
+    private String simpleName;
     private String testDoc;
     private CaptureStyle captureStyle = CaptureStyle.getDefault();
 
@@ -18,22 +18,19 @@ public class AdditionalMethodTestDoc {
     }
 
     public String getSimpleName() {
-        if (qualifiedName == null) {
-            return null;
-        }
-        int lastIndex = qualifiedName.lastIndexOf("."); // TODO name separator is always dot ??
-        if (lastIndex == -1) {
-            return qualifiedName;
-        }
-        return qualifiedName.substring(lastIndex + 1);
+        return simpleName;
+    }
+
+    public void setSimpleName(String simpleName) {
+        this.simpleName = simpleName;
     }
 
     public String getQualifiedName() {
-        return qualifiedName;
-    }
-
-    public void setQualifiedName(String qualifiedName) {
-        this.qualifiedName = qualifiedName;
+        if (classQualifiedName == null || simpleName == null) {
+            return simpleName;
+        } else {
+            return classQualifiedName + "." + simpleName;
+        }
     }
 
     public String getTestDoc() {

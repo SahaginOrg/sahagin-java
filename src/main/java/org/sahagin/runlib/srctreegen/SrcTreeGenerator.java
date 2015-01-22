@@ -101,8 +101,8 @@ public class SrcTreeGenerator {
         if (pair.getLeft() != null) {
             return pair;
         }
-        AdditionalMethodTestDoc additional
-        = additionalTestDocs.getMethodTestDoc(ASTUtils.qualifiedMethodName(method));
+        AdditionalMethodTestDoc additional = additionalTestDocs.getMethodTestDoc(
+                method.getDeclaringClass().getQualifiedName(), method.getName());
         if (additional != null) {
             return Pair.of(additional.getTestDoc(), additional.getCaptureStyle());
         }
@@ -181,7 +181,7 @@ public class SrcTreeGenerator {
 
             TestMethod testMethod = new TestMethod();
             testMethod.setKey(methodBinding.getKey());
-            testMethod.setQualifiedName(ASTUtils.qualifiedMethodName(methodBinding));
+            testMethod.setSimpleName(methodBinding.getName());
             Pair<String, CaptureStyle> pair = getTestDoc(methodBinding);
             if (pair.getLeft() != null) {
                 // pair is null if the root method does not have TestDoc annotation
@@ -276,7 +276,7 @@ public class SrcTreeGenerator {
 
             TestMethod testMethod = new TestMethod();
             testMethod.setKey(methodBinding.getKey());
-            testMethod.setQualifiedName(ASTUtils.qualifiedMethodName(methodBinding));
+            testMethod.setSimpleName(methodBinding.getName());
             Pair<String, CaptureStyle> pair = getTestDoc(methodBinding);
             testMethod.setTestDoc(pair.getLeft());
             testMethod.setCaptureStyle(pair.getRight());

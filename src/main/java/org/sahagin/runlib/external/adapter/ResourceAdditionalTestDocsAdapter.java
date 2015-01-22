@@ -97,11 +97,11 @@ implements AdditionalTestDocsAdapter {
     protected final void methodAdd(String classQualifiedName,
             String methodSimpleName, CaptureStyle captureStyle) {
         AdditionalMethodTestDoc methodTestDocInstance = new AdditionalMethodTestDoc();
-        String methodQualifiedName = classQualifiedName + "." + methodSimpleName;
         methodTestDocInstance.setClassQualifiedName(classQualifiedName);
-        methodTestDocInstance.setQualifiedName(methodQualifiedName);
+        methodTestDocInstance.setSimpleName(methodSimpleName);
         methodTestDocInstance.setCaptureStyle(captureStyle);
         String testDoc = ""; // set empty string if no locale data is found
+        String methodQualifiedName = classQualifiedName + "." + methodSimpleName;
         for (Locale locale : locales.getLocales()) {
             Map<String, Object> map = localeMethodYamlObjMap.get(locale);
             if (map == null) {

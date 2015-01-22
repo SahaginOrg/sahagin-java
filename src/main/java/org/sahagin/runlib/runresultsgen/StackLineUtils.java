@@ -3,6 +3,7 @@ package org.sahagin.runlib.runresultsgen;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.sahagin.share.runresults.StackLine;
 import org.sahagin.share.srctree.SrcTree;
 import org.sahagin.share.srctree.TestMethod;
@@ -24,11 +25,12 @@ class StackLineUtils {
         return false;
     }
 
-    // returns the TestMethod whose name matches to methodQualifiedName
+    // returns the TestMethod whose name matches to classQualifiedName and methodSimpleName
     // and codeBody locates between methodDeclareStartLine and methodDeclareEndLine
     private static TestMethod getTestMethod(TestMethodTable table,
-            String methodQualifiedName, int methodDeclareStartLine, int methodDeclareEndLine) {
-        List<TestMethod> nameMethods = table.getByQualifiedName(methodQualifiedName);
+            String classQualifiedName, String methodSimpleName,
+            int methodDeclareStartLine, int methodDeclareEndLine) {
+        List<TestMethod> nameMethods = table.getByName(classQualifiedName, methodSimpleName);
         for (TestMethod method : nameMethods) {
             if (methodLineMatches(method, methodDeclareStartLine, methodDeclareEndLine)) {
                 return method;
@@ -37,17 +39,18 @@ class StackLineUtils {
         return null;
     }
 
-    // returns the TestMethod whose name matches to methodQualifiedName
+    // returns the TestMethod whose name matches to classQualifiedName and methodSimpleName
     // and codeBody locates between methodDeclareStartLine and methodDeclareEndLine
     public static TestMethod getTestMethod(SrcTree srcTree,
-            String methodQualifiedName, int methodDeclareStartLine, int methodDeclareEndLine) {
+            String classQualifiedName, String methodSimpleName,
+            int methodDeclareStartLine, int methodDeclareEndLine) {
         TestMethod rootMethod = getTestMethod(srcTree.getRootMethodTable(),
-                methodQualifiedName, methodDeclareStartLine, methodDeclareEndLine);
+                classQualifiedName, methodSimpleName, methodDeclareStartLine, methodDeclareEndLine);
         if (rootMethod != null) {
             return rootMethod;
         }
         TestMethod subMethod = getTestMethod(srcTree.getSubMethodTable(),
-                methodQualifiedName, methodDeclareStartLine, methodDeclareEndLine);
+                classQualifiedName, methodSimpleName, methodDeclareStartLine, methodDeclareEndLine);
         if (subMethod != null) {
             return subMethod;
         }
@@ -61,7 +64,7 @@ class StackLineUtils {
             TestMethodTable rootMethodTable, StackTraceElement[] currentStackTrace) {
         for (StackTraceElement element : currentStackTrace) {
             List<TestMethod> rootMethods
-            = rootMethodTable.getByQualifiedName(element.getClassName() + "." + element.getMethodName());
+            = rootMethodTable.getByName(element.getClassName(), element.getMethodName());
             if (rootMethods.size() > 0) {
                 assert rootMethods.size() == 1;
                 return rootMethods.get(0);
@@ -72,11 +75,11 @@ class StackLineUtils {
 
     // return null if not found
     private static StackLine getStackLine(
-            TestMethodTable table, String methodQualifiedName, int line) {
+            TestMethodTable table, String classQualifiedName, String methodSimpleName, int line) {
         if (line <= 0) {
             return null; // 0 or negative line number never matches
         }
-        List<TestMethod> nameMethods = table.getByQualifiedName(methodQualifiedName);
+        List<TestMethod> nameMethods = table.getByName(classQualifiedName, methodSimpleName);
         for (TestMethod method : nameMethods) {
             for (int i = 0; i < method.getCodeBody().size(); i++) {
                 CodeLine codeLine = method.getCodeBody().get(i);
@@ -94,12 +97,15 @@ class StackLineUtils {
     }
 
     // null means method does not exists in srcTree
-    private static StackLine getStackLine(SrcTree srcTree, String methodQualifiedName, int line) {
-        StackLine rootStackLine = getStackLine(srcTree.getRootMethodTable(), methodQualifiedName, line);
+    private static StackLine getStackLine(SrcTree srcTree,
+            String classQualifiedName, String methodSimpleName, int line) {
+        StackLine rootStackLine = getStackLine(
+                srcTree.getRootMethodTable(), classQualifiedName, methodSimpleName, line);
         if (rootStackLine != null) {
             return rootStackLine;
         }
-        StackLine subStackLine = getStackLine(srcTree.getSubMethodTable(), methodQualifiedName, line);
+        StackLine subStackLine = getStackLine(
+                srcTree.getSubMethodTable(), classQualifiedName, methodSimpleName, line);
         if (subStackLine != null) {
             return subStackLine;
         }
@@ -107,8 +113,8 @@ class StackLineUtils {
     }
 
     private static StackLine getStackLine(SrcTree srcTree, StackTraceElement element) {
-        return getStackLine(srcTree,
-                element.getClassName() + "." + element.getMethodName(), element.getLineNumber());
+        return getStackLine(
+                srcTree, element.getClassName(), element.getMethodName(), element.getLineNumber());
     }
 
     public static List<StackLine> getStackLines(SrcTree srcTree, StackTraceElement[] elements) {
@@ -125,14 +131,16 @@ class StackLineUtils {
     // line for hookedMethodName, hookedLine will be replaced to originalLine
     public static List<StackLine> getStackLinesReplacingActualLine(
             SrcTree srcTree, StackTraceElement[] elements,
-            String hoookedMethodName, int hookedLine, int originalLine) {
+            String hookedClassQualifiedName, String hookedMethodSimpleName,
+            int hookedLine, int originalLine) {
         List<StackLine> stackLines = new ArrayList<StackLine>(elements.length);
         for (StackTraceElement element : elements) {
-            String methodQualifiedName = element.getClassName() + "." + element.getMethodName();
             StackLine stackLine;
-            if (methodQualifiedName.equals(hoookedMethodName)
+            if (StringUtils.equals(element.getClassName(), hookedClassQualifiedName)
+                    && StringUtils.equals(element.getMethodName(), hookedMethodSimpleName)
                     && element.getLineNumber() == hookedLine) {
-                stackLine = getStackLine(srcTree, methodQualifiedName, originalLine);
+                stackLine = getStackLine(srcTree,
+                        hookedClassQualifiedName, hookedMethodSimpleName, originalLine);
             } else {
                 stackLine = getStackLine(srcTree, element);
             }

@@ -23,9 +23,9 @@ public class AdapterContainerTest {
         AdditionalTestDocs testDocs
         = AdapterContainer.globalInstance().getAdditionalTestDocs();
         AdditionalMethodTestDoc assertThatTestDoc
-        = testDocs.getMethodTestDoc("org.junit.Assert.assertThat");
+        = testDocs.getMethodTestDoc("org.junit.Assert", "assertThat");
         AdditionalMethodTestDoc clickTestDoc
-        = testDocs.getMethodTestDoc("org.openqa.selenium.WebElement.click");
+        = testDocs.getMethodTestDoc("org.openqa.selenium.WebElement", "click");
         assertThat(assertThatTestDoc.getCaptureStyle(), is(CaptureStyle.THIS_LINE));
         assertThat(assertThatTestDoc.getTestDoc(), is("check that '{0}' {1}"));
         assertThat(clickTestDoc.getTestDoc(), is("click {this}"));
@@ -40,9 +40,9 @@ public class AdapterContainerTest {
         AdditionalTestDocs testDocs
         = AdapterContainer.globalInstance().getAdditionalTestDocs();
         AdditionalMethodTestDoc assertThatTestDoc
-        = testDocs.getMethodTestDoc("org.junit.Assert.assertThat");
+        = testDocs.getMethodTestDoc("org.junit.Assert", "assertThat");
         AdditionalMethodTestDoc clickTestDoc
-        = testDocs.getMethodTestDoc("org.openqa.selenium.WebElement.click");
+        = testDocs.getMethodTestDoc("org.openqa.selenium.WebElement", "click");
         assertThat(assertThatTestDoc.getCaptureStyle(), is(CaptureStyle.THIS_LINE));
         assertThat(assertThatTestDoc.getTestDoc(), is("「{0}」が{1}ことをチェック"));
         assertThat(clickTestDoc.getTestDoc(), is("{this}をクリック"));

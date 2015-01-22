@@ -84,7 +84,7 @@ public class TestClass implements YamlConvertible {
         Map<String, Object> result = new HashMap<String, Object>(8);
         result.put("type", getType());
         result.put("key", key);
-        result.put("name", qualifiedName);
+        result.put("qname", qualifiedName);
         result.put("testDoc", testDoc);
         result.put("methodKeys", testMethodKeys);
         return result;
@@ -95,7 +95,7 @@ public class TestClass implements YamlConvertible {
             throws YamlConvertException {
         YamlUtils.strValueEqualsCheck(yamlObject, "type", getType());
         key = YamlUtils.getStrValue(yamlObject, "key");
-        qualifiedName = YamlUtils.getStrValue(yamlObject, "name");
+        qualifiedName = YamlUtils.getStrValue(yamlObject, "qname");
         testDoc = YamlUtils.getStrValue(yamlObject, "testDoc");
         testMethodKeys = YamlUtils.getStrListValue(yamlObject, "methodKeys");
         testMethods.clear();

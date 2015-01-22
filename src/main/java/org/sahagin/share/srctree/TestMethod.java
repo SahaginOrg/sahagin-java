@@ -14,8 +14,7 @@ import org.sahagin.share.yaml.YamlConvertible;
 public class TestMethod implements YamlConvertible {
     private String testClassKey;
     private TestClass testClass;    private String key;
-    // qualifiedName is not necessarily unique
-    private String qualifiedName;
+    private String simpleName;
     private String testDoc;
     private CaptureStyle captureStyle = CaptureStyle.getDefault();
     private List<String> argVariables = new ArrayList<String>(4);
@@ -46,22 +45,19 @@ public class TestMethod implements YamlConvertible {
     }
 
     public String getSimpleName() {
-        if (qualifiedName == null) {
-            return null;
-        }
-        int lastIndex = qualifiedName.lastIndexOf("."); // TODO name separator is always dot ??
-        if (lastIndex == -1) {
-            return qualifiedName;
-        }
-        return qualifiedName.substring(lastIndex + 1);
+        return simpleName;
+    }
+
+    public void setSimpleName(String simpleName) {
+        this.simpleName = simpleName;
     }
 
     public String getQualifiedName() {
-        return qualifiedName;
-    }
-
-    public void setQualifiedName(String qualifiedName) {
-        this.qualifiedName = qualifiedName;
+        if (testClass == null || simpleName == null) {
+            return simpleName;
+        } else {
+            return testClass.getQualifiedName() + "." + simpleName;
+        }
     }
 
     public String getTestDoc() {
@@ -104,7 +100,7 @@ public class TestMethod implements YamlConvertible {
         Map<String, Object> result = new HashMap<String, Object>(8);
         result.put("classKey", testClassKey);
         result.put("key", key);
-        result.put("name", qualifiedName);
+        result.put("name", simpleName);
         result.put("testDoc", testDoc);
         result.put("capture", captureStyle.getValue());
         result.put("argVariables", argVariables);
@@ -118,7 +114,7 @@ public class TestMethod implements YamlConvertible {
         testClass = null;
         testClassKey = YamlUtils.getStrValue(yamlObject, "classKey");
         key = YamlUtils.getStrValue(yamlObject, "key");
-        qualifiedName = YamlUtils.getStrValue(yamlObject, "name");
+        simpleName = YamlUtils.getStrValue(yamlObject, "name");
         testDoc = YamlUtils.getStrValue(yamlObject, "testDoc");
         // captureStyle is not mandatory
         captureStyle = YamlUtils.getCaptureStyleValue(yamlObject, "capture", true);

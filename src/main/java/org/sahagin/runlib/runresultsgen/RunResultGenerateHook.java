@@ -151,24 +151,27 @@ public class RunResultGenerateHook {
         logger.info("afterRootMethodHook: end");
     }
 
-    public static void beforeRootCodeBodyHook(String methodName, int line, int actualInsertedLine) {
-        beforeCodeBodyHook(methodName, line, actualInsertedLine);
+    public static void beforeRootCodeBodyHook(String classQualifiedName, String methodSimpleName,
+            int line, int actualInsertedLine) {
+        beforeCodeBodyHook(classQualifiedName, methodSimpleName, line, actualInsertedLine);
     }
 
-    public static void beforeSubCodeBodyHook(String methodName, int line, int actualInsertedLine) {
-        beforeCodeBodyHook(methodName, line, actualInsertedLine);
+    public static void beforeSubCodeBodyHook(String classQualifiedName, String methodSimpleName,
+            int line, int actualInsertedLine) {
+        beforeCodeBodyHook(classQualifiedName, methodSimpleName, line, actualInsertedLine);
     }
 
-    private static void beforeCodeBodyHook(String methodName, int line, int actualInsertedLine) {
+    private static void beforeCodeBodyHook(String classQualifiedName, String methodSimpleName,
+            int line, int actualInsertedLine) {
         initializedCheck();
         if (currentRunResult == null) {
             return; // maybe called outside of the root method
         }
 
-        logger.info("beforeCodeBodyHook: start: " + methodName + ": " + line);
+        logger.info("beforeCodeBodyHook: start: " + classQualifiedName + "." + methodSimpleName + ": " + line);
         List<StackLine> stackLines = StackLineUtils.getStackLinesReplacingActualLine(
                 srcTree, Thread.currentThread().getStackTrace(),
-                methodName, actualInsertedLine, line);
+                classQualifiedName, methodSimpleName, actualInsertedLine, line);
         if (stackLines.size() == 0) {
             throw new RuntimeException("implementation error");
         }

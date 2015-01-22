@@ -2,8 +2,8 @@ subMethodTable:
   methods:
   - testDoc: 'Doc: defaultMethod'
     classKey: "*TestMain$InterfaceWithDefault;"
-    name: "*.TestMain.InterfaceWithDefault.defaultMethod"
-  - name: "*.TestMain.print"
+    name: "defaultMethod"
+  - name: "print"
 rootMethodTable:
   methods:
   - codeBody:
@@ -18,14 +18,14 @@ rootMethodTable:
         methodKey: "*TestMain$InterfaceWithDefault;.defaultMethod()V"
         original: instance.defaultMethod();
         thisInstance: {original: instance, type: unknown}
-    name: "*.TestMain.defaultInterfaceTest"
+    name: "defaultInterfaceTest"
   - codeBody:
     - code: {original: List<String> slist=new ArrayList<String>(2);, type: unknown}
     - code: {original: slist.add("a");, type: unknown}
     - code: {original: slist.stream().forEach(s -> System.out.println(s));, type: unknown}
     - code: {original: slist.stream().forEach(s -> print(s));, type: unknown}
-    name: "*.TestMain.streamApiCallTest"
+    name: "streamApiCallTest"
 subClassTable:
   classes:
-  - name: "*.TestMain.InterfaceWithDefault"
+  - qname: "*.TestMain.InterfaceWithDefault"
     methodKeys: ["*TestMain$InterfaceWithDefault;.defaultMethod()V"]

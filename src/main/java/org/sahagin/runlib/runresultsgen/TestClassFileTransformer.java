@@ -36,10 +36,6 @@ public class TestClassFileTransformer implements ClassFileTransformer {
         this.srcTree = srcTree;
     }
 
-    private String qualifiedName(CtMethod method) {
-        return method.getDeclaringClass().getName() + "." + method.getName();
-    }
-
     private int declareStartLine(CtMethod method) {
         return method.getMethodInfo().getLineNumber(0);
     }
@@ -63,9 +59,10 @@ public class TestClassFileTransformer implements ClassFileTransformer {
             throw new RuntimeException(e);
         }
         // TODO method overload is not supported
-        String methodQualifiedName = qualifiedName(method);
+        String classQualifiedName = method.getDeclaringClass().getName();
+        String methodSimpleName = method.getName();
         return AdapterContainer.globalInstance().getAdditionalTestDocs().getMethodTestDoc(
-                methodQualifiedName) != null;
+                classQualifiedName, methodSimpleName) != null;
     }
 
     private List<CtMethod> allSubMethods(CtClass ctClass) {
@@ -166,9 +163,12 @@ public class TestClassFileTransformer implements ClassFileTransformer {
                     logger.log(Level.INFO, "", e);
                     return null;
                 }
-                String subMethodName = qualifiedName(ctSubMethod);
+
+                String subClassQualifiedName = ctSubMethod.getDeclaringClass().getName();
+                String subMethodSimpleName = ctSubMethod.getName();
                 TestMethod subMethod = StackLineUtils.getTestMethod(
-                        srcTree, subMethodName, methodDeclaredStartLine, methodDeclaredEndLine);
+                        srcTree, subClassQualifiedName, subMethodSimpleName,
+                        methodDeclaredStartLine, methodDeclaredEndLine);
                 if (subMethod == null) {
                     continue;
                 }
@@ -192,8 +192,8 @@ public class TestClassFileTransformer implements ClassFileTransformer {
                     // (the code inserted by the insertAt method is inserted just before the target line)
                     int actualInsertedLine = ctSubMethod.insertAt(codeLine.getEndLine() + 1, false, null);
                     ctSubMethod.insertAt(codeLine.getEndLine() + 1,
-                            String.format("%s%s.beforeSubCodeBodyHook(\"%s\", %d, %d);",
-                                    initializeSrc, hookClassName, subMethodName,
+                            String.format("%s%s.beforeSubCodeBodyHook(\"%s\", \"%s\", %d, %d);",
+                                    initializeSrc, hookClassName, subClassQualifiedName, subMethodSimpleName,
                                     codeLine.getStartLine(), actualInsertedLine));
                     transformed = true;
                 }
@@ -204,13 +204,14 @@ public class TestClassFileTransformer implements ClassFileTransformer {
                 if (ctRootMethod.isEmpty()) {
                     continue; // cannot hook empty method
                 }
+                String rootClassQualifiedName = ctRootMethod.getDeclaringClass().getName();
+                String rootMethodSimpleName = ctRootMethod.getName();
                 TestMethod rootMethod = StackLineUtils.getTestMethod(
-                        srcTree, qualifiedName(ctRootMethod),
+                        srcTree, rootClassQualifiedName, rootMethodSimpleName,
                         declareStartLine(ctRootMethod), declareEndLine(ctRootMethod));
                 if (rootMethod == null) {
                     continue;
                 }
-                String rootMethodName = qualifiedName(ctRootMethod);
                 for (int i = 0; i < rootMethod.getCodeBody().size(); i++) {
                     CodeLine codeLine = rootMethod.getCodeBody().get(i);
                     if (i + 1 < rootMethod.getCodeBody().size()) {
@@ -232,8 +233,8 @@ public class TestClassFileTransformer implements ClassFileTransformer {
                     // (the code inserted by the insertAt method is inserted just before the target line)
                     int actualInsertedLine = ctRootMethod.insertAt(codeLine.getEndLine() + 1, false, null);
                     ctRootMethod.insertAt(codeLine.getEndLine() + 1,
-                            String.format("%s%s.beforeRootCodeBodyHook(\"%s\", %d, %d);",
-                                    initializeSrc, hookClassName, rootMethodName,
+                            String.format("%s%s.beforeRootCodeBodyHook(\"%s\", \"%s\", %d, %d);",
+                                    initializeSrc, hookClassName, rootClassQualifiedName, rootMethodSimpleName,
                                     codeLine.getStartLine(), actualInsertedLine));
                 }
 

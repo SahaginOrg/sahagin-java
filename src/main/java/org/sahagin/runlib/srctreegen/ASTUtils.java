@@ -265,11 +265,4 @@ public class ASTUtils {
         return getTestDoc(method.getAnnotations(), locales);
     }
 
-    // method name with qualified class name
-    public static String qualifiedMethodName(IMethodBinding method) {
-        String methodName = method.getName();
-        String className = method.getDeclaringClass().getQualifiedName();
-        return className + "." + methodName;
-    }
-
 }
