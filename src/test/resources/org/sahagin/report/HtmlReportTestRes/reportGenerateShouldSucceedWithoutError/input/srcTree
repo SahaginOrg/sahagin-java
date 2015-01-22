@@ -1,0 +1,111 @@
+subMethodTable:
+  methods:
+  - testDoc: 'Doc: subMehtod'
+    classKey: Lsample/SampleTest;
+    codeBody:
+    - endLine: 35
+      startLine: 35
+      code: {original: System.out.println("ZZZ");, type: unknown}
+    name: sample.SampleTest.subMethod
+    capture: thisLine
+    argVariables: []
+    key: Lsample/SampleTest;.subMethod()V
+  - testDoc: go to the page '{0}'
+    classKey: _Additional_org.openqa.selenium.WebDriver
+    codeBody: []
+    name: org.openqa.selenium.WebDriver.get
+    capture: thisLine
+    argVariables: []
+    key: _Additional_org.openqa.selenium.WebDriver.get
+  - testDoc: check that '{0}' {1}
+    classKey: _Additional_org.junit.Assert
+    codeBody: []
+    name: org.junit.Assert.assertThat
+    capture: thisLine
+    argVariables: []
+    key: _Additional_org.junit.Assert.assertThat
+  - testDoc: equals to '{0}'
+    classKey: _Additional_org.hamcrest.CoreMatchers
+    codeBody: []
+    name: org.hamcrest.CoreMatchers.is
+    capture: thisLine
+    argVariables: []
+    key: _Additional_org.hamcrest.CoreMatchers.is
+rootMethodTable:
+  methods:
+  - testDoc: null
+    classKey: Lsample/SampleTest;
+    codeBody:
+    - endLine: 24
+      startLine: 24
+      code:
+        args: []
+        methodKey: Lsample/SampleTest;.subMethod()V
+        original: subMethod();
+        type: method
+    name: sample.SampleTest.shouldSucceed
+    capture: thisLine
+    argVariables: []
+    type: method
+    key: Lsample/SampleTest;.shouldSucceed()V
+  - testDoc: null
+    classKey: Lsample/SampleTest;
+    codeBody:
+    - endLine: 29
+      startLine: 29
+      code:
+        args:
+        - {original: '"****.com"', type: string, value: '****.com'}
+        methodKey: _Additional_org.openqa.selenium.WebDriver.get
+        original: wd.get("****.com");
+        type: method
+        thisInstance: {original: wd, type: unknown}
+    - endLine: 30
+      startLine: 30
+      code:
+        args:
+        - {original: '"A"', type: string, value: A}
+        - args:
+          - {original: '"B"', type: string, value: B}
+          methodKey: _Additional_org.hamcrest.CoreMatchers.is
+          original: is("B")
+          type: method
+        methodKey: _Additional_org.junit.Assert.assertThat
+        original: assertThat("A",is("B"));
+        type: method
+    name: sample.SampleTest.shouldFail
+    capture: thisLine
+    argVariables: []
+    type: method
+    key: Lsample/SampleTest;.shouldFail()V
+rootClassTable:
+  classes:
+  - name: sample.SampleTest
+    testDoc: null
+    methodKeys: [Lsample/SampleTest;.shouldSucceed()V, Lsample/SampleTest;.shouldFail()V,
+      Lsample/SampleTest;.subMethod()V]
+    type: class
+    key: Lsample/SampleTest;
+formatVersion: 0.4
+subClassTable:
+  classes:
+  - name: org.openqa.selenium.WebDriver
+    testDoc: null
+    methodKeys: []
+    type: class
+    key: _Additional_org.openqa.selenium.WebDriver
+  - name: org.junit.Assert
+    testDoc: null
+    methodKeys: []
+    type: class
+    key: _Additional_org.junit.Assert
+  - name: org.hamcrest.CoreMatchers
+    testDoc: null
+    methodKeys: []
+    type: class
+    key: _Additional_org.hamcrest.CoreMatchers
+  - name: org.hamcrest.core.Is
+    testDoc: null
+    methodKeys: []
+    type: class
+    key: _Additional_org.hamcrest.core.Is
