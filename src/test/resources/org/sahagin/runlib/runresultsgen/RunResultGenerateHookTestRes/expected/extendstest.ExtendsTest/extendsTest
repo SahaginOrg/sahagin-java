@@ -2,16 +2,16 @@ runFailures: []
 lineScreenCaptures:
 - path: "*001.png"
   stackLines:
-  - {codeBodyIndex: 0, functionKey: "*ExtendsTest;.extendsTest()V"}
+  - {codeBodyIndex: 0, methodKey: "*ExtendsTest;.extendsTest()V"}
 - path: "*002.png"
   stackLines:
-  - {codeBodyIndex: 2, functionKey: "*ExtendsTest;.extendsTest()V"}
+  - {codeBodyIndex: 2, methodKey: "*ExtendsTest;.extendsTest()V"}
 - path: "*003.png"
   stackLines:
-  - {codeBodyIndex: 3, functionKey: "*ExtendsTest;.extendsTest()V"}
+  - {codeBodyIndex: 3, methodKey: "*ExtendsTest;.extendsTest()V"}
 - path: "*004.png"
   stackLines:
-  - {codeBodyIndex: 4, functionKey: "*ExtendsTest;.extendsTest()V"}
+  - {codeBodyIndex: 4, methodKey: "*ExtendsTest;.extendsTest()V"}
 - path: "*005.png"
   stackLines:
-  - {codeBodyIndex: 7, functionKey: "*ExtendsTest;.extendsTest()V"}
+  - {codeBodyIndex: 7, methodKey: "*ExtendsTest;.extendsTest()V"}

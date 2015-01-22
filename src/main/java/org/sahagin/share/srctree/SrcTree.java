@@ -7,7 +7,6 @@ import org.sahagin.share.CommonUtils;
 import org.sahagin.share.IllegalDataStructureException;
 import org.sahagin.share.srctree.code.Code;
 import org.sahagin.share.srctree.code.CodeLine;
-import org.sahagin.share.srctree.code.SubFunctionInvoke;
 import org.sahagin.share.srctree.code.SubMethodInvoke;
 import org.sahagin.share.yaml.YamlUtils;
 import org.sahagin.share.yaml.YamlConvertException;
@@ -15,15 +14,14 @@ import org.sahagin.share.yaml.YamlConvertible;
 
 public class SrcTree implements YamlConvertible {
     private static final String MSG_CLASS_NOT_FOUND = "class not found; key: %s";
-    private static final String MSG_FUNCTION_NOT_FOUND = "function not found; key: %s";
-    private static final String MSG_NOT_METHOD = "function \"%s\" is not a method";
+    private static final String MSG_METHOD_NOT_FOUND = "method not found; key: %s";
     private static final String MSG_SRC_TREE_FORMAT_MISMATCH
     = "expected formatVersion is \"%s\", but actual is \"%s\"";
 
     private TestClassTable rootClassTable;
-    private TestFuncTable rootFuncTable;
+    private TestMethodTable rootMethodTable;
     private TestClassTable subClassTable;
-    private TestFuncTable subFuncTable;
+    private TestMethodTable subMethodTable;
 
     public TestClassTable getRootClassTable() {
         return rootClassTable;
@@ -33,12 +31,12 @@ public class SrcTree implements YamlConvertible {
         this.rootClassTable = rootClassTable;
     }
 
-    public TestFuncTable getRootFuncTable() {
-        return rootFuncTable;
+    public TestMethodTable getRootMethodTable() {
+        return rootMethodTable;
     }
 
-    public void setRootFuncTable(TestFuncTable rootFuncTable) {
-        this.rootFuncTable = rootFuncTable;
+    public void setRootMethodTable(TestMethodTable rootMethodTable) {
+        this.rootMethodTable = rootMethodTable;
     }
 
     public TestClassTable getSubClassTable() {
@@ -49,19 +47,19 @@ public class SrcTree implements YamlConvertible {
         this.subClassTable = subClassTable;
     }
 
-    public TestFuncTable getSubFuncTable() {
-        return subFuncTable;
+    public TestMethodTable getSubMethodTable() {
+        return subMethodTable;
     }
 
-    public void setSubFuncTable(TestFuncTable subFuncTable) {
-        this.subFuncTable = subFuncTable;
+    public void setSubMethodTable(TestMethodTable subMethodTable) {
+        this.subMethodTable = subMethodTable;
     }
 
     public void sort() {
         rootClassTable.sort();
-        rootFuncTable.sort();
+        rootMethodTable.sort();
         subClassTable.sort();
-        subFuncTable.sort();
+        subMethodTable.sort();
     }
 
     @Override
@@ -72,23 +70,23 @@ public class SrcTree implements YamlConvertible {
         if (rootClassTable != null) {
             rootClassTableYamlObj = rootClassTable.toYamlObject();
         }
-        Map<String, Object> rootFuncTableYamlObj = null;
-        if (rootFuncTable != null) {
-            rootFuncTableYamlObj = rootFuncTable.toYamlObject();
+        Map<String, Object> rootMethodTableYamlObj = null;
+        if (rootMethodTable != null) {
+            rootMethodTableYamlObj = rootMethodTable.toYamlObject();
         }
         Map<String, Object> subClassTableYamlObj = null;
         if (subClassTable != null) {
             subClassTableYamlObj = subClassTable.toYamlObject();
         }
-        Map<String, Object> subFuncTableYamlObj = null;
-        if (subFuncTable != null) {
-            subFuncTableYamlObj = subFuncTable.toYamlObject();
+        Map<String, Object> subMethodTableYamlObj = null;
+        if (subMethodTable != null) {
+            subMethodTableYamlObj = subMethodTable.toYamlObject();
         }
 
         result.put("rootClassTable", rootClassTableYamlObj);
-        result.put("rootFuncTable", rootFuncTableYamlObj);
+        result.put("rootMethodTable", rootMethodTableYamlObj);
         result.put("subClassTable", subClassTableYamlObj);
-        result.put("subFuncTable", subFuncTableYamlObj);
+        result.put("subMethodTable", subMethodTableYamlObj);
         result.put("formatVersion", CommonUtils.formatVersion());
 
         return result;
@@ -98,29 +96,29 @@ public class SrcTree implements YamlConvertible {
     public void fromYamlObject(Map<String, Object> yamlObject)
             throws YamlConvertException {
         rootClassTable = null;
-        rootFuncTable = null;
+        rootMethodTable = null;
         subClassTable = null;
-        subFuncTable = null;
+        subMethodTable = null;
 
         Map<String, Object> rootClassTableYamlObj = YamlUtils.getYamlObjectValue(yamlObject, "rootClassTable");
         if (rootClassTableYamlObj != null) {
             rootClassTable = new TestClassTable();
             rootClassTable.fromYamlObject(rootClassTableYamlObj);
         }
-        Map<String, Object> rootFuncTableYamlObj = YamlUtils.getYamlObjectValue(yamlObject, "rootFuncTable");
-        if (rootFuncTableYamlObj != null) {
-            rootFuncTable = new TestFuncTable();
-            rootFuncTable.fromYamlObject(rootFuncTableYamlObj);
+        Map<String, Object> rootMethodTableYamlObj = YamlUtils.getYamlObjectValue(yamlObject, "rootMethodTable");
+        if (rootMethodTableYamlObj != null) {
+            rootMethodTable = new TestMethodTable();
+            rootMethodTable.fromYamlObject(rootMethodTableYamlObj);
         }
         Map<String, Object> subClassTableYamlObj = YamlUtils.getYamlObjectValue(yamlObject, "subClassTable");
         if (subClassTableYamlObj != null) {
             subClassTable = new TestClassTable();
             subClassTable.fromYamlObject(subClassTableYamlObj);
         }
-        Map<String, Object> subFuncTableYamlObj = YamlUtils.getYamlObjectValue(yamlObject, "subFuncTable");
-        if (subFuncTableYamlObj != null) {
-            subFuncTable = new TestFuncTable();
-            subFuncTable.fromYamlObject(subFuncTableYamlObj);
+        Map<String, Object> subMethodTableYamlObj = YamlUtils.getYamlObjectValue(yamlObject, "subMethodTable");
+        if (subMethodTableYamlObj != null) {
+            subMethodTable = new TestMethodTable();
+            subMethodTable.fromYamlObject(subMethodTableYamlObj);
         }
 
         String formatVersion = YamlUtils.getStrValue(yamlObject, "formatVersion");
@@ -148,37 +146,24 @@ public class SrcTree implements YamlConvertible {
         throw new IllegalDataStructureException(String.format(MSG_CLASS_NOT_FOUND, testClassKey));
     }
 
-    public TestFunction getTestFunctionByKey(String testFunctionKey)
+    public TestMethod getTestMethodByKey(String testMethodKey)
             throws IllegalDataStructureException {
-        if (subFuncTable != null) {
-            TestFunction subFunc = subFuncTable.getByKey(testFunctionKey);
-            if (subFunc != null) {
-                return subFunc;
+        if (subMethodTable != null) {
+            TestMethod subMethod = subMethodTable.getByKey(testMethodKey);
+            if (subMethod != null) {
+                return subMethod;
             }
         }
-        if (rootFuncTable != null) {
-            TestFunction rootFunc = rootFuncTable.getByKey(testFunctionKey);
-            if (rootFunc != null) {
-                return rootFunc;
+        if (rootMethodTable != null) {
+            TestMethod rootMethod = rootMethodTable.getByKey(testMethodKey);
+            if (rootMethod != null) {
+                return rootMethod;
             }
         }
-        throw new IllegalDataStructureException(String.format(MSG_FUNCTION_NOT_FOUND, testFunctionKey));
+        throw new IllegalDataStructureException(String.format(MSG_METHOD_NOT_FOUND, testMethodKey));
     }
 
-    private TestMethod getTestMethodByKey(String testMethodKey) throws IllegalDataStructureException {
-        TestFunction testFunction = getTestFunctionByKey(testMethodKey);
-        if (!(testFunction instanceof TestMethod)) {
-            throw new IllegalDataStructureException(String.format(MSG_NOT_METHOD,
-                    testFunction.getQualifiedName()));
-        }
-        return (TestMethod) testFunction;
-    }
-
-    private void resolveTestClass(TestFunction testFunction) throws IllegalDataStructureException {
-        if (!(testFunction instanceof TestMethod)) {
-            return;
-        }
-        TestMethod testMethod = (TestMethod) testFunction;
+    private void resolveTestClass(TestMethod testMethod) throws IllegalDataStructureException {
         testMethod.setTestClass(getTestClassByKey(testMethod.getTestClassKey()));
     }
 
@@ -190,21 +175,14 @@ public class SrcTree implements YamlConvertible {
         }
     }
 
-    private void resolveTestFunction(Code code) throws IllegalDataStructureException {
+    private void resolveTestMethod(Code code) throws IllegalDataStructureException {
         if (code instanceof SubMethodInvoke) {
             SubMethodInvoke invoke = (SubMethodInvoke) code;
             TestMethod testMethod = getTestMethodByKey(invoke.getSubMethodKey());
             invoke.setSubMethod(testMethod);
-            resolveTestFunction(invoke.getThisInstance());
+            resolveTestMethod(invoke.getThisInstance());
             for (Code arg : invoke.getArgs()) {
-                resolveTestFunction(arg);
-            }
-        } else if (code instanceof SubFunctionInvoke) {
-            SubFunctionInvoke invoke = (SubFunctionInvoke) code;
-            TestFunction testFunction = getTestFunctionByKey(invoke.getSubFunctionKey());
-            invoke.setSubFunction(testFunction);
-            for (Code arg : invoke.getArgs()) {
-                resolveTestFunction(arg);
+                resolveTestMethod(arg);
             }
         }
     }
@@ -222,19 +200,19 @@ public class SrcTree implements YamlConvertible {
                 resolveTestMethod(testClass);
             }
         }
-        if (rootFuncTable != null) {
-            for (TestFunction testFunction : rootFuncTable.getTestFunctions()) {
-                resolveTestClass(testFunction);
-                for (CodeLine codeLine : testFunction.getCodeBody()) {
-                    resolveTestFunction(codeLine.getCode());
+        if (rootMethodTable != null) {
+            for (TestMethod testMethod : rootMethodTable.getTestMethods()) {
+                resolveTestClass(testMethod);
+                for (CodeLine codeLine : testMethod.getCodeBody()) {
+                    resolveTestMethod(codeLine.getCode());
                 }
             }
         }
-        if (subFuncTable != null) {
-            for (TestFunction testFunction : subFuncTable.getTestFunctions()) {
-                resolveTestClass(testFunction);
-                for (CodeLine codeLine : testFunction.getCodeBody()) {
-                    resolveTestFunction(codeLine.getCode());
+        if (subMethodTable != null) {
+            for (TestMethod testMethod : subMethodTable.getTestMethods()) {
+                resolveTestClass(testMethod);
+                for (CodeLine codeLine : testMethod.getCodeBody()) {
+                    resolveTestMethod(codeLine.getCode());
                 }
             }
         }

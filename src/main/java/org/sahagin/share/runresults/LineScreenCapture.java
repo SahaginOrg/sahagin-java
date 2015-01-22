@@ -40,7 +40,7 @@ public class LineScreenCapture implements YamlConvertible {
         for (int i = 0; i < targetStackLines.size(); i++) {
             StackLine targetLine = targetStackLines.get(i);
             StackLine line = getStackLines().get(i);
-            if (!targetLine.getFunction().getKey().equals(line.getFunction().getKey())) {
+            if (!targetLine.getMethod().getKey().equals(line.getMethod().getKey())) {
                 return false;
             }
             if (targetLine.getCodeBodyIndex() != line.getCodeBodyIndex()) {

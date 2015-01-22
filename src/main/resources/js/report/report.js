@@ -252,12 +252,12 @@ function getSrcTree() {
  * @param {sahagin.Code} code
  * @returns {string}
  */
-function getFunctionKey(code) {
-  if (!(code instanceof sahagin.SubFunctionInvoke)) {
+function getMethodKey(code) {
+  if (!(code instanceof sahagin.SubMethodInvoke)) {
     return '';
   }
   var invoke = code;
-  return invoke.getSubFunctionKey();
+  return invoke.getSubMethodKey();
 }
 
 /**
@@ -265,29 +265,29 @@ function getFunctionKey(code) {
  * @param {Object} tr
  */
 function loadCodeBodyHiddenNode(tr) {
-  var trFuncKey = tr.attr("data-func-key")
-  if (trFuncKey == '') {
+  var trMethodKey = tr.attr("data-method-key")
+  if (trMethodKey == '') {
     return; // no need to load child nodes
   }  
   var srcTree = getSrcTree();
   var trTtId = getTrTtId(tr);
-  var testFunction = srcTree.getTestFunctionByKey(trFuncKey);
-  if (testFunction.getCodeBody().length == 0) {
+  var testMethod = srcTree.getTestMethodByKey(trMethodKey);
+  if (testMethod.getCodeBody().length == 0) {
     return; // no need to load child nodes
   }  
-  var parentFuncArgTestDocs = new Array();
-  var funcArgTestDocDivs = $("#funcArgTestDocs .hiddenFuncArgTestDoc[data-tt-id='" + trTtId + "']");
-  for (var i = 0; i < funcArgTestDocDivs.length; i++) {
-    parentFuncArgTestDocs.push(funcArgTestDocDivs.eq(i).text());
+  var parentMethodArgTestDocs = new Array();
+  var methodArgTestDocDivs = $("#methodArgTestDocs .hiddenMethodArgTestDoc[data-tt-id='" + trTtId + "']");
+  for (var i = 0; i < methodArgTestDocDivs.length; i++) {
+    parentMethodArgTestDocs.push(methodArgTestDocDivs.eq(i).text());
   }
 
   var childNodeHtml = '';
-  var funcArgTestDocHtml = "";
-  for (var i = 0; i < testFunction.getCodeBody().length; i++) {
-    var codeLine = testFunction.getCodeBody()[i];
+  var methodArgTestDocHtml = "";
+  for (var i = 0; i < testMethod.getCodeBody().length; i++) {
+    var codeLine = testMethod.getCodeBody()[i];
     var parentTtId = trTtId;
     var ttId = parentTtId + '_' + i.toString(10);
-    var funcKey = getFunctionKey(codeLine.getCode());
+    var methodKey = getMethodKey(codeLine.getCode());
     var errCompare = compareToErrTtId(ttId, sahagin.errLineTtId);
     var lineClass;
     if (errCompare == 0) {
@@ -301,29 +301,29 @@ function loadCodeBodyHiddenNode(tr) {
     if (pageTestDoc == null) {
       pageTestDoc = '-';
     }
-    var testDoc = sahagin.TestDocResolver.placeholderResolvedFuncTestDoc(
-        codeLine.getCode(), parentFuncArgTestDocs);
+    var testDoc = sahagin.TestDocResolver.placeholderResolvedMethodTestDoc(
+        codeLine.getCode(), parentMethodArgTestDocs);
     if (testDoc == null) {
       testDoc = '';
     }
     var original = codeLine.getCode().getOriginal();
     
     childNodeHtml = childNodeHtml + sahagin.CommonUtils.strFormat(
-      '<tr data-tt-id="{0}" data-tt-parent-id="{1}" data-func-key="{2}" class="{3}">'
+      '<tr data-tt-id="{0}" data-tt-parent-id="{1}" data-method-key="{2}" class="{3}">'
           + '<td>{4}</td><td>{5}</td><td>{6}</td></tr>',
-      ttId, parentTtId, funcKey, lineClass, pageTestDoc, testDoc, original);
+      ttId, parentTtId, methodKey, lineClass, pageTestDoc, testDoc, original);
     
-    var funcArgTestDocs = sahagin.TestDocResolver.placeholderResolvedFuncArgTestDocs(
-        codeLine.getCode(), parentFuncArgTestDocs);
-    for (var j = 0; j < funcArgTestDocs.length; j++) {
-      funcArgTestDocHtml = funcArgTestDocHtml + sahagin.CommonUtils.strFormat( 
-          '<div class= "hiddenFuncArgTestDoc" data-tt-id="{0}">{1}</div>',
-          ttId, funcArgTestDocs[j]);
+    var methodArgTestDocs = sahagin.TestDocResolver.placeholderResolvedMethodArgTestDocs(
+        codeLine.getCode(), parentMethodArgTestDocs);
+    for (var j = 0; j < methodArgTestDocs.length; j++) {
+      methodArgTestDocHtml = methodArgTestDocHtml + sahagin.CommonUtils.strFormat( 
+          '<div class= "hiddenMethodArgTestDoc" data-tt-id="{0}">{1}</div>',
+          ttId, methodArgTestDocs[j]);
     }
   }
   
-  // add funcArgTestDocs
-  $("#funcArgTestDocs").append(funcArgTestDocHtml);
+  // add methodArgTestDocs
+  $("#methodArgTestDocs").append(methodArgTestDocHtml);
   
   var trNode = $("#script_table").treetable("node", trTtId);
   $("#script_table").treetable("loadBranch", trNode, childNodeHtml);

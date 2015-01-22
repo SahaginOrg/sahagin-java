@@ -2,15 +2,15 @@ runFailures: []
 lineScreenCaptures:
 - path: "*001.png"
   stackLines:
-  - {codeBodyIndex: 0, functionKey: "*TestMain;.stepInCaptureTest()V"}
+  - {codeBodyIndex: 0, methodKey: "*TestMain;.stepInCaptureTest()V"}
 - path: "*002.png"
   stackLines:
-  - {codeBodyIndex: 0, functionKey: "*TestMain;.stepInCaptureMethod()V"}
-  - {codeBodyIndex: 1, functionKey: "*TestMain;.stepInCaptureTest()V"}
+  - {codeBodyIndex: 0, methodKey: "*TestMain;.stepInCaptureMethod()V"}
+  - {codeBodyIndex: 1, methodKey: "*TestMain;.stepInCaptureTest()V"}
 - path: "*003.png"
   stackLines:
-  - {codeBodyIndex: 1, functionKey: "*TestMain;.stepInCaptureMethod()V"}
-  - {codeBodyIndex: 1, functionKey: "*TestMain;.stepInCaptureTest()V"}
+  - {codeBodyIndex: 1, methodKey: "*TestMain;.stepInCaptureMethod()V"}
+  - {codeBodyIndex: 1, methodKey: "*TestMain;.stepInCaptureTest()V"}
 - path: "*004.png"
   stackLines:
-  - {codeBodyIndex: 1, functionKey: "*TestMain;.stepInCaptureTest()V"}
+  - {codeBodyIndex: 1, methodKey: "*TestMain;.stepInCaptureTest()V"}

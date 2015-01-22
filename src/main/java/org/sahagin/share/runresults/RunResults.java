@@ -7,31 +7,31 @@ import java.util.Map;
 
 import org.sahagin.share.IllegalDataStructureException;
 import org.sahagin.share.srctree.SrcTree;
-import org.sahagin.share.srctree.TestFunction;
+import org.sahagin.share.srctree.TestMethod;
 import org.sahagin.share.yaml.YamlUtils;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlConvertible;
 
 public class RunResults implements YamlConvertible {
-    private List<RootFuncRunResult> rootFuncRunResults = new ArrayList<RootFuncRunResult>(512);
+    private List<RootMethodRunResult> rootMethodRunResults = new ArrayList<RootMethodRunResult>(512);
 
-    public List<RootFuncRunResult> getRootFuncRunResults() {
-        return rootFuncRunResults;
+    public List<RootMethodRunResult> getRootMethodRunResults() {
+        return rootMethodRunResults;
     }
 
-    public void addRootFuncRunResults(RootFuncRunResult rootFuncRunResult) {
-        this.rootFuncRunResults.add(rootFuncRunResult);
+    public void addRootMethodRunResults(RootMethodRunResult rootMethodRunResult) {
+        this.rootMethodRunResults.add(rootMethodRunResult);
     }
 
     // returns null if not found
-    public RootFuncRunResult getRunResultByRootFunction(TestFunction rootFunction) {
-        if (rootFunction == null) {
+    public RootMethodRunResult getRunResultByRootMethod(TestMethod rootMethod) {
+        if (rootMethod == null) {
             throw new NullPointerException();
         }
-        for (RootFuncRunResult rootFuncRunResult : rootFuncRunResults) {
-            if ((rootFuncRunResult.getRootFunction() != null)
-                    && rootFunction.getKey().equals(rootFuncRunResult.getRootFunction().getKey())) {
-                return rootFuncRunResult;
+        for (RootMethodRunResult rootMethodRunResult : rootMethodRunResults) {
+            if ((rootMethodRunResult.getRootMethod() != null)
+                    && rootMethod.getKey().equals(rootMethodRunResult.getRootMethod().getKey())) {
+                return rootMethodRunResult;
             }
         }
         return null;
@@ -40,43 +40,43 @@ public class RunResults implements YamlConvertible {
     @Override
     public Map<String, Object> toYamlObject() {
         Map<String, Object> result = new HashMap<String, Object>(2);
-        result.put("rootFuncRunResults", YamlUtils.toYamlObjectList(rootFuncRunResults));
+        result.put("rootMethodRunResults", YamlUtils.toYamlObjectList(rootMethodRunResults));
         return result;
     }
 
     @Override
     public void fromYamlObject(Map<String, Object> yamlObject)
             throws YamlConvertException {
-        List<Map<String, Object>> rootFuncRunResultsYamlObj
-        = YamlUtils.getYamlObjectListValue(yamlObject, "rootFuncRunResults");
-        rootFuncRunResults = new ArrayList<RootFuncRunResult>(rootFuncRunResultsYamlObj.size());
-        for (Map<String, Object> rootFuncRunResultYamlObj : rootFuncRunResultsYamlObj) {
-            RootFuncRunResult rootFuncRunResult = new RootFuncRunResult();
-            rootFuncRunResult.fromYamlObject(rootFuncRunResultYamlObj);
-            rootFuncRunResults.add(rootFuncRunResult);
+        List<Map<String, Object>> rootMethodRunResultsYamlObj
+        = YamlUtils.getYamlObjectListValue(yamlObject, "rootMethodRunResults");
+        rootMethodRunResults = new ArrayList<RootMethodRunResult>(rootMethodRunResultsYamlObj.size());
+        for (Map<String, Object> rootMethodRunResultYamlObj : rootMethodRunResultsYamlObj) {
+            RootMethodRunResult rootMethodRunResult = new RootMethodRunResult();
+            rootMethodRunResult.fromYamlObject(rootMethodRunResultYamlObj);
+            rootMethodRunResults.add(rootMethodRunResult);
         }
     }
 
-    private void resolveTestFunction(SrcTree srcTree, StackLine stackLine)
+    private void resolveTestMethod(SrcTree srcTree, StackLine stackLine)
             throws IllegalDataStructureException {
-        if (!stackLine.getFunctionKey().equals("")) {
-            TestFunction testFunction = srcTree.getTestFunctionByKey(stackLine.getFunctionKey());
-            stackLine.setFunction(testFunction);
+        if (!stackLine.getMethodKey().equals("")) {
+            TestMethod testMethod = srcTree.getTestMethodByKey(stackLine.getMethodKey());
+            stackLine.setMethod(testMethod);
         }
     }
 
     public void resolveKeyReference(SrcTree srcTree) throws IllegalDataStructureException {
-        for (RootFuncRunResult runResult : rootFuncRunResults) {
-            TestFunction rootFunction = srcTree.getTestFunctionByKey(runResult.getRootFunctionKey());
-            runResult.setRootFunction(rootFunction);
+        for (RootMethodRunResult runResult : rootMethodRunResults) {
+            TestMethod rootMethod = srcTree.getTestMethodByKey(runResult.getRootMethodKey());
+            runResult.setRootMethod(rootMethod);
             for (RunFailure failure : runResult.getRunFailures()) {
                 for (StackLine stackLine : failure.getStackLines()) {
-                    resolveTestFunction(srcTree, stackLine);
+                    resolveTestMethod(srcTree, stackLine);
                 }
             }
             for (LineScreenCapture capture : runResult.getLineScreenCaptures()) {
                 for (StackLine stackLine : capture.getStackLines()) {
-                    resolveTestFunction(srcTree, stackLine);
+                    resolveTestMethod(srcTree, stackLine);
                 }
             }
         }

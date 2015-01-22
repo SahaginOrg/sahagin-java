@@ -20,7 +20,7 @@ public class CommonPath {
         return new File(reportOutputDir, "index.html");
     }
 
-    public static File funcHtmlReportRootDir(File reportOutputDir) {
+    public static File methodHtmlReportRootDir(File reportOutputDir) {
         return new File(reportOutputDir, "reports");
     }
 

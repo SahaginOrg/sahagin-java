@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.sahagin.runlib.external.adapter.Adapter;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.runlib.external.adapter.ResourceAdditionalTestDocsAdapter;
-import org.sahagin.runlib.external.adapter.RootFunctionAdapter;
+import org.sahagin.runlib.external.adapter.RootMethodAdapter;
 import org.sahagin.runlib.srctreegen.ASTUtils;
 import org.sahagin.share.CommonPath;
 
@@ -16,20 +16,20 @@ public class JUnit4Adapter implements Adapter {
     @Override
     public void initialSetAdapter() {
         AdapterContainer container = AdapterContainer.globalInstance();
-        container.setRootFunctionAdapter(new RootFunctionAdapterImpl());
+        container.setRootMethodAdapter(new RootMethodAdapterImpl());
         container.addAdditionalTestDocsAdapter(new AdditionalTestDocsAdapterImpl());
     }
 
-    private static class RootFunctionAdapterImpl implements RootFunctionAdapter {
+    private static class RootMethodAdapterImpl implements RootMethodAdapter {
 
         @Override
-        public boolean isRootFunction(IMethodBinding methodBinding) {
+        public boolean isRootMethod(IMethodBinding methodBinding) {
             return ASTUtils.getAnnotationBinding(
                     methodBinding.getAnnotations(), Test.class) != null;
         }
 
         @Override
-        public boolean isRootFunction(CtMethod method) {
+        public boolean isRootMethod(CtMethod method) {
             try {
                 return method.getAnnotation(Test.class) != null;
             } catch (ClassNotFoundException e) {
@@ -51,7 +51,7 @@ public class JUnit4Adapter implements Adapter {
         }
 
         @Override
-        public void funcAdd() {
+        public void methodAdd() {
             // TODO cannot handle methods defined on subclass
 
             // in alphabetical order

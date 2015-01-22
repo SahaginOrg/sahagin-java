@@ -12,50 +12,50 @@ import org.sahagin.share.yaml.YamlUtils;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlConvertible;
 
-public class TestFuncTable implements YamlConvertible {
-    private List<TestFunction> testFunctions = new ArrayList<TestFunction>(512);
+public class TestMethodTable implements YamlConvertible {
+    private List<TestMethod> testMethods = new ArrayList<TestMethod>(512);
 
-    public List<TestFunction> getTestFunctions() {
-        return testFunctions;
+    public List<TestMethod> getTestMethods() {
+        return testMethods;
     }
 
-    public void addTestFunction(TestFunction testFunction) {
-        testFunctions.add(testFunction);
+    public void addTestMethod(TestMethod testMethod) {
+        testMethods.add(testMethod);
     }
 
     // returns null if not found
-    public TestFunction getByKey(String key) {
+    public TestMethod getByKey(String key) {
         if (key == null) {
             throw new NullPointerException();
         }
-        for (TestFunction testFunction : testFunctions) {
-            if (key.equals(testFunction.getKey())) {
-                return testFunction;
+        for (TestMethod testMethod : testMethods) {
+            if (key.equals(testMethod.getKey())) {
+                return testMethod;
             }
         }
         return null;
     }
 
-    public List<TestFunction> getByQualifiedName(String qualifiedName) {
+    public List<TestMethod> getByQualifiedName(String qualifiedName) {
         if (qualifiedName == null) {
             throw new NullPointerException();
         }
-        List<TestFunction> result = new ArrayList<TestFunction>(1);
-        for (TestFunction testFunction : testFunctions) {
-            if (qualifiedName.equals(testFunction.getQualifiedName())) {
-                result.add(testFunction);
+        List<TestMethod> result = new ArrayList<TestMethod>(1);
+        for (TestMethod testMethod : testMethods) {
+            if (qualifiedName.equals(testMethod.getQualifiedName())) {
+                result.add(testMethod);
             }
         }
         return result;
     }
 
     public void sort() {
-        Collections.sort(testFunctions, new Comparator<TestFunction>() {
+        Collections.sort(testMethods, new Comparator<TestMethod>() {
 
             // sort by name as much as possible
             // since sometimes key differs between Windows and OSX
             @Override
-            public int compare(TestFunction left, TestFunction right) {
+            public int compare(TestMethod left, TestMethod right) {
                 int nameCompareResult = CommonUtils.compare(left.getQualifiedName(), right.getQualifiedName());
                 if (nameCompareResult == 0) {
                     return CommonUtils.compare(left.getKey(), right.getKey());
@@ -69,18 +69,19 @@ public class TestFuncTable implements YamlConvertible {
     @Override
     public Map<String, Object> toYamlObject() {
         Map<String, Object> result = new HashMap<String, Object>(1);
-        result.put("functions", YamlUtils.toYamlObjectList(testFunctions));
+        result.put("methods", YamlUtils.toYamlObjectList(testMethods));
         return result;
     }
 
     @Override
     public void fromYamlObject(Map<String, Object> yamlObject)
             throws YamlConvertException {
-        List<Map<String, Object>> testFunctionsYamlObj = YamlUtils.getYamlObjectListValue(yamlObject, "functions");
-        testFunctions = new ArrayList<TestFunction>(testFunctionsYamlObj.size());
-        for (Map<String, Object> testFunctionYamlObj : testFunctionsYamlObj) {
-            TestFunction testFunction = TestFunction.newInstanceFromYamlObject(testFunctionYamlObj);
-            testFunctions.add(testFunction);
+        List<Map<String, Object>> testMethodsYamlObj = YamlUtils.getYamlObjectListValue(yamlObject, "methods");
+        testMethods = new ArrayList<TestMethod>(testMethodsYamlObj.size());
+        for (Map<String, Object> testMethodYamlObj : testMethodsYamlObj) {
+            TestMethod testMethod = new TestMethod();
+            testMethod.fromYamlObject(testMethodYamlObj);
+            testMethods.add(testMethod);
         }
     }
 

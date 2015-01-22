@@ -17,11 +17,10 @@ import org.sahagin.share.IllegalDataStructureException;
 import org.sahagin.share.IllegalTestScriptException;
 import org.sahagin.share.Logging;
 import org.sahagin.share.runresults.LineScreenCapture;
-import org.sahagin.share.runresults.RootFuncRunResult;
+import org.sahagin.share.runresults.RootMethodRunResult;
 import org.sahagin.share.runresults.RunFailure;
 import org.sahagin.share.runresults.StackLine;
 import org.sahagin.share.srctree.SrcTree;
-import org.sahagin.share.srctree.TestFunction;
 import org.sahagin.share.srctree.TestMethod;
 import org.sahagin.share.srctree.code.CodeLine;
 import org.sahagin.share.srctree.code.UnknownCode;
@@ -36,7 +35,7 @@ public class RunResultGenerateHook {
     private static File runResultsRootDir;
     private static File captureRootDir;
     private static int currentCaptureNo = 1;
-    private static RootFuncRunResult currentRunResult = null;
+    private static RootMethodRunResult currentRunResult = null;
     private static SrcTree srcTree;
 
     // if called multiple times, just ignored
@@ -104,14 +103,14 @@ public class RunResultGenerateHook {
         initializedCheck();
         // initialize current captureNo and runResult
         currentCaptureNo = 1;
-        currentRunResult = new RootFuncRunResult();
-        TestFunction rootFunction = StackLineUtils.getRootFunction(
-                srcTree.getRootFuncTable(), Thread.currentThread().getStackTrace());
-        if (rootFunction == null) {
+        currentRunResult = new RootMethodRunResult();
+        TestMethod rootMethod = StackLineUtils.getRootMethod(
+                srcTree.getRootMethodTable(), Thread.currentThread().getStackTrace());
+        if (rootMethod == null) {
             throw new RuntimeException("implementation error");
         }
-        currentRunResult.setRootFunctionKey(rootFunction.getKey());
-        currentRunResult.setRootFunction(rootFunction);
+        currentRunResult.setRootMethodKey(rootMethod.getKey());
+        currentRunResult.setRootMethod(rootMethod);
         logger.info("beforeRootMethodHook: end");
     }
 
@@ -127,8 +126,8 @@ public class RunResultGenerateHook {
         }
         currentRunResult.addRunFailure(runFailure);
 
-        assert currentRunResult.getRootFunction() instanceof TestMethod;
-        TestMethod rootMethod = (TestMethod) currentRunResult.getRootFunction();
+        assert currentRunResult.getRootMethod() instanceof TestMethod;
+        TestMethod rootMethod = currentRunResult.getRootMethod();
         captureScreenForEachStackLine(rootMethod, stackLines);
     }
 
@@ -138,7 +137,7 @@ public class RunResultGenerateHook {
         initializedCheck();
 
         assert currentRunResult != null;
-        TestMethod rootMethod = (TestMethod) currentRunResult.getRootFunction();
+        TestMethod rootMethod = currentRunResult.getRootMethod();
         assert rootMethod.getTestClass() != null;
         File runResultFile = new File(String.format("%s/%s/%s",
                 runResultsRootDir, rootMethod.getTestClass().getQualifiedName(),
@@ -174,7 +173,7 @@ public class RunResultGenerateHook {
             throw new RuntimeException("implementation error");
         }
 
-        CodeLine thisCodeLine = stackLines.get(0).getFunction().getCodeBody().get(
+        CodeLine thisCodeLine = stackLines.get(0).getMethod().getCodeBody().get(
                 stackLines.get(0).getCodeBodyIndex());
         if (thisCodeLine.getCode() instanceof UnknownCode) {
             logger.info("beforeCodeBodyHook: skip UnknownCode method: " + thisCodeLine.getCode().getOriginal());
@@ -186,8 +185,8 @@ public class RunResultGenerateHook {
         }
 
         // screen capture
-        assert currentRunResult.getRootFunction() instanceof TestMethod;
-        TestMethod rootMethod = (TestMethod) currentRunResult.getRootFunction();
+        assert currentRunResult.getRootMethod() instanceof TestMethod;
+        TestMethod rootMethod = currentRunResult.getRootMethod();
         File captureFile = captureScreen(rootMethod, stackLines);
         if (captureFile != null) {
             logger.info("beforeCodeBodyHook: end with capture " + captureFile.getName());
@@ -262,7 +261,7 @@ public class RunResultGenerateHook {
         // stack bottom line ( = root line) is always regarded as stepIn true line
         for (int i = 0; i < stackLines.size() - 1; i++) {
             StackLine stackLine = stackLines.get(i);
-            CaptureStyle style = stackLine.getFunction().getCaptureStyle();
+            CaptureStyle style = stackLine.getMethod().getCaptureStyle();
             if (style != CaptureStyle.STEP_IN && style != CaptureStyle.STEP_IN_ONLY) {
                 return false;
             }

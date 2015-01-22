@@ -1,6 +1,6 @@
 # TODO currently, check only if try-catch-finally statement is handled as unknown line
-rootFuncTable:
-  functions:
+rootMethodTable:
+  methods:
   - codeBody:
     - code:
         original: "*"

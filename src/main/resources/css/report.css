@@ -25,11 +25,11 @@ body {
   background-color: #e7e8e2;
 }
 
-#funcArgTestDocs {
+#methodArgTestDocs {
   display: none;
 }
 
-.hiddenFuncArgTestDoc {
+.hiddenMethodArgTestDoc {
   display: none;
 }
 

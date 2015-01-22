@@ -1,4 +1,4 @@
-func:
+method:
   org.hamcrest.core.Is.is: 「{0}」に等しい
   org.hamcrest.CoreMatchers.is: 「{0}」に等しい
   org.junit.Assert.assertEquals: 「{0}」が「{1}」に等しいことをチェック

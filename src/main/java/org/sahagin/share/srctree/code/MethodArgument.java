@@ -5,7 +5,7 @@ import java.util.Map;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlUtils;
 
-public class FuncArgument extends Code {
+public class MethodArgument extends Code {
     public static final String TYPE = "arg";
 
     private int argIndex;

@@ -2,7 +2,7 @@ package org.sahagin.share;
 
 import org.sahagin.share.srctree.SrcTree;
 import org.sahagin.share.srctree.TestClass;
-import org.sahagin.share.srctree.TestFunction;
+import org.sahagin.share.srctree.TestMethod;
 
 public class SrcTreeChecker {
     // TODO throw error if sub class has root method
@@ -17,28 +17,28 @@ public class SrcTreeChecker {
     = "TestDoc of \"%s\" contains invalid keyword \"%s\"";
 
     public static void check(SrcTree srcTree) throws IllegalTestScriptException {
-        for (TestFunction func : srcTree.getRootFuncTable().getTestFunctions()) {
-            if (func.getTestDoc() != null && func.getTestDoc().contains("\\")) {
+        for (TestMethod method : srcTree.getRootMethodTable().getTestMethods()) {
+            if (method.getTestDoc() != null && method.getTestDoc().contains("\\")) {
                 // TODO support back slash
                 throw new RuntimeException(String.format(
-                        "back slash is not supported: %s", func.getTestDoc()));
+                        "back slash is not supported: %s", method.getTestDoc()));
             }
-            String invalidKeyword = TestDocResolver.searchInvalidPlaceholder(func);
+            String invalidKeyword = TestDocResolver.searchInvalidPlaceholder(method);
             if (invalidKeyword != null) {
                 throw new IllegalTestScriptException(String.format(MSG_INVALID_PLACEHOLDER,
-                        func.getQualifiedName(), invalidKeyword));
+                        method.getQualifiedName(), invalidKeyword));
             }
         }
-        for (TestFunction func : srcTree.getSubFuncTable().getTestFunctions()) {
-            if (func.getTestDoc() != null && func.getTestDoc().contains("\\")) {
+        for (TestMethod method : srcTree.getSubMethodTable().getTestMethods()) {
+            if (method.getTestDoc() != null && method.getTestDoc().contains("\\")) {
                 // TODO support back slash
                 throw new RuntimeException(String.format(
-                        "back slash is not supported: %s", func.getTestDoc()));
+                        "back slash is not supported: %s", method.getTestDoc()));
             }
-            String invalidKeyword = TestDocResolver.searchInvalidPlaceholder(func);
+            String invalidKeyword = TestDocResolver.searchInvalidPlaceholder(method);
             if (invalidKeyword != null) {
                 throw new IllegalTestScriptException(String.format(MSG_INVALID_PLACEHOLDER,
-                        func.getQualifiedName(), invalidKeyword));
+                        method.getQualifiedName(), invalidKeyword));
             }
         }
         for (TestClass testClass: srcTree.getRootClassTable().getTestClasses()) {

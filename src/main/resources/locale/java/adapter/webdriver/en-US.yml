@@ -1,4 +1,4 @@
-func:
+method:
   org.openqa.selenium.By.className: class name = {0}
   org.openqa.selenium.By.cssSelector: css = {0}
   org.openqa.selenium.By.id: id = {0}

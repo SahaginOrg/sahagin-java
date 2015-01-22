@@ -6,34 +6,34 @@ import java.util.List;
 import java.util.Map;
 
 import org.sahagin.share.CommonUtils;
-import org.sahagin.share.srctree.TestFunction;
+import org.sahagin.share.srctree.TestMethod;
 import org.sahagin.share.yaml.YamlUtils;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlConvertible;
 
-public class RootFuncRunResult implements YamlConvertible {
+public class RootMethodRunResult implements YamlConvertible {
     private static final String MSG_SRC_TREE_FORMAT_MISMATCH
     = "expected formatVersion is \"%s\", but actual is \"%s\"";
 
-    private String rootFunctionKey;
-    private TestFunction rootFunction;
+    private String rootMethodKey;
+    private TestMethod rootMethod;
     private List<RunFailure> runFailures = new ArrayList<RunFailure>(16);
     private List<LineScreenCapture> lineScreenCaptures = new ArrayList<LineScreenCapture>(32);
 
-    public String getRootFunctionKey() {
-        return rootFunctionKey;
+    public String getRootMethodKey() {
+        return rootMethodKey;
     }
 
-    public void setRootFunctionKey(String rootFunctionKey) {
-        this.rootFunctionKey = rootFunctionKey;
+    public void setRootMethodKey(String rootMethodKey) {
+        this.rootMethodKey = rootMethodKey;
     }
 
-    public TestFunction getRootFunction() {
-        return rootFunction;
+    public TestMethod getRootMethod() {
+        return rootMethod;
     }
 
-    public void setRootFunction(TestFunction rootFunction) {
-        this.rootFunction = rootFunction;
+    public void setRootMethod(TestMethod rootMethod) {
+        this.rootMethod = rootMethod;
     }
 
     public List<RunFailure> getRunFailures() {
@@ -55,7 +55,7 @@ public class RootFuncRunResult implements YamlConvertible {
     @Override
     public Map<String, Object> toYamlObject() {
         Map<String, Object> result = new HashMap<String, Object>(4);
-        result.put("rootFunctionKey", rootFunctionKey);
+        result.put("rootMethodKey", rootMethodKey);
         result.put("runFailures", YamlUtils.toYamlObjectList(runFailures));
         result.put("lineScreenCaptures", YamlUtils.toYamlObjectList(lineScreenCaptures));
         result.put("formatVersion", CommonUtils.formatVersion());
@@ -65,7 +65,7 @@ public class RootFuncRunResult implements YamlConvertible {
     @Override
     public void fromYamlObject(Map<String, Object> yamlObject)
             throws YamlConvertException {
-        rootFunctionKey = YamlUtils.getStrValue(yamlObject, "rootFunctionKey");
+        rootMethodKey = YamlUtils.getStrValue(yamlObject, "rootMethodKey");
         List<Map<String, Object>> runFailuresYamlObj
         = YamlUtils.getYamlObjectListValue(yamlObject, "runFailures");
         runFailures = new ArrayList<RunFailure>(runFailuresYamlObj.size());

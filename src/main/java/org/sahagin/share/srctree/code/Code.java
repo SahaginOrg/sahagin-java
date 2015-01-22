@@ -42,10 +42,8 @@ public abstract class Code implements YamlConvertible {
         Code result;
         if (StringCode.TYPE.equals(type)) {
             result = new StringCode();
-        } else if (FuncArgument.TYPE.equals(type)) {
-            result = new FuncArgument();
-        } else if (SubFunctionInvoke.TYPE.equals(type)) {
-            result = new SubFunctionInvoke();
+        } else if (MethodArgument.TYPE.equals(type)) {
+            result = new MethodArgument();
         } else if (SubMethodInvoke.TYPE.equals(type)) {
             result = new SubMethodInvoke();
         } else if (UnknownCode.TYPE.equals(type)) {

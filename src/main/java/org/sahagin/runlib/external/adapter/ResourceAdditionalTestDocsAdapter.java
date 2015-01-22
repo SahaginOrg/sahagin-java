@@ -20,7 +20,7 @@ implements AdditionalTestDocsAdapter {
     private AdditionalTestDocs docs;
     private AcceptableLocales locales;
     private Map<Locale, Map<String, Object>> localeClassYamlObjMap;
-    private Map<Locale, Map<String, Object>> localeFuncYamlObjMap;
+    private Map<Locale, Map<String, Object>> localeMethodYamlObjMap;
 
     // Path from the jar or project file top level.
     // This path must not end with "/"
@@ -29,7 +29,7 @@ implements AdditionalTestDocsAdapter {
     // list of locale and its YAML object pair
     private void setLocaleYamlObjListFromResource() throws YamlConvertException {
         localeClassYamlObjMap = new HashMap<Locale, Map<String, Object>>(8);
-        localeFuncYamlObjMap = new HashMap<Locale, Map<String, Object>>(8);
+        localeMethodYamlObjMap = new HashMap<Locale, Map<String, Object>>(8);
         for (Locale locale : Locale.values()) {
             InputStream in = this.getClass().getResourceAsStream(
                     resourceDirPath() + "/" + locale.getValue() + ".yml");
@@ -40,12 +40,12 @@ implements AdditionalTestDocsAdapter {
             try {
                 Map<String, Object> yamlObj = YamlUtils.load(in);
                 Map<String, Object> classYamlObj = YamlUtils.getYamlObjectValue(yamlObj, "class", true);
-                Map<String, Object> funcYamlObj = YamlUtils.getYamlObjectValue(yamlObj, "func", true);
+                Map<String, Object> methodYamlObj = YamlUtils.getYamlObjectValue(yamlObj, "method", true);
                 if (classYamlObj != null) {
                     localeClassYamlObjMap.put(locale, classYamlObj);
                 }
-                if (funcYamlObj != null) {
-                    localeFuncYamlObjMap.put(locale, funcYamlObj);
+                if (methodYamlObj != null) {
+                    localeMethodYamlObjMap.put(locale, methodYamlObj);
                 }
             } finally {
                 IOUtils.closeQuietly(in);
@@ -63,7 +63,7 @@ implements AdditionalTestDocsAdapter {
             throw new RuntimeException(e);
         }
         classAdd();
-        funcAdd();
+        methodAdd();
     }
 
     private void classAddSub(AdditionalClassTestDoc classTestDocInstance, String qualifiedName) {
@@ -94,7 +94,7 @@ implements AdditionalTestDocsAdapter {
 
     public abstract void classAdd();
 
-    protected final void methodAdd(String classQualifiedName, 
+    protected final void methodAdd(String classQualifiedName,
             String methodSimpleName, CaptureStyle captureStyle) {
         AdditionalMethodTestDoc methodTestDocInstance = new AdditionalMethodTestDoc();
         String methodQualifiedName = classQualifiedName + "." + methodSimpleName;
@@ -103,7 +103,7 @@ implements AdditionalTestDocsAdapter {
         methodTestDocInstance.setCaptureStyle(captureStyle);
         String testDoc = ""; // set empty string if no locale data is found
         for (Locale locale : locales.getLocales()) {
-            Map<String, Object> map = localeFuncYamlObjMap.get(locale);
+            Map<String, Object> map = localeMethodYamlObjMap.get(locale);
             if (map == null) {
                 continue;
             }
@@ -114,13 +114,13 @@ implements AdditionalTestDocsAdapter {
             }
         }
         methodTestDocInstance.setTestDoc(testDoc);
-        docs.funcAdd(methodTestDocInstance);
+        docs.methodAdd(methodTestDocInstance);
     }
 
     protected final void methodAdd(String classQualifiedName, String methodSimpleName) {
         methodAdd(classQualifiedName, methodSimpleName, CaptureStyle.getDefault());
     }
 
-    public abstract void funcAdd();
+    public abstract void methodAdd();
 
 }

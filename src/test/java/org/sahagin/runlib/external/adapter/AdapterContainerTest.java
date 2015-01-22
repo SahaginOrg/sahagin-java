@@ -2,8 +2,9 @@ package org.sahagin.runlib.external.adapter;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
+
 import org.junit.Test;
-import org.sahagin.runlib.additionaltestdoc.AdditionalFuncTestDoc;
+import org.sahagin.runlib.additionaltestdoc.AdditionalMethodTestDoc;
 import org.sahagin.runlib.additionaltestdoc.AdditionalTestDocs;
 import org.sahagin.runlib.external.CaptureStyle;
 import org.sahagin.runlib.external.Locale;
@@ -21,10 +22,10 @@ public class AdapterContainerTest {
         new WebDriverAdapter().initialSetAdapter();
         AdditionalTestDocs testDocs
         = AdapterContainer.globalInstance().getAdditionalTestDocs();
-        AdditionalFuncTestDoc assertThatTestDoc
-        = testDocs.getFuncTestDoc("org.junit.Assert.assertThat");
-        AdditionalFuncTestDoc clickTestDoc
-        = testDocs.getFuncTestDoc("org.openqa.selenium.WebElement.click");
+        AdditionalMethodTestDoc assertThatTestDoc
+        = testDocs.getMethodTestDoc("org.junit.Assert.assertThat");
+        AdditionalMethodTestDoc clickTestDoc
+        = testDocs.getMethodTestDoc("org.openqa.selenium.WebElement.click");
         assertThat(assertThatTestDoc.getCaptureStyle(), is(CaptureStyle.THIS_LINE));
         assertThat(assertThatTestDoc.getTestDoc(), is("check that '{0}' {1}"));
         assertThat(clickTestDoc.getTestDoc(), is("click {this}"));
@@ -38,10 +39,10 @@ public class AdapterContainerTest {
         new WebDriverAdapter().initialSetAdapter();
         AdditionalTestDocs testDocs
         = AdapterContainer.globalInstance().getAdditionalTestDocs();
-        AdditionalFuncTestDoc assertThatTestDoc
-        = testDocs.getFuncTestDoc("org.junit.Assert.assertThat");
-        AdditionalFuncTestDoc clickTestDoc
-        = testDocs.getFuncTestDoc("org.openqa.selenium.WebElement.click");
+        AdditionalMethodTestDoc assertThatTestDoc
+        = testDocs.getMethodTestDoc("org.junit.Assert.assertThat");
+        AdditionalMethodTestDoc clickTestDoc
+        = testDocs.getMethodTestDoc("org.openqa.selenium.WebElement.click");
         assertThat(assertThatTestDoc.getCaptureStyle(), is(CaptureStyle.THIS_LINE));
         assertThat(assertThatTestDoc.getTestDoc(), is("「{0}」が{1}ことをチェック"));
         assertThat(clickTestDoc.getTestDoc(), is("{this}をクリック"));

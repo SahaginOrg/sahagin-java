@@ -1,48 +1,43 @@
 package org.sahagin.share.srctree.code;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
-import org.sahagin.share.srctree.TestFunction;
 import org.sahagin.share.srctree.TestMethod;
-import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlUtils;
+import org.sahagin.share.yaml.YamlConvertException;
 
-public class SubMethodInvoke extends SubFunctionInvoke {
+public class SubMethodInvoke extends Code {
     public static final String TYPE = "method";
+
+    private String subMethodKey;
+    private TestMethod subMethod;
+    private List<Code> args = new ArrayList<Code>(4);
     private Code thisInstance;
 
     public String getSubMethodKey() {
-        return getSubFunctionKey();
+        return subMethodKey;
     }
 
     public void setSubMethodKey(String subMethodKey) {
-        setSubFunctionKey(subMethodKey);
+        this.subMethodKey = subMethodKey;
     }
 
     public TestMethod getSubMethod() {
-        return (TestMethod)getSubFunction();
-    }
-
-    @Override
-    public void setSubFunction(TestFunction subFunction) {
-        if (!(subFunction instanceof TestMethod)) {
-            throw new IllegalArgumentException("not testMethod: " + subFunction);
-        }
-        super.setSubFunction(subFunction);
+        return subMethod;
     }
 
     public void setSubMethod(TestMethod subMethod) {
-        setSubFunction(subMethod);
+        this.subMethod = subMethod;
     }
 
-    @Override
-    protected String getType() {
-        return TYPE;
+    public List<Code> getArgs() {
+        return args;
     }
 
-    @Override
-    protected String getFunctionKeyName() {
-        return "methodKey";
+    public void addArg(Code arg) {
+        args.add(arg);
     }
 
     public Code getThisInstance() {
@@ -52,9 +47,17 @@ public class SubMethodInvoke extends SubFunctionInvoke {
     public void setThisInstance(Code thisInstance) {
         this.thisInstance = thisInstance;
     }
+
+    @Override
+    protected String getType() {
+        return TYPE;
+    }
+
     @Override
     public Map<String, Object> toYamlObject() {
         Map<String, Object> result = super.toYamlObject();
+        result.put("methodKey", subMethodKey);
+        result.put("args", YamlUtils.toYamlObjectList(args));
         if (thisInstance != null) {
             result.put("thisInstance", thisInstance.toYamlObject());
         }
@@ -65,6 +68,14 @@ public class SubMethodInvoke extends SubFunctionInvoke {
     public void fromYamlObject(Map<String, Object> yamlObject)
             throws YamlConvertException {
         super.fromYamlObject(yamlObject);
+        subMethodKey = YamlUtils.getStrValue(yamlObject, "methodKey");
+        subMethod = null;
+        List<Map<String, Object>> argsYamlObj = YamlUtils.getYamlObjectListValue(yamlObject, "args");
+        args = new ArrayList<Code>(argsYamlObj.size());
+        for (Map<String, Object> argYamlObj : argsYamlObj) {
+            Code code = Code.newInstanceFromYamlObject(argYamlObj);
+            args.add(code);
+        }
         Map<String, Object> thisInstanceYamlObj = YamlUtils.getYamlObjectValue(yamlObject, "thisInstance", true);
         if (thisInstanceYamlObj == null) {
             thisInstance = null;

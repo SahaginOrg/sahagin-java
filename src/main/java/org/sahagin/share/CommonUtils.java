@@ -18,7 +18,7 @@ import org.openqa.selenium.io.IOUtils;
 public class CommonUtils {
 
     public static String formatVersion() {
-        return "0.2.3";
+        return "0.4";
     }
 
     // - nulls last

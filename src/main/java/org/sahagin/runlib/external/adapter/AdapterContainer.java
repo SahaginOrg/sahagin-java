@@ -10,7 +10,7 @@ public class AdapterContainer {
     private static AdapterContainer globalInstance = new AdapterContainer();
     private boolean initialized = false;
     private AcceptableLocales locales;
-    private RootFunctionAdapter rootFunctionAdapter;
+    private RootMethodAdapter rootMethodAdapter;
     private ScreenCaptureAdapter screenCaptureAdapter;
     private AdditionalTestDocs additionalTestDocs = new AdditionalTestDocs();
 
@@ -38,19 +38,19 @@ public class AdapterContainer {
     }
 
     // TODO throw error if called　from other method than initialSetAdapter
-    public void setRootFunctionAdapter(RootFunctionAdapter rootFunctionAdapter) {
-        if (rootFunctionAdapter == null) {
+    public void setRootMethodAdapter(RootMethodAdapter rootMethodAdapter) {
+        if (rootMethodAdapter == null) {
             throw new NullPointerException();
         }
-        this.rootFunctionAdapter = rootFunctionAdapter;
+        this.rootMethodAdapter = rootMethodAdapter;
     }
 
-    public boolean isRootFunction(CtMethod method) {
-        return rootFunctionAdapter.isRootFunction(method);
+    public boolean isRootMethod(CtMethod method) {
+        return rootMethodAdapter.isRootMethod(method);
     }
 
-    public boolean isRootFunction(IMethodBinding methodBinding) {
-        return rootFunctionAdapter.isRootFunction(methodBinding);
+    public boolean isRootMethod(IMethodBinding methodBinding) {
+        return rootMethodAdapter.isRootMethod(methodBinding);
     }
 
     // set null if don't want screen capture

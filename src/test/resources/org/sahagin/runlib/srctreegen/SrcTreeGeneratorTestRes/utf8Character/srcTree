@@ -1,11 +1,11 @@
-subFuncTable:
-  functions:
+subMethodTable:
+  methods:
   - name: "*.ページクラス.ページメソッド"
     classKey: "*ページクラス;"
     testDoc: ページメソッド
     key: "*ページクラス;.ページメソッド()V"
-rootFuncTable:
-  functions:
+rootMethodTable:
+  methods:
   - codeBody:
     - code: {original: ページクラス page=new ページクラス();, type: unknown}
     - code:

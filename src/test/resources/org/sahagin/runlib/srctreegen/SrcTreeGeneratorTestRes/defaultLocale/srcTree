@@ -1,5 +1,5 @@
-subFuncTable:
-  functions:
+subMethodTable:
+  methods:
   - name: "*.TestMain.defaultTestDocMethod"
     testDoc: Doc:default
   - name: "*.TestMain.enUsTestDocMethod"

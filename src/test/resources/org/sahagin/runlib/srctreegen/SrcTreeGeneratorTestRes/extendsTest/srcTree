@@ -1,12 +1,11 @@
-subFuncTable:
-  functions:
+subMethodTable:
+  methods:
   - codeBody: []
     name: "*ExtendsPage.abstractMethod"
     capture: thisLine
     argVariables: [arg]
     classKey: "*ExtendsPage;"
     testDoc: 'Doc: abstractMethod: override: {arg}'
-    type: method
     key: "*ExtendsPage;.abstractMethod(I)V"
   - codeBody:
     - code: {original: super.overriddenMethod(arg);, type: unknown}
@@ -15,7 +14,6 @@ subFuncTable:
     argVariables: [arg]
     classKey: "*ExtendsPage;"
     testDoc: 'Doc: overriddenMethod: override: {arg}'
-    type: method
     key: "*ExtendsPage;.overriddenMethod(Ljava/lang/String;)V"
   - codeBody: []
     name: "*.ExtendsPageBase.abstractMethod"
@@ -23,7 +21,6 @@ subFuncTable:
     argVariables: [arg]
     classKey: "*ExtendsPageBase;"
     testDoc: 'Doc: abstractMethod: {arg}'
-    type: method
     key: "*ExtendsPageBase;.abstractMethod(I)V"
   - codeBody: []
     name: "*ExtendsPageBase.finalMethod"
@@ -31,7 +28,6 @@ subFuncTable:
     argVariables: [arg]
     classKey: "*ExtendsPageBase;"
     testDoc: 'Doc: finalMethod: {arg}'
-    type: method
     key: "*ExtendsPageBase;.finalMethod(Ljava/lang/Object;)V"
   - codeBody: []
     name: "*ExtendsTestBase.testBaseMethod"
@@ -39,7 +35,6 @@ subFuncTable:
     argVariables: [arg]
     classKey: "*ExtendsTestBase;"
     testDoc: 'Doc: testBaseMethod: {arg}'
-    type: method
     key: "*ExtendsTestBase;.testBaseMethod(Ljava/lang/String;)V"
   - codeBody:
     - code: {original: super.testBaseMethod(arg);, type: unknown}
@@ -48,35 +43,30 @@ subFuncTable:
     argVariables: [arg]
     classKey: "*ExtendsTestMain;"
     testDoc: 'Doc: testBaseMethod: override: {arg}'
-    type: method
     key: "*ExtendsTestMain;.testBaseMethod(Ljava/lang/String;)V"
-rootFuncTable:
-  functions:
+rootMethodTable:
+  methods:
   - codeBody:
     - code:
         original: testBaseMethod("ABC");
-        type: method
         methodKey: "*ExtendsTestMain;.testBaseMethod(Ljava/lang/String;)V"
         args:
         - {value: ABC, original: '"ABC"', type: string}
     - code: {original: ExtendsPage pageInstance=new ExtendsPage();, type: unknown}
     - code:
         original: pageInstance.abstractMethod(123);
-        type: method
         methodKey: "*ExtendsPage;.abstractMethod(I)V"
         thisInstance: {original: pageInstance, type: unknown}
         args:
         - {original: '123', type: unknown}
     - code:
         original: pageInstance.finalMethod(null);
-        type: method
         methodKey: "*ExtendsPageBase;.finalMethod(Ljava/lang/Object;)V"
         thisInstance: {original: pageInstance, type: unknown}
         args:
         - {original: 'null', type: unknown}
     - code:
         original: pageInstance.overriddenMethod("YYY");
-        type: method
         methodKey: "*ExtendsPage;.overriddenMethod(Ljava/lang/String;)V"
         thisInstance: {original: pageInstance, type: unknown}
         args:
@@ -84,14 +74,12 @@ rootFuncTable:
     - code: {original: ExtendsPageBase baseInstance=new ExtendsPage();, type: unknown}
     - code:
         original: baseInstance.abstractMethod(456);
-        type: method
         methodKey: "*ExtendsPageBase;.abstractMethod(I)V"
         thisInstance: {original: baseInstance, type: unknown}
         args:
         - {original: '456', type: unknown}
     - code:
         original: baseInstance.finalMethod("WWW");
-        type: method
         methodKey: "*ExtendsPageBase;.finalMethod(Ljava/lang/Object;)V"
         thisInstance: {original: baseInstance, type: unknown}
         args:
@@ -102,7 +90,6 @@ rootFuncTable:
     argVariables: []
     classKey: "*ExtendsTestMain;"
     testDoc: null
-    type: method
     key: "*ExtendsTestMain;.extendsTest()V"
 subClassTable:
   classes:

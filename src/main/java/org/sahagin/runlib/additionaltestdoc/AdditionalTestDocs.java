@@ -6,8 +6,8 @@ import java.util.List;
 public class AdditionalTestDocs {
     private List<AdditionalClassTestDoc> classTestDocs
     = new ArrayList<AdditionalClassTestDoc>(128);
-    private List<AdditionalFuncTestDoc> funcTestDocs
-    = new ArrayList<AdditionalFuncTestDoc>(256);
+    private List<AdditionalMethodTestDoc> methodTestDocs
+    = new ArrayList<AdditionalMethodTestDoc>(256);
 
     public List<AdditionalClassTestDoc> getClassTestDocs() {
         return classTestDocs;
@@ -24,12 +24,12 @@ public class AdditionalTestDocs {
         classTestDocs.add(additionalClassTestDoc);
     }
 
-    public List<AdditionalFuncTestDoc> getFuncTestDocs() {
-        return funcTestDocs;
+    public List<AdditionalMethodTestDoc> getMethodTestDocs() {
+        return methodTestDocs;
     }
 
-    public void funcAdd(AdditionalFuncTestDoc funcTestDoc) {
-        funcTestDocs.add(funcTestDoc);
+    public void methodAdd(AdditionalMethodTestDoc methodTestDoc) {
+        methodTestDocs.add(methodTestDoc);
     }
 
     public void methodAdd(String classQualifiedName, String simpleName, String testDoc) {
@@ -37,7 +37,7 @@ public class AdditionalTestDocs {
         additionalMethodTestDoc.setClassQualifiedName(classQualifiedName);
         additionalMethodTestDoc.setQualifiedName(classQualifiedName + "." + simpleName);
         additionalMethodTestDoc.setTestDoc(testDoc);
-        funcTestDocs.add(additionalMethodTestDoc);
+        methodTestDocs.add(additionalMethodTestDoc);
     }
 
     // returns null if not found
@@ -56,15 +56,15 @@ public class AdditionalTestDocs {
     }
 
     // returns null if not found
-    public AdditionalFuncTestDoc getFuncTestDoc(String qualifiedFuncName) {
-        if (qualifiedFuncName == null) {
+    public AdditionalMethodTestDoc getMethodTestDoc(String qualifiedMethodName) {
+        if (qualifiedMethodName == null) {
             throw new NullPointerException();
         }
         // last set data is referred first
-        for (int i = funcTestDocs.size() - 1; i >= 0; i--) {
-            AdditionalFuncTestDoc funcTestDoc = funcTestDocs.get(i);
-            if (qualifiedFuncName.equals(funcTestDoc.getQualifiedName())) {
-                return funcTestDoc;
+        for (int i = methodTestDocs.size() - 1; i >= 0; i--) {
+            AdditionalMethodTestDoc methodTestDoc = methodTestDocs.get(i);
+            if (qualifiedMethodName.equals(methodTestDoc.getQualifiedName())) {
+                return methodTestDoc;
             }
         }
         return null;

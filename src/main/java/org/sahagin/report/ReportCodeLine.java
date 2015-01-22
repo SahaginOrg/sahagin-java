@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.sahagin.share.runresults.StackLine;
 import org.sahagin.share.srctree.code.CodeLine;
-import org.sahagin.share.srctree.code.SubFunctionInvoke;
+import org.sahagin.share.srctree.code.SubMethodInvoke;
 
 /**
  * CodeLine for report
@@ -16,19 +16,20 @@ public class ReportCodeLine {
     // placeholder must have been resolved
     private String testDoc;
     // placeholder must have been resolved
-    private List<String> funcArgTestDocs = new ArrayList<String>(4);
+    private List<String> methodArgTestDocs = new ArrayList<String>(4);
     private List<StackLine> stackLines;
     private boolean hasError = false;
     private boolean alreadyRun = false;
     private String ttId;
     private String parentTtId = null; // null means no parent
 
-    public String getFunctionKey() {
-        if (!(codeLine.getCode() instanceof SubFunctionInvoke)) {
+    public String getMethodKey() {
+        if (!(codeLine.getCode() instanceof SubMethodInvoke)) {
             return "";
         }
-        SubFunctionInvoke invoke = (SubFunctionInvoke) codeLine.getCode();
-        return invoke.getSubFunctionKey();
+
+        SubMethodInvoke invoke = (SubMethodInvoke) codeLine.getCode();
+        return invoke.getSubMethodKey();
     }
 
     public String getOriginal() {
@@ -59,17 +60,17 @@ public class ReportCodeLine {
         this.testDoc = testDoc;
     }
 
-    public List<String> getFuncArgTestDocs() {
-        return funcArgTestDocs;
+    public List<String> getMethodArgTestDocs() {
+        return methodArgTestDocs;
     }
 
-    public void addFuncArgTestDoc(String funcArgTestDoc) {
-        this.funcArgTestDocs.add(funcArgTestDoc);
+    public void addMethodArgTestDoc(String methodArgTestDoc) {
+        this.methodArgTestDocs.add(methodArgTestDoc);
     }
 
-    public void addAllFuncArgTestDocs(List<String> funcArgTestDocs) {
-        for (String funcArgTestDoc : funcArgTestDocs) {
-            this.funcArgTestDocs.add(funcArgTestDoc);
+    public void addAllMethodArgTestDocs(List<String> methodArgTestDocs) {
+        for (String methodArgTestDoc : methodArgTestDocs) {
+            this.methodArgTestDocs.add(methodArgTestDoc);
         }
     }
 

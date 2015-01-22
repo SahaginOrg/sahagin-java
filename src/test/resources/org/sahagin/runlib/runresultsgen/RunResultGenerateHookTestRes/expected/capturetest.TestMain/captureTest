@@ -2,18 +2,18 @@ runFailures: []
 lineScreenCaptures:
 - path: "*001.png"
   stackLines:
-  - {codeBodyIndex: 0, functionKey: "*TestMain;.captureTest()V", line: 18}
+  - {codeBodyIndex: 0, methodKey: "*TestMain;.captureTest()V", line: 18}
 - path: "*002.png"
   stackLines:
-  - {codeBodyIndex: 0, functionKey: "*TestMain;.subMethod()V", line: 27}
-  - {codeBodyIndex: 1, functionKey: "*TestMain;.captureTest()V", line: 19}
+  - {codeBodyIndex: 0, methodKey: "*TestMain;.subMethod()V", line: 27}
+  - {codeBodyIndex: 1, methodKey: "*TestMain;.captureTest()V", line: 19}
 - path: "*003.png"
   stackLines:
-  - {codeBodyIndex: 1, functionKey: "*TestMain;.subMethod()V", line: 28}
-  - {codeBodyIndex: 1, functionKey: "*TestMain;.captureTest()V", line: 19}
+  - {codeBodyIndex: 1, methodKey: "*TestMain;.subMethod()V", line: 28}
+  - {codeBodyIndex: 1, methodKey: "*TestMain;.captureTest()V", line: 19}
 - path: "*004.png"
   stackLines:
-  - {codeBodyIndex: 1, functionKey: "*TestMain;.captureTest()V", line: 19}
+  - {codeBodyIndex: 1, methodKey: "*TestMain;.captureTest()V", line: 19}
 - path: "*005.png"
   stackLines:
-  - {codeBodyIndex: 2, functionKey: "*TestMain;.captureTest()V", line: 20}
+  - {codeBodyIndex: 2, methodKey: "*TestMain;.captureTest()V", line: 20}

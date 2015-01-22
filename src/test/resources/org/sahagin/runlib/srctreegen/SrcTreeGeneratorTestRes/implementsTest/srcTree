@@ -1,5 +1,5 @@
-subFuncTable:
-  functions:
+subMethodTable:
+  methods:
   - codeBody: []
     name: "*.ImplementsPage.baseMethod"
     argVariables: [arg]
@@ -24,8 +24,8 @@ subFuncTable:
     classKey: "*ImplementsTestBase;"
     testDoc: 'Doc: testBaseMethod: {arg}'
     key: "*ImplementsTestBase;.testBaseMethod(Ljava/lang/String;)V"
-rootFuncTable:
-  functions:
+rootMethodTable:
+  methods:
   - codeBody:
     - code: {original: testBaseMethod("DEF");, type: unknown}
     - code: {original: ImplementsPage pageInstance=new ImplementsPage();, type: unknown}

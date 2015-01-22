@@ -8,16 +8,14 @@
     <script src="${externalResourceRootDir}/js/share/yaml/yaml-utils.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/code/code.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/code/string-code.js"></script>
-    <script src="${externalResourceRootDir}/js/share/srctree/code/func-argument.js"></script>
+    <script src="${externalResourceRootDir}/js/share/srctree/code/method-argument.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/code/unknown-code.js"></script>
-    <script src="${externalResourceRootDir}/js/share/srctree/code/sub-function-invoke.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/code/sub-method-invoke.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/code/code-line.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/test-class.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/page-class.js"></script>
-    <script src="${externalResourceRootDir}/js/share/srctree/test-function.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/test-method.js"></script>
-    <script src="${externalResourceRootDir}/js/share/srctree/test-func-table.js"></script>
+    <script src="${externalResourceRootDir}/js/share/srctree/test-method-table.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/test-class-table.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/src-tree.js"></script>
     <script src="${externalResourceRootDir}/js/share/testdoc-resolver.js"></script>
@@ -44,10 +42,10 @@
     #else
     <div>${className}</div>
     #end
-    #if ( ${funcTestDoc} )
-    <div>${funcTestDoc} (${funcName})</div>
+    #if ( ${methodTestDoc} )
+    <div>${methodTestDoc} (${methodName})</div>
     #else
-    <div>${funcName}</div>
+    <div>${methodName}</div>
     #end
     <br/>
     <div class="scrollContainer" id="script_table_container">
@@ -66,7 +64,7 @@
           #else
             #set( $dataTtParentId = "" )
           #end
-          <tr data-tt-id="${codeLine.getTtId()}" ${dataTtParentId} data-func-key="${codeLine.getFunctionKey()}" class="${lineClass}">
+          <tr data-tt-id="${codeLine.getTtId()}" ${dataTtParentId} data-method-key="${codeLine.getMethodKey()}" class="${lineClass}">
             <td>${codeLine.getPageTestDoc()}</td>
             <td>${codeLine.getTestDoc()}</td>
             <td>${codeLine.getCodeLine().getCode().getOriginal()}</td>
@@ -94,10 +92,10 @@
       <span id="err_msg">${errMsg}</span>
     </div>
     #end
-    <div id="funcArgTestDocs">
+    <div id="methodArgTestDocs">
     #foreach( $codeLine in $codeBody )
-    #foreach ( $funcArgTestDoc in ${codeLine.getFuncArgTestDocs()} )
-      <div class="hiddenFuncArgTestDoc" data-tt-id="${codeLine.getTtId()}">${funcArgTestDoc}</div>
+    #foreach ( $methodArgTestDoc in ${codeLine.getMethodArgTestDocs()} )
+      <div class="hiddenMethodArgTestDoc" data-tt-id="${codeLine.getTtId()}">${methodArgTestDoc}</div>
     #end
     #end
     </div>

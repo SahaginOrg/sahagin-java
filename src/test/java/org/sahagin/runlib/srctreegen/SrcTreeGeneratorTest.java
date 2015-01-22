@@ -21,7 +21,7 @@ public class SrcTreeGeneratorTest extends TestBase {
     public static void setUpClass() throws IOException {
         AcceptableLocales locales = AcceptableLocales.getInstance(null);
         AdapterContainer.globalInitialize(locales);
-        // set RootFunctionAdapter
+        // set RootMethodAdapter
         new JUnit4Adapter().initialSetAdapter();
     }
 
@@ -63,11 +63,11 @@ public class SrcTreeGeneratorTest extends TestBase {
     // - recursive method call
     // - mutual recursive method call
     // - nested sub method call and it's method argument
-    // - when arguments of SubFunctionInvoke is another SubFunctionInvoke
+    // - when arguments of SubMethodInvoke is another SubMethodInvoke
     // - testDoc placeholder (variable name and index and this)
     // - @Test, @TestDoc, @Page annotation
     // - capture value of @TestDoc
-    // - variable assignment with SubFunctionInvoke
+    // - variable assignment with SubMethodInvoke
     // - predefined methods ( assert, webDriver, findElement, by, click, sendKeys)
     // - multiple lines statement
     // - multiple statements in a line

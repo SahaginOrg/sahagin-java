@@ -8,14 +8,14 @@ import org.sahagin.TestBase;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlUtils;
 
-public class RootFuncRunResultTest extends TestBase {
+public class RootMethodRunResultTest extends TestBase {
 
-    // convert YAML -> rootFuncRunResult -> YAML, then compare 2 YAML
+    // convert YAML -> rootMethodRunResult -> YAML, then compare 2 YAML
     @Test
     public void yamlConversion() throws YamlConvertException {
-        File fromYamlFile = new File(testResourceDir("yamlConversion"), "rootFuncRunResult");
+        File fromYamlFile = new File(testResourceDir("yamlConversion"), "rootMethodRunResult");
         Map<String, Object> fromYamlObj = YamlUtils.load(fromYamlFile);
-        RootFuncRunResult result = new RootFuncRunResult();
+        RootMethodRunResult result = new RootMethodRunResult();
         result.fromYamlObject(fromYamlObj);
         Map<String, Object> toYamlObj = result.toYamlObject();
         assertYamlEquals(fromYamlObj, toYamlObj);

@@ -2,4 +2,4 @@ runFailures: []
 lineScreenCaptures:
 - path: "*001.png"
   stackLines:
-  - {codeBodyIndex: 1, functionKey: "*TestMain;.defaultInterfaceTest()V"}
+  - {codeBodyIndex: 1, methodKey: "*TestMain;.defaultInterfaceTest()V"}

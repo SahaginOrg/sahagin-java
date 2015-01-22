@@ -36,7 +36,7 @@ import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.sahagin.runlib.additionaltestdoc.AdditionalClassTestDoc;
-import org.sahagin.runlib.additionaltestdoc.AdditionalFuncTestDoc;
+import org.sahagin.runlib.additionaltestdoc.AdditionalMethodTestDoc;
 import org.sahagin.runlib.additionaltestdoc.AdditionalPage;
 import org.sahagin.runlib.additionaltestdoc.AdditionalTestDocs;
 import org.sahagin.runlib.external.CaptureStyle;
@@ -49,12 +49,11 @@ import org.sahagin.share.srctree.PageClass;
 import org.sahagin.share.srctree.SrcTree;
 import org.sahagin.share.srctree.TestClass;
 import org.sahagin.share.srctree.TestClassTable;
-import org.sahagin.share.srctree.TestFuncTable;
-import org.sahagin.share.srctree.TestFunction;
 import org.sahagin.share.srctree.TestMethod;
+import org.sahagin.share.srctree.TestMethodTable;
 import org.sahagin.share.srctree.code.Code;
 import org.sahagin.share.srctree.code.CodeLine;
-import org.sahagin.share.srctree.code.FuncArgument;
+import org.sahagin.share.srctree.code.MethodArgument;
 import org.sahagin.share.srctree.code.StringCode;
 import org.sahagin.share.srctree.code.SubMethodInvoke;
 import org.sahagin.share.srctree.code.UnknownCode;
@@ -102,17 +101,17 @@ public class SrcTreeGenerator {
         if (pair.getLeft() != null) {
             return pair;
         }
-        AdditionalFuncTestDoc additional
-        = additionalTestDocs.getFuncTestDoc(ASTUtils.qualifiedMethodName(method));
+        AdditionalMethodTestDoc additional
+        = additionalTestDocs.getMethodTestDoc(ASTUtils.qualifiedMethodName(method));
         if (additional != null) {
             return Pair.of(additional.getTestDoc(), additional.getCaptureStyle());
         }
         return Pair.of(null, null);
     }
 
-    private boolean isSubFunction(IMethodBinding methodBinding) {
-        // rootFuntion also can have its TestDoc value
-        if (AdapterContainer.globalInstance().isRootFunction(methodBinding)) {
+    private boolean isSubMethod(IMethodBinding methodBinding) {
+        // rootMethod also can have its TestDoc value
+        if (AdapterContainer.globalInstance().isRootMethod(methodBinding)) {
             return false;
         }
         return getTestDoc(methodBinding).getLeft() != null;
@@ -143,12 +142,12 @@ public class SrcTreeGenerator {
     // methods does not have code information yet.
     private class CollectRootVisitor extends ASTVisitor {
         private TestClassTable rootClassTable;
-        private TestFuncTable rootMethodTable;
+        private TestMethodTable rootMethodTable;
 
         // old value in rootClassTable is not replaced.
         // old value in rootMethodTable is replaced.
         public CollectRootVisitor(
-                TestClassTable rootClassTable, TestFuncTable rootMethodTable) {
+                TestClassTable rootClassTable, TestMethodTable rootMethodTable) {
             this.rootClassTable = rootClassTable;
             this.rootMethodTable = rootMethodTable;
         }
@@ -156,7 +155,7 @@ public class SrcTreeGenerator {
         @Override
         public boolean visit(MethodDeclaration node) {
             IMethodBinding methodBinding = node.resolveBinding();
-            if (!AdapterContainer.globalInstance().isRootFunction(methodBinding)) {
+            if (!AdapterContainer.globalInstance().isRootMethod(methodBinding)) {
                 return super.visit(node);
             }
 
@@ -198,7 +197,7 @@ public class SrcTreeGenerator {
             }
             testMethod.setTestClassKey(rootClass.getKey());
             testMethod.setTestClass(rootClass);
-            rootMethodTable.addTestFunction(testMethod);
+            rootMethodTable.addTestMethod(testMethod);
 
             rootClass.addTestMethodKey(testMethod.getKey());
             rootClass.addTestMethod(testMethod);
@@ -209,18 +208,18 @@ public class SrcTreeGenerator {
 
     private class CollectRootRequestor extends FileASTRequestor {
         private TestClassTable rootClassTable;
-        private TestFuncTable rootMethodTable;
+        private TestMethodTable rootMethodTable;
 
         public CollectRootRequestor() {
             rootClassTable = new TestClassTable();
-            rootMethodTable = new TestFuncTable();
+            rootMethodTable = new TestMethodTable();
         }
 
         public TestClassTable getRootClassTable() {
             return rootClassTable;
         }
 
-        public TestFuncTable getRootMethodTable() {
+        public TestMethodTable getRootMethodTable() {
             return rootMethodTable;
         }
 
@@ -232,14 +231,14 @@ public class SrcTreeGenerator {
 
     private class CollectSubVisitor extends ASTVisitor {
         private TestClassTable subClassTable;
-        private TestFuncTable subMethodTable;
+        private TestMethodTable subMethodTable;
         private TestClassTable rootClassTable;
 
         // rootClassTable if only for read, not write any data.
         // old value in subClassTable is not replaced.
         // old value in subMethodTable is replaced.
         public CollectSubVisitor(TestClassTable rootClassTable,
-                TestClassTable subClassTable, TestFuncTable subMethodTable) {
+                TestClassTable subClassTable, TestMethodTable subMethodTable) {
             this.rootClassTable = rootClassTable;
             this.subClassTable = subClassTable;
             this.subMethodTable = subMethodTable;
@@ -248,7 +247,7 @@ public class SrcTreeGenerator {
         @Override
         public boolean visit(MethodDeclaration node) {
             IMethodBinding methodBinding = node.resolveBinding();
-            if (!isSubFunction(methodBinding)) {
+            if (!isSubMethod(methodBinding)) {
                 return super.visit(node);
             }
 
@@ -290,7 +289,7 @@ public class SrcTreeGenerator {
             }
             testMethod.setTestClassKey(testClass.getKey());
             testMethod.setTestClass(testClass);
-            subMethodTable.addTestFunction(testMethod);
+            subMethodTable.addTestMethod(testMethod);
 
             testClass.addTestMethodKey(testMethod.getKey());
             testClass.addTestMethod(testMethod);
@@ -301,20 +300,20 @@ public class SrcTreeGenerator {
 
     private class CollectSubRequestor extends FileASTRequestor {
         private TestClassTable subClassTable;
-        private TestFuncTable subMethodTable;
+        private TestMethodTable subMethodTable;
         private TestClassTable rootClassTable;
 
         public CollectSubRequestor(TestClassTable rootClassTable) {
             this.rootClassTable = rootClassTable;
             subClassTable = new TestClassTable();
-            subMethodTable = new TestFuncTable();
+            subMethodTable = new TestMethodTable();
         }
 
         public TestClassTable getSubClassTable() {
             return subClassTable;
         }
 
-        public TestFuncTable getSubMethodTable() {
+        public TestMethodTable getSubMethodTable() {
             return subMethodTable;
         }
 
@@ -326,12 +325,12 @@ public class SrcTreeGenerator {
     }
 
     private class CollectCodeVisitor extends ASTVisitor {
-        private TestFuncTable rootMethodTable;
-        private TestFuncTable subMethodTable;
+        private TestMethodTable rootMethodTable;
+        private TestMethodTable subMethodTable;
         private CompilationUnit compilationUnit;
 
         // set code information to method table
-        public CollectCodeVisitor(TestFuncTable rootMethodTable, TestFuncTable subMethodTable,
+        public CollectCodeVisitor(TestMethodTable rootMethodTable, TestMethodTable subMethodTable,
                 CompilationUnit compilationUnit) {
             this.rootMethodTable = rootMethodTable;
             this.subMethodTable = subMethodTable;
@@ -339,7 +338,7 @@ public class SrcTreeGenerator {
         }
 
         private Code methodBindingCode(IMethodBinding binding,
-                Expression thisInstance, List<?> arguments, String original, TestFunction parentFunc) {
+                Expression thisInstance, List<?> arguments, String original, TestMethod parentMethod) {
             if (binding == null) {
                 UnknownCode unknownCode = new UnknownCode();
                 unknownCode.setOriginal(original);
@@ -347,43 +346,43 @@ public class SrcTreeGenerator {
             }
 
             String uniqueKey = binding.getKey();
-            TestFunction invocationFunc = subMethodTable.getByKey(uniqueKey);
-            if (invocationFunc == null) {
+            TestMethod invocationMethod = subMethodTable.getByKey(uniqueKey);
+            if (invocationMethod == null) {
                 // TODO using additionalTestDocKey is temporal logic..
                 // TODO What does binding.getName method return for constructor method??
                 String additionalUniqueKey = AdditionalTestDocsSetter.additionalTestDocKey(
                         binding.getDeclaringClass().getQualifiedName() + "." + binding.getName());
-                invocationFunc = subMethodTable.getByKey(additionalUniqueKey);
-                if (invocationFunc == null) {
+                invocationMethod = subMethodTable.getByKey(additionalUniqueKey);
+                if (invocationMethod == null) {
                     UnknownCode unknownCode = new UnknownCode();
                     unknownCode.setOriginal(original);
                     return unknownCode;
                 }
             }
             SubMethodInvoke subMethodInvoke = new SubMethodInvoke();
-            subMethodInvoke.setSubFunctionKey(invocationFunc.getKey());
-            subMethodInvoke.setSubFunction(invocationFunc);
+            subMethodInvoke.setSubMethodKey(invocationMethod.getKey());
+            subMethodInvoke.setSubMethod(invocationMethod);
             if (thisInstance == null) {
                 subMethodInvoke.setThisInstance(null);
             } else {
-                subMethodInvoke.setThisInstance(expressionCode(thisInstance, parentFunc));
+                subMethodInvoke.setThisInstance(expressionCode(thisInstance, parentMethod));
             }
             for (Object arg : arguments) {
                 Expression exp = (Expression) arg;
-                subMethodInvoke.addArg(expressionCode(exp, parentFunc));
+                subMethodInvoke.addArg(expressionCode(exp, parentMethod));
             }
             subMethodInvoke.setOriginal(original);
             return subMethodInvoke;
         }
 
         private Code generateParamVarCode(Expression expression,
-                IVariableBinding paramVarBinding, TestFunction parentFunc) {
+                IVariableBinding paramVarBinding, TestMethod parentMethod) {
             int argIndex;
-            if (parentFunc == null) {
+            if (parentMethod == null) {
                 argIndex = -1;
             } else {
                 String varName = paramVarBinding.getName();
-                argIndex = parentFunc.getArgVariables().indexOf(varName);
+                argIndex = parentMethod.getArgVariables().indexOf(varName);
             }
 
             if (argIndex == -1) {
@@ -391,10 +390,10 @@ public class SrcTreeGenerator {
                 return generateUnknownCode(expression);
             }
 
-            FuncArgument funcArg = new FuncArgument();
-            funcArg.setOriginal(expression.toString().trim());
-            funcArg.setArgIndex(argIndex);
-            return funcArg;
+            MethodArgument methodArg = new MethodArgument();
+            methodArg.setOriginal(expression.toString().trim());
+            methodArg.setArgIndex(argIndex);
+            return methodArg;
         }
 
         private UnknownCode generateUnknownCode(Expression expression) {
@@ -403,7 +402,7 @@ public class SrcTreeGenerator {
             return unknownCode;
         }
 
-        private Code expressionCode(Expression expression, TestFunction parentFunc) {
+        private Code expressionCode(Expression expression, TestMethod parentMethod) {
             if (expression == null) {
                 StringCode strCode = new StringCode();
                 strCode.setValue(null);
@@ -416,24 +415,24 @@ public class SrcTreeGenerator {
                 return strCode;
             } else if (expression instanceof Assignment) {
                 Assignment assignment = (Assignment) expression;
-                return expressionCode(assignment.getRightHandSide(), parentFunc);
+                return expressionCode(assignment.getRightHandSide(), parentMethod);
             } else if (expression instanceof MethodInvocation) {
                 MethodInvocation invocation = (MethodInvocation) expression;
                 IMethodBinding binding = invocation.resolveMethodBinding();
                 return methodBindingCode(binding, invocation.getExpression(),
-                        invocation.arguments(), expression.toString().trim(), parentFunc);
+                        invocation.arguments(), expression.toString().trim(), parentMethod);
             } else if (expression instanceof ClassInstanceCreation) {
                 ClassInstanceCreation creation = (ClassInstanceCreation) expression;
                 IMethodBinding binding = creation.resolveConstructorBinding();
                 return methodBindingCode(binding, null, creation.arguments(),
-                        expression.toString().trim(), parentFunc);
+                        expression.toString().trim(), parentMethod);
             } else if (expression instanceof SimpleName) {
                SimpleName simpleName = (SimpleName) expression;
                IBinding binding = simpleName.resolveBinding();
                if (binding instanceof IVariableBinding) {
                    IVariableBinding varBinding = (IVariableBinding) binding;
                    if (varBinding.isParameter()) {
-                       return generateParamVarCode(expression, varBinding, parentFunc);
+                       return generateParamVarCode(expression, varBinding, parentMethod);
                    } else {
                        return generateUnknownCode(expression);
                    }
@@ -447,12 +446,12 @@ public class SrcTreeGenerator {
 
         @Override
         public boolean visit(MethodDeclaration node) {
-            TestFunction testFunc;
+            TestMethod testMethod;
             IMethodBinding methodBinding = node.resolveBinding();
-            if (AdapterContainer.globalInstance().isRootFunction(methodBinding)) {
-                testFunc = rootMethodTable.getByKey(methodBinding.getKey());
-            } else if (isSubFunction(methodBinding)) {
-                testFunc = subMethodTable.getByKey(methodBinding.getKey());
+            if (AdapterContainer.globalInstance().isRootMethod(methodBinding)) {
+                testMethod = rootMethodTable.getByKey(methodBinding.getKey());
+            } else if (isSubMethod(methodBinding)) {
+                testMethod = subMethodTable.getByKey(methodBinding.getKey());
             } else {
                 return super.visit(node);
             }
@@ -469,13 +468,13 @@ public class SrcTreeGenerator {
                 Code code;
                 if (statementNode instanceof ExpressionStatement) {
                     Expression expression = ((ExpressionStatement)statementNode).getExpression();
-                    code = expressionCode(expression, testFunc);
+                    code = expressionCode(expression, testMethod);
                 } else if (statementNode instanceof VariableDeclarationStatement) {
                     // TODO assume single VariableDeclarationFragment
                     VariableDeclarationFragment varFrag
                     = (VariableDeclarationFragment)(((VariableDeclarationStatement)statementNode).fragments().get(0));
                     Expression expression = varFrag.getInitializer();
-                    code = expressionCode(expression, testFunc);
+                    code = expressionCode(expression, testMethod);
                 } else {
                     code = new UnknownCode();
                     code.setOriginal(statementNode.toString().trim());
@@ -488,17 +487,17 @@ public class SrcTreeGenerator {
                 codeLine.setCode(code);
                 // sometimes original value set by expressionCode method does not equal to the on of statementNode
                 code.setOriginal(statementNode.toString().trim());
-                testFunc.addCodeBody(codeLine);
+                testMethod.addCodeBody(codeLine);
             }
             return super.visit(node);
         }
     }
 
     private class CollectCodeRequestor extends FileASTRequestor {
-        private TestFuncTable rootMethodTable;
-        private TestFuncTable subMethodTable;
+        private TestMethodTable rootMethodTable;
+        private TestMethodTable subMethodTable;
 
-        public CollectCodeRequestor(TestFuncTable rootMethodTable, TestFuncTable subMethodTable) {
+        public CollectCodeRequestor(TestMethodTable rootMethodTable, TestMethodTable subMethodTable) {
             this.rootMethodTable = rootMethodTable;
             this.subMethodTable = subMethodTable;
         }
@@ -537,8 +536,8 @@ public class SrcTreeGenerator {
         SrcTree result = new SrcTree();
         result.setRootClassTable(rootRequestor.getRootClassTable());
         result.setSubClassTable(subRequestor.getSubClassTable());
-        result.setRootFuncTable(rootRequestor.getRootMethodTable());
-        result.setSubFuncTable(subRequestor.getSubMethodTable());
+        result.setRootMethodTable(rootRequestor.getRootMethodTable());
+        result.setSubMethodTable(subRequestor.getSubMethodTable());
         return result;
     }
 

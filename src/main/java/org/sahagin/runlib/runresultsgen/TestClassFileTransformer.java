@@ -21,7 +21,7 @@ import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.share.IllegalTestScriptException;
 import org.sahagin.share.Logging;
 import org.sahagin.share.srctree.SrcTree;
-import org.sahagin.share.srctree.TestFunction;
+import org.sahagin.share.srctree.TestMethod;
 import org.sahagin.share.srctree.code.CodeLine;
 import org.sahagin.share.yaml.YamlConvertException;
 
@@ -51,7 +51,7 @@ public class TestClassFileTransformer implements ClassFileTransformer {
 
     private boolean isSubMethod(CtMethod method) {
         // root method also may be TestDoc method
-        if (AdapterContainer.globalInstance().isRootFunction(method)) {
+        if (AdapterContainer.globalInstance().isRootMethod(method)) {
             return false;
         }
 
@@ -64,7 +64,7 @@ public class TestClassFileTransformer implements ClassFileTransformer {
         }
         // TODO method overload is not supported
         String methodQualifiedName = qualifiedName(method);
-        return AdapterContainer.globalInstance().getAdditionalTestDocs().getFuncTestDoc(
+        return AdapterContainer.globalInstance().getAdditionalTestDocs().getMethodTestDoc(
                 methodQualifiedName) != null;
     }
 
@@ -93,7 +93,7 @@ public class TestClassFileTransformer implements ClassFileTransformer {
                 // CtClass.getMethods, so exclude such methods
                 continue;
             }
-            if (AdapterContainer.globalInstance().isRootFunction(method)) {
+            if (AdapterContainer.globalInstance().isRootMethod(method)) {
                 result.add(method);
             }
         }
@@ -151,31 +151,31 @@ public class TestClassFileTransformer implements ClassFileTransformer {
                 return null;
             }
             List<CtMethod> subMethods = allSubMethods(ctClass);
-            for (CtMethod subMethod : subMethods) {
-                if (subMethod.isEmpty()) {
+            for (CtMethod ctSubMethod : subMethods) {
+                if (ctSubMethod.isEmpty()) {
                     continue; // cannot hook empty method
                 }
-                int funcDeclaredStartLine;
-                int funcDeclaredEndLine;
+                int methodDeclaredStartLine;
+                int methodDeclaredEndLine;
                 try {
-                    funcDeclaredStartLine = declareStartLine(subMethod);
-                    funcDeclaredEndLine = declareEndLine(subMethod);
+                    methodDeclaredStartLine = declareStartLine(ctSubMethod);
+                    methodDeclaredEndLine = declareEndLine(ctSubMethod);
                 } catch (RuntimeException e) {
                     // Maybe when this class is frozen.
                     // Since frozen classes are maybe system class, just ignore this exception
                     logger.log(Level.INFO, "", e);
                     return null;
                 }
-                String subMethodName = qualifiedName(subMethod);
-                TestFunction subFunction = StackLineUtils.getTestFunction(
-                        srcTree, subMethodName, funcDeclaredStartLine, funcDeclaredEndLine);
-                if (subFunction == null) {
+                String subMethodName = qualifiedName(ctSubMethod);
+                TestMethod subMethod = StackLineUtils.getTestMethod(
+                        srcTree, subMethodName, methodDeclaredStartLine, methodDeclaredEndLine);
+                if (subMethod == null) {
                     continue;
                 }
-                for (int i = 0; i < subFunction.getCodeBody().size(); i++) {
-                    CodeLine codeLine = subFunction.getCodeBody().get(i);
-                    if (i + 1 < subFunction.getCodeBody().size()) {
-                        CodeLine nextCodeLine = subFunction.getCodeBody().get(i + 1);
+                for (int i = 0; i < subMethod.getCodeBody().size(); i++) {
+                    CodeLine codeLine = subMethod.getCodeBody().get(i);
+                    if (i + 1 < subMethod.getCodeBody().size()) {
+                        CodeLine nextCodeLine = subMethod.getCodeBody().get(i + 1);
                         assert codeLine.getEndLine() <= nextCodeLine.getStartLine();
                         if (codeLine.getEndLine() == nextCodeLine.getStartLine()) {
                             // - if multiple statements exist on a line, insert hook only after the last statement
@@ -190,8 +190,8 @@ public class TestClassFileTransformer implements ClassFileTransformer {
                     // insert the hook code to the next line of the hook target line
                     // to take screen shot after the target line procedure has been finished
                     // (the code inserted by the insertAt method is inserted just before the target line)
-                    int actualInsertedLine = subMethod.insertAt(codeLine.getEndLine() + 1, false, null);
-                    subMethod.insertAt(codeLine.getEndLine() + 1,
+                    int actualInsertedLine = ctSubMethod.insertAt(codeLine.getEndLine() + 1, false, null);
+                    ctSubMethod.insertAt(codeLine.getEndLine() + 1,
                             String.format("%s%s.beforeSubCodeBodyHook(\"%s\", %d, %d);",
                                     initializeSrc, hookClassName, subMethodName,
                                     codeLine.getStartLine(), actualInsertedLine));
@@ -200,21 +200,21 @@ public class TestClassFileTransformer implements ClassFileTransformer {
             }
             CtClass exceptionType = classPool.get(Throwable.class.getCanonicalName());
             List<CtMethod> rootMethods = allRootMethods(ctClass);
-            for (CtMethod rootMethod : rootMethods) {
-                if (rootMethod.isEmpty()) {
+            for (CtMethod ctRootMethod : rootMethods) {
+                if (ctRootMethod.isEmpty()) {
                     continue; // cannot hook empty method
                 }
-                TestFunction rootFunction = StackLineUtils.getTestFunction(
-                        srcTree, qualifiedName(rootMethod),
-                        declareStartLine(rootMethod), declareEndLine(rootMethod));
-                if (rootFunction == null) {
+                TestMethod rootMethod = StackLineUtils.getTestMethod(
+                        srcTree, qualifiedName(ctRootMethod),
+                        declareStartLine(ctRootMethod), declareEndLine(ctRootMethod));
+                if (rootMethod == null) {
                     continue;
                 }
-                String rootMethodName = qualifiedName(rootMethod);
-                for (int i = 0; i < rootFunction.getCodeBody().size(); i++) {
-                    CodeLine codeLine = rootFunction.getCodeBody().get(i);
-                    if (i + 1 < rootFunction.getCodeBody().size()) {
-                        CodeLine nextCodeLine = rootFunction.getCodeBody().get(i + 1);
+                String rootMethodName = qualifiedName(ctRootMethod);
+                for (int i = 0; i < rootMethod.getCodeBody().size(); i++) {
+                    CodeLine codeLine = rootMethod.getCodeBody().get(i);
+                    if (i + 1 < rootMethod.getCodeBody().size()) {
+                        CodeLine nextCodeLine = rootMethod.getCodeBody().get(i + 1);
                         assert codeLine.getEndLine() <= nextCodeLine.getStartLine();
                         if (codeLine.getEndLine() == nextCodeLine.getStartLine()) {
                             // - if multiple statements exist on a line, insert hook only after the last statement
@@ -230,17 +230,17 @@ public class TestClassFileTransformer implements ClassFileTransformer {
                     // insert the hook code to the next line of the hook target line
                     // to take screen shot after the target line procedure has been finished
                     // (the code inserted by the insertAt method is inserted just before the target line)
-                    int actualInsertedLine = rootMethod.insertAt(codeLine.getEndLine() + 1, false, null);
-                    rootMethod.insertAt(codeLine.getEndLine() + 1,
+                    int actualInsertedLine = ctRootMethod.insertAt(codeLine.getEndLine() + 1, false, null);
+                    ctRootMethod.insertAt(codeLine.getEndLine() + 1,
                             String.format("%s%s.beforeRootCodeBodyHook(\"%s\", %d, %d);",
                                     initializeSrc, hookClassName, rootMethodName,
                                     codeLine.getStartLine(), actualInsertedLine));
                 }
 
-                rootMethod.insertBefore(initializeSrc + hookClassName + ".beforeRootMethodHook();");
-                rootMethod.addCatch(
+                ctRootMethod.insertBefore(initializeSrc + hookClassName + ".beforeRootMethodHook();");
+                ctRootMethod.addCatch(
                         "{ " + initializeSrc + hookClassName + ".rootMethodErrorHook($e); throw $e; }", exceptionType);
-                rootMethod.insertAfter(initializeSrc + hookClassName + ".afterRootMethodHook();", true);
+                ctRootMethod.insertAfter(initializeSrc + hookClassName + ".afterRootMethodHook();", true);
                 transformed = true;
             }
 

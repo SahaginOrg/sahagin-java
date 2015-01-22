@@ -5,66 +5,66 @@ import java.util.List;
 
 import org.sahagin.share.runresults.StackLine;
 import org.sahagin.share.srctree.SrcTree;
-import org.sahagin.share.srctree.TestFuncTable;
-import org.sahagin.share.srctree.TestFunction;
+import org.sahagin.share.srctree.TestMethod;
+import org.sahagin.share.srctree.TestMethodTable;
 import org.sahagin.share.srctree.code.CodeLine;
 
 class StackLineUtils {
 
-    // returns true if some codeLine of function locates
-    // between funcDeclareStartLine and funcDeclareEndLine
-    private static boolean funcLineMatches(TestFunction func,
-            int funcDeclareStartLine, int funcDeclareEndLine) {
-        for (CodeLine codeLine : func.getCodeBody()) {
-            if (funcDeclareStartLine <= codeLine.getStartLine()
-                    && codeLine.getEndLine() <= funcDeclareEndLine) {
+    // returns true if some codeLine of method locates
+    // between methodDeclareStartLine and methodDeclareEndLine
+    private static boolean methodLineMatches(TestMethod method,
+            int methodDeclareStartLine, int methodDeclareEndLine) {
+        for (CodeLine codeLine : method.getCodeBody()) {
+            if (methodDeclareStartLine <= codeLine.getStartLine()
+                    && codeLine.getEndLine() <= methodDeclareEndLine) {
                 return true;
             }
         }
         return false;
     }
 
-    // returns the TestFunction whose name matches to funcQualifiedName
-    // and codeBody locates between funcDeclareStartLine and funcDeclareEndLine
-    private static TestFunction getTestFunction(TestFuncTable table,
-            String funcQualifiedName, int funcDeclareStartLine, int funcDeclareEndLine) {
-        List<TestFunction> nameFuncs = table.getByQualifiedName(funcQualifiedName);
-        for (TestFunction func : nameFuncs) {
-            if (funcLineMatches(func, funcDeclareStartLine, funcDeclareEndLine)) {
-                return func;
+    // returns the TestMethod whose name matches to methodQualifiedName
+    // and codeBody locates between methodDeclareStartLine and methodDeclareEndLine
+    private static TestMethod getTestMethod(TestMethodTable table,
+            String methodQualifiedName, int methodDeclareStartLine, int methodDeclareEndLine) {
+        List<TestMethod> nameMethods = table.getByQualifiedName(methodQualifiedName);
+        for (TestMethod method : nameMethods) {
+            if (methodLineMatches(method, methodDeclareStartLine, methodDeclareEndLine)) {
+                return method;
             }
         }
         return null;
     }
 
-    // returns the TestFunction whose name matches to funcQualifiedName
-    // and codeBody locates between funcDeclareStartLine and funcDeclareEndLine
-    public static TestFunction getTestFunction(SrcTree srcTree,
-            String funcQualifiedName, int funcDeclareStartLine, int funcDeclareEndLine) {
-        TestFunction rootFunction = getTestFunction(
-                srcTree.getRootFuncTable(), funcQualifiedName, funcDeclareStartLine, funcDeclareEndLine);
-        if (rootFunction != null) {
-            return rootFunction;
+    // returns the TestMethod whose name matches to methodQualifiedName
+    // and codeBody locates between methodDeclareStartLine and methodDeclareEndLine
+    public static TestMethod getTestMethod(SrcTree srcTree,
+            String methodQualifiedName, int methodDeclareStartLine, int methodDeclareEndLine) {
+        TestMethod rootMethod = getTestMethod(srcTree.getRootMethodTable(),
+                methodQualifiedName, methodDeclareStartLine, methodDeclareEndLine);
+        if (rootMethod != null) {
+            return rootMethod;
         }
-        TestFunction subFunction = getTestFunction(
-                srcTree.getSubFuncTable(), funcQualifiedName, funcDeclareStartLine, funcDeclareEndLine);
-        if (subFunction != null) {
-            return subFunction;
+        TestMethod subMethod = getTestMethod(srcTree.getSubMethodTable(),
+                methodQualifiedName, methodDeclareStartLine, methodDeclareEndLine);
+        if (subMethod != null) {
+            return subMethod;
         }
         return null;
     }
 
-    // - assume only 1 root function line exists in currentStackTrace
+    // - assume only 1 root method line exists in currentStackTrace
     //   and overloaded root method does not exists
     // returns null if not found
-    public static TestFunction getRootFunction(
-            TestFuncTable rootFuncTable, StackTraceElement[] currentStackTrace) {
+    public static TestMethod getRootMethod(
+            TestMethodTable rootMethodTable, StackTraceElement[] currentStackTrace) {
         for (StackTraceElement element : currentStackTrace) {
-            List<TestFunction> rootFunctions
-            = rootFuncTable.getByQualifiedName(element.getClassName() + "." + element.getMethodName());
-            if (rootFunctions.size() > 0) {
-                assert rootFunctions.size() == 1;
-                return rootFunctions.get(0);
+            List<TestMethod> rootMethods
+            = rootMethodTable.getByQualifiedName(element.getClassName() + "." + element.getMethodName());
+            if (rootMethods.size() > 0) {
+                assert rootMethods.size() == 1;
+                return rootMethods.get(0);
             }
         }
         return null;
@@ -72,18 +72,18 @@ class StackLineUtils {
 
     // return null if not found
     private static StackLine getStackLine(
-            TestFuncTable table, String funcQualifiedName, int line) {
+            TestMethodTable table, String methodQualifiedName, int line) {
         if (line <= 0) {
             return null; // 0 or negative line number never matches
         }
-        List<TestFunction> nameFuncs = table.getByQualifiedName(funcQualifiedName);
-        for (TestFunction func : nameFuncs) {
-            for (int i = 0; i < func.getCodeBody().size(); i++) {
-                CodeLine codeLine = func.getCodeBody().get(i);
+        List<TestMethod> nameMethods = table.getByQualifiedName(methodQualifiedName);
+        for (TestMethod method : nameMethods) {
+            for (int i = 0; i < method.getCodeBody().size(); i++) {
+                CodeLine codeLine = method.getCodeBody().get(i);
                 if (codeLine.getStartLine() <= line && line <= codeLine.getEndLine()) {
                     StackLine result = new StackLine();
-                    result.setFunctionKey(func.getKey());
-                    result.setFunction(func);
+                    result.setMethodKey(method.getKey());
+                    result.setMethod(method);
                     result.setCodeBodyIndex(i);
                     result.setLine(line);
                     return result;
@@ -94,12 +94,12 @@ class StackLineUtils {
     }
 
     // null means method does not exists in srcTree
-    private static StackLine getStackLine(SrcTree srcTree, String funcQualifiedName, int line) {
-        StackLine rootStackLine = getStackLine(srcTree.getRootFuncTable(), funcQualifiedName, line);
+    private static StackLine getStackLine(SrcTree srcTree, String methodQualifiedName, int line) {
+        StackLine rootStackLine = getStackLine(srcTree.getRootMethodTable(), methodQualifiedName, line);
         if (rootStackLine != null) {
             return rootStackLine;
         }
-        StackLine subStackLine = getStackLine(srcTree.getSubFuncTable(), funcQualifiedName, line);
+        StackLine subStackLine = getStackLine(srcTree.getSubMethodTable(), methodQualifiedName, line);
         if (subStackLine != null) {
             return subStackLine;
         }
@@ -107,8 +107,8 @@ class StackLineUtils {
     }
 
     private static StackLine getStackLine(SrcTree srcTree, StackTraceElement element) {
-        return getStackLine(
-                srcTree, element.getClassName() + "." + element.getMethodName(), element.getLineNumber());
+        return getStackLine(srcTree,
+                element.getClassName() + "." + element.getMethodName(), element.getLineNumber());
     }
 
     public static List<StackLine> getStackLines(SrcTree srcTree, StackTraceElement[] elements) {

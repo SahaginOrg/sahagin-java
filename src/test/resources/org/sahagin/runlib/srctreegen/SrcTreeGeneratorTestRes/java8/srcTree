@@ -1,11 +1,11 @@
-subFuncTable:
-  functions:
+subMethodTable:
+  methods:
   - testDoc: 'Doc: defaultMethod'
     classKey: "*TestMain$InterfaceWithDefault;"
     name: "*.TestMain.InterfaceWithDefault.defaultMethod"
   - name: "*.TestMain.print"
-rootFuncTable:
-  functions:
+rootMethodTable:
+  methods:
   - codeBody:
     - code:
         original: |-

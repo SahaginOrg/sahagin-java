@@ -2,4 +2,4 @@ runFailures: []
 lineScreenCaptures:
 - path: "*001.png"
   stackLines:
-  - {codeBodyIndex: 1, functionKey: "*TestMain;.innerClassTest()V", line: "*"}
+  - {codeBodyIndex: 1, methodKey: "*TestMain;.innerClassTest()V", line: "*"}

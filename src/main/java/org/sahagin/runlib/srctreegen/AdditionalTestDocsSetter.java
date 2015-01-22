@@ -1,19 +1,17 @@
 package org.sahagin.runlib.srctreegen;
 
 import org.sahagin.runlib.additionaltestdoc.AdditionalClassTestDoc;
-import org.sahagin.runlib.additionaltestdoc.AdditionalFuncTestDoc;
 import org.sahagin.runlib.additionaltestdoc.AdditionalMethodTestDoc;
 import org.sahagin.runlib.additionaltestdoc.AdditionalPage;
 import org.sahagin.runlib.additionaltestdoc.AdditionalTestDocs;
 import org.sahagin.share.srctree.PageClass;
 import org.sahagin.share.srctree.TestClass;
 import org.sahagin.share.srctree.TestClassTable;
-import org.sahagin.share.srctree.TestFuncTable;
-import org.sahagin.share.srctree.TestFunction;
 import org.sahagin.share.srctree.TestMethod;
+import org.sahagin.share.srctree.TestMethodTable;
 
-// If TestClass or TestFunction for the AdditionlTestDoc does not exist in the table,
-// add them as sub TestClass or sub TestFunction.
+// If TestClass or TestMethod for the AdditionlTestDoc does not exist in the table,
+// add them as sub TestClass or sub TestMethod.
 // If already exists, override it's TestDoc value.
 //
 // - This class assumes class qualifiedName is unique
@@ -21,15 +19,15 @@ import org.sahagin.share.srctree.TestMethod;
 public class AdditionalTestDocsSetter {
     private TestClassTable rootClassTable;
     private TestClassTable subClassTable;
-    private TestFuncTable rootFuncTable;
-    private TestFuncTable subFuncTable;
+    private TestMethodTable rootMethodTable;
+    private TestMethodTable subMethodTable;
 
     public AdditionalTestDocsSetter(TestClassTable rootClassTable, TestClassTable subClassTable,
-            TestFuncTable rootFuncTable, TestFuncTable subFuncTable) {
+            TestMethodTable rootMethodTable, TestMethodTable subMethodTable) {
         this.rootClassTable = rootClassTable;
         this.subClassTable = subClassTable;
-        this.rootFuncTable = rootFuncTable;
-        this.subFuncTable = subFuncTable;
+        this.rootMethodTable = rootMethodTable;
+        this.subMethodTable = subMethodTable;
     }
 
     public void set(AdditionalTestDocs testDocs) {
@@ -40,9 +38,9 @@ public class AdditionalTestDocsSetter {
             setClass(classTestDoc.getQualifiedName(), classTestDoc.getTestDoc(),
                     classTestDoc instanceof AdditionalPage);
         }
-        for (int i = testDocs.getFuncTestDocs().size() - 1; i >= 0; i--) {
-            AdditionalFuncTestDoc testDoc = testDocs.getFuncTestDocs().get(i);
-            setFunction(testDoc);
+        for (int i = testDocs.getMethodTestDocs().size() - 1; i >= 0; i--) {
+            AdditionalMethodTestDoc testDoc = testDocs.getMethodTestDocs().get(i);
+            setMethod(testDoc);
         }
     }
 
@@ -80,39 +78,32 @@ public class AdditionalTestDocsSetter {
         return newClass;
     }
 
-    // return the newly set TestFunction instance or already set instance.
-    private TestFunction setFunction(AdditionalFuncTestDoc testDoc) {
-        for (TestFunction testFunction : subFuncTable.getTestFunctions()) {
+    // return the newly set TestMethod instance or already set instance.
+    private TestMethod setMethod(AdditionalMethodTestDoc testDoc) {
+        for (TestMethod testMethod : subMethodTable.getTestMethods()) {
             // TODO method overload is not supported
-            if (testDoc.getQualifiedName().equals(testFunction.getQualifiedName())) {
-                return testFunction;
+            if (testDoc.getQualifiedName().equals(testMethod.getQualifiedName())) {
+                return testMethod;
             }
         }
 
-        for (TestFunction testFunction : rootFuncTable.getTestFunctions()) {
+        for (TestMethod testMethod : rootMethodTable.getTestMethods()) {
             // TODO method overload is not supported
-            if (testDoc.getQualifiedName().equals(testFunction.getQualifiedName())) {
-                return testFunction;
+            if (testDoc.getQualifiedName().equals(testMethod.getQualifiedName())) {
+                return testMethod;
             }
         }
 
-        TestFunction newFunction;
-        if (testDoc instanceof AdditionalMethodTestDoc) {
-            AdditionalMethodTestDoc methodTestDoc = (AdditionalMethodTestDoc) testDoc;
-            TestClass testClass = setClass(methodTestDoc.getClassQualifiedName(), null, false);
-            TestMethod newMethod = new TestMethod();
-            newMethod.setTestClassKey(testClass.getKey());
-            newMethod.setTestClass(testClass);
-            testClass.addTestMethod(newMethod);
-            newFunction = newMethod;
-        } else {
-            newFunction = new TestFunction();
-        }
-        newFunction.setKey(additionalTestDocKey(testDoc.getQualifiedName()));
-        newFunction.setQualifiedName(testDoc.getQualifiedName());
-        newFunction.setTestDoc(testDoc.getTestDoc());
-        subFuncTable.addTestFunction(newFunction);
-        return newFunction;
+        TestMethod newMethod = new TestMethod();
+        TestClass testClass = setClass(testDoc.getClassQualifiedName(), null, false);
+        newMethod.setTestClassKey(testClass.getKey());
+        newMethod.setTestClass(testClass);
+        testClass.addTestMethod(newMethod);
+        newMethod.setKey(additionalTestDocKey(testDoc.getQualifiedName()));
+        newMethod.setQualifiedName(testDoc.getQualifiedName());
+        newMethod.setTestDoc(testDoc.getTestDoc());
+        subMethodTable.addTestMethod(newMethod);
+        return newMethod;
     }
 
 }

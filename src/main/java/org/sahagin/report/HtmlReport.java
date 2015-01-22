@@ -27,15 +27,14 @@ import org.sahagin.share.IllegalTestScriptException;
 import org.sahagin.share.Logging;
 import org.sahagin.share.TestDocResolver;
 import org.sahagin.share.runresults.LineScreenCapture;
-import org.sahagin.share.runresults.RootFuncRunResult;
+import org.sahagin.share.runresults.RootMethodRunResult;
 import org.sahagin.share.runresults.RunFailure;
 import org.sahagin.share.runresults.RunResults;
 import org.sahagin.share.runresults.StackLine;
 import org.sahagin.share.srctree.SrcTree;
-import org.sahagin.share.srctree.TestFunction;
 import org.sahagin.share.srctree.TestMethod;
 import org.sahagin.share.srctree.code.CodeLine;
-import org.sahagin.share.srctree.code.SubFunctionInvoke;
+import org.sahagin.share.srctree.code.SubMethodInvoke;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlUtils;
 
@@ -69,13 +68,13 @@ public class HtmlReport {
     // generate ResportScreenCapture list from lineScreenCaptures and
     private List<ReportScreenCapture> generateReportScreenCaptures(
             List<LineScreenCapture> lineScreenCaptures,
-            File inputCaptureRootDir, File reportOutputDir, File funcReportParentDir) {
+            File inputCaptureRootDir, File reportOutputDir, File methodReportParentDir) {
         List<ReportScreenCapture> reportCaptures
         = new ArrayList<ReportScreenCapture>(lineScreenCaptures.size());
 
         // add noImage capture
         String noImageFilePath = new File(CommonUtils.relativize(
-                CommonPath.htmlExternalResourceRootDir(reportOutputDir), funcReportParentDir),
+                CommonPath.htmlExternalResourceRootDir(reportOutputDir), methodReportParentDir),
                 "images/noImage.png").getPath();
         ReportScreenCapture noImageCapture = new ReportScreenCapture();
         // URL separator is always slash regardless of OS type
@@ -85,7 +84,7 @@ public class HtmlReport {
 
         logger.info("inputCaptureRootDir: " + inputCaptureRootDir);
         logger.info("reportOutputDir: " + reportOutputDir);
-        logger.info("funcReportParentDir: " + funcReportParentDir);
+        logger.info("methodReportParentDir: " + methodReportParentDir);
 
         // add each line screen capture
         for (LineScreenCapture lineScreenCapture : lineScreenCaptures) {
@@ -94,7 +93,7 @@ public class HtmlReport {
                     lineScreenCapture.getPath(), inputCaptureRootDir);
             File absOutputCapturePath = new File(
                     CommonPath.htmlReportCaptureRootDir(reportOutputDir), relInputCapturePath.getPath());
-            File relOutputCapturePath = CommonUtils.relativize(absOutputCapturePath, funcReportParentDir);
+            File relOutputCapturePath = CommonUtils.relativize(absOutputCapturePath, methodReportParentDir);
             // URL separator is always slash regardless of OS type
             reportCapture.setPath(FilenameUtils.separatorsToUnix(relOutputCapturePath.getPath()));
             String ttId = generateTtId(lineScreenCapture.getStackLines());
@@ -105,7 +104,7 @@ public class HtmlReport {
     }
 
     // returns null if no failure
-    private RunFailure getRunFailure(RootFuncRunResult runResult) {
+    private RunFailure getRunFailure(RootMethodRunResult runResult) {
         if (runResult == null || runResult.getRunFailures().size() == 0) {
             return null; // no failure
         }
@@ -117,7 +116,7 @@ public class HtmlReport {
     private String stackLinesStr(List<StackLine> stackLines) {
         String result = "";
         for (int i = 0; i < stackLines.size(); i++) {
-            result = result + String.format("%s%n", stackLines.get(i).getFunctionKey());
+            result = result + String.format("%s%n", stackLines.get(i).getMethodKey());
         }
         return result;
     }
@@ -161,20 +160,20 @@ public class HtmlReport {
         }
     }
 
-    private String placeholderResolvedTestDoc(CodeLine codeLine, List<String> parentFuncArgTestDocs)
+    private String placeholderResolvedTestDoc(CodeLine codeLine, List<String> parentMethodArgTestDocs)
             throws IllegalTestScriptException {
-        String funcTestDoc = TestDocResolver.placeholderResolvedFuncTestDoc(
-                codeLine.getCode(), parentFuncArgTestDocs);
-        if (funcTestDoc == null) {
+        String methodTestDoc = TestDocResolver.placeholderResolvedMethodTestDoc(
+                codeLine.getCode(), parentMethodArgTestDocs);
+        if (methodTestDoc == null) {
             return "";
         }
-        return funcTestDoc;
+        return methodTestDoc;
     }
 
-    private ReportCodeLine generateReportCodeLine(CodeLine codeLine, List<String> parentFuncArgTestDocs,
+    private ReportCodeLine generateReportCodeLine(CodeLine codeLine, List<String> parentMethodArgTestDocs,
             List<StackLine> stackLines, RunFailure runFailure, boolean executed,
             String ttId, String parentTtId) throws IllegalTestScriptException {
-        if (parentFuncArgTestDocs == null) {
+        if (parentMethodArgTestDocs == null) {
             throw new NullPointerException();
         }
         if (stackLines == null) {
@@ -184,11 +183,11 @@ public class HtmlReport {
         result.setCodeLine(codeLine);
         String pageTestDoc = pageTestDoc(codeLine);
         result.setPagetTestDoc(pageTestDoc);
-        String testDoc = placeholderResolvedTestDoc(codeLine, parentFuncArgTestDocs);
+        String testDoc = placeholderResolvedTestDoc(codeLine, parentMethodArgTestDocs);
         result.setTestDoc(testDoc);
-        List<String> funcArgTestDocs
-        = TestDocResolver.placeholderResolvedFuncArgTestDocs(codeLine.getCode(), parentFuncArgTestDocs);
-        result.addAllFuncArgTestDocs(funcArgTestDocs);
+        List<String> methodArgTestDocs
+        = TestDocResolver.placeholderResolvedMethodArgTestDocs(codeLine.getCode(), parentMethodArgTestDocs);
+        result.addAllMethodArgTestDocs(methodArgTestDocs);
         result.setStackLines(stackLines);
         result.setTtId(ttId);
         result.setParentTtId(parentTtId);
@@ -212,11 +211,11 @@ public class HtmlReport {
         return result;
     }
 
-    private StackLine generateStackLine(TestFunction function, String functionKey,
+    private StackLine generateStackLine(TestMethod method, String methodKey,
             int codeBodyIndex, int line) {
         StackLine result = new StackLine();
-        result.setFunction(function);
-        result.setFunctionKey(functionKey);
+        result.setMethod(method);
+        result.setMethodKey(methodKey);
         result.setCodeBodyIndex(codeBodyIndex);
         result.setLine(line);
         return result;
@@ -224,15 +223,15 @@ public class HtmlReport {
 
     // runFailure... set null if not error
     private List<ReportCodeLine> generateReportCodeBody(
-            TestFunction rootFunction, RunFailure runFailure, boolean executed)
+            TestMethod rootMethod, RunFailure runFailure, boolean executed)
                     throws IllegalTestScriptException {
-        List<ReportCodeLine> result = new ArrayList<ReportCodeLine>(rootFunction.getCodeBody().size());
-        for (int i = 0; i < rootFunction.getCodeBody().size(); i++) {
-            CodeLine codeLine = rootFunction.getCodeBody().get(i);
+        List<ReportCodeLine> result = new ArrayList<ReportCodeLine>(rootMethod.getCodeBody().size());
+        for (int i = 0; i < rootMethod.getCodeBody().size(); i++) {
+            CodeLine codeLine = rootMethod.getCodeBody().get(i);
             String rootTtId = Integer.toString(i);
 
             StackLine rootStackLine = generateStackLine(
-                    rootFunction, rootFunction.getKey(), i, codeLine.getStartLine());
+                    rootMethod, rootMethod.getKey(), i, codeLine.getStartLine());
             List<StackLine> rootStackLines = new ArrayList<StackLine>(1);
             rootStackLines.add(rootStackLine);
 
@@ -241,21 +240,21 @@ public class HtmlReport {
             result.add(reportCodeLine);
 
             // add direct child to HTML report
-            if (codeLine.getCode() instanceof SubFunctionInvoke) {
-                SubFunctionInvoke invoke = (SubFunctionInvoke) codeLine.getCode();
-                List<String> parentFuncArgTestDocs = reportCodeLine.getFuncArgTestDocs();
-                List<CodeLine> codeBody = invoke.getSubFunction().getCodeBody();
+            if (codeLine.getCode() instanceof SubMethodInvoke) {
+                SubMethodInvoke invoke = (SubMethodInvoke) codeLine.getCode();
+                List<String> parentMethodArgTestDocs = reportCodeLine.getMethodArgTestDocs();
+                List<CodeLine> codeBody = invoke.getSubMethod().getCodeBody();
                 for (int j = 0; j < codeBody.size(); j++) {
                     CodeLine childCodeLine = codeBody.get(j);
 
-                    StackLine childStackLine = generateStackLine(invoke.getSubFunction(),
-                            invoke.getSubFunctionKey(), j, childCodeLine.getStartLine());
+                    StackLine childStackLine = generateStackLine(invoke.getSubMethod(),
+                            invoke.getSubMethodKey(), j, childCodeLine.getStartLine());
                     List<StackLine> childStackLines = new ArrayList<StackLine>(2);
                     childStackLines.add(childStackLine);
                     childStackLines.add(rootStackLine);
 
                     ReportCodeLine childReportCodeLine = generateReportCodeLine(
-                            childCodeLine, parentFuncArgTestDocs, childStackLines,
+                            childCodeLine, parentMethodArgTestDocs, childStackLines,
                             runFailure, executed, rootTtId + "_" + j, rootTtId);
                     result.add(childReportCodeLine);
                 }
@@ -291,13 +290,13 @@ public class HtmlReport {
         }
         for (File runResultFile : runResultFiles) {
             Map<String, Object> runResultYamlObj = YamlUtils.load(runResultFile);
-            RootFuncRunResult rootFuncRunResult = new RootFuncRunResult();
+            RootMethodRunResult rootMethodRunResult = new RootMethodRunResult();
             try {
-                rootFuncRunResult.fromYamlObject(runResultYamlObj);
+                rootMethodRunResult.fromYamlObject(runResultYamlObj);
             } catch (YamlConvertException e) {
                 throw new IllegalDataStructureException(e);
             }
-            results.addRootFuncRunResults(rootFuncRunResult);
+            results.addRootMethodRunResults(rootMethodRunResult);
         }
         results.resolveKeyReference(srcTree);
         return results;
@@ -347,16 +346,14 @@ public class HtmlReport {
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/yaml/yaml-utils.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/code.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/string-code.js");
-        extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/func-argument.js");
+        extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/method-argument.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/unknown-code.js");
-        extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/sub-function-invoke.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/sub-method-invoke.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/code-line.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/test-class.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/page-class.js");
-        extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/test-function.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/test-method.js");
-        extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/test-func-table.js");
+        extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/test-method-table.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/test-class-table.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/src-tree.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/testdoc-resolver.js");
@@ -390,52 +387,52 @@ public class HtmlReport {
             throw new RuntimeException(e);
         }
 
-        List<TestFunction> testFunctions = srcTree.getRootFuncTable().getTestFunctions();
+        List<TestMethod> testMethods = srcTree.getRootMethodTable().getTestMethods();
         File reportMainDir = CommonPath.htmlReportMainFile(reportOutputDir).getParentFile();
-        List<ReportFuncLink> reportLinks = new ArrayList<ReportFuncLink>(testFunctions.size());
+        List<ReportMethodLink> reportLinks = new ArrayList<ReportMethodLink>(testMethods.size());
 
-        // generate each function report
-        for (TestFunction rootFunc : testFunctions) {
-            TestMethod method = (TestMethod) rootFunc;
-            File funcReportParentDir = new File(CommonPath.funcHtmlReportRootDir(reportOutputDir),
+        // generate each method report
+        for (TestMethod rootMethod : testMethods) {
+            TestMethod method = rootMethod;
+            File methodReportParentDir = new File(CommonPath.methodHtmlReportRootDir(reportOutputDir),
                     method.getTestClass().getQualifiedName());
-            funcReportParentDir.mkdirs();
+            methodReportParentDir.mkdirs();
 
-            VelocityContext funcContext = new VelocityContext();
-            if (rootFunc.getTestDoc() == null) {
-                escapePut(funcContext, "title", rootFunc.getSimpleName());
+            VelocityContext methodContext = new VelocityContext();
+            if (rootMethod.getTestDoc() == null) {
+                escapePut(methodContext, "title", rootMethod.getSimpleName());
             } else {
-                escapePut(funcContext, "title", rootFunc.getTestDoc());
+                escapePut(methodContext, "title", rootMethod.getTestDoc());
             }
 
             String externalResourceRootDir =  CommonUtils.relativize(
-                    CommonPath.htmlExternalResourceRootDir(reportOutputDir), funcReportParentDir).getPath();
+                    CommonPath.htmlExternalResourceRootDir(reportOutputDir), methodReportParentDir).getPath();
             // URL separator is always slash regardless of OS type
-            escapePut(funcContext, "externalResourceRootDir", 
+            escapePut(methodContext, "externalResourceRootDir",
                     FilenameUtils.separatorsToUnix(externalResourceRootDir));
-            if (!(rootFunc instanceof TestMethod)) {
-                throw new RuntimeException("not supported yet: " + rootFunc);
+            if (!(rootMethod instanceof TestMethod)) {
+                throw new RuntimeException("not supported yet: " + rootMethod);
             }
 
-            escapePut(funcContext, "className", method.getTestClass().getQualifiedName());
-            escapePut(funcContext, "classTestDoc", method.getTestClass().getTestDoc());
-            escapePut(funcContext, "funcName", rootFunc.getSimpleName());
-            escapePut(funcContext, "funcTestDoc", rootFunc.getTestDoc());
+            escapePut(methodContext, "className", method.getTestClass().getQualifiedName());
+            escapePut(methodContext, "classTestDoc", method.getTestClass().getTestDoc());
+            escapePut(methodContext, "methodName", rootMethod.getSimpleName());
+            escapePut(methodContext, "methodTestDoc", rootMethod.getTestDoc());
 
-            RootFuncRunResult runResult = runResults.getRunResultByRootFunction(rootFunc);
+            RootMethodRunResult runResult = runResults.getRunResultByRootMethod(rootMethod);
             boolean executed = (runResult != null);
             RunFailure runFailure = getRunFailure(runResult);
             if (runFailure == null) {
-                escapePut(funcContext, "errMsg", null);
-                escapePut(funcContext, "errLineTtId", "");
+                escapePut(methodContext, "errMsg", null);
+                escapePut(methodContext, "errLineTtId", "");
             } else {
-                escapePut(funcContext, "errMsg", runFailure.getMessage().trim());
-                escapePut(funcContext, "errLineTtId", generateTtId(runFailure.getStackLines()));
+                escapePut(methodContext, "errMsg", runFailure.getMessage().trim());
+                escapePut(methodContext, "errLineTtId", generateTtId(runFailure.getStackLines()));
             }
 
             List<ReportCodeLine> reportCodeBody
-            = generateReportCodeBody(rootFunc, runFailure, executed);
-            funcContext.put("codeBody", reportCodeBody);
+            = generateReportCodeBody(rootMethod, runFailure, executed);
+            methodContext.put("codeBody", reportCodeBody);
 
             List<LineScreenCapture> lineScreenCaptures;
             if (runResult == null) {
@@ -444,16 +441,16 @@ public class HtmlReport {
                 lineScreenCaptures = runResult.getLineScreenCaptures();
             }
             List<ReportScreenCapture> captures = generateReportScreenCaptures(
-                    lineScreenCaptures, inputCaptureRootDir, reportOutputDir, funcReportParentDir);
-            funcContext.put("captures", captures);
+                    lineScreenCaptures, inputCaptureRootDir, reportOutputDir, methodReportParentDir);
+            methodContext.put("captures", captures);
 
-            File funcReportFile = new File(funcReportParentDir, rootFunc.getSimpleName() + ".html");
-            generateVelocityOutput(funcContext, "/template/report.html.vm", funcReportFile);
+            File methodReportFile = new File(methodReportParentDir, rootMethod.getSimpleName() + ".html");
+            generateVelocityOutput(methodContext, "/template/report.html.vm", methodReportFile);
 
             // set reportLinks data
-            ReportFuncLink reportLink = new ReportFuncLink();
+            ReportMethodLink reportLink = new ReportMethodLink();
             reportLink.setTitle(method.getQualifiedName());
-            String reportLinkPath = CommonUtils.relativize(funcReportFile, reportMainDir).getPath();
+            String reportLinkPath = CommonUtils.relativize(methodReportFile, reportMainDir).getPath();
             // URL separator is always slash regardless of OS type
             reportLink.setPath(FilenameUtils.separatorsToUnix(reportLinkPath));
             reportLinks.add(reportLink);

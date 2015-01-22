@@ -1,6 +1,6 @@
 package org.sahagin.report;
 
-public class ReportFuncLink {
+public class ReportMethodLink {
     private String title;
     private String path;
 

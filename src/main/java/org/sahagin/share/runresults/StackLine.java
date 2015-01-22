@@ -3,32 +3,32 @@ package org.sahagin.share.runresults;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.sahagin.share.srctree.TestFunction;
+import org.sahagin.share.srctree.TestMethod;
 import org.sahagin.share.yaml.YamlUtils;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlConvertible;
 
-// represents code line in the function codeBody for the codeBodyIndex
+// represents code line in the method codeBody for the codeBodyIndex
 public class StackLine implements YamlConvertible {
-    private String functionKey;
-    private TestFunction function;
+    private String methodKey;
+    private TestMethod method;
     private int line;
     private int codeBodyIndex;
 
-    public String getFunctionKey() {
-        return functionKey;
+    public String getMethodKey() {
+        return methodKey;
     }
 
-    public void setFunctionKey(String functionKey) {
-        this.functionKey = functionKey;
+    public void setMethodKey(String methodKey) {
+        this.methodKey = methodKey;
     }
 
-    public TestFunction getFunction() {
-        return function;
+    public TestMethod getMethod() {
+        return method;
     }
 
-    public void setFunction(TestFunction function) {
-        this.function = function;
+    public void setMethod(TestMethod method) {
+        this.method = method;
     }
 
     public int getLine() {
@@ -47,17 +47,19 @@ public class StackLine implements YamlConvertible {
         this.codeBodyIndex = codeBodyIndex;
     }
 
+    @Override
     public Map<String, Object> toYamlObject() {
         Map<String, Object> result = new HashMap<String, Object>(8);
-        result.put("functionKey", functionKey);
+        result.put("methodKey", methodKey);
         result.put("line", line);
         result.put("codeBodyIndex", codeBodyIndex);
         return result;
     }
 
+    @Override
     public void fromYamlObject(Map<String, Object> yamlObject) throws YamlConvertException {
-        functionKey = YamlUtils.getStrValue(yamlObject, "functionKey");
-        function = null;
+        methodKey = YamlUtils.getStrValue(yamlObject, "methodKey");
+        method = null;
         line = YamlUtils.getIntValue(yamlObject, "line");
         codeBodyIndex = YamlUtils.getIntValue(yamlObject, "codeBodyIndex");
     }
