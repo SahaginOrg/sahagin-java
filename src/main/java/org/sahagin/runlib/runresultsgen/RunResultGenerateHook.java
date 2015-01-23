@@ -128,7 +128,7 @@ public class RunResultGenerateHook {
 
         assert currentRunResult.getRootMethod() instanceof TestMethod;
         TestMethod rootMethod = currentRunResult.getRootMethod();
-        captureScreenForEachStackLine(rootMethod, stackLines);
+        captureScreenForStackLine(rootMethod, stackLines);
     }
 
     // write runResult to YAML file
@@ -221,24 +221,19 @@ public class RunResultGenerateHook {
         return captureFile;
     }
 
-    // use the same capture for the all StackLine.
     // - returns null if fails to capture
     // - try to capture even for UnknownCode and no stepInCapture line
     //   as long as code line exists in srcTree
-    private static File captureScreenForEachStackLine(
+    private static File captureScreenForStackLine(
             TestMethod rootMethod, List<StackLine> stackLines) {
         File captureFile = captureScreen(rootMethod);
         if (captureFile == null) {
             return null;
         }
-        for (int i = 0; i < stackLines.size(); i++) {
-            LineScreenCapture capture = new LineScreenCapture();
-            capture.setPath(new File(captureFile.getAbsolutePath()));
-            for (int j = i; j < stackLines.size(); j++) {
-                capture.addStackLine(stackLines.get(j));
-            }
-            currentRunResult.addLineScreenCapture(capture);
-        }
+        LineScreenCapture capture = new LineScreenCapture();
+        capture.setPath(new File(captureFile.getAbsolutePath()));
+        capture.addAllStackLines(stackLines);
+        currentRunResult.addLineScreenCapture(capture);
         return captureFile;
     }
 

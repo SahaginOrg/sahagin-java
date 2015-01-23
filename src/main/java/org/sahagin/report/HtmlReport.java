@@ -65,6 +65,52 @@ public class HtmlReport {
         return ttId;
     }
 
+    private int matchedLineScreenCaptureIndex(
+            List<LineScreenCapture> lineScreenCaptures, List<StackLine> stackLines) {
+        for (int i = 0; i < lineScreenCaptures.size(); i++) {
+            if (lineScreenCaptures.get(i).matchesStackLines(stackLines)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    // Add or replace capture information for each stack line of runFailure
+    // by error screen capture.
+    // The same capture is used for the all StackLines.
+    private void addLineScreenCaptureForErrorEachStackLine(
+            List<LineScreenCapture> lineScreenCaptures, RunFailure runFailure) {
+        if (runFailure == null) {
+            return; // do nothing
+        }
+        List<StackLine> failureLines = runFailure.getStackLines();
+        int failureCaptureIndex = matchedLineScreenCaptureIndex(
+                lineScreenCaptures, failureLines);
+        if (failureCaptureIndex == -1) {
+            return; // no failure capture
+        }
+        LineScreenCapture failureCapture = lineScreenCaptures.get(failureCaptureIndex);
+
+        for (int i = 1; i < failureLines.size(); i++) {
+            List<StackLine> errorEachStackLine = new ArrayList<StackLine>(failureLines.size() - i);
+            for (int j = i; j < failureLines.size(); j++) {
+                errorEachStackLine.add(failureLines.get(j));
+            }
+
+            LineScreenCapture newCapture = new LineScreenCapture();
+            newCapture.setPath(failureCapture.getPath());
+            newCapture.addAllStackLines(errorEachStackLine);
+
+            int errEachStackLineCaptureIndex
+            = matchedLineScreenCaptureIndex(lineScreenCaptures, errorEachStackLine);
+            if (errEachStackLineCaptureIndex == -1) {
+                lineScreenCaptures.add(newCapture);
+            } else {
+                lineScreenCaptures.set(errEachStackLineCaptureIndex, newCapture);
+            }
+        }
+    }
+
     // generate ResportScreenCapture list from lineScreenCaptures and
     private List<ReportScreenCapture> generateReportScreenCaptures(
             List<LineScreenCapture> lineScreenCaptures,
@@ -440,6 +486,7 @@ public class HtmlReport {
             } else {
                 lineScreenCaptures = runResult.getLineScreenCaptures();
             }
+            addLineScreenCaptureForErrorEachStackLine(lineScreenCaptures, runFailure);
             List<ReportScreenCapture> captures = generateReportScreenCaptures(
                     lineScreenCaptures, inputCaptureRootDir, reportOutputDir, methodReportParentDir);
             methodContext.put("captures", captures);

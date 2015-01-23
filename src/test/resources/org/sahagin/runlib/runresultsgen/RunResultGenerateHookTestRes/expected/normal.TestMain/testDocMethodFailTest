@@ -8,6 +8,3 @@ lineScreenCaptures:
   stackLines:
   - {codeBodyIndex: 0, methodKey: "*TestMain;.testDocMethod()V"}
   - {codeBodyIndex: 0, methodKey: "*TestMain;.testDocMethodFailTest()V"}
-- path: "*001.png"
-  stackLines:
-  - {codeBodyIndex: 0, methodKey: "*TestMain;.testDocMethodFailTest()V"}

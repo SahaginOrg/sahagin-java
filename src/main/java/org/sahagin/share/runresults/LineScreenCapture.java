@@ -32,6 +32,12 @@ public class LineScreenCapture implements YamlConvertible {
         stackLines.add(stackLine);
     }
 
+    public void addAllStackLines(List<StackLine> stackLines) {
+        for (StackLine stackLine : stackLines) {
+            addStackLine(stackLine);
+        }
+    }
+
     // check if stack line for this instance matches targetStackLines
     public boolean matchesStackLines(List<StackLine> targetStackLines) {
         if (targetStackLines.size() != getStackLines().size()) {

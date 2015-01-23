@@ -43,7 +43,7 @@ public class TestMain extends Java6TestBase {
 
     @TestDoc("Doc: testDocMethod")
     public void testDocMethod() {
-        assertEquals(1, 2);
+        assertEquals(1, 2); // make test fail
     }
 
     @Test
@@ -52,7 +52,7 @@ public class TestMain extends Java6TestBase {
     }
 
     public void noTestDocMethod() {
-        assertEquals(1, 2);
+        assertEquals(1, 2); // make test fail
     }
 
     @Test
