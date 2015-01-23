@@ -117,6 +117,7 @@ class StackLineUtils {
                 srcTree, element.getClassName(), element.getMethodName(), element.getLineNumber());
     }
 
+    // gap line (the line out of SrcTree) is skipped
     public static List<StackLine> getStackLines(SrcTree srcTree, StackTraceElement[] elements) {
         List<StackLine> stackLines = new ArrayList<StackLine>(elements.length);
         for (StackTraceElement element : elements) {
@@ -129,6 +130,7 @@ class StackLineUtils {
     }
 
     // line for hookedMethodName, hookedLine will be replaced to originalLine
+    // - gap line (the line out of SrcTree) is skipped
     public static List<StackLine> getStackLinesReplacingActualLine(
             SrcTree srcTree, StackTraceElement[] elements,
             String hookedClassQualifiedName, String hookedMethodSimpleName,
