@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.lang.instrument.Instrumentation;
 
 import org.apache.commons.io.FileUtils;
+import org.sahagin.runlib.external.adapter.Adapter;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.runlib.external.adapter.junit4.JUnit4Adapter;
 import org.sahagin.runlib.external.adapter.webdriver.WebDriverAdapter;
@@ -26,7 +27,8 @@ public class SahaginPreMain {
 
     // agentArgs is configuration YAML file path
     public static void premain(String agentArgs, Instrumentation inst)
-            throws YamlConvertException, IllegalTestScriptException, IOException {
+            throws YamlConvertException, IllegalTestScriptException,
+            IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         String configFilePath;
         if (agentArgs == null) {
             configFilePath = "sahagin.yml";
@@ -35,10 +37,23 @@ public class SahaginPreMain {
         }
         Config config = Config.generateFromYamlConfig(new File(configFilePath));
         AcceptableLocales locales = AcceptableLocales.getInstance(config.getUserLocale());
-        // TODO change adapter according to the configuration value
         AdapterContainer.globalInitialize(locales);
+
+        // default adapters
         new JUnit4Adapter().initialSetAdapter();
         new WebDriverAdapter().initialSetAdapter();
+
+        for (String adapterClassName : config.getAdapterClassNames()) {
+            // TODO handle exception thrown by forName or newInstance method
+            // more appropriately
+            Class<?> adapterClass = Class.forName(adapterClassName);
+            assert adapterClass != null;
+            Object adapterObj = adapterClass.newInstance();
+            assert adapterObj != null;
+            assert adapterObj instanceof Adapter;
+            Adapter adapter = (Adapter) adapterObj;
+            adapter.initialSetAdapter();
+        }
 
         Logging.setLoggerEnabled(config.isOutputLog());
 

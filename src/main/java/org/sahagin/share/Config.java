@@ -1,7 +1,9 @@
 package org.sahagin.share;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.sahagin.runlib.external.Locale;
@@ -16,6 +18,7 @@ public class Config implements YamlConvertible {
 
     private File rootDir;
     private File testDir;
+    private List<String> adapterClassNames = new ArrayList<String>(8);
     private File reportIntermediateDataDir = REPORT_INTERMEDIATE_DATA_DIR_DEFAULT;
     private File reportOutputDir = REPORT_OUTPUDT_DATA_DIR_DEFAULT;
     private boolean outputLog = false; // TODO provisional. this is only for debugging
@@ -59,6 +62,14 @@ public class Config implements YamlConvertible {
         } else {
             return new File(rootDir, reportIntermediateDataDir.getPath());
         }
+    }
+
+    public List<String> getAdapterClassNames() {
+        return adapterClassNames;
+    }
+
+    public void addAdapterClassName(String adapterClassName) {
+        adapterClassNames.add(adapterClassName);
     }
 
     public void setReportIntermediateDataDir(File reportIntermediateDataDir) {
@@ -115,6 +126,7 @@ public class Config implements YamlConvertible {
     public Map<String, Object> toYamlObject() {
         Map<String, Object> javaConf = new HashMap<String, Object>(4);
         javaConf.put("testDir", testDir.getPath());
+        javaConf.put("adapters", adapterClassNames);
         Map<String, Object> commonConf = new HashMap<String, Object>(4);
         commonConf.put("reportIntermediateDataDir", reportIntermediateDataDir.getPath());
         commonConf.put("reportOutputDir", reportOutputDir.getPath());
@@ -139,6 +151,7 @@ public class Config implements YamlConvertible {
         // (since cannot get source code path on run time)
         // TODO support array testDir value (so, testDir can be string or string array)
         testDir = new File(YamlUtils.getStrValue(javaYamlObj, "testDir"));
+        adapterClassNames = YamlUtils.getStrListValue(javaYamlObj, "adapters", true);
 
         // common and it's child settings is not mandatory
         Map<String, Object> commonYamlObj = YamlUtils.getYamlObjectValue(yamlObject, "common", true);

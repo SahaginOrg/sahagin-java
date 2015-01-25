@@ -64,7 +64,6 @@ public class SahaginMain {
         Config config = Config.generateFromYamlConfig(configFile);
         Logging.setLoggerEnabled(config.isOutputLog());
 
-
         switch (action) {
         case Report:
             report(config);
