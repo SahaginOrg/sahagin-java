@@ -89,10 +89,10 @@ public class RunResultGenerateHookTest extends TestBase {
     }
 
     private void captureAssertion(String subDirName, String className, String methodName,
-            File reportInputDir, int counterMax) {
+            File reportIntermediateDir, int counterMax) {
         File capturesDir = new File(mkWorkDir(subDirName), "captures");
         File testMainCaptureDir
-        = new File(CommonPath.inputCaptureRootDir(reportInputDir), className);
+        = new File(CommonPath.inputCaptureRootDir(reportIntermediateDir), className);
         for (int i = 1; i <= counterMax; i++) {
             assertFileByteContentsEquals(getTestCapturePath(capturesDir, i),
                     new File(testMainCaptureDir, String.format("%s/00%d.png", methodName, i)));
@@ -101,9 +101,9 @@ public class RunResultGenerateHookTest extends TestBase {
     }
 
     private void testResultAssertion(String className, String methodName,
-            File reportInputDir, boolean checksTestSuccess) throws YamlConvertException {
+            File reportIntermediateDir, boolean checksTestSuccess) throws YamlConvertException {
         File testMainResultDir
-        = new File(CommonPath.runResultRootDir(reportInputDir), className);
+        = new File(CommonPath.runResultRootDir(reportIntermediateDir), className);
         Map<String, Object> actualYamlObj = YamlUtils.load(new File(testMainResultDir, methodName));
         if (checksTestSuccess) {
             // check runFailures entry does not exist
@@ -193,46 +193,46 @@ public class RunResultGenerateHookTest extends TestBase {
         Pair<MavenInvokeResult, Config> pair = invokeChildTest(subDirName, null);
 
         // check test output
-        File reportInputDir = pair.getRight().getRootBaseReportInputDataDir();
+        File reportIntermediateDir = pair.getRight().getRootBaseReportIntermediateDataDir();
         try {
             String normalTest = "normal.TestMain";
-            captureAssertion(subDirName, normalTest, "noTestDocMethodFailTest", reportInputDir, 1);
-            captureAssertion(subDirName, normalTest, "stepInCaptureTest", reportInputDir, 4);
-            captureAssertion(subDirName, normalTest, "successTest", reportInputDir, 2);
-            captureAssertion(subDirName, normalTest, "testDocMethodFailTest", reportInputDir, 1);
-            captureAssertion(subDirName, normalTest, "innerClassTest", reportInputDir, 1);
-            captureAssertion(subDirName, normalTest, "anonymousClassTest", reportInputDir, 1);
-            captureAssertion(subDirName, normalTest, "multiLineStatementTest", reportInputDir, 1);
-            testResultAssertion(normalTest, "noTestDocMethodFailTest", reportInputDir, false);
-            testResultAssertion(normalTest, "stepInCaptureTest", reportInputDir, true);
-            testResultAssertion(normalTest, "successTest", reportInputDir, true);
-            testResultAssertion(normalTest, "testDocMethodFailTest", reportInputDir, false);
-            testResultAssertion(normalTest, "innerClassTest", reportInputDir, true);
-            testResultAssertion(normalTest, "anonymousClassTest", reportInputDir, true);
-            testResultAssertion(normalTest, "multiLineStatementTest", reportInputDir, true);
+            captureAssertion(subDirName, normalTest, "noTestDocMethodFailTest", reportIntermediateDir, 1);
+            captureAssertion(subDirName, normalTest, "stepInCaptureTest", reportIntermediateDir, 4);
+            captureAssertion(subDirName, normalTest, "successTest", reportIntermediateDir, 2);
+            captureAssertion(subDirName, normalTest, "testDocMethodFailTest", reportIntermediateDir, 1);
+            captureAssertion(subDirName, normalTest, "innerClassTest", reportIntermediateDir, 1);
+            captureAssertion(subDirName, normalTest, "anonymousClassTest", reportIntermediateDir, 1);
+            captureAssertion(subDirName, normalTest, "multiLineStatementTest", reportIntermediateDir, 1);
+            testResultAssertion(normalTest, "noTestDocMethodFailTest", reportIntermediateDir, false);
+            testResultAssertion(normalTest, "stepInCaptureTest", reportIntermediateDir, true);
+            testResultAssertion(normalTest, "successTest", reportIntermediateDir, true);
+            testResultAssertion(normalTest, "testDocMethodFailTest", reportIntermediateDir, false);
+            testResultAssertion(normalTest, "innerClassTest", reportIntermediateDir, true);
+            testResultAssertion(normalTest, "anonymousClassTest", reportIntermediateDir, true);
+            testResultAssertion(normalTest, "multiLineStatementTest", reportIntermediateDir, true);
             // Check only if test has been succeeded for the moment
             // since other result such as screen captures are still buggy..
             // TODO fix these bugs
-            testResultAssertion(normalTest, "multiStatementInALineTest", reportInputDir, true);
+            testResultAssertion(normalTest, "multiStatementInALineTest", reportIntermediateDir, true);
 
             String extendsTest = "extendstest.ExtendsTest";
-            captureAssertion(subDirName, extendsTest, "extendsTest", reportInputDir, 5);
-            testResultAssertion(extendsTest, "extendsTest", reportInputDir, true);
+            captureAssertion(subDirName, extendsTest, "extendsTest", reportIntermediateDir, 5);
+            testResultAssertion(extendsTest, "extendsTest", reportIntermediateDir, true);
 
             String implementsTest = "implementstest.ImplementsTest";
-            captureAssertion(subDirName, implementsTest, "implementsTest", reportInputDir, 3);
-            testResultAssertion(implementsTest, "implementsTest", reportInputDir, true);
+            captureAssertion(subDirName, implementsTest, "implementsTest", reportIntermediateDir, 3);
+            testResultAssertion(implementsTest, "implementsTest", reportIntermediateDir, true);
 
             String captureTest = "capturetest.TestMain";
-            captureAssertion(subDirName, captureTest, "captureTest", reportInputDir, 5);
-            testResultAssertion(captureTest, "captureTest", reportInputDir, true);
+            captureAssertion(subDirName, captureTest, "captureTest", reportIntermediateDir, 5);
+            testResultAssertion(captureTest, "captureTest", reportIntermediateDir, true);
 
             String multiExtendsTest1 = "multiextendstest.Test1";
-            captureAssertion(subDirName, multiExtendsTest1, "test1", reportInputDir, 1);
-            testResultAssertion(multiExtendsTest1, "test1", reportInputDir, true);
+            captureAssertion(subDirName, multiExtendsTest1, "test1", reportIntermediateDir, 1);
+            testResultAssertion(multiExtendsTest1, "test1", reportIntermediateDir, true);
             String multiExtendsTest2 = "multiextendstest.Test2";
-            captureAssertion(subDirName, multiExtendsTest2, "test2", reportInputDir, 1);
-            testResultAssertion(multiExtendsTest2, "test2", reportInputDir, true);
+            captureAssertion(subDirName, multiExtendsTest2, "test2", reportIntermediateDir, 1);
+            testResultAssertion(multiExtendsTest2, "test2", reportIntermediateDir, true);
         } catch (AssertionError e) {
             pair.getLeft().printStdOutsAndErrs();
             throw e;
@@ -251,13 +251,13 @@ public class RunResultGenerateHookTest extends TestBase {
         Pair<MavenInvokeResult, Config> pair = invokeChildTest(subDirName, "java8-compile");
 
         // check test output
-        File reportInputDir = pair.getRight().getRootBaseReportInputDataDir();
+        File reportIntermediateDir = pair.getRight().getRootBaseReportIntermediateDataDir();
         try {
             String java8featuresTest = "java8features.TestMain";
-            captureAssertion(subDirName, java8featuresTest, "streamApiCallTest", reportInputDir, 1);
-            captureAssertion(subDirName, java8featuresTest, "defaultInterfaceTest", reportInputDir, 1);
-            testResultAssertion(java8featuresTest, "streamApiCallTest", reportInputDir, true);
-            testResultAssertion(java8featuresTest, "defaultInterfaceTest", reportInputDir, true);
+            captureAssertion(subDirName, java8featuresTest, "streamApiCallTest", reportIntermediateDir, 1);
+            captureAssertion(subDirName, java8featuresTest, "defaultInterfaceTest", reportIntermediateDir, 1);
+            testResultAssertion(java8featuresTest, "streamApiCallTest", reportIntermediateDir, true);
+            testResultAssertion(java8featuresTest, "defaultInterfaceTest", reportIntermediateDir, true);
         } catch (AssertionError e) {
             pair.getLeft().printStdOutsAndErrs();
             throw e;

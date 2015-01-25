@@ -43,8 +43,8 @@ public class SahaginPreMain {
         Logging.setLoggerEnabled(config.isOutputLog());
 
         // delete previous data
-        if (config.getRootBaseReportInputDataDir().exists()) {
-            FileUtils.deleteDirectory(config.getRootBaseReportInputDataDir());
+        if (config.getRootBaseReportIntermediateDataDir().exists()) {
+            FileUtils.deleteDirectory(config.getRootBaseReportIntermediateDataDir());
         }
 
         SrcTree srcTree = generateAndDumpSrcTree(config, locales);
@@ -57,7 +57,7 @@ public class SahaginPreMain {
         // generate and dump srcTree
         SrcTreeGenerator generator = new SrcTreeGenerator(
                 AdapterContainer.globalInstance().getAdditionalTestDocs(), locales);
-        File srcTreeFile = CommonPath.srcTreeFile(config.getRootBaseReportInputDataDir());
+        File srcTreeFile = CommonPath.srcTreeFile(config.getRootBaseReportIntermediateDataDir());
         SrcTree srcTree = generator.generateWithRuntimeClassPath(config.getRootBaseTestDir(), "UTF-8");
         SrcTreeChecker.check(srcTree);
         YamlUtils.dump(srcTree.toYamlObject(), srcTreeFile);

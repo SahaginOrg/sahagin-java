@@ -4,16 +4,16 @@ import java.io.File;
 
 public class CommonPath {
 
-    public static File srcTreeFile(File reportInputDataDir) {
-        return new File(reportInputDataDir, "srcTree");
+    public static File srcTreeFile(File reportIntermediateDataDir) {
+        return new File(reportIntermediateDataDir, "srcTree");
     }
 
-    public static File runResultRootDir(File reportInputDataDir) {
-        return new File(reportInputDataDir, "runResults");
+    public static File runResultRootDir(File reportIntermediateDataDir) {
+        return new File(reportIntermediateDataDir, "runResults");
     }
 
-    public static File inputCaptureRootDir(File reportInputDataDir) {
-        return new File(reportInputDataDir, "captures");
+    public static File inputCaptureRootDir(File reportIntermediateDataDir) {
+        return new File(reportIntermediateDataDir, "captures");
     }
 
     public static File htmlReportMainFile(File reportOutputDir) {

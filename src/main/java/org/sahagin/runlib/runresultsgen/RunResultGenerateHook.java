@@ -53,10 +53,10 @@ public class RunResultGenerateHook {
         }
 
         RunResultGenerateHook.runResultsRootDir
-        = CommonPath.runResultRootDir(config.getRootBaseReportInputDataDir());
+        = CommonPath.runResultRootDir(config.getRootBaseReportIntermediateDataDir());
         RunResultGenerateHook.captureRootDir
-        = CommonPath.inputCaptureRootDir(config.getRootBaseReportInputDataDir());
-        final File srcTreeFile = CommonPath.srcTreeFile(config.getRootBaseReportInputDataDir());
+        = CommonPath.inputCaptureRootDir(config.getRootBaseReportIntermediateDataDir());
+        final File srcTreeFile = CommonPath.srcTreeFile(config.getRootBaseReportIntermediateDataDir());
 
         // load srcTree from already dumped srcTree YAML
         srcTree = new SrcTree();
@@ -78,7 +78,8 @@ public class RunResultGenerateHook {
                 public void run() {
                     HtmlReport report = new HtmlReport();
                     try {
-                        report.generate(config.getRootBaseReportInputDataDir(), config.getRootBaseReportOutputDir());
+                        report.generate(config.getRootBaseReportIntermediateDataDir(),
+                                config.getRootBaseReportOutputDir());
                     } catch (IllegalDataStructureException e) {
                         throw new RuntimeException(e);
                     } catch (IllegalTestScriptException e) {

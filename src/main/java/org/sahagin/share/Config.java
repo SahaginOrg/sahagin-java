@@ -11,12 +11,12 @@ import org.sahagin.share.yaml.YamlConvertible;
 
 public class Config implements YamlConvertible {
     private static final String INVALID_CONFIG_YAML = "failed to load config file \"%s\": %s";
-    private static final File REPORT_INPUDT_DATA_DIR_DEFAULT = new File("sahagin-report-input");
+    private static final File REPORT_INTERMEDIATE_DATA_DIR_DEFAULT = new File("sahagin-intermediate-data");
     private static final File REPORT_OUTPUDT_DATA_DIR_DEFAULT = new File("sahagin-report");
 
     private File rootDir;
     private File testDir;
-    private File reportInputDataDir = REPORT_INPUDT_DATA_DIR_DEFAULT;
+    private File reportIntermediateDataDir = REPORT_INTERMEDIATE_DATA_DIR_DEFAULT;
     private File reportOutputDir = REPORT_OUTPUDT_DATA_DIR_DEFAULT;
     private boolean outputLog = false; // TODO provisional. this is only for debugging
     // if true, don't generate report, generate only report input
@@ -53,16 +53,16 @@ public class Config implements YamlConvertible {
         this.testDir = testDir;
     }
 
-    public File getRootBaseReportInputDataDir() {
-        if (reportInputDataDir.isAbsolute()) {
-            return reportInputDataDir;
+    public File getRootBaseReportIntermediateDataDir() {
+        if (reportIntermediateDataDir.isAbsolute()) {
+            return reportIntermediateDataDir;
         } else {
-            return new File(rootDir, reportInputDataDir.getPath());
+            return new File(rootDir, reportIntermediateDataDir.getPath());
         }
     }
 
-    public void setReportInputDataDir(File reportInputDataDir) {
-        this.reportInputDataDir = reportInputDataDir;
+    public void setReportIntermediateDataDir(File reportIntermediateDataDir) {
+        this.reportIntermediateDataDir = reportIntermediateDataDir;
     }
 
     public File getRootBaseReportOutputDir() {
@@ -96,7 +96,7 @@ public class Config implements YamlConvertible {
     public Locale getUserLocale() {
         return userLocale;
     }
-    
+
     public boolean usesSystemLocale() {
         return usesSystemLocale;
     }
@@ -105,7 +105,7 @@ public class Config implements YamlConvertible {
         this.userLocale = userLocale;
         usesSystemLocale = false;
     }
-    
+
     public void setUserLocaleFromSystemLocale() {
         this.userLocale = Locale.getSystemLocale();
         usesSystemLocale = true;
@@ -116,12 +116,12 @@ public class Config implements YamlConvertible {
         Map<String, Object> javaConf = new HashMap<String, Object>(4);
         javaConf.put("testDir", testDir.getPath());
         Map<String, Object> commonConf = new HashMap<String, Object>(4);
-        commonConf.put("reportInputDataDir", reportInputDataDir.getPath());
+        commonConf.put("reportIntermediateDataDir", reportIntermediateDataDir.getPath());
         commonConf.put("reportOutputDir", reportOutputDir.getPath());
         commonConf.put("outputLog", outputLog);
         commonConf.put("runTestOnly", runTestOnly);
         if (usesSystemLocale) {
-            commonConf.put("userLocale", "system");            
+            commonConf.put("userLocale", "system");
         } else {
             commonConf.put("userLocale", userLocale.getValue());
         }
@@ -146,41 +146,41 @@ public class Config implements YamlConvertible {
             return;
         }
 
-        String reportInputDataDirValue = YamlUtils.getStrValue(commonYamlObj, "reportInputDataDir", true);
+        String reportInputDataDirValue = YamlUtils.getStrValue(commonYamlObj, "reportIntermediateDataDir", true);
         if (reportInputDataDirValue != null) {
-            reportInputDataDir = new File(reportInputDataDirValue);
+            reportIntermediateDataDir = new File(reportInputDataDirValue);
         } else {
-            reportInputDataDir = REPORT_INPUDT_DATA_DIR_DEFAULT;
+            reportIntermediateDataDir = REPORT_INTERMEDIATE_DATA_DIR_DEFAULT;
         }
-        
+
         String reportOutputDirValue = YamlUtils.getStrValue(commonYamlObj, "reportOutputDir", true);
         if (reportOutputDirValue != null) {
             reportOutputDir = new File(reportOutputDirValue);
         } else {
             reportOutputDir = REPORT_OUTPUDT_DATA_DIR_DEFAULT;
         }
-        
+
         Boolean outputLogValue = YamlUtils.getBooleanValue(commonYamlObj, "outputLog", true);
         if (outputLogValue != null) {
             outputLog = outputLogValue;
         } else {
             outputLog = false;
         }
-        
+
         Boolean runTestOnlyValue = YamlUtils.getBooleanValue(commonYamlObj, "runTestOnly", true);
         if (runTestOnlyValue != null) {
             runTestOnly = runTestOnlyValue;
         } else {
             runTestOnly = false;
         }
-        
+
         String userLocaleValueStr = YamlUtils.getStrValue(commonYamlObj, "userLocale", true);
         if (userLocaleValueStr == null || userLocaleValueStr.equals("system")) {
             usesSystemLocale = true;
             userLocale = Locale.getSystemLocale();
         } else {
             usesSystemLocale = false;
-            userLocale = YamlUtils.getLocaleValue(commonYamlObj, "userLocale");            
+            userLocale = YamlUtils.getLocaleValue(commonYamlObj, "userLocale");
         }
     }
 
