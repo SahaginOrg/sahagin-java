@@ -25,6 +25,7 @@ public class YamlUtils {
     private static final String MSG_VALUE_NOT_LOCALE
     = "can't convert value to Locale; key: %s; vaule: %s";
     private static final String MSG_NOT_EQUALS_TO_EXPECTED = "\"%s\" is not equals to \"%s\"";
+    private static final String MSG_LIST_MUST_NOT_BE_NULL = "list must not be null";
 
     // if allowsEmpty and key entry is not found, just returns null.
     // (null may mean null value for the specified key)
@@ -82,6 +83,19 @@ public class YamlUtils {
     public static String getStrValue(Map<String, Object> yamlObject, String key)
             throws YamlConvertException {
         return getStrValue(yamlObject, key, false);
+    }
+
+    public static void strValueEqualsCheck(Map<String, Object> yamlObject,
+            String key, String expected, String defaultValue)
+            throws YamlConvertException {
+        String value = getStrValue(yamlObject, key, true);
+        if (value == null) {
+            value = defaultValue;
+        }
+        if (!StringUtils.equals(value, expected)) {
+            throw new YamlConvertException(String.format(
+                    MSG_NOT_EQUALS_TO_EXPECTED, value, expected));
+        }
     }
 
     public static void strValueEqualsCheck(Map<String, Object> yamlObject, String key, String expected)
@@ -184,37 +198,41 @@ public class YamlUtils {
         return getYamlObjectValue(yamlObject, key, false);
     }
 
-    // for null, returns empty list
+    // for null or not found key, returns empty list
     public static List<String> getStrListValue(Map<String, Object> yamlObject, String key,
             boolean allowsEmpty) throws YamlConvertException {
         Object obj = getObjectValue(yamlObject, key, allowsEmpty);
         @SuppressWarnings("unchecked")
         List<String> result = (List<String>) obj;
         if (result == null) {
+            if (!allowsEmpty) {
+                throw new YamlConvertException(MSG_LIST_MUST_NOT_BE_NULL);
+            }
             result = new ArrayList<String>(0);
         }
         return result;
     }
 
-    // for null or not found, returns empty list
     public static List<String> getStrListValue(Map<String, Object> yamlObject, String key)
             throws YamlConvertException {
         return getStrListValue(yamlObject, key, false);
     }
 
-    // for null, returns empty list
+    // for null or not found key, returns empty list
     public static List<Map<String, Object>> getYamlObjectListValue(Map<String, Object> yamlObject,
             String key, boolean allowsEmpty) throws YamlConvertException {
         Object obj = getObjectValue(yamlObject, key, allowsEmpty);
         @SuppressWarnings("unchecked")
         List<Map<String, Object>> result = (List<Map<String, Object>>) obj;
         if (result == null) {
+            if (!allowsEmpty) {
+                throw new YamlConvertException(MSG_LIST_MUST_NOT_BE_NULL);
+            }
             result = new ArrayList<Map<String, Object>>(0);
         }
         return result;
     }
 
-    // for null or not found, returns empty list
     public static List<Map<String, Object>> getYamlObjectListValue(Map<String, Object> yamlObject,
             String key) throws YamlConvertException {
         return getYamlObjectListValue(yamlObject, key, false);

@@ -57,7 +57,9 @@ public class SubMethodInvoke extends Code {
     public Map<String, Object> toYamlObject() {
         Map<String, Object> result = super.toYamlObject();
         result.put("methodKey", subMethodKey);
-        result.put("args", YamlUtils.toYamlObjectList(args));
+        if (!args.isEmpty()) {
+            result.put("args", YamlUtils.toYamlObjectList(args));
+        }
         if (thisInstance != null) {
             result.put("thisInstance", thisInstance.toYamlObject());
         }
@@ -70,7 +72,7 @@ public class SubMethodInvoke extends Code {
         super.fromYamlObject(yamlObject);
         subMethodKey = YamlUtils.getStrValue(yamlObject, "methodKey");
         subMethod = null;
-        List<Map<String, Object>> argsYamlObj = YamlUtils.getYamlObjectListValue(yamlObject, "args");
+        List<Map<String, Object>> argsYamlObj = YamlUtils.getYamlObjectListValue(yamlObject, "args", true);
         args = new ArrayList<Code>(argsYamlObj.size());
         for (Map<String, Object> argYamlObj : argsYamlObj) {
             Code code = Code.newInstanceFromYamlObject(argYamlObj);

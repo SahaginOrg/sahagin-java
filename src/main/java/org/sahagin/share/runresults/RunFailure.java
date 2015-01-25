@@ -43,19 +43,25 @@ public class RunFailure implements YamlConvertible {
     @Override
     public Map<String, Object> toYamlObject() {
         Map<String, Object> result = new HashMap<String, Object>(4);
-        result.put("message", message);
-        result.put("stackTrace", stackTrace);
-        result.put("stackLines", YamlUtils.toYamlObjectList(stackLines));
+        if (message != null) {
+            result.put("message", message);
+        }
+        if (stackTrace != null) {
+            result.put("stackTrace", stackTrace);
+        }
+        if (!stackLines.isEmpty()) {
+            result.put("stackLines", YamlUtils.toYamlObjectList(stackLines));
+        }
         return result;
     }
 
     @Override
     public void fromYamlObject(Map<String, Object> yamlObject)
             throws YamlConvertException {
-        message = YamlUtils.getStrValue(yamlObject, "message");
-        stackTrace = YamlUtils.getStrValue(yamlObject, "stackTrace");
+        message = YamlUtils.getStrValue(yamlObject, "message", true);
+        stackTrace = YamlUtils.getStrValue(yamlObject, "stackTrace", true);
         List<Map<String, Object>> stackLinesYamlObj
-        = YamlUtils.getYamlObjectListValue(yamlObject, "stackLines");
+        = YamlUtils.getYamlObjectListValue(yamlObject, "stackLines", true);
         stackLines = new ArrayList<StackLine>(stackLinesYamlObj.size());
         for (Map<String, Object> stackLineYamlObj : stackLinesYamlObj) {
             StackLine stackLine = new StackLine();

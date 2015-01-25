@@ -51,8 +51,8 @@ public class StackLine implements YamlConvertible {
     public Map<String, Object> toYamlObject() {
         Map<String, Object> result = new HashMap<String, Object>(8);
         result.put("methodKey", methodKey);
-        result.put("line", line);
         result.put("codeBodyIndex", codeBodyIndex);
+        result.put("line", line);
         return result;
     }
 
@@ -60,8 +60,8 @@ public class StackLine implements YamlConvertible {
     public void fromYamlObject(Map<String, Object> yamlObject) throws YamlConvertException {
         methodKey = YamlUtils.getStrValue(yamlObject, "methodKey");
         method = null;
-        line = YamlUtils.getIntValue(yamlObject, "line");
         codeBodyIndex = YamlUtils.getIntValue(yamlObject, "codeBodyIndex");
+        line = YamlUtils.getIntValue(yamlObject, "line");
     }
 
 }

@@ -18,16 +18,19 @@ public class SrcTree implements YamlConvertible {
     private static final String MSG_SRC_TREE_FORMAT_MISMATCH
     = "expected formatVersion is \"%s\", but actual is \"%s\"";
 
-    private TestClassTable rootClassTable;
-    private TestMethodTable rootMethodTable;
-    private TestClassTable subClassTable;
-    private TestMethodTable subMethodTable;
+    private TestClassTable rootClassTable = new TestClassTable();
+    private TestMethodTable rootMethodTable = new TestMethodTable();
+    private TestClassTable subClassTable = new TestClassTable();
+    private TestMethodTable subMethodTable = new TestMethodTable();
 
     public TestClassTable getRootClassTable() {
         return rootClassTable;
     }
 
     public void setRootClassTable(TestClassTable rootClassTable) {
+        if (rootClassTable == null) {
+            throw new NullPointerException();
+        }
         this.rootClassTable = rootClassTable;
     }
 
@@ -36,6 +39,9 @@ public class SrcTree implements YamlConvertible {
     }
 
     public void setRootMethodTable(TestMethodTable rootMethodTable) {
+        if (rootMethodTable == null) {
+            throw new NullPointerException();
+        }
         this.rootMethodTable = rootMethodTable;
     }
 
@@ -44,6 +50,9 @@ public class SrcTree implements YamlConvertible {
     }
 
     public void setSubClassTable(TestClassTable subClassTable) {
+        if (subClassTable == null) {
+            throw new NullPointerException();
+        }
         this.subClassTable = subClassTable;
     }
 
@@ -52,6 +61,9 @@ public class SrcTree implements YamlConvertible {
     }
 
     public void setSubMethodTable(TestMethodTable subMethodTable) {
+        if (subMethodTable == null) {
+            throw new NullPointerException();
+        }
         this.subMethodTable = subMethodTable;
     }
 
@@ -64,31 +76,20 @@ public class SrcTree implements YamlConvertible {
 
     @Override
     public Map<String, Object> toYamlObject() {
-        Map<String, Object> result = new HashMap<String, Object>(4);
-
-        Map<String, Object> rootClassTableYamlObj = null;
-        if (rootClassTable != null) {
-            rootClassTableYamlObj = rootClassTable.toYamlObject();
-        }
-        Map<String, Object> rootMethodTableYamlObj = null;
-        if (rootMethodTable != null) {
-            rootMethodTableYamlObj = rootMethodTable.toYamlObject();
-        }
-        Map<String, Object> subClassTableYamlObj = null;
-        if (subClassTable != null) {
-            subClassTableYamlObj = subClassTable.toYamlObject();
-        }
-        Map<String, Object> subMethodTableYamlObj = null;
-        if (subMethodTable != null) {
-            subMethodTableYamlObj = subMethodTable.toYamlObject();
-        }
-
-        result.put("rootClassTable", rootClassTableYamlObj);
-        result.put("rootMethodTable", rootMethodTableYamlObj);
-        result.put("subClassTable", subClassTableYamlObj);
-        result.put("subMethodTable", subMethodTableYamlObj);
+        Map<String, Object> result = new HashMap<String, Object>(8);
         result.put("formatVersion", CommonUtils.formatVersion());
-
+        if (!rootMethodTable.isEmpty()) {
+            result.put("rootMethodTable", rootMethodTable.toYamlObject());
+        }
+        if (!subMethodTable.isEmpty()) {
+            result.put("subMethodTable", subMethodTable.toYamlObject());
+        }
+        if (!rootClassTable.isEmpty()) {
+            result.put("rootClassTable", rootClassTable.toYamlObject());
+        }
+        if (!subClassTable.isEmpty()) {
+            result.put("subClassTable", subClassTable.toYamlObject());
+        }
         return result;
     }
 
@@ -103,62 +104,56 @@ public class SrcTree implements YamlConvertible {
                     (MSG_SRC_TREE_FORMAT_MISMATCH, CommonUtils.formatVersion(), formatVersion));
         }
 
-        rootClassTable = null;
-        rootMethodTable = null;
-        subClassTable = null;
-        subMethodTable = null;
-
-        Map<String, Object> rootClassTableYamlObj = YamlUtils.getYamlObjectValue(yamlObject, "rootClassTable");
-        if (rootClassTableYamlObj != null) {
-            rootClassTable = new TestClassTable();
-            rootClassTable.fromYamlObject(rootClassTableYamlObj);
-        }
-        Map<String, Object> rootMethodTableYamlObj = YamlUtils.getYamlObjectValue(yamlObject, "rootMethodTable");
+        rootMethodTable = new TestMethodTable();
+        Map<String, Object> rootMethodTableYamlObj
+        = YamlUtils.getYamlObjectValue(yamlObject, "rootMethodTable", true);
         if (rootMethodTableYamlObj != null) {
-            rootMethodTable = new TestMethodTable();
             rootMethodTable.fromYamlObject(rootMethodTableYamlObj);
         }
-        Map<String, Object> subClassTableYamlObj = YamlUtils.getYamlObjectValue(yamlObject, "subClassTable");
-        if (subClassTableYamlObj != null) {
-            subClassTable = new TestClassTable();
-            subClassTable.fromYamlObject(subClassTableYamlObj);
-        }
-        Map<String, Object> subMethodTableYamlObj = YamlUtils.getYamlObjectValue(yamlObject, "subMethodTable");
+
+        subMethodTable = new TestMethodTable();
+        Map<String, Object> subMethodTableYamlObj
+        = YamlUtils.getYamlObjectValue(yamlObject, "subMethodTable", true);
         if (subMethodTableYamlObj != null) {
-            subMethodTable = new TestMethodTable();
             subMethodTable.fromYamlObject(subMethodTableYamlObj);
+        }
+
+        rootClassTable = new TestClassTable();
+        Map<String, Object> rootClassTableYamlObj
+        = YamlUtils.getYamlObjectValue(yamlObject, "rootClassTable", true);
+        if (rootClassTableYamlObj != null) {
+            rootClassTable.fromYamlObject(rootClassTableYamlObj);
+        }
+
+        subClassTable = new TestClassTable();
+        Map<String, Object> subClassTableYamlObj
+        = YamlUtils.getYamlObjectValue(yamlObject, "subClassTable", true);
+        if (subClassTableYamlObj != null) {
+            subClassTable.fromYamlObject(subClassTableYamlObj);
         }
     }
 
     public TestClass getTestClassByKey(String testClassKey) throws IllegalDataStructureException {
-        if (subClassTable != null) {
-            TestClass subClass = subClassTable.getByKey(testClassKey);
-            if (subClass != null) {
-                return subClass;
-            }
+        TestClass subClass = subClassTable.getByKey(testClassKey);
+        if (subClass != null) {
+            return subClass;
         }
-        if (rootClassTable != null) {
-            TestClass rootClass = rootClassTable.getByKey(testClassKey);
-            if (rootClass != null) {
-                return rootClass;
-            }
+        TestClass rootClass = rootClassTable.getByKey(testClassKey);
+        if (rootClass != null) {
+            return rootClass;
         }
         throw new IllegalDataStructureException(String.format(MSG_CLASS_NOT_FOUND, testClassKey));
     }
 
     public TestMethod getTestMethodByKey(String testMethodKey)
             throws IllegalDataStructureException {
-        if (subMethodTable != null) {
-            TestMethod subMethod = subMethodTable.getByKey(testMethodKey);
-            if (subMethod != null) {
-                return subMethod;
-            }
+        TestMethod subMethod = subMethodTable.getByKey(testMethodKey);
+        if (subMethod != null) {
+            return subMethod;
         }
-        if (rootMethodTable != null) {
-            TestMethod rootMethod = rootMethodTable.getByKey(testMethodKey);
-            if (rootMethod != null) {
-                return rootMethod;
-            }
+        TestMethod rootMethod = rootMethodTable.getByKey(testMethodKey);
+        if (rootMethod != null) {
+            return rootMethod;
         }
         throw new IllegalDataStructureException(String.format(MSG_METHOD_NOT_FOUND, testMethodKey));
     }
@@ -190,30 +185,22 @@ public class SrcTree implements YamlConvertible {
     // resolve all methodKey and classKey references.
     // assume all keys have been set
     public void resolveKeyReference() throws IllegalDataStructureException {
-        if (rootClassTable != null) {
-            for (TestClass testClass : rootClassTable.getTestClasses()) {
-                resolveTestMethod(testClass);
+        for (TestClass testClass : rootClassTable.getTestClasses()) {
+            resolveTestMethod(testClass);
+        }
+        for (TestClass testClass : subClassTable.getTestClasses()) {
+            resolveTestMethod(testClass);
+        }
+        for (TestMethod testMethod : rootMethodTable.getTestMethods()) {
+            resolveTestClass(testMethod);
+            for (CodeLine codeLine : testMethod.getCodeBody()) {
+                resolveTestMethod(codeLine.getCode());
             }
         }
-        if (subClassTable != null) {
-            for (TestClass testClass : subClassTable.getTestClasses()) {
-                resolveTestMethod(testClass);
-            }
-        }
-        if (rootMethodTable != null) {
-            for (TestMethod testMethod : rootMethodTable.getTestMethods()) {
-                resolveTestClass(testMethod);
-                for (CodeLine codeLine : testMethod.getCodeBody()) {
-                    resolveTestMethod(codeLine.getCode());
-                }
-            }
-        }
-        if (subMethodTable != null) {
-            for (TestMethod testMethod : subMethodTable.getTestMethods()) {
-                resolveTestClass(testMethod);
-                for (CodeLine codeLine : testMethod.getCodeBody()) {
-                    resolveTestMethod(codeLine.getCode());
-                }
+        for (TestMethod testMethod : subMethodTable.getTestMethods()) {
+            resolveTestClass(testMethod);
+            for (CodeLine codeLine : testMethod.getCodeBody()) {
+                resolveTestMethod(codeLine.getCode());
             }
         }
     }

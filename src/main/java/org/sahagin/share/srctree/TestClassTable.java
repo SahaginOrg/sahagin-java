@@ -24,6 +24,10 @@ public class TestClassTable implements YamlConvertible {
         testClasses.add(testClass);
     }
 
+    public boolean isEmpty() {
+        return testClasses.isEmpty();
+    }
+
     // returns null if not found
     public TestClass getByKey(String key) {
         if (key == null) {
@@ -57,14 +61,17 @@ public class TestClassTable implements YamlConvertible {
     @Override
     public Map<String, Object> toYamlObject() {
         Map<String, Object> result = new HashMap<String, Object>(1);
-        result.put("classes", YamlUtils.toYamlObjectList(testClasses));
+        if (!isEmpty()) {
+            result.put("classes", YamlUtils.toYamlObjectList(testClasses));
+        }
         return result;
     }
 
     @Override
     public void fromYamlObject(Map<String, Object> yamlObject)
             throws YamlConvertException {
-        List<Map<String, Object>> testClassesYamlObj = YamlUtils.getYamlObjectListValue(yamlObject, "classes");
+        List<Map<String, Object>> testClassesYamlObj
+        = YamlUtils.getYamlObjectListValue(yamlObject, "classes", true);
         testClasses = new ArrayList<TestClass>(testClassesYamlObj.size());
         for (Map<String, Object> testClassYamlObj : testClassesYamlObj) {
             TestClass testClass = TestClass.newInstanceFromYamlObject(testClassYamlObj);

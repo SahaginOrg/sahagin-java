@@ -1,8 +1,6 @@
 subMethodTable:
   methods:
-  - codeBody: []
-    name: "abstractMethod"
-    capture: thisLine
+  - name: "abstractMethod"
     argVariables: [arg]
     classKey: "*ExtendsPage;"
     testDoc: 'Doc: abstractMethod: override: {arg}'
@@ -10,28 +8,21 @@ subMethodTable:
   - codeBody:
     - code: {original: super.overriddenMethod(arg);, type: unknown}
     name: "overriddenMethod"
-    capture: thisLine
     argVariables: [arg]
     classKey: "*ExtendsPage;"
     testDoc: 'Doc: overriddenMethod: override: {arg}'
     key: "*ExtendsPage;.overriddenMethod(Ljava/lang/String;)V"
-  - codeBody: []
-    name: "abstractMethod"
-    capture: thisLine
+  - name: "abstractMethod"
     argVariables: [arg]
     classKey: "*ExtendsPageBase;"
     testDoc: 'Doc: abstractMethod: {arg}'
     key: "*ExtendsPageBase;.abstractMethod(I)V"
-  - codeBody: []
-    name: "finalMethod"
-    capture: thisLine
+  - name: "finalMethod"
     argVariables: [arg]
     classKey: "*ExtendsPageBase;"
     testDoc: 'Doc: finalMethod: {arg}'
     key: "*ExtendsPageBase;.finalMethod(Ljava/lang/Object;)V"
-  - codeBody: []
-    name: "testBaseMethod"
-    capture: thisLine
+  - name: "testBaseMethod"
     argVariables: [arg]
     classKey: "*ExtendsTestBase;"
     testDoc: 'Doc: testBaseMethod: {arg}'
@@ -86,10 +77,7 @@ rootMethodTable:
         - {value: WWW, original: '"WWW"', type: string}
     - code: {original: baseInstance.overriddenMethod("ZZZ");, type: unknown}
     name: "extendsTest"
-    capture: thisLine
-    argVariables: []
     classKey: "*ExtendsTestMain;"
-    testDoc: null
     key: "*ExtendsTestMain;.extendsTest()V"
 subClassTable:
   classes:
@@ -99,21 +87,17 @@ subClassTable:
     methodKeys: ["*ExtendsPage;.overriddenMethod(Ljava/lang/String;)V",
       "*ExtendsPage;.abstractMethod(I)V"]
     qname: "*.ExtendsPage"
-  - testDoc: null
-    type: class
-    key: "*ExtendsPageBase;"
+  - key: "*ExtendsPageBase;"
     methodKeys: ["*ExtendsPageBase;.abstractMethod(I)V",
       "*ExtendsPageBase;.finalMethod(Ljava/lang/Object;)V"]
     qname: "*.ExtendsPageBase"
   - testDoc: 'Doc: ExtendsTestBase'
-    type: class
     key: "*ExtendsTestBase;"
     methodKeys: ["*ExtendsTestBase;.testBaseMethod(Ljava/lang/String;)V"]
     qname: "*.ExtendsTestBase"
 rootClassTable:
   classes:
   - testDoc: 'Doc: ExtendsTestMain'
-    type: class
     key: "*ExtendsTestMain;"
     methodKeys: ["*ExtendsTestMain;.extendsTest()V",
       "*ExtendsTestMain;.testBaseMethod(Ljava/lang/String;)V"]

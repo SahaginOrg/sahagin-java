@@ -13,7 +13,8 @@ import org.sahagin.share.yaml.YamlConvertible;
 
 public class TestMethod implements YamlConvertible {
     private String testClassKey;
-    private TestClass testClass;    private String key;
+    private TestClass testClass;
+    private String key;
     private String simpleName;
     private String testDoc;
     private CaptureStyle captureStyle = CaptureStyle.getDefault();
@@ -101,10 +102,18 @@ public class TestMethod implements YamlConvertible {
         result.put("classKey", testClassKey);
         result.put("key", key);
         result.put("name", simpleName);
-        result.put("testDoc", testDoc);
-        result.put("capture", captureStyle.getValue());
-        result.put("argVariables", argVariables);
-        result.put("codeBody", YamlUtils.toYamlObjectList(codeBody));
+        if (testDoc != null) {
+            result.put("testDoc", testDoc);
+        }
+        if (captureStyle != CaptureStyle.getDefault()) {
+            result.put("capture", captureStyle.getValue());
+        }
+        if (!argVariables.isEmpty()) {
+            result.put("argVariables", argVariables);
+        }
+        if (!codeBody.isEmpty()) {
+            result.put("codeBody", YamlUtils.toYamlObjectList(codeBody));
+        }
         return result;
     }
 
@@ -115,14 +124,14 @@ public class TestMethod implements YamlConvertible {
         testClassKey = YamlUtils.getStrValue(yamlObject, "classKey");
         key = YamlUtils.getStrValue(yamlObject, "key");
         simpleName = YamlUtils.getStrValue(yamlObject, "name");
-        testDoc = YamlUtils.getStrValue(yamlObject, "testDoc");
+        testDoc = YamlUtils.getStrValue(yamlObject, "testDoc", true);
         // captureStyle is not mandatory
         captureStyle = YamlUtils.getCaptureStyleValue(yamlObject, "capture", true);
         if (captureStyle == null) {
             captureStyle = CaptureStyle.getDefault();
         }
-        argVariables = YamlUtils.getStrListValue(yamlObject, "argVariables");
-        List<Map<String, Object>> codeBodyYamlObj = YamlUtils.getYamlObjectListValue(yamlObject, "codeBody");
+        argVariables = YamlUtils.getStrListValue(yamlObject, "argVariables", true);
+        List<Map<String, Object>> codeBodyYamlObj = YamlUtils.getYamlObjectListValue(yamlObject, "codeBody", true);
         codeBody = new ArrayList<CodeLine>(codeBodyYamlObj.size());
         for (Map<String, Object> codeLineYamlObj : codeBodyYamlObj) {
             CodeLine codeLine = new CodeLine();

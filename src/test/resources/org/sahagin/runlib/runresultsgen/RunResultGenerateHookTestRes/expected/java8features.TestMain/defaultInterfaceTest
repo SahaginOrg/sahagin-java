@@ -1,4 +1,3 @@
-runFailures: []
 lineScreenCaptures:
 - path: "*001.png"
   stackLines:

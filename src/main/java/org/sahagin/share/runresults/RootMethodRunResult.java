@@ -55,10 +55,14 @@ public class RootMethodRunResult implements YamlConvertible {
     @Override
     public Map<String, Object> toYamlObject() {
         Map<String, Object> result = new HashMap<String, Object>(4);
-        result.put("rootMethodKey", rootMethodKey);
-        result.put("runFailures", YamlUtils.toYamlObjectList(runFailures));
-        result.put("lineScreenCaptures", YamlUtils.toYamlObjectList(lineScreenCaptures));
         result.put("formatVersion", CommonUtils.formatVersion());
+        result.put("rootMethodKey", rootMethodKey);
+        if (!runFailures.isEmpty()) {
+            result.put("runFailures", YamlUtils.toYamlObjectList(runFailures));
+        }
+        if (!lineScreenCaptures.isEmpty()) {
+            result.put("lineScreenCaptures", YamlUtils.toYamlObjectList(lineScreenCaptures));
+        }
         return result;
     }
 
@@ -74,7 +78,7 @@ public class RootMethodRunResult implements YamlConvertible {
         }
         rootMethodKey = YamlUtils.getStrValue(yamlObject, "rootMethodKey");
         List<Map<String, Object>> runFailuresYamlObj
-        = YamlUtils.getYamlObjectListValue(yamlObject, "runFailures");
+        = YamlUtils.getYamlObjectListValue(yamlObject, "runFailures", true);
         runFailures = new ArrayList<RunFailure>(runFailuresYamlObj.size());
         for (Map<String, Object> runFailureYamlObj : runFailuresYamlObj) {
             RunFailure runFailure = new RunFailure();
@@ -82,7 +86,7 @@ public class RootMethodRunResult implements YamlConvertible {
             runFailures.add(runFailure);
         }
         List<Map<String, Object>> lineScreenCapturesYamlObj
-        = YamlUtils.getYamlObjectListValue(yamlObject, "lineScreenCaptures");
+        = YamlUtils.getYamlObjectListValue(yamlObject, "lineScreenCaptures", true);
         lineScreenCaptures = new ArrayList<LineScreenCapture>(lineScreenCapturesYamlObj.size());
         for (Map<String, Object> lineScreenCaptureYamlObj : lineScreenCapturesYamlObj) {
             LineScreenCapture lineScreenCapture = new LineScreenCapture();

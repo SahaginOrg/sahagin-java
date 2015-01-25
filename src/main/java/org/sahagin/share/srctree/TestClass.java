@@ -13,6 +13,7 @@ import org.sahagin.share.yaml.YamlConvertible;
 public class TestClass implements YamlConvertible {
     public static final String MSG_INVALID_TYPE = "invalid type: %s";
     public static final String TYPE = "class";
+    private static final String DEFAULT_TYPE = TYPE;
 
     private String key;
     private String qualifiedName;
@@ -82,28 +83,37 @@ public class TestClass implements YamlConvertible {
     @Override
     public Map<String, Object> toYamlObject() {
         Map<String, Object> result = new HashMap<String, Object>(8);
-        result.put("type", getType());
         result.put("key", key);
         result.put("qname", qualifiedName);
-        result.put("testDoc", testDoc);
-        result.put("methodKeys", testMethodKeys);
+        if (!getType().equals(DEFAULT_TYPE)) {
+            result.put("type", getType());
+        }
+        if (testDoc != null) {
+            result.put("testDoc", testDoc);
+        }
+        if (!testMethodKeys.isEmpty()) {
+            result.put("methodKeys", testMethodKeys);
+        }
         return result;
     }
 
     @Override
     public void fromYamlObject(Map<String, Object> yamlObject)
             throws YamlConvertException {
-        YamlUtils.strValueEqualsCheck(yamlObject, "type", getType());
+        YamlUtils.strValueEqualsCheck(yamlObject, "type", getType(), DEFAULT_TYPE);
         key = YamlUtils.getStrValue(yamlObject, "key");
         qualifiedName = YamlUtils.getStrValue(yamlObject, "qname");
-        testDoc = YamlUtils.getStrValue(yamlObject, "testDoc");
-        testMethodKeys = YamlUtils.getStrListValue(yamlObject, "methodKeys");
+        testDoc = YamlUtils.getStrValue(yamlObject, "testDoc", true);
+        testMethodKeys = YamlUtils.getStrListValue(yamlObject, "methodKeys", true);
         testMethods.clear();
     }
 
     public static TestClass newInstanceFromYamlObject(Map<String, Object> yamlObject)
             throws YamlConvertException {
-        String type = YamlUtils.getStrValue(yamlObject, "type");
+        String type = YamlUtils.getStrValue(yamlObject, "type", true);
+        if (type == null) {
+            type = DEFAULT_TYPE;
+        }
         TestClass result;
         if (TestClass.TYPE.equals(type)) {
             result = new TestClass();

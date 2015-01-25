@@ -14,7 +14,6 @@ rootMethodTable:
           ;
         type: unknown
     - code:
-        args: []
         methodKey: "*TestMain$InterfaceWithDefault;.defaultMethod()V"
         original: instance.defaultMethod();
         thisInstance: {original: instance, type: unknown}

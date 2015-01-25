@@ -40,7 +40,9 @@ public class RunResults implements YamlConvertible {
     @Override
     public Map<String, Object> toYamlObject() {
         Map<String, Object> result = new HashMap<String, Object>(2);
-        result.put("rootMethodRunResults", YamlUtils.toYamlObjectList(rootMethodRunResults));
+        if (!rootMethodRunResults.isEmpty()) {
+            result.put("rootMethodRunResults", YamlUtils.toYamlObjectList(rootMethodRunResults));
+        }
         return result;
     }
 
@@ -48,7 +50,7 @@ public class RunResults implements YamlConvertible {
     public void fromYamlObject(Map<String, Object> yamlObject)
             throws YamlConvertException {
         List<Map<String, Object>> rootMethodRunResultsYamlObj
-        = YamlUtils.getYamlObjectListValue(yamlObject, "rootMethodRunResults");
+        = YamlUtils.getYamlObjectListValue(yamlObject, "rootMethodRunResults", true);
         rootMethodRunResults = new ArrayList<RootMethodRunResult>(rootMethodRunResultsYamlObj.size());
         for (Map<String, Object> rootMethodRunResultYamlObj : rootMethodRunResultsYamlObj) {
             RootMethodRunResult rootMethodRunResult = new RootMethodRunResult();

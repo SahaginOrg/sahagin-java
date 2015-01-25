@@ -24,6 +24,10 @@ public class TestMethodTable implements YamlConvertible {
         testMethods.add(testMethod);
     }
 
+    public boolean isEmpty() {
+        return testMethods.isEmpty();
+    }
+
     // returns null if not found
     public TestMethod getByKey(String key) {
         if (key == null) {
@@ -74,14 +78,17 @@ public class TestMethodTable implements YamlConvertible {
     @Override
     public Map<String, Object> toYamlObject() {
         Map<String, Object> result = new HashMap<String, Object>(1);
-        result.put("methods", YamlUtils.toYamlObjectList(testMethods));
+        if (!isEmpty()) {
+            result.put("methods", YamlUtils.toYamlObjectList(testMethods));
+        }
         return result;
     }
 
     @Override
     public void fromYamlObject(Map<String, Object> yamlObject)
             throws YamlConvertException {
-        List<Map<String, Object>> testMethodsYamlObj = YamlUtils.getYamlObjectListValue(yamlObject, "methods");
+        List<Map<String, Object>> testMethodsYamlObj
+        = YamlUtils.getYamlObjectListValue(yamlObject, "methods", true);
         testMethods = new ArrayList<TestMethod>(testMethodsYamlObj.size());
         for (Map<String, Object> testMethodYamlObj : testMethodsYamlObj) {
             TestMethod testMethod = new TestMethod();

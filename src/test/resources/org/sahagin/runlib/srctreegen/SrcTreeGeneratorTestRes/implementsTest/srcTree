@@ -1,25 +1,21 @@
 subMethodTable:
   methods:
-  - codeBody: []
-    name: "baseMethod"
+  - name: "baseMethod"
     argVariables: [arg]
     classKey: "*ImplementsPage;"
     testDoc: 'Doc: baseMethod: override: {arg}'
     key: "*ImplementsPage;.baseMethod(Ljava/lang/String;)V"
-  - codeBody: []
-    name: "childMethod"
+  - name: "childMethod"
     argVariables: [arg]
     classKey: "*ImplementsPage;"
     testDoc: 'Doc: childMethod: {arg}'
     key: "*ImplementsPage;.childMethod(I)V"
-  - codeBody: []
-    name: "baseMethod"
+  - name: "baseMethod"
     argVariables: [arg]
     classKey: "*ImplementsPageBase;"
     testDoc: 'Doc: baseMethod: {arg}'
     key: "*ImplementsPageBase;.baseMethod(Ljava/lang/String;)V"
-  - codeBody: []
-    name: "testBaseMethod"
+  - name: "testBaseMethod"
     argVariables: [arg]
     classKey: "*ImplementsTestBase;"
     testDoc: 'Doc: testBaseMethod: {arg}'
@@ -49,9 +45,7 @@ rootMethodTable:
         args:
         - {value: RRR, original: '"RRR"', type: string}
     name: "implementsTest"
-    argVariables: []
     classKey: "*ImplementsTestMain;"
-    testDoc: null
     key: "*ImplementsTestMain;.implementsTest()V"
 subClassTable:
   classes:
@@ -70,7 +64,6 @@ subClassTable:
     qname: "*.ImplementsTestBase"
 rootClassTable:
   classes:
-  - testDoc: null
-    key: "*ImplementsTestMain;"
+  - key: "*ImplementsTestMain;"
     methodKeys: ["*ImplementsTestMain;.implementsTest()V"]
     qname: "*.ImplementsTestMain"
