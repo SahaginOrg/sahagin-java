@@ -117,7 +117,7 @@ public class SrcTreeGeneratorTest extends TestBase {
         new JUnit4Adapter().initialSetAdapter();
         AdditionalTestDocs testDocs
         = AdapterContainer.globalInstance().getAdditionalTestDocs();
-        testMain("additionalTestDocs", testDocs, null);
+        testMain("additionalTestDocs", testDocs, Locale.EN_US);
     }
 
     @Test
