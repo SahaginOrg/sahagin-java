@@ -101,8 +101,14 @@ public class SrcTreeGenerator {
         if (pair.getLeft() != null) {
             return pair;
         }
+
+        ITypeBinding[] paramTypes = method.getParameterTypes();
+        List<String> argClassQualifiedNames = new ArrayList<String>(paramTypes.length);
+        for (ITypeBinding param : paramTypes) {
+            argClassQualifiedNames.add(param.getQualifiedName());
+        }
         AdditionalMethodTestDoc additional = additionalTestDocs.getMethodTestDoc(
-                method.getDeclaringClass().getQualifiedName(), method.getName());
+                method.getDeclaringClass().getQualifiedName(), method.getName(), argClassQualifiedNames);
         if (additional != null) {
             return Pair.of(additional.getTestDoc(), additional.getCaptureStyle());
         }
@@ -324,6 +330,31 @@ public class SrcTreeGenerator {
         }
     }
 
+    private static String additionalMethodTestDocKey(IMethodBinding method) {
+        ITypeBinding[] paramTypes;
+        if (method.isParameterizedMethod()) {
+            // Use generic type to get argument class types
+            // instead of the actual type resolved by JDT.
+            IMethodBinding originalMethod = method.getMethodDeclaration();
+            paramTypes = originalMethod.getParameterTypes();
+        } else {
+            paramTypes = method.getParameterTypes();
+        }
+        List<String> argClassQualifiedNames = new ArrayList<String>(paramTypes.length);
+        for (ITypeBinding param : paramTypes) {
+            // AdditionalTestDoc's argClassQualifiedNames are defined by type erasure.
+            // TODO is this generic handling logic always work well??
+            argClassQualifiedNames.add(param.getErasure().getQualifiedName());
+        }
+        return AdditionalMethodTestDoc.generateMethodKey(
+                method.getDeclaringClass().getQualifiedName(), method.getName(), argClassQualifiedNames);
+    }
+
+    private static String additionalMethodTestDocKeyNoOverload(IMethodBinding method) {
+        return AdditionalMethodTestDoc.generateMethodKey(
+                method.getDeclaringClass().getQualifiedName(), method.getName());
+    }
+
     private class CollectCodeVisitor extends ASTVisitor {
         private TestMethodTable rootMethodTable;
         private TestMethodTable subMethodTable;
@@ -348,17 +379,21 @@ public class SrcTreeGenerator {
             String uniqueKey = binding.getKey();
             TestMethod invocationMethod = subMethodTable.getByKey(uniqueKey);
             if (invocationMethod == null) {
-                // TODO using additionalTestDocKey is temporal logic..
                 // TODO What does binding.getName method return for constructor method??
-                String additionalUniqueKey = AdditionalTestDocsSetter.additionalTestDocKey(
-                        binding.getDeclaringClass().getQualifiedName() + "." + binding.getName());
-                invocationMethod = subMethodTable.getByKey(additionalUniqueKey);
+                // TODO key for additional doc should be calculated by the same rule as getKey method in jdt
+                String additionalUniqueKeyNoOverload = additionalMethodTestDocKeyNoOverload(binding);
+                invocationMethod = subMethodTable.getByKey(additionalUniqueKeyNoOverload);
                 if (invocationMethod == null) {
-                    UnknownCode unknownCode = new UnknownCode();
-                    unknownCode.setOriginal(original);
-                    return unknownCode;
+                    String additionalUniqueKey = additionalMethodTestDocKey(binding);
+                    invocationMethod = subMethodTable.getByKey(additionalUniqueKey);
+                    if (invocationMethod == null) {
+                        UnknownCode unknownCode = new UnknownCode();
+                        unknownCode.setOriginal(original);
+                        return unknownCode;
+                    }
                 }
             }
+
             SubMethodInvoke subMethodInvoke = new SubMethodInvoke();
             subMethodInvoke.setSubMethodKey(invocationMethod.getKey());
             subMethodInvoke.setSubMethod(invocationMethod);

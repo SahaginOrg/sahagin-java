@@ -7,6 +7,7 @@ import java.util.Map;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.sahagin.TestBase;
+import org.sahagin.runlib.additionaltestdoc.AdditionalTestDocs;
 import org.sahagin.runlib.external.Locale;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.runlib.external.adapter.junit4.JUnit4Adapter;
@@ -25,10 +26,11 @@ public class SrcTreeGeneratorTest extends TestBase {
         new JUnit4Adapter().initialSetAdapter();
     }
 
-    private void testMain(String subDirName, Locale userLocale) {
+    private void testMain(String subDirName,
+            AdditionalTestDocs additionalTestDocs, Locale userLocale) {
         File testSrcDir = new File(testResourceDir(subDirName), "input");
         AcceptableLocales locales = AcceptableLocales.getInstance(userLocale);
-        SrcTreeGenerator gen = new SrcTreeGenerator(null, locales);
+        SrcTreeGenerator gen = new SrcTreeGenerator(additionalTestDocs, locales);
         SrcTree srcTree;
         try {
             srcTree = gen.generateWithRuntimeClassPath(testSrcDir, "UTF-8");
@@ -75,42 +77,52 @@ public class SrcTreeGeneratorTest extends TestBase {
     // so split to multiple test method when srcTree YAML format is fixed.
     @Test
     public void variousData() {
-        testMain("variousData", null);
+        testMain("variousData", null, null);
     }
 
     @Test
     public void utf8Character() {
-        testMain("utf8Character", null);
+        testMain("utf8Character", null, null);
     }
 
     @Test
     public void defaultLocale() {
-        testMain("defaultLocale", null);
+        testMain("defaultLocale", null, null);
     }
 
     @Test
     public void jaJpLocale() {
-        testMain("jaJpLocale", Locale.JA_JP);
+        testMain("jaJpLocale", null, Locale.JA_JP);
     }
 
     @Test
     public void extendsTest() {
-        testMain("extendsTest", null);
+        testMain("extendsTest", null, null);
     }
 
     @Test
     public void implementsTest() {
-        testMain("implementsTest", null);
+        testMain("implementsTest", null, null);
     }
 
     @Test
     public void exceptionHandler() {
-        testMain("exceptionHandler", null);
+        testMain("exceptionHandler", null, null);
+    }
+
+    @Test
+    public void additionalTestDocs() {
+        AcceptableLocales locales = AcceptableLocales.getInstance(Locale.EN_US);
+        AdapterContainer.globalInitialize(locales);
+        new JUnit4Adapter().initialSetAdapter();
+        AdditionalTestDocs testDocs
+        = AdapterContainer.globalInstance().getAdditionalTestDocs();
+        testMain("additionalTestDocs", testDocs, null);
     }
 
     @Test
     public void java8() {
-        testMain("java8", null);
+        testMain("java8", null, null);
     }
 
 }

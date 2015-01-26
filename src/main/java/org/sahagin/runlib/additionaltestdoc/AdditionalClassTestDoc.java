@@ -32,4 +32,9 @@ public class AdditionalClassTestDoc {
         this.testDoc = testDoc;
     }
 
+    public static String generateClassKey(String classQualifiedName) {
+        return "_Additional_" + classQualifiedName;
+    }
+
+
 }

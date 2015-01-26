@@ -15,7 +15,6 @@ import org.sahagin.share.srctree.TestMethodTable;
 // If already exists, override it's TestDoc value.
 //
 // - This class assumes class qualifiedName is unique
-// - This class does not support method overload yet..
 public class AdditionalTestDocsSetter {
     private TestClassTable rootClassTable;
     private TestClassTable subClassTable;
@@ -44,11 +43,6 @@ public class AdditionalTestDocsSetter {
         }
     }
 
-    public static String additionalTestDocKey(String qualifiedName) {
-        // class qualified name must be unique
-        return "_Additional_" + qualifiedName;
-    }
-
     // return the newly set TestClass instance or already set instance.
     private TestClass setClass(String qualifiedName, String testDoc, boolean isPage) {
         for (TestClass testClass : subClassTable.getTestClasses()) {
@@ -71,7 +65,7 @@ public class AdditionalTestDocsSetter {
         } else {
             newClass = new TestClass();
         }
-        newClass.setKey(additionalTestDocKey(qualifiedName));
+        newClass.setKey(AdditionalClassTestDoc.generateClassKey(qualifiedName));
         newClass.setQualifiedName(qualifiedName);
         newClass.setTestDoc(testDoc);
         subClassTable.addTestClass(newClass);
@@ -80,16 +74,16 @@ public class AdditionalTestDocsSetter {
 
     // return the newly set TestMethod instance or already set instance.
     private TestMethod setMethod(AdditionalMethodTestDoc testDoc) {
+        // TODO consider about priority of multiple method additional TestDocs.
+        // TODO when override non additional TestDoc by additional TestDoc
+        String methodKey = AdditionalMethodTestDoc.generateMethodKey(testDoc);
         for (TestMethod testMethod : subMethodTable.getTestMethods()) {
-            // TODO method overload is not supported
-            if (testDoc.getQualifiedName().equals(testMethod.getQualifiedName())) {
+            if (testMethod.getKey().equals(methodKey)) {
                 return testMethod;
             }
         }
-
         for (TestMethod testMethod : rootMethodTable.getTestMethods()) {
-            // TODO method overload is not supported
-            if (testDoc.getQualifiedName().equals(testMethod.getQualifiedName())) {
+            if (testMethod.getKey().equals(methodKey)) {
                 return testMethod;
             }
         }
@@ -99,7 +93,7 @@ public class AdditionalTestDocsSetter {
         newMethod.setTestClassKey(testClass.getKey());
         newMethod.setTestClass(testClass);
         testClass.addTestMethod(newMethod);
-        newMethod.setKey(additionalTestDocKey(testDoc.getQualifiedName()));
+        newMethod.setKey(methodKey);
         newMethod.setSimpleName(testDoc.getSimpleName());
         newMethod.setTestDoc(testDoc.getTestDoc());
         subMethodTable.addTestMethod(newMethod);

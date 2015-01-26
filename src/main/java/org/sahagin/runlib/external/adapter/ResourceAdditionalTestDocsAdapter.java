@@ -94,12 +94,16 @@ implements AdditionalTestDocsAdapter {
 
     public abstract void classAdd();
 
-    protected final void methodAdd(String classQualifiedName,
-            String methodSimpleName, CaptureStyle captureStyle) {
+    // argClassQualifiedNames... null means no overload
+    private void methodAddSub(String classQualifiedName,
+            String methodSimpleName, String argClassesStr, CaptureStyle captureStyle) {
         AdditionalMethodTestDoc methodTestDocInstance = new AdditionalMethodTestDoc();
         methodTestDocInstance.setClassQualifiedName(classQualifiedName);
         methodTestDocInstance.setSimpleName(methodSimpleName);
         methodTestDocInstance.setCaptureStyle(captureStyle);
+        if (argClassesStr != null) {
+            methodTestDocInstance.setOverloadFromArgClassesStr(argClassesStr);
+        }
         String testDoc = ""; // set empty string if no locale data is found
         String methodQualifiedName = classQualifiedName + "." + methodSimpleName;
         for (Locale locale : locales.getLocales()) {
@@ -109,16 +113,45 @@ implements AdditionalTestDocsAdapter {
             }
             Object value = map.get(methodQualifiedName);
             if (value != null) {
-                testDoc = (String) value;
-                break;
+                if (argClassesStr == null && value instanceof String) {
+                    // no overload
+                    testDoc = (String) value;
+                    break;
+                } else if (argClassesStr != null && value instanceof Map) {
+                    // overload
+                    @SuppressWarnings("unchecked")
+                    Map<String, Object> overloadMap = (Map<String, Object>) value;
+                    Object overloadValue = overloadMap.get(argClassesStr);
+                    if (overloadValue != null) {
+                        testDoc = (String) overloadValue;
+                        break;
+                    }
+                }
             }
         }
         methodTestDocInstance.setTestDoc(testDoc);
         docs.methodAdd(methodTestDocInstance);
     }
 
+    protected final void methodAdd(String classQualifiedName,
+            String methodSimpleName, String argClassesStr, CaptureStyle captureStyle) {
+        if (argClassesStr == null) {
+            throw new NullPointerException();
+        }
+        methodAddSub(classQualifiedName, methodSimpleName, argClassesStr, captureStyle);
+    }
+
+    protected final void methodAdd(String classQualifiedName,
+            String methodSimpleName, String argClassesStr) {
+        if (argClassesStr == null) {
+            throw new NullPointerException();
+        }
+        methodAddSub(
+                classQualifiedName, methodSimpleName, argClassesStr, CaptureStyle.getDefault());
+    }
+
     protected final void methodAdd(String classQualifiedName, String methodSimpleName) {
-        methodAdd(classQualifiedName, methodSimpleName, CaptureStyle.getDefault());
+        methodAddSub(classQualifiedName, methodSimpleName, null, CaptureStyle.getDefault());
     }
 
     public abstract void methodAdd();

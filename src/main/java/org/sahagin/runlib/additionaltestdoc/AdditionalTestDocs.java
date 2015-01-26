@@ -19,27 +19,12 @@ public class AdditionalTestDocs {
         classTestDocs.add(classTestDoc);
     }
 
-    public void classAdd(String qualifiedName, String testDoc) {
-        AdditionalClassTestDoc additionalClassTestDoc = new AdditionalClassTestDoc();
-        additionalClassTestDoc.setQualifiedName(qualifiedName);
-        additionalClassTestDoc.setTestDoc(testDoc);
-        classTestDocs.add(additionalClassTestDoc);
-    }
-
     public List<AdditionalMethodTestDoc> getMethodTestDocs() {
         return methodTestDocs;
     }
 
     public void methodAdd(AdditionalMethodTestDoc methodTestDoc) {
         methodTestDocs.add(methodTestDoc);
-    }
-
-    public void methodAdd(String classQualifiedName, String simpleName, String testDoc) {
-        AdditionalMethodTestDoc additionalMethodTestDoc = new AdditionalMethodTestDoc();
-        additionalMethodTestDoc.setClassQualifiedName(classQualifiedName);
-        additionalMethodTestDoc.setSimpleName(simpleName);
-        additionalMethodTestDoc.setTestDoc(testDoc);
-        methodTestDocs.add(additionalMethodTestDoc);
     }
 
     // returns null if not found
@@ -58,12 +43,15 @@ public class AdditionalTestDocs {
     }
 
     // returns null if not found
-    public AdditionalMethodTestDoc getMethodTestDoc(
-            String classQualifiedName, String methodSimpleName) {
+    public AdditionalMethodTestDoc getMethodTestDoc(String classQualifiedName,
+            String methodSimpleName, List<String> argClassQualifiedNames) {
         if (classQualifiedName == null) {
             throw new NullPointerException();
         }
         if (methodSimpleName == null) {
+            throw new NullPointerException();
+        }
+        if (argClassQualifiedNames == null) {
             throw new NullPointerException();
         }
         // last set data is referred first
@@ -71,6 +59,28 @@ public class AdditionalTestDocs {
             AdditionalMethodTestDoc methodTestDoc = methodTestDocs.get(i);
             if (StringUtils.equals(methodTestDoc.getClassQualifiedName(), classQualifiedName)
                     && StringUtils.equals(methodTestDoc.getSimpleName(), methodSimpleName)) {
+                if (!methodTestDoc.isOverloaded()) {
+                    return methodTestDoc; // ignore method argument classes difference
+                }
+
+                // check method argument classes
+                if (methodTestDoc.getArgClassQualifiedNames().size()
+                        != argClassQualifiedNames.size()) {
+                    continue;
+                }
+                boolean mismatchFound = false;
+                for (int j = 0; j < methodTestDoc.getArgClassQualifiedNames().size(); j++) {
+                    if (!StringUtils.equals(
+                            methodTestDoc.getArgClassQualifiedNames().get(j), argClassQualifiedNames.get(j))) {
+                        mismatchFound = true;
+                        break;
+                    }
+                }
+
+                if (mismatchFound) {
+                    continue;
+                }
+
                 return methodTestDoc;
             }
         }

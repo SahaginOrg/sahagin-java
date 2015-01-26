@@ -1,5 +1,11 @@
 method:
-  org.hamcrest.core.Is.is: 「{0}」に等しい
-  org.hamcrest.CoreMatchers.is: 「{0}」に等しい
+  org.hamcrest.core.Is.is:
+    java.lang.Object: 「{0}」に等しい
+    org.hamcrest.Matcher: "{0}"
+  org.hamcrest.core.IsNot.not: 「{0}」と異なる
+  org.hamcrest.CoreMatchers.is:
+    java.lang.Object: 「{0}」に等しい
+    org.hamcrest.Matcher: "{0}"
+  org.hamcrest.CoreMatchers.not: 「{0}」と異なる
   org.junit.Assert.assertEquals: 「{0}」が「{1}」に等しいことをチェック
   org.junit.Assert.assertThat: 「{0}」が{1}ことをチェック

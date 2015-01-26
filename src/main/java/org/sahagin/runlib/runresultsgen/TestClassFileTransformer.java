@@ -14,6 +14,7 @@ import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
+import javassist.NotFoundException;
 
 import org.openqa.selenium.io.IOUtils;
 import org.sahagin.runlib.external.TestDoc;
@@ -58,11 +59,20 @@ public class TestClassFileTransformer implements ClassFileTransformer {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        // TODO method overload is not supported
         String classQualifiedName = method.getDeclaringClass().getName();
         String methodSimpleName = method.getName();
+        CtClass[] paramTypes;
+        try {
+            paramTypes = method.getParameterTypes();
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        List<String> argClassQualifiedNames = new ArrayList<String>(paramTypes.length);
+        for (CtClass paramType : paramTypes) {
+            argClassQualifiedNames.add(paramType.getName());
+        }
         return AdapterContainer.globalInstance().getAdditionalTestDocs().getMethodTestDoc(
-                classQualifiedName, methodSimpleName) != null;
+                classQualifiedName, methodSimpleName, argClassQualifiedNames) != null;
     }
 
     private List<CtMethod> allSubMethods(CtClass ctClass) {

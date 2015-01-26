@@ -55,8 +55,12 @@ public class JUnit4Adapter implements Adapter {
             // TODO cannot handle methods defined on subclass
 
             // in alphabetical order
-            methodAdd("org.hamcrest.core.Is", "is");
-            methodAdd("org.hamcrest.CoreMatchers", "is");
+            methodAdd("org.hamcrest.core.Is", "is", "java.lang.Object");
+            methodAdd("org.hamcrest.core.Is", "is", "org.hamcrest.Matcher");
+            methodAdd("org.hamcrest.core.IsNot", "not");
+            methodAdd("org.hamcrest.CoreMatchers", "is", "java.lang.Object");
+            methodAdd("org.hamcrest.CoreMatchers", "is", "org.hamcrest.Matcher");
+            methodAdd("org.hamcrest.CoreMatchers", "not");
             methodAdd("org.junit.Assert", "assertEquals");
             methodAdd("org.junit.Assert", "assertThat");
         }

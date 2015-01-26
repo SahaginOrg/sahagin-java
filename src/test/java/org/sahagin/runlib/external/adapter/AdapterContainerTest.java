@@ -3,6 +3,9 @@ package org.sahagin.runlib.external.adapter;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.sahagin.runlib.additionaltestdoc.AdditionalMethodTestDoc;
 import org.sahagin.runlib.additionaltestdoc.AdditionalTestDocs;
@@ -22,13 +25,22 @@ public class AdapterContainerTest {
         new WebDriverAdapter().initialSetAdapter();
         AdditionalTestDocs testDocs
         = AdapterContainer.globalInstance().getAdditionalTestDocs();
-        AdditionalMethodTestDoc assertThatTestDoc
-        = testDocs.getMethodTestDoc("org.junit.Assert", "assertThat");
+
         AdditionalMethodTestDoc clickTestDoc
-        = testDocs.getMethodTestDoc("org.openqa.selenium.WebElement", "click");
-        assertThat(assertThatTestDoc.getCaptureStyle(), is(CaptureStyle.THIS_LINE));
-        assertThat(assertThatTestDoc.getTestDoc(), is("check that '{0}' {1}"));
+        = testDocs.getMethodTestDoc("org.openqa.selenium.WebElement", "click", new ArrayList<String>(0));
         assertThat(clickTestDoc.getTestDoc(), is("click {this}"));
+
+        AdditionalMethodTestDoc isTestDoc1
+        = testDocs.getMethodTestDoc("org.hamcrest.CoreMatchers", "is",
+                Arrays.asList(Object.class.getCanonicalName()));
+        assertThat(isTestDoc1.getCaptureStyle(), is(CaptureStyle.THIS_LINE));
+        assertThat(isTestDoc1.getTestDoc(), is("equals to '{0}'"));
+
+        AdditionalMethodTestDoc isTestDoc2
+        = testDocs.getMethodTestDoc("org.hamcrest.CoreMatchers", "is",
+                Arrays.asList(Matcher.class.getCanonicalName()));
+        assertThat(isTestDoc2.getCaptureStyle(), is(CaptureStyle.THIS_LINE));
+        assertThat(isTestDoc2.getTestDoc(), is("{0}"));
     }
 
     @Test
@@ -39,12 +51,9 @@ public class AdapterContainerTest {
         new WebDriverAdapter().initialSetAdapter();
         AdditionalTestDocs testDocs
         = AdapterContainer.globalInstance().getAdditionalTestDocs();
-        AdditionalMethodTestDoc assertThatTestDoc
-        = testDocs.getMethodTestDoc("org.junit.Assert", "assertThat");
+
         AdditionalMethodTestDoc clickTestDoc
-        = testDocs.getMethodTestDoc("org.openqa.selenium.WebElement", "click");
-        assertThat(assertThatTestDoc.getCaptureStyle(), is(CaptureStyle.THIS_LINE));
-        assertThat(assertThatTestDoc.getTestDoc(), is("「{0}」が{1}ことをチェック"));
+        = testDocs.getMethodTestDoc("org.openqa.selenium.WebElement", "click", new ArrayList<String>(0));
         assertThat(clickTestDoc.getTestDoc(), is("{this}をクリック"));
     }
 }
