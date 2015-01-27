@@ -23,3 +23,7 @@ For more information, let's go to [Sahagin main features](https://github.com/Sah
 * [Sahagin main features](https://github.com/SahaginOrg/sahagin-java/wiki/Sahagin-main-features)
 * [Getting started](https://github.com/SahaginOrg/sahagin-java/wiki/Getting-started)
 * [Sahagin development](https://github.com/SahaginOrg/sahagin-java/wiki/Sahagin-development)
+
+# Japanese information
+
+* 日本語情報は[こちら](http://blog.trident-qa.com/2015/01/sahagin-first-release-1/)
