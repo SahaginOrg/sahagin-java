@@ -1,6 +1,7 @@
 package org.sahagin.share;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,6 +34,7 @@ public class TestDocResolver {
         if (method.getTestDoc() == null) {
             return null; // no TestDoc
         }
+        boolean condidionalFound = false;
         Matcher matcher = PLACEHOLDER.matcher(method.getTestDoc());
         while (matcher.find()) {
             String matched = matcher.group();
@@ -44,6 +46,12 @@ public class TestDocResolver {
                 // not index pattern
                 if (matched.equals("this")) {
                     continue;
+                } else if (matched.startsWith("if:") || matched.startsWith("elseif:")) {
+                    condidionalFound = true;
+                    continue;
+                } else if (condidionalFound
+                        && (matched.equals("else") || matched.equals("end"))) {
+                    continue;
                 } else if (!method.getArgVariables().contains(matched)) {
                     return matched;
                 }
@@ -52,8 +60,31 @@ public class TestDocResolver {
         return null;
     }
 
+    private static String subMethodInvokeTestDoc(SubMethodInvoke methodInvoke,
+            List<String> placeholderResolvedParentMethodArgTestDocs) throws IllegalTestScriptException {
+        TestMethod method = methodInvoke.getSubMethod();
+        assert method != null : "null for " + methodInvoke.getOriginal();
+        if (method.getTestDoc() == null) {
+            return methodInvoke.getOriginal();
+        }
+        Matcher matcher = PLACEHOLDER.matcher(method.getTestDoc());
+
+        // replace all placeholders by Matcher
+        StringBuffer buf = new StringBuffer(method.getTestDoc().length());
+        while (matcher.find()) {
+            String variable = matcher.group();
+            variable = variable.substring(1, variable.length() - 1) ; // trim head and tail braces
+            String testDoc = methodInvokeNormalVariableTestDoc(
+                    methodInvoke, variable, placeholderResolvedParentMethodArgTestDocs);
+            matcher.appendReplacement(buf, testDoc);
+        }
+        matcher.appendTail(buf);
+        return buf.toString();
+    }
+
     // returns original if TestDoc value not found
-    private static String methodTestDocSub(Code code, List<String> placeholderResolvedParentMethodArgTestDocs)
+    private static String methodTestDocSub(Code code,
+            List<String> placeholderResolvedParentMethodArgTestDocs)
             throws IllegalTestScriptException {
         if (code instanceof StringCode) {
             return ((StringCode) code).getValue();
@@ -62,95 +93,95 @@ public class TestDocResolver {
             return placeholderResolvedParentMethodArgTestDocs.get(methodArg.getArgIndex());
         } else if (code instanceof SubMethodInvoke) {
             SubMethodInvoke methodInvoke = (SubMethodInvoke) code;
-            TestMethod method = methodInvoke.getSubMethod();
-            assert method != null : "null for " + methodInvoke.getOriginal();
-            if (method.getTestDoc() == null) {
-                return methodInvoke.getOriginal();
-            }
-            Matcher matcher = PLACEHOLDER.matcher(method.getTestDoc());
-
-            // replace all placeholders by Matcher
-            StringBuffer buf = new StringBuffer(method.getTestDoc().length());
-            while (matcher.find()) {
-                String variable = matcher.group();
-                variable = variable.substring(1, variable.length() - 1) ; // trim head and tail braces
-                int varIndex = -1;
-                boolean isIndexPattern = false;
-
-                try {
-                    varIndex = Integer.parseInt(variable);
-                    isIndexPattern = true;
-                } catch (NumberFormatException e) {
-                    // not index pattern
-                }
-
-                List<Code> variableCodes = new ArrayList<Code>(4);
-                if (!isIndexPattern && variable.equals("this")) {
-                    Code variableCode = methodInvoke.getThisInstance();
-                    if (variableCode == null) {
-                        // When called inside the class on which this method is defined,
-                        // set the class name for {this} keyword
-                        variableCode = new UnknownCode();
-                        variableCode.setOriginal(methodInvoke.getSubMethod().getTestClass().getSimpleName());
-                    }
-                    variableCodes.add(variableCode);
-                } else {
-                    if (!isIndexPattern) {
-                        varIndex = method.getArgVariables().indexOf(variable);
-                    }
-                    if (varIndex < 0
-                            ||
-                            // TestMethod for AdditionalMethodTestDoc does not have argument information
-                            // currently. TODO should have argument information and
-                            // should not use isAdditionalMethodKey method
-                            (varIndex >= method.getArgVariables().size()
-                            && !AdditionalMethodTestDoc.isAdditionalMethodKey(method.getKey()))) {
-                        throw new IllegalTestScriptException(String.format(
-                                MSG_INVALID_PLACEHOLDER, method.getQualifiedName(), variable));
-                    }
-
-                    if (!method.hasVariableLengthArg()) {
-                        if (varIndex >= methodInvoke.getArgs().size()) {
-                            // maybe AdditionalMethodTestDoc
-                            throw new IllegalTestScriptException(String.format(
-                                    MSG_INVALID_PLACEHOLDER, method.getQualifiedName(), variable));
-                        }
-                        variableCodes.add(methodInvoke.getArgs().get(varIndex));
-                    } else if (varIndex == method.getVariableLengthArgIndex()) {
-                        // variable length argument.
-                        // - TestDoc for variable length argument
-                        //   is the comma connected string of all rest arguments.
-                        // - TestDoc for variable length argument
-                        //   is empty string if no rest arguments exist.
-                        for (int i = varIndex; i < methodInvoke.getArgs().size(); i++) {
-                            variableCodes.add(methodInvoke.getArgs().get(i));
-                        }
-                    } else if (varIndex > method.getVariableLengthArgIndex()) {
-                            throw new IllegalTestScriptException(String.format(
-                                    MSG_INVALID_PLACEHOLDER, method.getQualifiedName(), variable));
-                    } else {
-                        try {
-                            variableCodes.add(methodInvoke.getArgs().get(varIndex));
-                        } catch (IndexOutOfBoundsException e) {
-                            throw new RuntimeException(method.getQualifiedName(),e);
-                        }
-                    }
-                }
-
-                String testDoc = "";
-                for (int i = 0; i < variableCodes.size(); i++) {
-                    if (i != 0) {
-                        testDoc = testDoc + ", ";
-                    }
-                    testDoc = testDoc + methodTestDocSub(
-                            variableCodes.get(i), placeholderResolvedParentMethodArgTestDocs);
-                }
-                matcher.appendReplacement(buf, testDoc);
-            }
-            matcher.appendTail(buf);
-            return buf.toString();
+            return subMethodInvokeTestDoc(methodInvoke, placeholderResolvedParentMethodArgTestDocs);
         } else {
             return code.getOriginal();
+        }
+    }
+
+    private static String methodInvokeNormalVariableTestDoc(
+            SubMethodInvoke methodInvoke, String variable,
+            List<String> placeholderResolvedParentMethodArgTestDocs) throws IllegalTestScriptException {
+        List<Code> variableCodes = methodInvokeNormalVariableCodes(methodInvoke, variable);
+        String testDoc = "";
+        for (int i = 0; i < variableCodes.size(); i++) {
+            if (i != 0) {
+                testDoc = testDoc + ", ";
+            }
+            testDoc = testDoc + methodTestDocSub(
+                    variableCodes.get(i), placeholderResolvedParentMethodArgTestDocs);
+        }
+        return testDoc;
+    }
+
+    private static List<Code> methodInvokeNormalVariableCodes(
+            SubMethodInvoke methodInvoke, String variable) throws IllegalTestScriptException {
+        TestMethod method = methodInvoke.getSubMethod();
+
+        if (variable.equals("this")) {
+            Code variableCode = methodInvoke.getThisInstance();
+            if (variableCode == null) {
+                // When called inside the class on which this method is defined,
+                // set the class name for {this} keyword
+                variableCode = new UnknownCode();
+                variableCode.setOriginal(methodInvoke.getSubMethod().getTestClass().getSimpleName());
+            }
+            return Arrays.asList(variableCode);
+        }
+
+        int varIndex = -1;
+        try {
+            varIndex = Integer.parseInt(variable);
+        } catch (NumberFormatException e) {
+            // not index pattern
+            varIndex = method.getArgVariables().indexOf(variable);
+        }
+
+        if (varIndex < 0) {
+            // maybe fails to calculate varIndex from variable
+            throw new IllegalTestScriptException(String.format(
+                    MSG_INVALID_PLACEHOLDER, method.getQualifiedName(), variable));
+        }
+
+        // TestMethod for AdditionalMethodTestDoc does not have argument information currently.
+        // TODO should have argument information and should not use isAdditionalMethodKey method
+        if (varIndex >= method.getArgVariables().size()
+                && !AdditionalMethodTestDoc.isAdditionalMethodKey(method.getKey())) {
+            throw new IllegalTestScriptException(String.format(
+                    MSG_INVALID_PLACEHOLDER, method.getQualifiedName(), variable));
+        }
+
+        if (!method.hasVariableLengthArg()) {
+            if (varIndex >= methodInvoke.getArgs().size()) {
+                // maybe AdditionalMethodTestDoc
+                throw new IllegalTestScriptException(String.format(
+                        MSG_INVALID_PLACEHOLDER, method.getQualifiedName(), variable));
+            }
+            return Arrays.asList(methodInvoke.getArgs().get(varIndex));
+        }
+
+        if (varIndex == method.getVariableLengthArgIndex()) {
+            // variable length argument.
+            // - TestDoc for variable length argument
+            //   is the comma connected string of all rest arguments.
+            // - TestDoc for variable length argument
+            //   is empty string if no rest arguments exist.
+            List<Code> variableCodes = new ArrayList<Code>(4);
+            for (int i = varIndex; i < methodInvoke.getArgs().size(); i++) {
+                variableCodes.add(methodInvoke.getArgs().get(i));
+            }
+            return variableCodes;
+        }
+
+        if (varIndex > method.getVariableLengthArgIndex()) {
+            throw new IllegalTestScriptException(String.format(
+                    MSG_INVALID_PLACEHOLDER, method.getQualifiedName(), variable));
+        }
+
+        try {
+            return Arrays.asList(methodInvoke.getArgs().get(varIndex));
+        } catch (IndexOutOfBoundsException e) {
+            throw new RuntimeException(method.getQualifiedName(),e);
         }
     }
 
