@@ -11,7 +11,9 @@ public class AdditionalMethodTestDoc {
     private String simpleName;
     // null means not overloaded
     private List<String> argClassQualifiedNames = null;
+    private int variableLengthArgIndex = -1;
     private String testDoc;
+    // TODO should not allow stepInCapture for AdditionalTestDoc
     private CaptureStyle captureStyle = CaptureStyle.getDefault();
 
     public String getClassQualifiedName() {
@@ -74,6 +76,18 @@ public class AdditionalMethodTestDoc {
         setOverload(argClassesStrToList(argClassesStr));
     }
 
+    public boolean hasVariableLengthArg() {
+        return variableLengthArgIndex != -1;
+    }
+
+    public int getVariableLengthArgIndex() {
+        return variableLengthArgIndex;
+    }
+
+    public void setVariableLengthArgIndex(int variableLengthArgIndex) {
+        this.variableLengthArgIndex = variableLengthArgIndex;
+    }
+
     public String getTestDoc() {
         return testDoc;
     }
@@ -110,6 +124,11 @@ public class AdditionalMethodTestDoc {
         }
         // TODO should use the same rule as getKey method in jdt
         return "_Additional_" + classQualifiedName + "." + methodSimpleName + "_" + argClassesStr;
+    }
+
+    // TODO this method should be removed
+    public static boolean isAdditionalMethodKey(String methodKey) {
+        return methodKey != null && methodKey.startsWith("_Additional_");
     }
 
     public static String generateMethodKey(String classQualifiedName,

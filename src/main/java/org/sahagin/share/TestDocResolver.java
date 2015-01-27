@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.sahagin.runlib.additionaltestdoc.AdditionalMethodTestDoc;
 import org.sahagin.share.srctree.PageClass;
 import org.sahagin.share.srctree.TestMethod;
 import org.sahagin.share.srctree.code.Code;
@@ -83,27 +84,68 @@ public class TestDocResolver {
                     // not index pattern
                 }
 
-                Code variableCode;
+                List<Code> variableCodes = new ArrayList<Code>(4);
                 if (!isIndexPattern && variable.equals("this")) {
-                    variableCode = methodInvoke.getThisInstance();
+                    Code variableCode = methodInvoke.getThisInstance();
                     if (variableCode == null) {
                         // When called inside the class on which this method is defined,
                         // set the class name for {this} keyword
                         variableCode = new UnknownCode();
                         variableCode.setOriginal(methodInvoke.getSubMethod().getTestClass().getSimpleName());
                     }
+                    variableCodes.add(variableCode);
                 } else {
                     if (!isIndexPattern) {
                         varIndex = method.getArgVariables().indexOf(variable);
                     }
-                    if (varIndex < 0 || varIndex >= methodInvoke.getArgs().size()) {
+                    if (varIndex < 0
+                            ||
+                            // TestMethod for AdditionalMethodTestDoc does not have argument information
+                            // currently. TODO should have argument information and
+                            // should not use isAdditionalMethodKey method
+                            (varIndex >= method.getArgVariables().size()
+                            && !AdditionalMethodTestDoc.isAdditionalMethodKey(method.getKey()))) {
                         throw new IllegalTestScriptException(String.format(
                                 MSG_INVALID_PLACEHOLDER, method.getQualifiedName(), variable));
                     }
-                    variableCode = methodInvoke.getArgs().get(varIndex);
+
+                    if (!method.hasVariableLengthArg()) {
+                        if (varIndex >= methodInvoke.getArgs().size()) {
+                            // maybe AdditionalMethodTestDoc
+                            throw new IllegalTestScriptException(String.format(
+                                    MSG_INVALID_PLACEHOLDER, method.getQualifiedName(), variable));
+                        }
+                        variableCodes.add(methodInvoke.getArgs().get(varIndex));
+                    } else if (varIndex == method.getVariableLengthArgIndex()) {
+                        // variable length argument.
+                        // - TestDoc for variable length argument
+                        //   is the comma connected string of all rest arguments.
+                        // - TestDoc for variable length argument
+                        //   is empty string if no rest arguments exist.
+                        for (int i = varIndex; i < methodInvoke.getArgs().size(); i++) {
+                            variableCodes.add(methodInvoke.getArgs().get(i));
+                        }
+                    } else if (varIndex > method.getVariableLengthArgIndex()) {
+                            throw new IllegalTestScriptException(String.format(
+                                    MSG_INVALID_PLACEHOLDER, method.getQualifiedName(), variable));
+                    } else {
+                        try {
+                            variableCodes.add(methodInvoke.getArgs().get(varIndex));
+                        } catch (IndexOutOfBoundsException e) {
+                            throw new RuntimeException(method.getQualifiedName(),e);
+                        }
+                    }
                 }
-                matcher.appendReplacement(buf, methodTestDocSub(
-                        variableCode, placeholderResolvedParentMethodArgTestDocs));
+
+                String testDoc = "";
+                for (int i = 0; i < variableCodes.size(); i++) {
+                    if (i != 0) {
+                        testDoc = testDoc + ", ";
+                    }
+                    testDoc = testDoc + methodTestDocSub(
+                            variableCodes.get(i), placeholderResolvedParentMethodArgTestDocs);
+                }
+                matcher.appendReplacement(buf, testDoc);
             }
             matcher.appendTail(buf);
             return buf.toString();

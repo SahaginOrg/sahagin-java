@@ -96,6 +96,8 @@ public class AdditionalTestDocsSetter {
         newMethod.setKey(methodKey);
         newMethod.setSimpleName(testDoc.getSimpleName());
         newMethod.setTestDoc(testDoc.getTestDoc());
+        newMethod.setCaptureStyle(testDoc.getCaptureStyle());
+        newMethod.setVariableLengthArgIndex(testDoc.getVariableLengthArgIndex());
         subMethodTable.addTestMethod(newMethod);
         return newMethod;
     }

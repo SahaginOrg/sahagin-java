@@ -94,13 +94,35 @@ implements AdditionalTestDocsAdapter {
 
     public abstract void classAdd();
 
-    // argClassQualifiedNames... null means no overload
-    private void methodAddSub(String classQualifiedName,
-            String methodSimpleName, String argClassesStr, CaptureStyle captureStyle) {
+    // argClassesStr.. null means no overload
+    protected final void methodAdd(String classQualifiedName, String methodSimpleName) {
+        methodAdd(classQualifiedName, methodSimpleName,
+                null, -1, CaptureStyle.getDefault());
+    }
+
+    // argClassesStr.. null means no overload
+    protected final void methodAdd(String classQualifiedName,
+            String methodSimpleName, String argClassesStr) {
+        methodAdd(classQualifiedName, methodSimpleName, argClassesStr, -1);
+    }
+
+    // argClassesStr.. null means no overload
+    protected final void methodAdd(String classQualifiedName,
+            String methodSimpleName, String argClassesStr,
+            int varLengthArgIndex) {
+        methodAdd(classQualifiedName, methodSimpleName,
+                argClassesStr, varLengthArgIndex, CaptureStyle.getDefault());
+    }
+
+    // argClassesStr.. null means no overload
+    protected final void methodAdd(String classQualifiedName,
+            String methodSimpleName, String argClassesStr,
+            int varLengthArgIndex, CaptureStyle captureStyle) {
         AdditionalMethodTestDoc methodTestDocInstance = new AdditionalMethodTestDoc();
         methodTestDocInstance.setClassQualifiedName(classQualifiedName);
         methodTestDocInstance.setSimpleName(methodSimpleName);
         methodTestDocInstance.setCaptureStyle(captureStyle);
+        methodTestDocInstance.setVariableLengthArgIndex(varLengthArgIndex);
         if (argClassesStr != null) {
             methodTestDocInstance.setOverloadFromArgClassesStr(argClassesStr);
         }
@@ -131,27 +153,6 @@ implements AdditionalTestDocsAdapter {
         }
         methodTestDocInstance.setTestDoc(testDoc);
         docs.methodAdd(methodTestDocInstance);
-    }
-
-    protected final void methodAdd(String classQualifiedName,
-            String methodSimpleName, String argClassesStr, CaptureStyle captureStyle) {
-        if (argClassesStr == null) {
-            throw new NullPointerException();
-        }
-        methodAddSub(classQualifiedName, methodSimpleName, argClassesStr, captureStyle);
-    }
-
-    protected final void methodAdd(String classQualifiedName,
-            String methodSimpleName, String argClassesStr) {
-        if (argClassesStr == null) {
-            throw new NullPointerException();
-        }
-        methodAddSub(
-                classQualifiedName, methodSimpleName, argClassesStr, CaptureStyle.getDefault());
-    }
-
-    protected final void methodAdd(String classQualifiedName, String methodSimpleName) {
-        methodAddSub(classQualifiedName, methodSimpleName, null, CaptureStyle.getDefault());
     }
 
     public abstract void methodAdd();

@@ -219,6 +219,26 @@ public class YamlUtils {
     }
 
     // for null or not found key, returns empty list
+    public static List<Integer> getIntListValue(Map<String, Object> yamlObject, String key,
+            boolean allowsEmpty) throws YamlConvertException {
+        Object obj = getObjectValue(yamlObject, key, allowsEmpty);
+        @SuppressWarnings("unchecked")
+        List<Integer> result = (List<Integer>) obj;
+        if (result == null) {
+            if (!allowsEmpty) {
+                throw new YamlConvertException(MSG_LIST_MUST_NOT_BE_NULL);
+            }
+            result = new ArrayList<Integer>(0);
+        }
+        return result;
+    }
+
+    public static List<Integer> getIntListValue(Map<String, Object> yamlObject, String key)
+            throws YamlConvertException {
+        return getIntListValue(yamlObject, key, false);
+    }
+
+    // for null or not found key, returns empty list
     public static List<Map<String, Object>> getYamlObjectListValue(Map<String, Object> yamlObject,
             String key, boolean allowsEmpty) throws YamlConvertException {
         Object obj = getObjectValue(yamlObject, key, allowsEmpty);

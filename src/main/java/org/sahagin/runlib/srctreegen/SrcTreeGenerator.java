@@ -200,6 +200,9 @@ public class SrcTreeGenerator {
                 }
                 SingleVariableDeclaration varDecl = (SingleVariableDeclaration)element;
                 testMethod.addArgVariable(varDecl.getName().getIdentifier());
+                if (varDecl.isVarargs()) {
+                    testMethod.setVariableLengthArgIndex(testMethod.getArgVariables().size() - 1);
+                }
             }
             testMethod.setTestClassKey(rootClass.getKey());
             testMethod.setTestClass(rootClass);
@@ -292,6 +295,9 @@ public class SrcTreeGenerator {
                 }
                 SingleVariableDeclaration varDecl = (SingleVariableDeclaration)element;
                 testMethod.addArgVariable(varDecl.getName().getIdentifier());
+                if (varDecl.isVarargs()) {
+                    testMethod.setVariableLengthArgIndex(testMethod.getArgVariables().size() - 1);
+                }
             }
             testMethod.setTestClassKey(testClass.getKey());
             testMethod.setTestClass(testClass);

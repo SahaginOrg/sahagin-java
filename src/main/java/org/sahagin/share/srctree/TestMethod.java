@@ -19,6 +19,7 @@ public class TestMethod implements YamlConvertible {
     private String testDoc;
     private CaptureStyle captureStyle = CaptureStyle.getDefault();
     private List<String> argVariables = new ArrayList<String>(4);
+    private int variableLengthArgIndex = -1;
     private List<CodeLine> codeBody = new ArrayList<CodeLine>(32);
 
     public String getTestClassKey() {
@@ -88,6 +89,18 @@ public class TestMethod implements YamlConvertible {
         argVariables.add(argVariable);
     }
 
+    public boolean hasVariableLengthArg() {
+        return variableLengthArgIndex != -1;
+    }
+
+    public int getVariableLengthArgIndex() {
+        return variableLengthArgIndex;
+    }
+
+    public void setVariableLengthArgIndex(int variableLengthArgIndex) {
+        this.variableLengthArgIndex = variableLengthArgIndex;
+    }
+
     public List<CodeLine> getCodeBody() {
         return codeBody;
     }
@@ -111,6 +124,9 @@ public class TestMethod implements YamlConvertible {
         if (!argVariables.isEmpty()) {
             result.put("argVariables", argVariables);
         }
+        if (variableLengthArgIndex != -1) {
+            result.put("varLengthArgIndex", variableLengthArgIndex);
+        }
         if (!codeBody.isEmpty()) {
             result.put("codeBody", YamlUtils.toYamlObjectList(codeBody));
         }
@@ -131,7 +147,14 @@ public class TestMethod implements YamlConvertible {
             captureStyle = CaptureStyle.getDefault();
         }
         argVariables = YamlUtils.getStrListValue(yamlObject, "argVariables", true);
-        List<Map<String, Object>> codeBodyYamlObj = YamlUtils.getYamlObjectListValue(yamlObject, "codeBody", true);
+        Integer variableLengthArgIndexObj = YamlUtils.getIntValue(yamlObject, "varLengthArgIndex", true);
+        if (variableLengthArgIndexObj == null) {
+            variableLengthArgIndex = -1;
+        } else {
+            variableLengthArgIndex = variableLengthArgIndexObj;
+        }
+        List<Map<String, Object>> codeBodyYamlObj
+        = YamlUtils.getYamlObjectListValue(yamlObject, "codeBody", true);
         codeBody = new ArrayList<CodeLine>(codeBodyYamlObj.size());
         for (Map<String, Object> codeLineYamlObj : codeBodyYamlObj) {
             CodeLine codeLine = new CodeLine();

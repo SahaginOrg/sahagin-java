@@ -1,0 +1,30 @@
+rootMethodTable:
+  methods:
+  - key: "*TestMain;.test()V"
+    codeBody:
+    - code:
+        args:
+        - {original: '1', type: unknown}
+        - {original: '"A"', type: string, value: A}
+        methodKey: "*TestMain;.varLengthArgMethod(I[Ljava/lang/String;)V"
+        type: method
+    - code:
+        args:
+        - {original: '1', type: unknown}
+        - {original: '"A"', type: string, value: A}
+        - {original: '"B"', type: string, value: B}
+        methodKey: "*TestMain;.varLengthArgMethod(I[Ljava/lang/String;)V"
+        type: method
+    - code:
+        args:
+        - {original: '1', type: unknown}
+        methodKey: "*TestMain;.varLengthArgMethod(I[Ljava/lang/String;)V"
+        type: method
+subMethodTable:
+  methods:
+  - key: "*TestMain;.varLengthArgMethod(I[Ljava/lang/String;)V"
+    testDoc: Doc:{1}{2}
+    argVariables: [arg1, arg2]
+    varLengthArgIndex: 1
+    codeBody:
+    - code: {original: System.out.println(arg2);, type: unknown}
