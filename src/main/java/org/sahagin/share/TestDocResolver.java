@@ -3,9 +3,11 @@ package org.sahagin.share;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.sahagin.runlib.additionaltestdoc.AdditionalMethodTestDoc;
 import org.sahagin.share.srctree.PageClass;
 import org.sahagin.share.srctree.TestMethod;
@@ -23,10 +25,15 @@ import org.sahagin.share.srctree.code.UnknownCode;
 public class TestDocResolver {
     private static final Pattern PLACEHOLDER = Pattern.compile("\\{[^\\{\\}]+\\}");
     private static final String MSG_INVALID_PLACEHOLDER
-    = "TestDoc of \"%s\" contains invalid keyword \"%s\"";
+    = "TestDoc of \"%s\" contains invalid keyword {%s}";
+    private static final String MSG_INVALID_PLACEHOLDER_POS
+    = "TestDoc of \"%s\" contains invalid position keyword {%s}";
+    private static final String MSG_STATEMENT_NOT_CLOSED
+    = "{end} keyword not found in TestDoc of \"%s\"";
 
     // returns invalid placeholder keyword in TestMethod if found.
     // returns null if not found
+    // TODO check mismatched if,else,elseif,end keywords
     public static String searchInvalidPlaceholder(TestMethod method) {
         if (method == null) {
             throw new NullPointerException();
@@ -46,11 +53,10 @@ public class TestDocResolver {
                 // not index pattern
                 if (matched.equals("this")) {
                     continue;
-                } else if (matched.startsWith("if:") || matched.startsWith("elseif:")) {
+                } else if (matched.startsWith("if:")) {
                     condidionalFound = true;
                     continue;
-                } else if (condidionalFound
-                        && (matched.equals("else") || matched.equals("end"))) {
+                } else if (condidionalFound && matched.equals("end")) {
                     continue;
                 } else if (!method.getArgVariables().contains(matched)) {
                     return matched;
@@ -60,73 +66,23 @@ public class TestDocResolver {
         return null;
     }
 
-    private static String subMethodInvokeTestDoc(SubMethodInvoke methodInvoke,
-            List<String> placeholderResolvedParentMethodArgTestDocs) throws IllegalTestScriptException {
-        TestMethod method = methodInvoke.getSubMethod();
-        assert method != null : "null for " + methodInvoke.getOriginal();
-        if (method.getTestDoc() == null) {
-            return methodInvoke.getOriginal();
-        }
-        Matcher matcher = PLACEHOLDER.matcher(method.getTestDoc());
-
-        // replace all placeholders by Matcher
-        StringBuffer buf = new StringBuffer(method.getTestDoc().length());
-        while (matcher.find()) {
-            String variable = matcher.group();
-            variable = variable.substring(1, variable.length() - 1) ; // trim head and tail braces
-            String testDoc = methodInvokeNormalVariableTestDoc(
-                    methodInvoke, variable, placeholderResolvedParentMethodArgTestDocs);
-            matcher.appendReplacement(buf, testDoc);
-        }
-        matcher.appendTail(buf);
-        return buf.toString();
-    }
-
-    // returns original if TestDoc value not found
-    private static String methodTestDocSub(Code code,
-            List<String> placeholderResolvedParentMethodArgTestDocs)
-            throws IllegalTestScriptException {
-        if (code instanceof StringCode) {
-            return ((StringCode) code).getValue();
-        } else if (code instanceof MethodArgument) {
-            MethodArgument methodArg = (MethodArgument) code;
-            return placeholderResolvedParentMethodArgTestDocs.get(methodArg.getArgIndex());
-        } else if (code instanceof SubMethodInvoke) {
-            SubMethodInvoke methodInvoke = (SubMethodInvoke) code;
-            return subMethodInvokeTestDoc(methodInvoke, placeholderResolvedParentMethodArgTestDocs);
-        } else {
-            return code.getOriginal();
-        }
-    }
-
-    private static String methodInvokeNormalVariableTestDoc(
-            SubMethodInvoke methodInvoke, String variable,
-            List<String> placeholderResolvedParentMethodArgTestDocs) throws IllegalTestScriptException {
-        List<Code> variableCodes = methodInvokeNormalVariableCodes(methodInvoke, variable);
-        String testDoc = "";
-        for (int i = 0; i < variableCodes.size(); i++) {
-            if (i != 0) {
-                testDoc = testDoc + ", ";
-            }
-            testDoc = testDoc + methodTestDocSub(
-                    variableCodes.get(i), placeholderResolvedParentMethodArgTestDocs);
-        }
-        return testDoc;
-    }
-
-    private static List<Code> methodInvokeNormalVariableCodes(
+    // second argument..whether argument for variable is actually specified.
+    // {this} and variable length argument can be empty
+    private static Pair<List<Code>, Boolean> methodInvokeNormalVariableCodes(
             SubMethodInvoke methodInvoke, String variable) throws IllegalTestScriptException {
         TestMethod method = methodInvoke.getSubMethod();
 
         if (variable.equals("this")) {
             Code variableCode = methodInvoke.getThisInstance();
+            boolean empty = false;
             if (variableCode == null) {
                 // When called inside the class on which this method is defined,
                 // set the class name for {this} keyword
                 variableCode = new UnknownCode();
                 variableCode.setOriginal(methodInvoke.getSubMethod().getTestClass().getSimpleName());
+                empty = true;
             }
-            return Arrays.asList(variableCode);
+            return Pair.of(Arrays.asList(variableCode), empty);
         }
 
         int varIndex = -1;
@@ -157,7 +113,7 @@ public class TestDocResolver {
                 throw new IllegalTestScriptException(String.format(
                         MSG_INVALID_PLACEHOLDER, method.getQualifiedName(), variable));
             }
-            return Arrays.asList(methodInvoke.getArgs().get(varIndex));
+            return Pair.of(Arrays.asList(methodInvoke.getArgs().get(varIndex)), false);
         }
 
         if (varIndex == method.getVariableLengthArgIndex()) {
@@ -170,7 +126,7 @@ public class TestDocResolver {
             for (int i = varIndex; i < methodInvoke.getArgs().size(); i++) {
                 variableCodes.add(methodInvoke.getArgs().get(i));
             }
-            return variableCodes;
+            return Pair.of(variableCodes, variableCodes.isEmpty());
         }
 
         if (varIndex > method.getVariableLengthArgIndex()) {
@@ -179,9 +135,116 @@ public class TestDocResolver {
         }
 
         try {
-            return Arrays.asList(methodInvoke.getArgs().get(varIndex));
+            return Pair.of(Arrays.asList(methodInvoke.getArgs().get(varIndex)), false);
         } catch (IndexOutOfBoundsException e) {
-            throw new RuntimeException(method.getQualifiedName(),e);
+            throw new RuntimeException(method.getQualifiedName(), e);
+        }
+    }
+
+    private static String methodInvokeNormalVariableTestDoc(
+            SubMethodInvoke methodInvoke, String variable,
+            List<String> placeholderResolvedParentMethodArgTestDocs) throws IllegalTestScriptException {
+        List<Code> variableCodes = methodInvokeNormalVariableCodes(methodInvoke, variable).getLeft();
+        String testDoc = "";
+        for (int i = 0; i < variableCodes.size(); i++) {
+            if (i != 0) {
+                testDoc = testDoc + ", ";
+            }
+            testDoc = testDoc + methodTestDocSub(
+                    variableCodes.get(i), placeholderResolvedParentMethodArgTestDocs);
+        }
+        return testDoc;
+    }
+
+    private static boolean validateCondVariable(SubMethodInvoke methodInvoke, String condVariable,
+            List<String> placeholderResolvedParentMethodArgTestDocs) throws IllegalTestScriptException {
+        String[] splitted = condVariable.split(":");
+        if (splitted.length != 2) {
+            throw new IllegalTestScriptException(String.format(
+                    MSG_INVALID_PLACEHOLDER, methodInvoke.getSubMethod().getQualifiedName(), condVariable));
+        }
+        String expressionVariable = splitted[1];
+        // returns true if argument for expressionVariable is not empty
+        return !methodInvokeNormalVariableCodes(methodInvoke, expressionVariable).getRight();
+    }
+
+    private static String subMethodInvokeTestDoc(SubMethodInvoke methodInvoke,
+            List<String> placeholderResolvedParentMethodArgTestDocs) throws IllegalTestScriptException {
+        TestMethod method = methodInvoke.getSubMethod();
+        assert method != null : "null for " + methodInvoke.getOriginal();
+        if (method.getTestDoc() == null) {
+            return methodInvoke.getOriginal();
+        }
+        Matcher matcher = PLACEHOLDER.matcher(method.getTestDoc());
+
+        // replace all placeholders by Matcher
+        StringBuffer buf = new StringBuffer(method.getTestDoc().length());
+        StringBuffer dummy = new StringBuffer(method.getTestDoc().length());
+        boolean ifFound = false;
+        boolean insideIf = false;
+        boolean skip = false;
+        // TODO support nested condition, and else, elseif condition
+        while (matcher.find()) {
+            String variable = matcher.group();
+            variable = variable.substring(1, variable.length() - 1) ; // trim head and tail braces
+            if (variable.startsWith("if:")) {
+                if (insideIf) {
+                    // nested if is not supported yet
+                    throw new IllegalTestScriptException(String.format(
+                            MSG_INVALID_PLACEHOLDER_POS, method.getQualifiedName(), variable));
+                }
+                matcher.appendReplacement(buf, "");
+                ifFound = true;
+                insideIf = true;
+                skip = !validateCondVariable(methodInvoke, variable, placeholderResolvedParentMethodArgTestDocs);
+            } else if (variable.equals("end") && ifFound) {
+                if (!insideIf) {
+                    throw new IllegalTestScriptException(String.format(
+                            MSG_INVALID_PLACEHOLDER_POS, method.getQualifiedName(), variable));
+                }
+                if (skip) {
+                    matcher.appendReplacement(dummy, ""); // abort data
+                } else {
+                    matcher.appendReplacement(buf, "");
+                }
+                insideIf = false;
+                skip = false;
+            } else if (skip) {
+                matcher.appendReplacement(dummy, ""); // abort data
+            } else {
+                String testDoc = methodInvokeNormalVariableTestDoc(
+                        methodInvoke, variable, placeholderResolvedParentMethodArgTestDocs);
+                // escape $ to avoid appendReplacement method error
+                testDoc = testDoc.replace("$", "\\$");
+                try {
+                    matcher.appendReplacement(buf, testDoc);
+                } catch (RuntimeException e) {
+                    throw new RuntimeException("fail to append: " + testDoc, e);
+                }
+            }
+        }
+        if (insideIf) {
+            throw new IllegalTestScriptException(String.format(
+                    MSG_STATEMENT_NOT_CLOSED, method.getQualifiedName()));
+        }
+        matcher.appendTail(buf);
+        return buf.toString();
+    }
+
+    // returns original if TestDoc value not found
+    private static String methodTestDocSub(Code code,
+            List<String> placeholderResolvedParentMethodArgTestDocs)
+            throws IllegalTestScriptException {
+        if (code instanceof StringCode) {
+            return ((StringCode) code).getValue();
+        } else if (code instanceof MethodArgument) {
+            MethodArgument methodArg = (MethodArgument) code;
+            return placeholderResolvedParentMethodArgTestDocs.get(methodArg.getArgIndex());
+        } else if (code instanceof SubMethodInvoke) {
+            SubMethodInvoke methodInvoke = (SubMethodInvoke) code;
+            return subMethodInvokeTestDoc(methodInvoke, placeholderResolvedParentMethodArgTestDocs);
+        } else {
+            return code.getOriginal();
         }
     }
 
