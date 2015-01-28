@@ -11,7 +11,7 @@ method:
   org.openqa.selenium.WebDriver.get: go to the page '{0}'
   org.openqa.selenium.WebElement.clear: clear the text of {this}
   org.openqa.selenium.WebElement.click: click {this}
-  org.openqa.selenium.WebElement.getAttribute: the attribute {0} of {this}
+  org.openqa.selenium.WebElement.getAttribute: the '{0}' attribute of {this}
   org.openqa.selenium.WebElement.getText: the text of {this}
   org.openqa.selenium.WebElement.isSelected: is {this} selected
   org.openqa.selenium.WebElement.sendKeys: send keys '{0}' to {this}

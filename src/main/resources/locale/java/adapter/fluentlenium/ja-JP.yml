@@ -1,0 +1,25 @@
+method:
+  org.fluentlenium.core.action.FillConstructor.with: "{this}に「{0}」を入力"
+  org.fluentlenium.core.domain.FluentList.clear: "{this}のテキストをクリア"
+  org.fluentlenium.core.domain.FluentList.click: "{this}をクリック"
+  org.fluentlenium.core.domain.FluentList.getAttribute: "{this}の属性「{0}」"
+  org.fluentlenium.core.domain.FluentList.getText: "{this}の表示テキスト"
+  org.fluentlenium.core.domain.FluentList.getValue: "{this}の値"
+  org.fluentlenium.core.domain.FluentWebElement.clear: "{this}のテキストをクリア"
+  org.fluentlenium.core.domain.FluentWebElement.click: "{this}をクリック"
+  org.fluentlenium.core.domain.FluentWebElement.getAttribute: "{this}の属性「{0}」"
+  org.fluentlenium.core.domain.FluentWebElement.getText: "{this}の表示テキスト"
+  org.fluentlenium.core.domain.FluentWebElement.getValue: "{this}の値"
+  org.fluentlenium.core.domain.FluentWebElement.isDisplayed: "{this}が表示されているか"
+  org.fluentlenium.core.domain.FluentWebElement.isEnabled: "{this}が有効になっているか"
+  org.fluentlenium.core.domain.FluentWebElement.isSelected: "{this}が選択されているか"
+  org.fluentlenium.core.filter.FilterConstructor.withClass:
+    String: class = {0}
+  org.fluentlenium.core.filter.FilterConstructor.withName:
+    String: name = {0}
+  org.fluentlenium.core.Fluent.$: 要素「{0}{if:1} ({1}){end}」
+  org.fluentlenium.core.Fluent.clear: 要素「{0}{if:1} ({1}){end}」のテキストをクリア
+  org.fluentlenium.core.Fluent.click: 要素「{0}{if:1} ({1}){end}」をクリック
+  org.fluentlenium.core.Fluent.fill: 要素「{0}{if:1} ({1}){end}」
+  org.fluentlenium.core.Fluent.find: 要素「{0}{if:1} ({1}){end}」
+  org.fluentlenium.core.Fluent.goTo: 「{0}」にページ遷移
