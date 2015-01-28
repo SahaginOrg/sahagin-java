@@ -20,7 +20,7 @@ For more information, let's go to [Sahagin main features](https://github.com/Sah
 
 # For more information
 
-* [Sahagin main features](https://github.com/SahaginOrg/sahagin-java/wiki/Sahagin-main-features)
+* [Sahagin overview](https://github.com/SahaginOrg/sahagin-java/wiki/Sahagin-overview)
 * [Getting started](https://github.com/SahaginOrg/sahagin-java/wiki/Getting-started)
 * [Sahagin development](https://github.com/SahaginOrg/sahagin-java/wiki/Sahagin-development)
 
