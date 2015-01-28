@@ -7,6 +7,7 @@ import java.lang.instrument.Instrumentation;
 import org.apache.commons.io.FileUtils;
 import org.sahagin.runlib.external.adapter.Adapter;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
+import org.sahagin.runlib.external.adapter.fluentlenium.FluentleniumAdapter;
 import org.sahagin.runlib.external.adapter.junit4.JUnit4Adapter;
 import org.sahagin.runlib.external.adapter.webdriver.WebDriverAdapter;
 import org.sahagin.runlib.runresultsgen.TestClassFileTransformer;
@@ -42,6 +43,7 @@ public class SahaginPreMain {
         // default adapters
         new JUnit4Adapter().initialSetAdapter();
         new WebDriverAdapter().initialSetAdapter();
+        new FluentleniumAdapter().initialSetAdapter();
 
         for (String adapterClassName : config.getAdapterClassNames()) {
             // TODO handle exception thrown by forName or newInstance method
