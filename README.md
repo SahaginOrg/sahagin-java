@@ -22,6 +22,7 @@ For more information, let's go to [Sahagin overview](https://github.com/SahaginO
 
 * [Sahagin overview](https://github.com/SahaginOrg/sahagin-java/wiki/Sahagin-overview)
 * [Getting started](https://github.com/SahaginOrg/sahagin-java/wiki/Getting-started)
+* [Various features](https://github.com/SahaginOrg/sahagin-java/wiki/Various-features)
 * [Sahagin development](https://github.com/SahaginOrg/sahagin-java/wiki/Sahagin-development)
 
 # Japanese information
