@@ -13,7 +13,7 @@ Sahagin's advantages are:
 
 Sahagin is now beta version, and only supports Java in the current latest version.
 
-For more information, let's go to [Sahagin main features](https://github.com/SahaginOrg/sahagin-java/wiki/Sahagin-main-features).
+For more information, let's go to [Sahagin overview](https://github.com/SahaginOrg/sahagin-java/wiki/Sahagin-overview).
 
 
 [![Build Status](https://travis-ci.org/SahaginOrg/sahagin-java.svg?branch=master)](https://travis-ci.org/SahaginOrg/sahagin-java)
