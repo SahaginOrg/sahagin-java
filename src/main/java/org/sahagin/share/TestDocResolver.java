@@ -3,7 +3,6 @@ package org.sahagin.share;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -168,7 +167,7 @@ public class TestDocResolver {
         return !methodInvokeNormalVariableCodes(methodInvoke, expressionVariable).getRight();
     }
 
-    private static String subMethodInvokeTestDoc(SubMethodInvoke methodInvoke,
+    private static String methodInvokeTestDoc(SubMethodInvoke methodInvoke,
             List<String> placeholderResolvedParentMethodArgTestDocs) throws IllegalTestScriptException {
         TestMethod method = methodInvoke.getSubMethod();
         assert method != null : "null for " + methodInvoke.getOriginal();
@@ -242,7 +241,7 @@ public class TestDocResolver {
             return placeholderResolvedParentMethodArgTestDocs.get(methodArg.getArgIndex());
         } else if (code instanceof SubMethodInvoke) {
             SubMethodInvoke methodInvoke = (SubMethodInvoke) code;
-            return subMethodInvokeTestDoc(methodInvoke, placeholderResolvedParentMethodArgTestDocs);
+            return methodInvokeTestDoc(methodInvoke, placeholderResolvedParentMethodArgTestDocs);
         } else {
             return code.getOriginal();
         }
