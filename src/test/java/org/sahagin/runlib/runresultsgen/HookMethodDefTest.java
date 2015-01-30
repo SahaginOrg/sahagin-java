@@ -31,7 +31,7 @@ import org.sahagin.share.yaml.YamlUtils;
 // This test must be executed by Maven,
 // or executed with Maven home setting
 // (system property maven.home or set environment value M2_HOME) and JAVA_HOME environment value
-public class RunResultsGenerateHookTest extends TestBase {
+public class HookMethodDefTest extends TestBase {
 
     private static File getTestCapturePath(File capturesDir, int counter) {
         return new File(capturesDir, counter + ".png");

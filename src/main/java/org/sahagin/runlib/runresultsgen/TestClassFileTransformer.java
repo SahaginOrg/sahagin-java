@@ -108,7 +108,7 @@ public class TestClassFileTransformer implements ClassFileTransformer {
     }
 
     private String hookInitializeSrc() {
-        String hookClassName = RunResultsGenerateHook.class.getCanonicalName();
+        String hookClassName = HookMethodDef.class.getCanonicalName();
         return String.format("%s.initialize(\"%s\");", hookClassName, configFilePath);
     }
 
@@ -143,7 +143,7 @@ public class TestClassFileTransformer implements ClassFileTransformer {
 
         // TODO don't need to do anything for java package classes
         ClassPool classPool = ClassPool.getDefault();
-        String hookClassName = RunResultsGenerateHook.class.getCanonicalName();
+        String hookClassName = HookMethodDef.class.getCanonicalName();
         String initializeSrc = hookInitializeSrc();
         boolean transformed = false;
         InputStream stream = null;

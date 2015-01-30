@@ -29,8 +29,8 @@ import org.sahagin.share.yaml.YamlUtils;
 
 // TODO support multiple thread concurrent test execution
 
-public class RunResultsGenerateHook {
-    private static Logger logger = Logging.getLogger(RunResultsGenerateHook.class.getName());
+public class HookMethodDef {
+    private static Logger logger = Logging.getLogger(HookMethodDef.class.getName());
     private static boolean initialized = false;
     private static File runResultsRootDir;
     private static File captureRootDir;
@@ -52,9 +52,9 @@ public class RunResultsGenerateHook {
             throw new RuntimeException(e);
         }
 
-        RunResultsGenerateHook.runResultsRootDir
+        HookMethodDef.runResultsRootDir
         = CommonPath.runResultRootDir(config.getRootBaseReportIntermediateDataDir());
-        RunResultsGenerateHook.captureRootDir
+        HookMethodDef.captureRootDir
         = CommonPath.inputCaptureRootDir(config.getRootBaseReportIntermediateDataDir());
         final File srcTreeFile = CommonPath.srcTreeFile(config.getRootBaseReportIntermediateDataDir());
 
