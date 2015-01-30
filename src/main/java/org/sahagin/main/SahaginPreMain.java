@@ -10,7 +10,7 @@ import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.runlib.external.adapter.fluentlenium.FluentleniumAdapter;
 import org.sahagin.runlib.external.adapter.junit4.JUnit4Adapter;
 import org.sahagin.runlib.external.adapter.webdriver.WebDriverAdapter;
-import org.sahagin.runlib.runresultsgen.TestClassFileTransformer;
+import org.sahagin.runlib.runresultsgen.RunResultsGenerateHookSetter;
 import org.sahagin.runlib.srctreegen.SrcTreeGenerator;
 import org.sahagin.share.AcceptableLocales;
 import org.sahagin.share.CommonPath;
@@ -65,7 +65,7 @@ public class SahaginPreMain {
         }
 
         SrcTree srcTree = generateAndDumpSrcTree(config, locales);
-        TestClassFileTransformer transformer = new TestClassFileTransformer(configFilePath, srcTree);
+        RunResultsGenerateHookSetter transformer = new RunResultsGenerateHookSetter(configFilePath, srcTree);
         inst.addTransformer(transformer);
     }
 

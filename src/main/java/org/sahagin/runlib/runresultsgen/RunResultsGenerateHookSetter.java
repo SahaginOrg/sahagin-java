@@ -26,12 +26,12 @@ import org.sahagin.share.srctree.TestMethod;
 import org.sahagin.share.srctree.code.CodeLine;
 import org.sahagin.share.yaml.YamlConvertException;
 
-public class TestClassFileTransformer implements ClassFileTransformer {
-    private static Logger logger = Logging.getLogger(TestClassFileTransformer.class.getName());
+public class RunResultsGenerateHookSetter implements ClassFileTransformer {
+    private static Logger logger = Logging.getLogger(RunResultsGenerateHookSetter.class.getName());
     private String configFilePath;
     private SrcTree srcTree;
 
-    public TestClassFileTransformer(String configFilePath, SrcTree srcTree)
+    public RunResultsGenerateHookSetter(String configFilePath, SrcTree srcTree)
             throws YamlConvertException, IllegalTestScriptException {
         this.configFilePath = configFilePath;
         this.srcTree = srcTree;
