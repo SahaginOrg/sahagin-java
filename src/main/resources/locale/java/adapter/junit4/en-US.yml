@@ -1,10 +1,10 @@
 method:
   org.hamcrest.core.Is.is:
-    java.lang.Object: equals to '{0}'
+    Object: equals to '{0}'
     org.hamcrest.Matcher: "{0}"
   org.hamcrest.core.IsNot.not: does not equal to '{0}'
   org.hamcrest.CoreMatchers.is:
-    java.lang.Object: equals to '{0}'
+    Object: equals to '{0}'
     org.hamcrest.Matcher: "{0}"
   org.hamcrest.CoreMatchers.not: does not equal to '{0}'
   org.junit.Assert.assertEquals: check that '{0}' equals to '{1}'

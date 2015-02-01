@@ -1,9 +1,9 @@
 formatVersion: "*"
-rootMethodKey: "*TestMain;.successTest()V"
+rootMethodKey: "*TestMain.successTest*"
 lineScreenCaptures:
 - path: "*captures*TestMain*successTest*001.png"
   stackLines:
-  - {codeBodyIndex: 0, methodKey: "*TestMain;.successTest()V"}
+  - {codeBodyIndex: 0, methodKey: "*TestMain.successTest*"}
 - path: "*captures*TestMain*successTest*002.png"
   stackLines:
-  - {codeBodyIndex: 1, methodKey: "*TestMain;.successTest()V"}
+  - {codeBodyIndex: 1, methodKey: "*TestMain.successTest*"}

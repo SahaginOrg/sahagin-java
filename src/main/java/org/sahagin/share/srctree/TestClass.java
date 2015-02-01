@@ -33,7 +33,7 @@ public class TestClass implements YamlConvertible {
         if (qualifiedName == null) {
             return null;
         }
-        int lastIndex = qualifiedName.lastIndexOf("."); // TODO name separator is always dot ??
+        int lastIndex = qualifiedName.lastIndexOf(".");
         if (lastIndex == -1) {
             return qualifiedName;
         }

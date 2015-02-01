@@ -4,29 +4,29 @@ subMethodTable:
     argVariables: [arg]
     classKey: "*ExtendsPage"
     testDoc: 'Doc: abstractMethod: override: {arg}'
-    key: "*ExtendsPage;.abstractMethod(I)V"
+    key: "*ExtendsPage.abstractMethod*"
   - codeBody:
     - code: {original: super.overriddenMethod(arg);, type: unknown}
     name: "overriddenMethod"
     argVariables: [arg]
     classKey: "*ExtendsPage"
     testDoc: 'Doc: overriddenMethod: override: {arg}'
-    key: "*ExtendsPage;.overriddenMethod(Ljava/lang/String;)V"
+    key: "*ExtendsPage.overriddenMethod*"
   - name: "abstractMethod"
     argVariables: [arg]
     classKey: "*ExtendsPageBase"
     testDoc: 'Doc: abstractMethod: {arg}'
-    key: "*ExtendsPageBase;.abstractMethod(I)V"
+    key: "*ExtendsPageBase.abstractMethod*"
   - name: "finalMethod"
     argVariables: [arg]
     classKey: "*ExtendsPageBase"
     testDoc: 'Doc: finalMethod: {arg}'
-    key: "*ExtendsPageBase;.finalMethod(Ljava/lang/Object;)V"
+    key: "*ExtendsPageBase.finalMethod*"
   - name: "testBaseMethod"
     argVariables: [arg]
     classKey: "*ExtendsTestBase"
     testDoc: 'Doc: testBaseMethod: {arg}'
-    key: "*ExtendsTestBase;.testBaseMethod(Ljava/lang/String;)V"
+    key: "*ExtendsTestBase.testBaseMethod*"
   - codeBody:
     - code: {original: super.testBaseMethod(arg);, type: unknown}
     name: "testBaseMethod"
@@ -34,71 +34,69 @@ subMethodTable:
     argVariables: [arg]
     classKey: "*ExtendsTestMain"
     testDoc: 'Doc: testBaseMethod: override: {arg}'
-    key: "*ExtendsTestMain;.testBaseMethod(Ljava/lang/String;)V"
+    key: "*ExtendsTestMain.testBaseMethod*"
 rootMethodTable:
   methods:
   - codeBody:
     - code:
         original: testBaseMethod("ABC");
-        methodKey: "*ExtendsTestMain;.testBaseMethod(Ljava/lang/String;)V"
+        methodKey: "*ExtendsTestMain.testBaseMethod*"
         args:
         - {value: ABC, original: '"ABC"', type: string}
     - code: {original: ExtendsPage pageInstance=new ExtendsPage();, type: unknown}
     - code:
         original: pageInstance.abstractMethod(123);
-        methodKey: "*ExtendsPage;.abstractMethod(I)V"
+        methodKey: "*ExtendsPage.abstractMethod*"
         thisInstance: {original: pageInstance, type: unknown}
         args:
         - {original: '123', type: unknown}
     - code:
         original: pageInstance.finalMethod(null);
-        methodKey: "*ExtendsPageBase;.finalMethod(Ljava/lang/Object;)V"
+        methodKey: "*ExtendsPageBase.finalMethod*"
         thisInstance: {original: pageInstance, type: unknown}
         args:
         - {original: 'null', type: unknown}
     - code:
         original: pageInstance.overriddenMethod("YYY");
-        methodKey: "*ExtendsPage;.overriddenMethod(Ljava/lang/String;)V"
+        methodKey: "*ExtendsPage.overriddenMethod*"
         thisInstance: {original: pageInstance, type: unknown}
         args:
         - {value: YYY, original: '"YYY"', type: string}
     - code: {original: ExtendsPageBase baseInstance=new ExtendsPage();, type: unknown}
     - code:
         original: baseInstance.abstractMethod(456);
-        methodKey: "*ExtendsPageBase;.abstractMethod(I)V"
+        methodKey: "*ExtendsPageBase.abstractMethod*"
         thisInstance: {original: baseInstance, type: unknown}
         args:
         - {original: '456', type: unknown}
     - code:
         original: baseInstance.finalMethod("WWW");
-        methodKey: "*ExtendsPageBase;.finalMethod(Ljava/lang/Object;)V"
+        methodKey: "*ExtendsPageBase.finalMethod*"
         thisInstance: {original: baseInstance, type: unknown}
         args:
         - {value: WWW, original: '"WWW"', type: string}
     - code: {original: baseInstance.overriddenMethod("ZZZ");, type: unknown}
     name: "extendsTest"
     classKey: "*ExtendsTestMain"
-    key: "*ExtendsTestMain;.extendsTest()V"
+    key: "*ExtendsTestMain.extendsTest*"
 subClassTable:
   classes:
   - testDoc: 'Doc: ExtendsPage'
     type: page
     key: "*ExtendsPage"
-    methodKeys: ["*ExtendsPage;.overriddenMethod(Ljava/lang/String;)V",
-      "*ExtendsPage;.abstractMethod(I)V"]
+    methodKeys: ["*ExtendsPage.overriddenMethod*", "*ExtendsPage.abstractMethod*"]
     qname: "*.ExtendsPage"
   - key: "*ExtendsPageBase"
-    methodKeys: ["*ExtendsPageBase;.abstractMethod(I)V",
-      "*ExtendsPageBase;.finalMethod(Ljava/lang/Object;)V"]
+    methodKeys: ["*ExtendsPageBase.abstractMethod*",
+      "*ExtendsPageBase.finalMethod*"]
     qname: "*.ExtendsPageBase"
   - testDoc: 'Doc: ExtendsTestBase'
     key: "*ExtendsTestBase"
-    methodKeys: ["*ExtendsTestBase;.testBaseMethod(Ljava/lang/String;)V"]
+    methodKeys: ["*ExtendsTestBase.testBaseMethod*"]
     qname: "*.ExtendsTestBase"
 rootClassTable:
   classes:
   - testDoc: 'Doc: ExtendsTestMain'
     key: "*ExtendsTestMain"
-    methodKeys: ["*ExtendsTestMain;.extendsTest()V",
-      "*ExtendsTestMain;.testBaseMethod(Ljava/lang/String;)V"]
+    methodKeys: ["*ExtendsTestMain.extendsTest*", "*ExtendsTestMain.testBaseMethod*"]
     qname: "*ExtendsTestMain"

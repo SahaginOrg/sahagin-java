@@ -1,30 +1,30 @@
 rootMethodTable:
   methods:
-  - key: "*TestMain;.test()V"
+  - key: "*TestMain.test*"
     codeBody:
     - code:
         original: assertThat("ABC",is("ABC"));
         type: method
-        methodKey: _Additional_org.junit.Assert.assertThat
+        methodKey: org.junit.Assert.assertThat
         args:
         - {value: ABC, original: '"ABC"', type: string}
         - original: is("ABC")
           type: method
-          methodKey: _Additional_org.hamcrest.CoreMatchers.is_Object
+          methodKey: org.hamcrest.CoreMatchers.is-Object
           args:
           - {value: ABC, original: '"ABC"', type: string}
     - code:
         original: assertThat("ABC",is(not("DEF")));
         type: method
-        methodKey: _Additional_org.junit.Assert.assertThat
+        methodKey: org.junit.Assert.assertThat
         args:
         - {value: ABC, original: '"ABC"', type: string}
         - original: is(not("DEF"))
           type: method
-          methodKey: _Additional_org.hamcrest.CoreMatchers.is_org.hamcrest.Matcher
+          methodKey: org.hamcrest.CoreMatchers.is-org.hamcrest.Matcher
           args:
           - original: not("DEF")
             type: method
-            methodKey: _Additional_org.hamcrest.CoreMatchers.not
+            methodKey: org.hamcrest.CoreMatchers.not
             args:
             - {value: DEF, original: '"DEF"', type: string}

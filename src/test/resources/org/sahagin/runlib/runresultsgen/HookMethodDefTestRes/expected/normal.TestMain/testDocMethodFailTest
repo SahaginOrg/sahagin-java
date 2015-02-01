@@ -1,10 +1,10 @@
 runFailures:
 - message: 'java.lang.AssertionError: expected:<1> but was:<2>'
   stackLines:
-  - {codeBodyIndex: 0, methodKey: "*TestMain;.testDocMethod()V"}
-  - {codeBodyIndex: 0, methodKey: "*TestMain;.testDocMethodFailTest()V"}
+  - {codeBodyIndex: 0, methodKey: "*TestMain.testDocMethod*"}
+  - {codeBodyIndex: 0, methodKey: "*TestMain.testDocMethodFailTest*"}
 lineScreenCaptures:
 - path: "*001.png"
   stackLines:
-  - {codeBodyIndex: 0, methodKey: "*TestMain;.testDocMethod()V"}
-  - {codeBodyIndex: 0, methodKey: "*TestMain;.testDocMethodFailTest()V"}
+  - {codeBodyIndex: 0, methodKey: "*TestMain.testDocMethod*"}
+  - {codeBodyIndex: 0, methodKey: "*TestMain.testDocMethodFailTest*"}

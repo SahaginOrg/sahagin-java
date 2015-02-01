@@ -115,6 +115,7 @@ implements AdditionalTestDocsAdapter {
     }
 
     // argClassesStr.. null means no overload
+    // TODO when qualified String or Object class name is used in argClassesStr
     protected final void methodAdd(String classQualifiedName,
             String methodSimpleName, String argClassesStr,
             int varLengthArgIndex, CaptureStyle captureStyle) {
@@ -124,7 +125,9 @@ implements AdditionalTestDocsAdapter {
         methodTestDocInstance.setCaptureStyle(captureStyle);
         methodTestDocInstance.setVariableLengthArgIndex(varLengthArgIndex);
         if (argClassesStr != null) {
-            methodTestDocInstance.setOverloadFromArgClassesStr(argClassesStr);
+            methodTestDocInstance.setOverload(argClassesStr);
+        } else {
+            methodTestDocInstance.setNotOverload();
         }
         String testDoc = ""; // set empty string if no locale data is found
         String methodQualifiedName = classQualifiedName + "." + methodSimpleName;

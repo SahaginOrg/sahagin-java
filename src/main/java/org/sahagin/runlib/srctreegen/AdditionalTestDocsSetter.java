@@ -30,14 +30,13 @@ public class AdditionalTestDocsSetter {
     }
 
     public void set(AdditionalTestDocs testDocs) {
-        // last set data in testDocs is used first
-
-        for (int i = testDocs.getClassTestDocs().size() - 1; i >= 0; i--) {
+        // override old data
+        for (int i = 0; i < testDocs.getClassTestDocs().size(); i++) {
             AdditionalClassTestDoc classTestDoc = testDocs.getClassTestDocs().get(i);
             setClass(classTestDoc.getQualifiedName(), classTestDoc.getTestDoc(),
                     classTestDoc instanceof AdditionalPage);
         }
-        for (int i = testDocs.getMethodTestDocs().size() - 1; i >= 0; i--) {
+        for (int i = 0; i < testDocs.getMethodTestDocs().size(); i++) {
             AdditionalMethodTestDoc testDoc = testDocs.getMethodTestDocs().get(i);
             setMethod(testDoc);
         }
@@ -48,6 +47,8 @@ public class AdditionalTestDocsSetter {
         for (TestClass testClass : subClassTable.getTestClasses()) {
             // class qualified name must be unique
             if (qualifiedName.equals(testClass.getQualifiedName())) {
+                // override existing testDoc ( don't override other information)
+                testClass.setTestDoc(testDoc);
                 return testClass;
             }
         }
@@ -55,6 +56,8 @@ public class AdditionalTestDocsSetter {
         for (TestClass testClass : rootClassTable.getTestClasses()) {
             // class qualified name must be unique
             if (qualifiedName.equals(testClass.getQualifiedName())) {
+                // override existing testDoc ( don't override other information)
+                testClass.setTestDoc(testDoc);
                 return testClass;
             }
         }
@@ -73,17 +76,27 @@ public class AdditionalTestDocsSetter {
     }
 
     // return the newly set TestMethod instance or already set instance.
+    // - TestDoc of the same name and argument types method can be overridden
     private TestMethod setMethod(AdditionalMethodTestDoc testDoc) {
-        // TODO consider about priority of multiple method additional TestDocs.
-        // TODO when override non additional TestDoc by additional TestDoc
-        String methodKey = AdditionalMethodTestDoc.generateMethodKey(testDoc);
+        String methodKey;
+        if (testDoc.isOverloaded()) {
+            methodKey = TestMethod.generateMethodKey(
+                    testDoc.getClassQualifiedName(), testDoc.getSimpleName(), testDoc.getArgClassesStr());
+        } else {
+            methodKey = TestMethod.generateMethodKey(
+                    testDoc.getClassQualifiedName(), testDoc.getSimpleName());
+        }
         for (TestMethod testMethod : subMethodTable.getTestMethods()) {
             if (testMethod.getKey().equals(methodKey)) {
+                // override existing testDoc ( don't override other information)
+                testMethod.setTestDoc(testDoc.getTestDoc());
                 return testMethod;
             }
         }
         for (TestMethod testMethod : rootMethodTable.getTestMethods()) {
             if (testMethod.getKey().equals(methodKey)) {
+                // override existing testDoc ( don't override other information)
+                testMethod.setTestDoc(testDoc.getTestDoc());
                 return testMethod;
             }
         }

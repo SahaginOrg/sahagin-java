@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.sahagin.share.srctree.TestMethod;
 
 public class AdditionalTestDocs {
     private List<AdditionalClassTestDoc> classTestDocs
@@ -54,8 +55,7 @@ public class AdditionalTestDocs {
         if (argClassQualifiedNames == null) {
             throw new NullPointerException();
         }
-        // last set data is referred first
-        for (int i = methodTestDocs.size() - 1; i >= 0; i--) {
+        for (int i = 0; i < methodTestDocs.size(); i++) {
             AdditionalMethodTestDoc methodTestDoc = methodTestDocs.get(i);
             if (StringUtils.equals(methodTestDoc.getClassQualifiedName(), classQualifiedName)
                     && StringUtils.equals(methodTestDoc.getSimpleName(), methodSimpleName)) {
@@ -63,28 +63,20 @@ public class AdditionalTestDocs {
                     return methodTestDoc; // ignore method argument classes difference
                 }
 
-                // check method argument classes
-                if (methodTestDoc.getArgClassQualifiedNames().size()
-                        != argClassQualifiedNames.size()) {
-                    continue;
+                String methodKey = TestMethod.generateMethodKey(classQualifiedName, methodSimpleName, argClassQualifiedNames);
+                String testDocMethodKey = TestMethod.generateMethodKey(
+                        methodTestDoc.getClassQualifiedName(), methodTestDoc.getSimpleName(), methodTestDoc.getArgClassesStr());
+                if (methodKey.equals(testDocMethodKey)) {
+                    return methodTestDoc;
                 }
-                boolean mismatchFound = false;
-                for (int j = 0; j < methodTestDoc.getArgClassQualifiedNames().size(); j++) {
-                    if (!StringUtils.equals(
-                            methodTestDoc.getArgClassQualifiedNames().get(j), argClassQualifiedNames.get(j))) {
-                        mismatchFound = true;
-                        break;
-                    }
-                }
-
-                if (mismatchFound) {
-                    continue;
-                }
-
-                return methodTestDoc;
             }
         }
         return null;
+    }
+
+    public void clear() {
+        classTestDocs.clear();
+        methodTestDocs.clear();
     }
 
 }

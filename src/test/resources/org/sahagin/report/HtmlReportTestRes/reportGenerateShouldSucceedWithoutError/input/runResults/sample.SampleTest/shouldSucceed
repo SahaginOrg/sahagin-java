@@ -2,6 +2,6 @@ runFailures: []
 lineScreenCaptures:
 - path: dummy.png
   stackLines:
-  - {codeBodyIndex: 0, methodKey: Lsample/SampleTest;.shouldSucceed()V, line: 24}
-formatVersion: 0.4
-rootMethodKey: Lsample/SampleTest;.shouldSucceed()V
+  - {codeBodyIndex: 0, methodKey: sample.SampleTest.shouldSucceed-void, line: 24}
+formatVersion: "*"
+rootMethodKey: sample.SampleTest.shouldSucceed-void

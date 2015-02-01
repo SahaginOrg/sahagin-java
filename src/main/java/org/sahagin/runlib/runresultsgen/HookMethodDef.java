@@ -22,7 +22,9 @@ import org.sahagin.share.runresults.RunFailure;
 import org.sahagin.share.runresults.StackLine;
 import org.sahagin.share.srctree.SrcTree;
 import org.sahagin.share.srctree.TestMethod;
+import org.sahagin.share.srctree.code.Code;
 import org.sahagin.share.srctree.code.CodeLine;
+import org.sahagin.share.srctree.code.SubMethodInvoke;
 import org.sahagin.share.srctree.code.UnknownCode;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlUtils;
@@ -152,6 +154,51 @@ public class HookMethodDef {
         logger.info("afterRootMethodHook: end");
     }
 
+    private static TestMethod topmostInvokedMethod(Code code) {
+        if (!(code instanceof SubMethodInvoke)) {
+            return null;
+        }
+        return ((SubMethodInvoke) code).getSubMethod();
+    }
+
+    public static void afterTestSubMethodHook(String classQualifiedName, String methodSimpleName) {
+        initializedCheck();
+        if (currentRunResult == null) {
+            return; // maybe called outside of the root method
+        }
+
+        logger.info("afterTestSubMethodHook: start: " + classQualifiedName + "." + methodSimpleName);
+        // The CodeLine for hooked line must not exist in SrcTree, and must not exist in stackLines
+        List<StackLine> stackLines = StackLineUtils.getStackLines(
+                srcTree, Thread.currentThread().getStackTrace());
+        if (stackLines.size() == 0) {
+            return; // maybe called outside of the root method
+        }
+        CodeLine thisCodeLine = stackLines.get(0).getMethod().getCodeBody().get(
+                stackLines.get(0).getCodeBodyIndex());
+        TestMethod thisCodeLineTopmostMethod = topmostInvokedMethod(thisCodeLine.getCode());
+        // TODO thisCodeLineTopmostMethod can be null when invoked method is overridden method
+        // and super method is not annotated. This is bug..
+        if (thisCodeLineTopmostMethod == null
+                || !thisCodeLineTopmostMethod.getQualifiedName().equals(
+                        classQualifiedName + "." + methodSimpleName)) {
+            logger.info("afterTestSubMethodHook: skip non topmost method: "
+                        + thisCodeLine.getCode().getOriginal());
+            return;
+        }
+
+        if (!canStepInCaptureTo(stackLines)) {
+            logger.info("beforeCodeBodyHook: skip no StepInCapture method");
+            return;
+        }
+
+        TestMethod rootMethod = currentRunResult.getRootMethod();
+        File captureFile = captureScreen(rootMethod, stackLines);
+        if (captureFile != null) {
+            logger.info("afterTestSubMethodHook: end with capture " + captureFile.getName());
+        }
+    }
+
     public static void beforeRootCodeBodyHook(String classQualifiedName, String methodSimpleName,
             int line, int actualInsertedLine) {
         beforeCodeBodyHook(classQualifiedName, methodSimpleName, line, actualInsertedLine);
@@ -189,7 +236,6 @@ public class HookMethodDef {
         }
 
         // screen capture
-        assert currentRunResult.getRootMethod() instanceof TestMethod;
         TestMethod rootMethod = currentRunResult.getRootMethod();
         File captureFile = captureScreen(rootMethod, stackLines);
         if (captureFile != null) {

@@ -1,15 +1,15 @@
 lineScreenCaptures:
 - path: "*001.png"
   stackLines:
-  - {codeBodyIndex: 0, methodKey: "*TestMain;.stepInCaptureTest()V"}
+  - {codeBodyIndex: 0, methodKey: "*TestMain.stepInCaptureTest*"}
 - path: "*002.png"
   stackLines:
-  - {codeBodyIndex: 0, methodKey: "*TestMain;.stepInCaptureMethod()V"}
-  - {codeBodyIndex: 1, methodKey: "*TestMain;.stepInCaptureTest()V"}
+  - {codeBodyIndex: 0, methodKey: "*TestMain.stepInCaptureMethod*"}
+  - {codeBodyIndex: 1, methodKey: "*TestMain.stepInCaptureTest*"}
 - path: "*003.png"
   stackLines:
-  - {codeBodyIndex: 1, methodKey: "*TestMain;.stepInCaptureMethod()V"}
-  - {codeBodyIndex: 1, methodKey: "*TestMain;.stepInCaptureTest()V"}
+  - {codeBodyIndex: 1, methodKey: "*TestMain.stepInCaptureMethod*"}
+  - {codeBodyIndex: 1, methodKey: "*TestMain.stepInCaptureTest*"}
 - path: "*004.png"
   stackLines:
-  - {codeBodyIndex: 1, methodKey: "*TestMain;.stepInCaptureTest()V"}
+  - {codeBodyIndex: 1, methodKey: "*TestMain.stepInCaptureTest*"}

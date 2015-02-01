@@ -1,16 +1,12 @@
 package org.sahagin.runlib.additionaltestdoc;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
 import org.sahagin.runlib.external.CaptureStyle;
 
 public class AdditionalMethodTestDoc {
     private String classQualifiedName;
     private String simpleName;
     // null means not overloaded
-    private List<String> argClassQualifiedNames = null;
+    private String argClassesStr = null;
     private int variableLengthArgIndex = -1;
     private String testDoc;
     // TODO should not allow stepInCapture for AdditionalTestDoc
@@ -41,15 +37,7 @@ public class AdditionalMethodTestDoc {
     }
 
     public boolean isOverloaded() {
-        return argClassQualifiedNames != null;
-    }
-
-    public List<String> getArgClassQualifiedNames() {
-        if (!isOverloaded()) {
-            throw new IllegalStateException(
-                    "not overloaded method, and argument information is not set");
-        }
-        return argClassQualifiedNames;
+        return argClassesStr != null;
     }
 
     public String getArgClassesStr() {
@@ -57,23 +45,18 @@ public class AdditionalMethodTestDoc {
             throw new IllegalStateException(
                     "not overloaded method, and argument information is not set");
         }
-        return argClassQualifiedNamesToStr(argClassQualifiedNames);
+        return argClassesStr;
     }
 
-    public void setOverload(List<String> argClassQualifiedNames) {
-        if (argClassQualifiedNames == null) {
-            this.argClassQualifiedNames = new ArrayList<String>(4);
-        } else {
-            this.argClassQualifiedNames = argClassQualifiedNames;
-        }
+    public void setNotOverload() {
+        argClassesStr = null;
     }
 
-    public void setOverloadFromArgClassesStr(String argClassesStr) {
+    public void setOverload(String argClassesStr) {
         if (argClassesStr == null) {
-            setOverload(null);
-            return;
+            throw new NullPointerException();
         }
-        setOverload(argClassesStrToList(argClassesStr));
+        this.argClassesStr = argClassesStr;
     }
 
     public boolean hasVariableLengthArg() {
@@ -104,6 +87,7 @@ public class AdditionalMethodTestDoc {
         this.captureStyle = captureStyle;
     }
 
+    /*
     public static String generateMethodKey(AdditionalMethodTestDoc testDoc) {
         if (testDoc == null) {
             throw new NullPointerException();
@@ -193,6 +177,6 @@ public class AdditionalMethodTestDoc {
             }
         }
         return result;
-    }
+    }*/
 
 }

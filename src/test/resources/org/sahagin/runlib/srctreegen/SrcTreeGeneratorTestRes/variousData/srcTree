@@ -2,60 +2,65 @@ subMethodTable:
   methods:
   - name: "testDocMethod"
     capture: stepIn
-    classKey: "*TestMain"
+    # not wildcard pattern
+    classKey: "org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData.input.TestMain"
     testDoc: Doc:testDocMethod
-    key: "*TestMain;.testDocMethod()V"
+    # not wildcard pattern
+    key: "org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData.input.TestMain.testDocMethod-void"
   - name: "innerClassMethod"
     classKey: "*TestPage.InnerClass"
     testDoc: Doc:innerClass
-    key: "*TestPage$InnerClass;.innerClassMethod()V"
+    # checks argument
+    key: "*TestPage.InnerClass.innerClassMethod-void"
   - name: "TestPage"
     classKey: "*TestPage"
     testDoc: 'Doc: TestPage'
-    key: "*TestPage;.()V"
+    # checks argument
+    key: "*TestPage.TestPage-void"
   - name: "argMethod"
     argVariables: [arg1, arg2]
     classKey: "*TestPage"
     testDoc: Doc:argMethod:{arg1}:{arg2}:{0}:{1}:{this}
-    key: "*TestPage;.argMethod(Ljava/lang/String;I)V"
+    # checks argument
+    key: "*TestPage.argMethod-String,int"
   - codeBody:
     - code: {original: return "EEE";, type: unknown}
     name: "getData"
     classKey: "*TestPage"
     testDoc: data
-    key: "*TestPage;.getData()Ljava/lang/String;"
+    key: "*TestPage.getData*"
   - codeBody:
     - code: {original: InnerClass innerClass=new InnerClass();, type: unknown}
     - code:
         original: innerClass.innerClassMethod();
-        methodKey: "*TestPage$InnerClass;.innerClassMethod()V"
+        methodKey: "*TestPage.InnerClass.innerClassMethod*"
         thisInstance: {original: innerClass, type: unknown}
     name: "inenrClassCall"
     classKey: "*TestPage"
     testDoc: Doc:innerTestCall
-    key: "*TestPage;.inenrClassCall()V"
+    key: "*TestPage.inenrClassCall*"
   - codeBody:
     - code:
         original: nest2(arg);
-        methodKey: "*TestPage;.nest2(Ljava/lang/String;)V"
+        methodKey: "*TestPage.nest2*"
         args:
         - {argIndex: 0, original: arg, type: arg}
     name: "nest1"
     argVariables: [arg]
     classKey: "*TestPage"
     testDoc: Doc:nest1:{arg}
-    key: "*TestPage;.nest1(Ljava/lang/String;)V"
+    key: "*TestPage.nest1*"
   - codeBody:
     - code:
         original: nest3(arg);
-        methodKey: "*TestPage;.nest3(Ljava/lang/String;)V"
+        methodKey: "*TestPage.nest3*"
         args:
         - {argIndex: 0, original: arg, type: arg}
     name: "nest2"
     argVariables: [arg]
     classKey: "*TestPage"
     testDoc: Doc:nest2:{arg}
-    key: "*TestPage;.nest2(Ljava/lang/String;)V"
+    key: "*TestPage.nest2*"
   - codeBody:
     - code: {original: int i=0;, type: unknown}
     - code: {original: int j=1;, type: unknown}
@@ -67,14 +72,14 @@ subMethodTable:
         type: unknown
     - code:
         original: nest1(arg);
-        methodKey: "*TestPage;.nest1(Ljava/lang/String;)V"
+        methodKey: "*TestPage.nest1*"
         args:
         - {argIndex: 0, original: arg, type: arg}
     name: "nest3"
     argVariables: [arg]
     classKey: "*TestPage"
     testDoc: Doc:nest3:{arg}
-    key: "*TestPage;.nest3(Ljava/lang/String;)V"
+    key: "*TestPage.nest3*"
   - codeBody:
     - code: {original: int i=0;, type: unknown}
     - code: {original: int j=1;, type: unknown}
@@ -86,72 +91,72 @@ subMethodTable:
         type: unknown
     - code:
         original: recurseMethodCall();
-        methodKey: "*TestPage;.recurseMethodCall()V"
+        methodKey: "*TestPage.recurseMethodCall*"
     name: "recurseMethodCall"
     classKey: "*TestPage"
     testDoc: 'Doc: recurseMethodCall'
-    key: "*TestPage;.recurseMethodCall()V"
+    key: "*TestPage.recurseMethodCall*"
   - name: "staticMethod"
     classKey: "*TestPage"
     testDoc: Doc:staticMethod
-    key: "*TestPage;.staticMethod()V"
+    key: "*TestPage.staticMethod*"
   - name: "subMethod"
     classKey: "*TestSub"
     testDoc: 'Doc: subMethod'
-    key: "*TestSub;.subMethod()V"
+    key: "*TestSub.subMethod*"
 rootMethodTable:
   methods:
   - codeBody:
     - code:
         original: TestSub.subMethod();
-        methodKey: "*TestSub;.subMethod()V"
+        methodKey: "*TestSub.subMethod*"
         thisInstance: {original: TestSub, type: unknown}
     - code:
         original: testDocMethod();
-        methodKey: "*TestMain;.testDocMethod()V"
+        methodKey: "*TestMain.testDocMethod*"
     - code:
         original: testDocMethod();
-        methodKey: "*TestMain;.testDocMethod()V"
+        methodKey: "*TestMain.testDocMethod*"
     - code:
         original: testDocMethod();
-        methodKey: "*TestMain;.testDocMethod()V"
+        methodKey: "*TestMain.testDocMethod*"
     - code: {original: noTestDocMethod();, type: unknown}
     - code:
         original: TestPage page=new TestPage();
-        methodKey: "*TestPage;.()V"
+        methodKey: "*TestPage.*"
     - code:
         original: page.inenrClassCall();
-        methodKey: "*TestPage;.inenrClassCall()V"
+        methodKey: "*TestPage.inenrClassCall*"
         thisInstance: {original: page, type: unknown}
     - code:
         original: TestPage.staticMethod();
-        methodKey: "*TestPage;.staticMethod()V"
+        methodKey: "*TestPage.staticMethod*"
         thisInstance: {original: TestPage, type: unknown}
     - code:
         original: page.staticMethod();
-        methodKey: "*TestPage;.staticMethod()V"
+        methodKey: "*TestPage.staticMethod*"
         thisInstance: {original: page, type: unknown}
     - code:
         original: page.argMethod("AAA",999);
-        methodKey: "*TestPage;.argMethod(Ljava/lang/String;I)V"
+        methodKey: "*TestPage.argMethod*"
         thisInstance: {original: page, type: unknown}
         args:
         - {value: AAA, original: '"AAA"', type: string}
         - {original: '999', type: unknown}
     - code:
         original: page.argMethod(null,0);
-        methodKey: "*TestPage;.argMethod(Ljava/lang/String;I)V"
+        methodKey: "*TestPage.argMethod*"
         thisInstance: {original: page, type: unknown}
         args:
         - {original: 'null', type: unknown}
         - {original: '0', type: unknown}
     - code:
         original: page.recurseMethodCall();
-        methodKey: "*TestPage;.recurseMethodCall()V"
+        methodKey: "*TestPage.recurseMethodCall*"
         thisInstance: {original: page, type: unknown}
     - code:
         original: page.nest1("DDD");
-        methodKey: "*TestPage;.nest1(Ljava/lang/String;)V"
+        methodKey: "*TestPage.nest1*"
         thisInstance: {original: page, type: unknown}
         args:
         - {value: DDD, original: '"DDD"', type: string}
@@ -168,11 +173,11 @@ rootMethodTable:
     - code: {original: wd.findElement(By.cssSelector("GGG")).sendKeys("HHH");, type: unknown}
     name: "testMethod1"
     classKey: "*TestMain"
-    key: "*TestMain;.testMethod1()V"
+    key: "*TestMain.testMethod1*"
   - name: "testMethod2"
     classKey: "*TestMain"
     testDoc: Doc:TestMethod2
-    key: "*TestMain;.testMethod2()V"
+    key: "*TestMain.testMethod2*"
 subClassTable:
   classes:
   - testDoc: Doc:TestPage
@@ -181,10 +186,10 @@ subClassTable:
     methodKeys: "*"
     qname: "*.TestPage"
   - key: "*TestPage.InnerClass"
-    methodKeys: ["*TestPage$InnerClass;.innerClassMethod()V"]
+    methodKeys: ["*TestPage.InnerClass.innerClassMethod*"]
     qname: "*.TestPage.InnerClass"
   - key: "*TestSub"
-    methodKeys: ["*TestSub;.subMethod()V"]
+    methodKeys: ["*TestSub.subMethod*"]
     qname: "*.TestSub"
 formatVersion: "*"
 rootClassTable:

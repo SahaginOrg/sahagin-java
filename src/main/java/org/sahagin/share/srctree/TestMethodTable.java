@@ -41,6 +41,7 @@ public class TestMethodTable implements YamlConvertible {
         return null;
     }
 
+    // returns null if not found
     public List<TestMethod> getByName(String classQualifiedName, String methodSimpleName) {
         if (classQualifiedName == null) {
             throw new NullPointerException();

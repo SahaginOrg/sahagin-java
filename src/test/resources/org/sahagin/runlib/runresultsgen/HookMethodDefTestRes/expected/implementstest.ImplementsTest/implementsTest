@@ -1,10 +1,10 @@
 lineScreenCaptures:
 - path: "*001.png"
   stackLines:
-  - {codeBodyIndex: 2, methodKey: "*ImplementsTest;.implementsTest()V"}
+  - {codeBodyIndex: 2, methodKey: "*ImplementsTest.implementsTest*"}
 - path: "*002.png"
   stackLines:
-  - {codeBodyIndex: 3, methodKey: "*ImplementsTest;.implementsTest()V"}
+  - {codeBodyIndex: 3, methodKey: "*ImplementsTest.implementsTest*"}
 - path: "*003.png"
   stackLines:
-  - {codeBodyIndex: 5, methodKey: "*ImplementsTest;.implementsTest()V"}
+  - {codeBodyIndex: 5, methodKey: "*ImplementsTest.implementsTest*"}

@@ -1,4 +1,4 @@
 lineScreenCaptures:
 - path: "*001.png"
   stackLines:
-  - {codeBodyIndex: 1, methodKey: "*TestMain;.defaultInterfaceTest()V"}
+  - {codeBodyIndex: 1, methodKey: "*TestMain.defaultInterfaceTest*"}

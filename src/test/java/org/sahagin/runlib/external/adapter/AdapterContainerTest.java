@@ -32,7 +32,7 @@ public class AdapterContainerTest {
 
         AdditionalMethodTestDoc isTestDoc1
         = testDocs.getMethodTestDoc("org.hamcrest.CoreMatchers", "is",
-                Arrays.asList(Object.class.getCanonicalName()));
+                Arrays.asList(Object.class.getSimpleName()));
         assertThat(isTestDoc1.getCaptureStyle(), is(CaptureStyle.THIS_LINE));
         assertThat(isTestDoc1.getTestDoc(), is("equals to '{0}'"));
 
@@ -47,10 +47,11 @@ public class AdapterContainerTest {
     public void testDocSetUpByJaJp() {
         AcceptableLocales locales = AcceptableLocales.getInstance(Locale.JA_JP);
         AdapterContainer.globalInitialize(locales);
-        new JUnit4Adapter().initialSetAdapter();
-        new WebDriverAdapter().initialSetAdapter();
         AdditionalTestDocs testDocs
         = AdapterContainer.globalInstance().getAdditionalTestDocs();
+        testDocs.clear();
+        new JUnit4Adapter().initialSetAdapter();
+        new WebDriverAdapter().initialSetAdapter();
 
         AdditionalMethodTestDoc clickTestDoc
         = testDocs.getMethodTestDoc("org.openqa.selenium.WebElement", "click", new ArrayList<String>(0));

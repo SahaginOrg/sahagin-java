@@ -1,7 +1,7 @@
 subMethodTable:
   methods:
   - testDoc: 'Doc: subMehtod'
-    classKey: Lsample/SampleTest;
+    classKey: sample.SampleTest
     codeBody:
     - endLine: 35
       startLine: 35
@@ -9,54 +9,54 @@ subMethodTable:
     name: subMethod
     capture: thisLine
     argVariables: []
-    key: Lsample/SampleTest;.subMethod()V
+    key: sample.SampleTest.subMethod-void
   - testDoc: go to the page '{0}'
-    classKey: _Additional_org.openqa.selenium.WebDriver
+    classKey: org.openqa.selenium.WebDriver
     codeBody: []
     name: get
     capture: thisLine
     argVariables: []
-    key: _Additional_org.openqa.selenium.WebDriver.get
+    key: org.openqa.selenium.WebDriver.get
   - testDoc: check that '{0}' {1}
-    classKey: _Additional_org.junit.Assert
+    classKey: org.junit.Assert
     codeBody: []
     name: assertThat
     capture: thisLine
     argVariables: []
-    key: _Additional_org.junit.Assert.assertThat
+    key: org.junit.Assert.assertThat
   - testDoc: equals to '{0}'
-    classKey: _Additional_org.hamcrest.CoreMatchers
+    classKey: org.hamcrest.CoreMatchers
     codeBody: []
     name: is
     capture: thisLine
     argVariables: []
-    key: _Additional_org.hamcrest.CoreMatchers.is
+    key: org.hamcrest.CoreMatchers.is
 rootMethodTable:
   methods:
   - testDoc: null
-    classKey: Lsample/SampleTest;
+    classKey: sample.SampleTest
     codeBody:
     - endLine: 24
       startLine: 24
       code:
         args: []
-        methodKey: Lsample/SampleTest;.subMethod()V
+        methodKey: sample.SampleTest.subMethod-void
         original: subMethod();
         type: method
     name: shouldSucceed
     capture: thisLine
     argVariables: []
     type: method
-    key: Lsample/SampleTest;.shouldSucceed()V
+    key: sample.SampleTest.shouldSucceed-void
   - testDoc: null
-    classKey: Lsample/SampleTest;
+    classKey: sample.SampleTest
     codeBody:
     - endLine: 29
       startLine: 29
       code:
         args:
         - {original: '"****.com"', type: string, value: '****.com'}
-        methodKey: _Additional_org.openqa.selenium.WebDriver.get
+        methodKey: org.openqa.selenium.WebDriver.get
         original: wd.get("****.com");
         type: method
         thisInstance: {original: wd, type: unknown}
@@ -67,45 +67,45 @@ rootMethodTable:
         - {original: '"A"', type: string, value: A}
         - args:
           - {original: '"B"', type: string, value: B}
-          methodKey: _Additional_org.hamcrest.CoreMatchers.is
+          methodKey: org.hamcrest.CoreMatchers.is
           original: is("B")
           type: method
-        methodKey: _Additional_org.junit.Assert.assertThat
+        methodKey: org.junit.Assert.assertThat
         original: assertThat("A",is("B"));
         type: method
     name: shouldFail
     capture: thisLine
     argVariables: []
     type: method
-    key: Lsample/SampleTest;.shouldFail()V
+    key: sample.SampleTest.shouldFail-void
 rootClassTable:
   classes:
   - qname: sample.SampleTest
     testDoc: null
-    methodKeys: [Lsample/SampleTest;.shouldSucceed()V, Lsample/SampleTest;.shouldFail()V,
-      Lsample/SampleTest;.subMethod()V]
+    methodKeys: [sample.SampleTest.shouldSucceed-void, sample.SampleTest.shouldFail-void,
+      sample.SampleTest.subMethod-void]
     type: class
-    key: Lsample/SampleTest;
-formatVersion: 0.4
+    key: sample.SampleTest
+formatVersion: "*"
 subClassTable:
   classes:
   - qname: org.openqa.selenium.WebDriver
     testDoc: null
     methodKeys: []
     type: class
-    key: _Additional_org.openqa.selenium.WebDriver
+    key: org.openqa.selenium.WebDriver
   - qname: org.junit.Assert
     testDoc: null
     methodKeys: []
     type: class
-    key: _Additional_org.junit.Assert
+    key: org.junit.Assert
   - qname: org.hamcrest.CoreMatchers
     testDoc: null
     methodKeys: []
     type: class
-    key: _Additional_org.hamcrest.CoreMatchers
+    key: org.hamcrest.CoreMatchers
   - qname: org.hamcrest.core.Is
     testDoc: null
     methodKeys: []
     type: class
-    key: _Additional_org.hamcrest.core.Is
+    key: org.hamcrest.core.Is

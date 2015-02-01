@@ -1,16 +1,16 @@
 lineScreenCaptures:
 - path: "*001.png"
   stackLines:
-  - {codeBodyIndex: 0, methodKey: "*ExtendsTest;.extendsTest()V"}
+  - {codeBodyIndex: 0, methodKey: "*ExtendsTest.extendsTest*"}
 - path: "*002.png"
   stackLines:
-  - {codeBodyIndex: 2, methodKey: "*ExtendsTest;.extendsTest()V"}
+  - {codeBodyIndex: 2, methodKey: "*ExtendsTest.extendsTest*"}
 - path: "*003.png"
   stackLines:
-  - {codeBodyIndex: 3, methodKey: "*ExtendsTest;.extendsTest()V"}
+  - {codeBodyIndex: 3, methodKey: "*ExtendsTest.extendsTest*"}
 - path: "*004.png"
   stackLines:
-  - {codeBodyIndex: 4, methodKey: "*ExtendsTest;.extendsTest()V"}
+  - {codeBodyIndex: 4, methodKey: "*ExtendsTest.extendsTest*"}
 - path: "*005.png"
   stackLines:
-  - {codeBodyIndex: 7, methodKey: "*ExtendsTest;.extendsTest()V"}
+  - {codeBodyIndex: 7, methodKey: "*ExtendsTest.extendsTest*"}

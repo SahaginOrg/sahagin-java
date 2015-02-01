@@ -7,7 +7,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.sahagin.runlib.additionaltestdoc.AdditionalMethodTestDoc;
 import org.sahagin.share.srctree.PageClass;
 import org.sahagin.share.srctree.TestMethod;
 import org.sahagin.share.srctree.code.Code;
@@ -93,18 +92,13 @@ public class TestDocResolver {
         }
 
         if (varIndex < 0) {
-            // maybe fails to calculate varIndex from variable
+            // maybe failed to calculate varIndex from variable
             throw new IllegalTestScriptException(String.format(
                     MSG_INVALID_PLACEHOLDER, method.getQualifiedName(), variable));
         }
 
-        // TestMethod for AdditionalMethodTestDoc does not have argument information currently.
-        // TODO should have argument information and should not use isAdditionalMethodKey method
-        if (varIndex >= method.getArgVariables().size()
-                && !AdditionalMethodTestDoc.isAdditionalMethodKey(method.getKey())) {
-            throw new IllegalTestScriptException(String.format(
-                    MSG_INVALID_PLACEHOLDER, method.getQualifiedName(), variable));
-        }
+        // TODO maybe should check that varIndex >= method.getArgVariables().size()
+        // only when method actually has argument variable information
 
         if (!method.hasVariableLengthArg()) {
             if (varIndex >= methodInvoke.getArgs().size()) {

@@ -3,28 +3,28 @@ subMethodTable:
   - name: "ページメソッド"
     classKey: "*ページクラス"
     testDoc: ページメソッド
-    key: "*ページクラス;.ページメソッド()V"
+    key: "*ページクラス.ページメソッド*"
 rootMethodTable:
   methods:
   - codeBody:
     - code: {original: ページクラス page=new ページクラス();, type: unknown}
     - code:
         original: page.ページメソッド();
-        methodKey: "*ページクラス;.ページメソッド()V"
+        methodKey: "*ページクラス.ページメソッド*"
     name: "テスト"
     classKey: "*メインクラス"
     testDoc: Doc:テスト
-    key: "*メインクラス;.テスト()V"
+    key: "*メインクラス.テスト*"
 subClassTable:
   classes:
   - testDoc: Doc:ページクラス
     key: "*ページクラス"
-    methodKeys: ["*ページクラス;.ページメソッド()V"]
+    methodKeys: ["*ページクラス.ページメソッド*"]
     qname: "*.ページクラス"
 formatVersion: "*"
 rootClassTable:
   classes:
   - testDoc: Doc:メインクラス
     key: "*メインクラス"
-    methodKeys: ["*メインクラス;.テスト()V"]
+    methodKeys: ["*メインクラス.テスト*"]
     qname: "*.メインクラス"

@@ -1,4 +1,4 @@
 lineScreenCaptures:
 - path: "*001.png"
   stackLines:
-  - {codeBodyIndex: 0, methodKey: "*TestMain;.streamApiCallTest()V"}
+  - {codeBodyIndex: 0, methodKey: "*TestMain.streamApiCallTest*"}

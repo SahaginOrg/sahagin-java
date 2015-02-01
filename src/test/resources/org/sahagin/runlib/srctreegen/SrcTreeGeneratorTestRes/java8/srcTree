@@ -14,7 +14,7 @@ rootMethodTable:
           ;
         type: unknown
     - code:
-        methodKey: "*TestMain$InterfaceWithDefault;.defaultMethod()V"
+        methodKey: "*TestMain.InterfaceWithDefault.defaultMethod*"
         original: instance.defaultMethod();
         thisInstance: {original: instance, type: unknown}
     name: "defaultInterfaceTest"
@@ -27,4 +27,4 @@ rootMethodTable:
 subClassTable:
   classes:
   - qname: "*.TestMain.InterfaceWithDefault"
-    methodKeys: ["*TestMain$InterfaceWithDefault;.defaultMethod()V"]
+    methodKeys: ["*TestMain.InterfaceWithDefault.defaultMethod*"]

@@ -102,17 +102,45 @@ public class SrcTreeGenerator {
             return pair;
         }
 
-        ITypeBinding[] paramTypes = method.getParameterTypes();
-        List<String> argClassQualifiedNames = new ArrayList<String>(paramTypes.length);
-        for (ITypeBinding param : paramTypes) {
-            argClassQualifiedNames.add(param.getQualifiedName());
-        }
+        List<String> argClassQualifiedNames = getArgClassQualifiedNames(method);
         AdditionalMethodTestDoc additional = additionalTestDocs.getMethodTestDoc(
                 method.getDeclaringClass().getQualifiedName(), method.getName(), argClassQualifiedNames);
         if (additional != null) {
             return Pair.of(additional.getTestDoc(), additional.getCaptureStyle());
         }
         return Pair.of(null, null);
+    }
+
+    private List<String> getArgClassQualifiedNames(IMethodBinding method) {
+        ITypeBinding[] paramTypes;
+        if (method.isParameterizedMethod()) {
+            // Use generic type to get argument class types
+            // instead of the actual type resolved by JDT.
+            IMethodBinding originalMethod = method.getMethodDeclaration();
+            paramTypes = originalMethod.getParameterTypes();
+        } else {
+            paramTypes = method.getParameterTypes();
+        }
+
+        List<String> result = new ArrayList<String>(paramTypes.length);
+        for (ITypeBinding param : paramTypes) {
+            // AdditionalTestDoc's argClassQualifiedNames are defined by type erasure.
+            // TODO is this generic handling logic always work well??
+            result.add(param.getErasure().getQualifiedName());
+        }
+        return result;
+    }
+
+    private String generateMethodKey(IMethodBinding method, boolean noArgClassesStr) {
+        String classQualifiedName = method.getDeclaringClass().getQualifiedName();
+        String methodSimpleName = method.getName();
+        List<String> argClassQualifiedNames = getArgClassQualifiedNames(method);
+        if (noArgClassesStr) {
+            return TestMethod.generateMethodKey(classQualifiedName, methodSimpleName);
+        } else {
+            return TestMethod.generateMethodKey(
+                    classQualifiedName, methodSimpleName, argClassQualifiedNames);
+        }
     }
 
     private boolean isSubMethod(IMethodBinding methodBinding) {
@@ -186,7 +214,7 @@ public class SrcTreeGenerator {
             }
 
             TestMethod testMethod = new TestMethod();
-            testMethod.setKey(methodBinding.getKey());
+            testMethod.setKey(generateMethodKey(methodBinding, false));
             testMethod.setSimpleName(methodBinding.getName());
             Pair<String, CaptureStyle> pair = getTestDoc(methodBinding);
             if (pair.getLeft() != null) {
@@ -284,7 +312,7 @@ public class SrcTreeGenerator {
             }
 
             TestMethod testMethod = new TestMethod();
-            testMethod.setKey(methodBinding.getKey());
+            testMethod.setKey(generateMethodKey(methodBinding, false));
             testMethod.setSimpleName(methodBinding.getName());
             Pair<String, CaptureStyle> pair = getTestDoc(methodBinding);
             testMethod.setTestDoc(pair.getLeft());
@@ -336,31 +364,6 @@ public class SrcTreeGenerator {
         }
     }
 
-    private static String additionalMethodTestDocKey(IMethodBinding method) {
-        ITypeBinding[] paramTypes;
-        if (method.isParameterizedMethod()) {
-            // Use generic type to get argument class types
-            // instead of the actual type resolved by JDT.
-            IMethodBinding originalMethod = method.getMethodDeclaration();
-            paramTypes = originalMethod.getParameterTypes();
-        } else {
-            paramTypes = method.getParameterTypes();
-        }
-        List<String> argClassQualifiedNames = new ArrayList<String>(paramTypes.length);
-        for (ITypeBinding param : paramTypes) {
-            // AdditionalTestDoc's argClassQualifiedNames are defined by type erasure.
-            // TODO is this generic handling logic always work well??
-            argClassQualifiedNames.add(param.getErasure().getQualifiedName());
-        }
-        return AdditionalMethodTestDoc.generateMethodKey(
-                method.getDeclaringClass().getQualifiedName(), method.getName(), argClassQualifiedNames);
-    }
-
-    private static String additionalMethodTestDocKeyNoOverload(IMethodBinding method) {
-        return AdditionalMethodTestDoc.generateMethodKey(
-                method.getDeclaringClass().getQualifiedName(), method.getName());
-    }
-
     private class CollectCodeVisitor extends ASTVisitor {
         private TestMethodTable rootMethodTable;
         private TestMethodTable subMethodTable;
@@ -382,21 +385,13 @@ public class SrcTreeGenerator {
                 return unknownCode;
             }
 
-            String uniqueKey = binding.getKey();
-            TestMethod invocationMethod = subMethodTable.getByKey(uniqueKey);
+            TestMethod invocationMethod = subMethodTable.getByKey(generateMethodKey(binding, false));
             if (invocationMethod == null) {
-                // TODO What does binding.getName method return for constructor method??
-                // TODO key for additional doc should be calculated by the same rule as getKey method in jdt
-                String additionalUniqueKeyNoOverload = additionalMethodTestDocKeyNoOverload(binding);
-                invocationMethod = subMethodTable.getByKey(additionalUniqueKeyNoOverload);
+                invocationMethod = subMethodTable.getByKey(generateMethodKey(binding, true));
                 if (invocationMethod == null) {
-                    String additionalUniqueKey = additionalMethodTestDocKey(binding);
-                    invocationMethod = subMethodTable.getByKey(additionalUniqueKey);
-                    if (invocationMethod == null) {
-                        UnknownCode unknownCode = new UnknownCode();
-                        unknownCode.setOriginal(original);
-                        return unknownCode;
-                    }
+                    UnknownCode unknownCode = new UnknownCode();
+                    unknownCode.setOriginal(original);
+                    return unknownCode;
                 }
             }
 
@@ -490,9 +485,17 @@ public class SrcTreeGenerator {
             TestMethod testMethod;
             IMethodBinding methodBinding = node.resolveBinding();
             if (AdapterContainer.globalInstance().isRootMethod(methodBinding)) {
-                testMethod = rootMethodTable.getByKey(methodBinding.getKey());
+                // TODO searching twice from table is not elegant logic..
+                testMethod = rootMethodTable.getByKey(generateMethodKey(methodBinding, false));
+                if (testMethod == null) {
+                    testMethod = rootMethodTable.getByKey(generateMethodKey(methodBinding, true));
+                }
             } else if (isSubMethod(methodBinding)) {
-                testMethod = subMethodTable.getByKey(methodBinding.getKey());
+                // TODO searching twice from table is not elegant logic..
+                testMethod = subMethodTable.getByKey(generateMethodKey(methodBinding, false));
+                if (testMethod == null) {
+                    testMethod = subMethodTable.getByKey(generateMethodKey(methodBinding, true));
+                }
             } else {
                 return super.visit(node);
             }

@@ -1,11 +1,11 @@
 runFailures:
 - message: err
   stackLines:
-  - {codeBodyIndex: 0, methodKey: Lsample/SampleTest;.shouldFail()V, line: 29}
+  - {codeBodyIndex: 0, methodKey: sample.SampleTest.shouldFail-void, line: 29}
   stackTrace: "err"
 lineScreenCaptures:
 - path: dummy.png
   stackLines:
-  - {codeBodyIndex: 0, methodKey: Lsample/SampleTest;.shouldFail()V, line: 29}
-formatVersion: 0.4
-rootMethodKey: Lsample/SampleTest;.shouldFail()V
+  - {codeBodyIndex: 0, methodKey: sample.SampleTest.shouldFail-void, line: 29}
+formatVersion: "*"
+rootMethodKey: sample.SampleTest.shouldFail-void
