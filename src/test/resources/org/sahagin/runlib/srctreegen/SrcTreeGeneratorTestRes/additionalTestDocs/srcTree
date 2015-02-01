@@ -5,7 +5,7 @@ rootMethodTable:
     - code:
         original: assertThat("ABC",is("ABC"));
         type: method
-        methodKey: org.junit.Assert.assertThat
+        methodKey: org.junit.Assert.assertThat-Object,org.hamcrest.Matcher
         args:
         - {value: ABC, original: '"ABC"', type: string}
         - original: is("ABC")
@@ -16,7 +16,7 @@ rootMethodTable:
     - code:
         original: assertThat("ABC",is(not("DEF")));
         type: method
-        methodKey: org.junit.Assert.assertThat
+        methodKey: org.junit.Assert.assertThat-Object,org.hamcrest.Matcher
         args:
         - {value: ABC, original: '"ABC"', type: string}
         - original: is(not("DEF"))
@@ -25,6 +25,6 @@ rootMethodTable:
           args:
           - original: not("DEF")
             type: method
-            methodKey: org.hamcrest.CoreMatchers.not
+            methodKey: org.hamcrest.CoreMatchers.not-Object
             args:
             - {value: DEF, original: '"DEF"', type: string}

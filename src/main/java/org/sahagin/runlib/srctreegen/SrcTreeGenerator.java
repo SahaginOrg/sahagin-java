@@ -88,7 +88,7 @@ public class SrcTreeGenerator {
             return Pair.of(testDoc, false);
         }
         AdditionalClassTestDoc additional
-        = additionalTestDocs.getClassTestDoc(type.getQualifiedName());
+        = additionalTestDocs.getClassTestDoc(type.getBinaryName());
         if (additional != null) {
             return Pair.of(additional.getTestDoc(), additional instanceof AdditionalPage);
         }
@@ -104,7 +104,7 @@ public class SrcTreeGenerator {
 
         List<String> argClassQualifiedNames = getArgClassQualifiedNames(method);
         AdditionalMethodTestDoc additional = additionalTestDocs.getMethodTestDoc(
-                method.getDeclaringClass().getQualifiedName(), method.getName(), argClassQualifiedNames);
+                method.getDeclaringClass().getBinaryName(), method.getName(), argClassQualifiedNames);
         if (additional != null) {
             return Pair.of(additional.getTestDoc(), additional.getCaptureStyle());
         }
@@ -126,13 +126,22 @@ public class SrcTreeGenerator {
         for (ITypeBinding param : paramTypes) {
             // AdditionalTestDoc's argClassQualifiedNames are defined by type erasure.
             // TODO is this generic handling logic always work well??
-            result.add(param.getErasure().getQualifiedName());
+            ITypeBinding erasure = param.getErasure();
+            if (erasure.isPrimitive()) {
+                // "int", "boolean", etc
+                result.add(erasure.getQualifiedName());
+            } else {
+                // getBinaryName and getQualifiedName are not the same.
+                // For example, getBinaryName returns parent$child for inner class,
+                // but getQualifiedName returns parent.child
+                result.add(param.getErasure().getBinaryName());
+            }
         }
         return result;
     }
 
     private String generateMethodKey(IMethodBinding method, boolean noArgClassesStr) {
-        String classQualifiedName = method.getDeclaringClass().getQualifiedName();
+        String classQualifiedName = method.getDeclaringClass().getBinaryName();
         String methodSimpleName = method.getName();
         List<String> argClassQualifiedNames = getArgClassQualifiedNames(method);
         if (noArgClassesStr) {
@@ -199,7 +208,7 @@ public class SrcTreeGenerator {
                 return super.visit(node);
             }
 
-            TestClass rootClass = rootClassTable.getByKey(classBinding.getQualifiedName());
+            TestClass rootClass = rootClassTable.getByKey(classBinding.getBinaryName());
             if (rootClass == null) {
                 Pair<String, Boolean> pair = getTestDoc(classBinding);
                 if (pair.getRight()) {
@@ -207,8 +216,8 @@ public class SrcTreeGenerator {
                 } else {
                     rootClass = new TestClass();
                 }
-                rootClass.setKey(classBinding.getQualifiedName());
-                rootClass.setQualifiedName(classBinding.getQualifiedName());
+                rootClass.setKey(classBinding.getBinaryName());
+                rootClass.setQualifiedName(classBinding.getBinaryName());
                 rootClass.setTestDoc(pair.getLeft());
                 rootClassTable.addTestClass(rootClass);
             }
@@ -294,9 +303,9 @@ public class SrcTreeGenerator {
                 return super.visit(node);
             }
 
-            TestClass testClass = rootClassTable.getByKey(classBinding.getQualifiedName());
+            TestClass testClass = rootClassTable.getByKey(classBinding.getBinaryName());
             if (testClass == null) {
-                testClass = subClassTable.getByKey(classBinding.getQualifiedName());
+                testClass = subClassTable.getByKey(classBinding.getBinaryName());
                 if (testClass == null) {
                     Pair<String, Boolean> pair = getTestDoc(classBinding);
                     if (pair.getRight()) {
@@ -304,8 +313,8 @@ public class SrcTreeGenerator {
                     } else {
                         testClass = new TestClass();
                     }
-                    testClass.setKey(classBinding.getQualifiedName());
-                    testClass.setQualifiedName(classBinding.getQualifiedName());
+                    testClass.setKey(classBinding.getBinaryName());
+                    testClass.setQualifiedName(classBinding.getBinaryName());
                     testClass.setTestDoc(pair.getLeft());
                     subClassTable.addTestClass(testClass);
                 }

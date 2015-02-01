@@ -7,7 +7,6 @@ import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javassist.CannotCompileException;
@@ -18,6 +17,7 @@ import javassist.NotFoundException;
 
 import org.openqa.selenium.io.IOUtils;
 import org.sahagin.runlib.external.TestDoc;
+import org.sahagin.runlib.external.TestDocs;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.share.IllegalTestScriptException;
 import org.sahagin.share.Logging;
@@ -37,17 +37,6 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
         this.srcTree = srcTree;
     }
 
-    // -1 means not available
-    private int declareStartLine(CtMethod method) {
-        return method.getMethodInfo().getLineNumber(0);
-    }
-
-    // -1 means not available
-    private int declareEndLine(CtMethod method) {
-        return method.getMethodInfo().getLineNumber(
-                method.getMethodInfo().getCodeAttribute().getCodeLength());
-    }
-
     private boolean isSubMethod(CtMethod method) {
         // root method also may be TestDoc method
         if (AdapterContainer.globalInstance().isRootMethod(method)) {
@@ -56,6 +45,9 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
 
         try {
             if (method.getAnnotation(TestDoc.class) != null) {
+                return true;
+            }
+            if (method.getAnnotation(TestDocs.class) != null) {
                 return true;
             }
         } catch (ClassNotFoundException e) {
@@ -131,6 +123,18 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
         return false;
     }
 
+    private TestMethod getTestMethod(SrcTree srcTree, String classQualifiedName,
+            String methodSimpleName, List<String> argClassQualifiedNames) {
+        String methodKey = TestMethod.generateMethodKey(
+                classQualifiedName, methodSimpleName, argClassQualifiedNames);
+        TestMethod testMethod = srcTree.getTestMethodByKeyAllowsNotFound(methodKey);
+        if (testMethod != null) {
+            return testMethod;
+        }
+        methodKey = TestMethod.generateMethodKey(classQualifiedName, methodSimpleName);
+        return srcTree.getTestMethodByKeyAllowsNotFound(methodKey);
+    }
+
     @Override
     public byte[] transform(ClassLoader loader, String className,
             Class<?> classBeingRedefined,
@@ -170,25 +174,15 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
                     logger.info("skip empty method: " + ctSubMethod.getLongName());
                     continue; // cannot hook empty method
                 }
-                int methodDeclaredStartLine;
-                int methodDeclaredEndLine;
-                try {
-                    methodDeclaredStartLine = declareStartLine(ctSubMethod);
-                    methodDeclaredEndLine = declareEndLine(ctSubMethod);
-                } catch (RuntimeException e) {
-                    // Maybe when this class is frozen.
-                    // Since frozen classes are maybe system class, just ignore this exception
-                    logger.log(Level.INFO, "", e);
-                    return null;
-                }
 
                 String subClassQualifiedName = ctSubMethod.getDeclaringClass().getName();
                 String subMethodSimpleName = ctSubMethod.getName();
-                TestMethod subMethod = StackLineUtils.getTestMethod(
-                        srcTree, subClassQualifiedName, subMethodSimpleName,
-                        methodDeclaredStartLine, methodDeclaredEndLine);
+                List<String> subMethodArgClassQualifiedNames = getArgClassQualifiedNames(ctSubMethod);
+                TestMethod subMethod = getTestMethod(
+                        srcTree, subClassQualifiedName, subMethodSimpleName, subMethodArgClassQualifiedNames);
                 if (subMethod == null) {
-                    logger.info("skip null subMethod: " + ctSubMethod.getLongName());
+                    logger.info(String.format("skip null subMethod: %s.%s",
+                            subClassQualifiedName, subMethodSimpleName));
                     continue;
                 }
                 for (int i = 0; i < subMethod.getCodeBody().size(); i++) {
@@ -225,9 +219,9 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
                 }
                 String rootClassQualifiedName = ctRootMethod.getDeclaringClass().getName();
                 String rootMethodSimpleName = ctRootMethod.getName();
-                TestMethod rootMethod = StackLineUtils.getTestMethod(
-                        srcTree, rootClassQualifiedName, rootMethodSimpleName,
-                        declareStartLine(ctRootMethod), declareEndLine(ctRootMethod));
+                List<String> argClassQualifiedNames = getArgClassQualifiedNames(ctRootMethod);
+                TestMethod rootMethod = getTestMethod(
+                        srcTree, rootClassQualifiedName, rootMethodSimpleName, argClassQualifiedNames);
                 if (rootMethod == null) {
                     continue;
                 }

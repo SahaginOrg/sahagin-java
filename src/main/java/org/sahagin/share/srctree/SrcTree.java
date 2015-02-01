@@ -145,6 +145,20 @@ public class SrcTree implements YamlConvertible {
         throw new IllegalDataStructureException(String.format(MSG_CLASS_NOT_FOUND, testClassKey));
     }
 
+    // TODO getTestMethodByKey should not throw IllegalDataStructureException
+    // and should remove getTestMethodByKeyAcceptNotFound method
+    public TestMethod getTestMethodByKeyAllowsNotFound(String testMethodKey) {
+        TestMethod subMethod = subMethodTable.getByKey(testMethodKey);
+        if (subMethod != null) {
+            return subMethod;
+        }
+        TestMethod rootMethod = rootMethodTable.getByKey(testMethodKey);
+        if (rootMethod != null) {
+            return rootMethod;
+        }
+        return null;
+    }
+
     public TestMethod getTestMethodByKey(String testMethodKey)
             throws IllegalDataStructureException {
         TestMethod subMethod = subMethodTable.getByKey(testMethodKey);

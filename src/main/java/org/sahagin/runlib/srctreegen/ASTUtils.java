@@ -33,7 +33,7 @@ public class ASTUtils {
         }
 
         for (IAnnotationBinding annotation : annotations) {
-            String qName = annotation.getAnnotationType().getQualifiedName();
+            String qName = annotation.getAnnotationType().getBinaryName();
             assert qName != null;
             if (qName.equals(annotationClassName)) {
                 return annotation;

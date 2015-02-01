@@ -1,7 +1,7 @@
 subMethodTable:
   methods:
   - testDoc: 'Doc: defaultMethod'
-    classKey: "*TestMain.InterfaceWithDefault"
+    classKey: "*TestMain$InterfaceWithDefault"
     name: "defaultMethod"
   - name: "print"
 rootMethodTable:
@@ -14,7 +14,7 @@ rootMethodTable:
           ;
         type: unknown
     - code:
-        methodKey: "*TestMain.InterfaceWithDefault.defaultMethod*"
+        methodKey: "*TestMain$InterfaceWithDefault.defaultMethod*"
         original: instance.defaultMethod();
         thisInstance: {original: instance, type: unknown}
     name: "defaultInterfaceTest"
@@ -26,5 +26,5 @@ rootMethodTable:
     name: "streamApiCallTest"
 subClassTable:
   classes:
-  - qname: "*.TestMain.InterfaceWithDefault"
-    methodKeys: ["*TestMain.InterfaceWithDefault.defaultMethod*"]
+  - qname: "*.TestMain$InterfaceWithDefault"
+    methodKeys: ["*TestMain$InterfaceWithDefault.defaultMethod*"]

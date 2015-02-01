@@ -57,12 +57,18 @@ public class JUnit4Adapter implements Adapter {
             // in alphabetical order
             methodAdd("org.hamcrest.core.Is", "is", "Object");
             methodAdd("org.hamcrest.core.Is", "is", "org.hamcrest.Matcher");
-            methodAdd("org.hamcrest.core.IsNot", "not");
+            methodAdd("org.hamcrest.core.IsNot", "not", "Object");
+            methodAdd("org.hamcrest.core.IsNot", "not", "org.hamcrest.Matcher");
             methodAdd("org.hamcrest.CoreMatchers", "is", "Object");
             methodAdd("org.hamcrest.CoreMatchers", "is", "org.hamcrest.Matcher");
-            methodAdd("org.hamcrest.CoreMatchers", "not");
-            methodAdd("org.junit.Assert", "assertEquals");
-            methodAdd("org.junit.Assert", "assertThat");
+            methodAdd("org.hamcrest.CoreMatchers", "not", "Object");
+            methodAdd("org.hamcrest.CoreMatchers", "not", "org.hamcrest.Matcher");
+            methodAdd("org.junit.Assert", "assertEquals", "double,double");
+            methodAdd("org.junit.Assert", "assertEquals", "long,long");
+            methodAdd("org.junit.Assert", "assertEquals", "Object,Object");
+            methodAdd("org.junit.Assert", "assertEquals", "Object[],Object[]");
+            methodAdd("org.junit.Assert", "assertThat", "Object,org.hamcrest.Matcher");
+            methodAdd("org.junit.Assert", "assertThat", "String,Object,org.hamcrest.Matcher");
         }
 
     }

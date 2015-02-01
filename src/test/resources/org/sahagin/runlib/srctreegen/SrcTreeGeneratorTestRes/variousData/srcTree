@@ -8,10 +8,10 @@ subMethodTable:
     # not wildcard pattern
     key: "org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData.input.TestMain.testDocMethod-void"
   - name: "innerClassMethod"
-    classKey: "*TestPage.InnerClass"
+    classKey: "*TestPage$InnerClass"
     testDoc: Doc:innerClass
     # checks argument
-    key: "*TestPage.InnerClass.innerClassMethod-void"
+    key: "*TestPage$InnerClass.innerClassMethod-void"
   - name: "TestPage"
     classKey: "*TestPage"
     testDoc: 'Doc: TestPage'
@@ -33,7 +33,7 @@ subMethodTable:
     - code: {original: InnerClass innerClass=new InnerClass();, type: unknown}
     - code:
         original: innerClass.innerClassMethod();
-        methodKey: "*TestPage.InnerClass.innerClassMethod*"
+        methodKey: "*TestPage$InnerClass.innerClassMethod*"
         thisInstance: {original: innerClass, type: unknown}
     name: "inenrClassCall"
     classKey: "*TestPage"
@@ -185,9 +185,9 @@ subClassTable:
     key: "*TestPage"
     methodKeys: "*"
     qname: "*.TestPage"
-  - key: "*TestPage.InnerClass"
-    methodKeys: ["*TestPage.InnerClass.innerClassMethod*"]
-    qname: "*.TestPage.InnerClass"
+  - key: "*TestPage$InnerClass"
+    methodKeys: ["*TestPage$InnerClass.innerClassMethod*"]
+    qname: "*.TestPage$InnerClass"
   - key: "*TestSub"
     methodKeys: ["*TestSub.subMethod*"]
     qname: "*.TestSub"

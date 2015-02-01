@@ -2,10 +2,20 @@ method:
   org.hamcrest.core.Is.is:
     Object: 「{0}」に等しい
     org.hamcrest.Matcher: "{0}"
-  org.hamcrest.core.IsNot.not: 「{0}」と異なる
+  org.hamcrest.core.IsNot.not:
+    Object: 「{0}」と異なる
+    org.hamcrest.Matcher: 「{0}」と異なる
   org.hamcrest.CoreMatchers.is:
     Object: 「{0}」に等しい
     org.hamcrest.Matcher: "{0}"
-  org.hamcrest.CoreMatchers.not: 「{0}」と異なる
-  org.junit.Assert.assertEquals: 「{0}」が「{1}」に等しいことをチェック
-  org.junit.Assert.assertThat: 「{0}」が{1}ことをチェック
+  org.hamcrest.CoreMatchers.not:
+    Object: 「{0}」と異なる
+    org.hamcrest.Matcher: 「{0}」と異なる
+  org.junit.Assert.assertEquals:
+    double,double: 「{0}」が「{1}」に等しいことをチェック
+    long,long: 「{0}」が「{1}」に等しいことをチェック
+    Object,Object: 「{0}」が「{1}」に等しいことをチェック
+    Object[],Object[]: 「{0}」が「{1}」に等しいことをチェック
+  org.junit.Assert.assertThat:
+    Object,org.hamcrest.Matcher: 「{0}」が{1}ことをチェック
+    String,Object,org.hamcrest.Matcher: 「{1}」が{2}ことをチェック

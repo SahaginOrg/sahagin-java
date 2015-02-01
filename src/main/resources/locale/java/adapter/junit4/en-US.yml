@@ -2,10 +2,20 @@ method:
   org.hamcrest.core.Is.is:
     Object: equals to '{0}'
     org.hamcrest.Matcher: "{0}"
-  org.hamcrest.core.IsNot.not: does not equal to '{0}'
+  org.hamcrest.core.IsNot.not:
+    Object: does not equal to '{0}'
+    org.hamcrest.Matcher: does not equal to '{0}'
   org.hamcrest.CoreMatchers.is:
     Object: equals to '{0}'
     org.hamcrest.Matcher: "{0}"
-  org.hamcrest.CoreMatchers.not: does not equal to '{0}'
-  org.junit.Assert.assertEquals: check that '{0}' equals to '{1}'
-  org.junit.Assert.assertThat: check that '{0}' {1}
+  org.hamcrest.CoreMatchers.not:
+    Object: does not equal to '{0}'
+    org.hamcrest.Matcher: does not equal to '{0}'
+  org.junit.Assert.assertEquals:
+    double,double: check that '{0}' equals to '{1}'
+    long,long: check that '{0}' equals to '{1}'
+    Object,Object: check that '{0}' equals to '{1}'
+    Object[],Object[]: check that '{0}' equals to '{1}'
+  org.junit.Assert.assertThat:
+    Object,org.hamcrest.Matcher: check that '{0}' {1}
+    String,Object,org.hamcrest.Matcher: check that '{1}' {2}

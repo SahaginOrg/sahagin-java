@@ -216,8 +216,8 @@ public class HookMethodDefTest extends TestBase {
             captureAssertion(subDirName, normalTest, "multiLineStatementTest", reportIntermediateDir, 1);
 
             String extendsTest = "extendstest.ExtendsTest";
-            captureAssertion(subDirName, extendsTest, "extendsTest", reportIntermediateDir, 5);
             testResultAssertion(extendsTest, "extendsTest", reportIntermediateDir, true);
+            captureAssertion(subDirName, extendsTest, "extendsTest", reportIntermediateDir, 5);
 
             String implementsTest = "implementstest.ImplementsTest";
             testResultAssertion(implementsTest, "implementsTest", reportIntermediateDir, true);

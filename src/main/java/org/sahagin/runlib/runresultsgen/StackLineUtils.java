@@ -12,51 +12,6 @@ import org.sahagin.share.srctree.code.CodeLine;
 
 class StackLineUtils {
 
-    // returns true if some codeLine of method locates
-    // between methodDeclareStartLine and methodDeclareEndLine
-    private static boolean methodLineMatches(TestMethod method,
-            int methodDeclareStartLine, int methodDeclareEndLine) {
-        for (CodeLine codeLine : method.getCodeBody()) {
-            if (methodDeclareStartLine <= codeLine.getStartLine()
-                    && codeLine.getEndLine() <= methodDeclareEndLine) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // returns the TestMethod whose name matches to classQualifiedName and methodSimpleName
-    // and codeBody locates between methodDeclareStartLine and methodDeclareEndLine
-    private static TestMethod getTestMethod(TestMethodTable table,
-            String classQualifiedName, String methodSimpleName,
-            int methodDeclareStartLine, int methodDeclareEndLine) {
-        List<TestMethod> nameMethods = table.getByName(classQualifiedName, methodSimpleName);
-        for (TestMethod method : nameMethods) {
-            if (methodLineMatches(method, methodDeclareStartLine, methodDeclareEndLine)) {
-                return method;
-            }
-        }
-        return null;
-    }
-
-    // returns the TestMethod whose name matches to classQualifiedName and methodSimpleName
-    // and codeBody locates between methodDeclareStartLine and methodDeclareEndLine
-    public static TestMethod getTestMethod(SrcTree srcTree,
-            String classQualifiedName, String methodSimpleName,
-            int methodDeclareStartLine, int methodDeclareEndLine) {
-        TestMethod rootMethod = getTestMethod(srcTree.getRootMethodTable(),
-                classQualifiedName, methodSimpleName, methodDeclareStartLine, methodDeclareEndLine);
-        if (rootMethod != null) {
-            return rootMethod;
-        }
-        TestMethod subMethod = getTestMethod(srcTree.getSubMethodTable(),
-                classQualifiedName, methodSimpleName, methodDeclareStartLine, methodDeclareEndLine);
-        if (subMethod != null) {
-            return subMethod;
-        }
-        return null;
-    }
-
     // - assume only 1 root method line exists in currentStackTrace
     //   and overloaded root method does not exists
     // returns null if not found
