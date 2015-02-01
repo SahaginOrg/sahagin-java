@@ -37,10 +37,12 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
         this.srcTree = srcTree;
     }
 
+    // -1 means not available
     private int declareStartLine(CtMethod method) {
         return method.getMethodInfo().getLineNumber(0);
     }
 
+    // -1 means not available
     private int declareEndLine(CtMethod method) {
         return method.getMethodInfo().getLineNumber(
                 method.getMethodInfo().getCodeAttribute().getCodeLength());
@@ -61,18 +63,23 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
         }
         String classQualifiedName = method.getDeclaringClass().getName();
         String methodSimpleName = method.getName();
+        List<String> argClassQualifiedNames = getArgClassQualifiedNames(method);
+        return AdapterContainer.globalInstance().getAdditionalTestDocs().getMethodTestDoc(
+                classQualifiedName, methodSimpleName, argClassQualifiedNames) != null;
+    }
+
+    private List<String> getArgClassQualifiedNames(CtMethod method) {
         CtClass[] paramTypes;
         try {
             paramTypes = method.getParameterTypes();
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
-        List<String> argClassQualifiedNames = new ArrayList<String>(paramTypes.length);
+        List<String> result = new ArrayList<String>(paramTypes.length);
         for (CtClass paramType : paramTypes) {
-            argClassQualifiedNames.add(paramType.getName());
+            result.add(paramType.getName());
         }
-        return AdapterContainer.globalInstance().getAdditionalTestDocs().getMethodTestDoc(
-                classQualifiedName, methodSimpleName, argClassQualifiedNames) != null;
+        return result;
     }
 
     private List<CtMethod> allSubMethods(CtClass ctClass) {
@@ -131,7 +138,7 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
                     throws IllegalClassFormatException {
         // Don't transform system classes. This reason is:
         // - To improve performance
-        // - To avoid unexpected behaviours.
+        // - To avoid unexpected behaviors.
         //   For example, if transforms java.lang.invoke.** classes in Java8
         //   even without any ctClass modification, the classes become broken
         //   and Java stream API call fails unexpectedly.
@@ -160,6 +167,7 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
             List<CtMethod> subMethods = allSubMethods(ctClass);
             for (CtMethod ctSubMethod : subMethods) {
                 if (ctSubMethod.isEmpty()) {
+                    logger.info("skip empty method: " + ctSubMethod.getLongName());
                     continue; // cannot hook empty method
                 }
                 int methodDeclaredStartLine;
@@ -180,6 +188,7 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
                         srcTree, subClassQualifiedName, subMethodSimpleName,
                         methodDeclaredStartLine, methodDeclaredEndLine);
                 if (subMethod == null) {
+                    logger.info("skip null subMethod: " + ctSubMethod.getLongName());
                     continue;
                 }
                 for (int i = 0; i < subMethod.getCodeBody().size(); i++) {

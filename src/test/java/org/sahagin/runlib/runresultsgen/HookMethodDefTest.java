@@ -196,13 +196,6 @@ public class HookMethodDefTest extends TestBase {
         File reportIntermediateDir = pair.getRight().getRootBaseReportIntermediateDataDir();
         try {
             String normalTest = "normal.TestMain";
-            captureAssertion(subDirName, normalTest, "noTestDocMethodFailTest", reportIntermediateDir, 1);
-            captureAssertion(subDirName, normalTest, "stepInCaptureTest", reportIntermediateDir, 4);
-            captureAssertion(subDirName, normalTest, "successTest", reportIntermediateDir, 2);
-            captureAssertion(subDirName, normalTest, "testDocMethodFailTest", reportIntermediateDir, 1);
-            captureAssertion(subDirName, normalTest, "innerClassTest", reportIntermediateDir, 1);
-            captureAssertion(subDirName, normalTest, "anonymousClassTest", reportIntermediateDir, 1);
-            captureAssertion(subDirName, normalTest, "multiLineStatementTest", reportIntermediateDir, 1);
             testResultAssertion(normalTest, "noTestDocMethodFailTest", reportIntermediateDir, false);
             testResultAssertion(normalTest, "stepInCaptureTest", reportIntermediateDir, true);
             testResultAssertion(normalTest, "successTest", reportIntermediateDir, true);
@@ -214,25 +207,32 @@ public class HookMethodDefTest extends TestBase {
             // since other result such as screen captures are still buggy..
             // TODO fix these bugs
             testResultAssertion(normalTest, "multiStatementInALineTest", reportIntermediateDir, true);
+            captureAssertion(subDirName, normalTest, "noTestDocMethodFailTest", reportIntermediateDir, 1);
+            captureAssertion(subDirName, normalTest, "stepInCaptureTest", reportIntermediateDir, 4);
+            captureAssertion(subDirName, normalTest, "successTest", reportIntermediateDir, 2);
+            captureAssertion(subDirName, normalTest, "testDocMethodFailTest", reportIntermediateDir, 1);
+            captureAssertion(subDirName, normalTest, "innerClassTest", reportIntermediateDir, 1);
+            captureAssertion(subDirName, normalTest, "anonymousClassTest", reportIntermediateDir, 1);
+            captureAssertion(subDirName, normalTest, "multiLineStatementTest", reportIntermediateDir, 1);
 
             String extendsTest = "extendstest.ExtendsTest";
             captureAssertion(subDirName, extendsTest, "extendsTest", reportIntermediateDir, 5);
             testResultAssertion(extendsTest, "extendsTest", reportIntermediateDir, true);
 
             String implementsTest = "implementstest.ImplementsTest";
-            captureAssertion(subDirName, implementsTest, "implementsTest", reportIntermediateDir, 3);
             testResultAssertion(implementsTest, "implementsTest", reportIntermediateDir, true);
+            captureAssertion(subDirName, implementsTest, "implementsTest", reportIntermediateDir, 3);
 
             String captureTest = "capturetest.TestMain";
-            captureAssertion(subDirName, captureTest, "captureTest", reportIntermediateDir, 5);
             testResultAssertion(captureTest, "captureTest", reportIntermediateDir, true);
+            captureAssertion(subDirName, captureTest, "captureTest", reportIntermediateDir, 5);
 
             String multiExtendsTest1 = "multiextendstest.Test1";
-            captureAssertion(subDirName, multiExtendsTest1, "test1", reportIntermediateDir, 1);
             testResultAssertion(multiExtendsTest1, "test1", reportIntermediateDir, true);
+            captureAssertion(subDirName, multiExtendsTest1, "test1", reportIntermediateDir, 1);
             String multiExtendsTest2 = "multiextendstest.Test2";
-            captureAssertion(subDirName, multiExtendsTest2, "test2", reportIntermediateDir, 1);
             testResultAssertion(multiExtendsTest2, "test2", reportIntermediateDir, true);
+            captureAssertion(subDirName, multiExtendsTest2, "test2", reportIntermediateDir, 1);
         } catch (AssertionError e) {
             pair.getLeft().printStdOutsAndErrs();
             throw e;
