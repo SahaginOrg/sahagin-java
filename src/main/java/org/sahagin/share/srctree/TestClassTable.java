@@ -44,16 +44,9 @@ public class TestClassTable implements YamlConvertible {
     public void sort() {
         Collections.sort(testClasses, new Comparator<TestClass>() {
 
-            // sort by name as much as possible
-            // since sometimes key differs between Windows and OSX
             @Override
             public int compare(TestClass left, TestClass right) {
-                int nameCompareResult = CommonUtils.compare(left.getQualifiedName(), right.getQualifiedName());
-                if (nameCompareResult == 0) {
-                    return CommonUtils.compare(left.getKey(), right.getKey());
-                } else {
-                    return nameCompareResult;
-                }
+                return CommonUtils.compare(left.getKey(), right.getKey());
             }
         });
     }

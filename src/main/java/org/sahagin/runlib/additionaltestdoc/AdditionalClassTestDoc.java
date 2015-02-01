@@ -32,13 +32,4 @@ public class AdditionalClassTestDoc {
         this.testDoc = testDoc;
     }
 
-    public static String generateClassKey(String classQualifiedName) {
-        return "_Additional_" + classQualifiedName;
-    }
-
-    // TODO this method should be removed
-    public static boolean isAdditionalClassKey(String classKey) {
-        return classKey != null && classKey.startsWith("_Additional_");
-    }
-
 }

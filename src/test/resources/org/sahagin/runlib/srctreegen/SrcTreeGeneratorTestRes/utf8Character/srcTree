@@ -1,7 +1,7 @@
 subMethodTable:
   methods:
   - name: "ページメソッド"
-    classKey: "*ページクラス;"
+    classKey: "*ページクラス"
     testDoc: ページメソッド
     key: "*ページクラス;.ページメソッド()V"
 rootMethodTable:
@@ -12,19 +12,19 @@ rootMethodTable:
         original: page.ページメソッド();
         methodKey: "*ページクラス;.ページメソッド()V"
     name: "テスト"
-    classKey: "*メインクラス;"
+    classKey: "*メインクラス"
     testDoc: Doc:テスト
     key: "*メインクラス;.テスト()V"
 subClassTable:
   classes:
   - testDoc: Doc:ページクラス
-    key: "*ページクラス;"
+    key: "*ページクラス"
     methodKeys: ["*ページクラス;.ページメソッド()V"]
     qname: "*.ページクラス"
 formatVersion: "*"
 rootClassTable:
   classes:
   - testDoc: Doc:メインクラス
-    key: "*メインクラス;"
+    key: "*メインクラス"
     methodKeys: ["*メインクラス;.テスト()V"]
     qname: "*.メインクラス"

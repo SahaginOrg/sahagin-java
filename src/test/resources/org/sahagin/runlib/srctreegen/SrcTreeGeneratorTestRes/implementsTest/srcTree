@@ -2,22 +2,22 @@ subMethodTable:
   methods:
   - name: "baseMethod"
     argVariables: [arg]
-    classKey: "*ImplementsPage;"
+    classKey: "*ImplementsPage"
     testDoc: 'Doc: baseMethod: override: {arg}'
     key: "*ImplementsPage;.baseMethod(Ljava/lang/String;)V"
   - name: "childMethod"
     argVariables: [arg]
-    classKey: "*ImplementsPage;"
+    classKey: "*ImplementsPage"
     testDoc: 'Doc: childMethod: {arg}'
     key: "*ImplementsPage;.childMethod(I)V"
   - name: "baseMethod"
     argVariables: [arg]
-    classKey: "*ImplementsPageBase;"
+    classKey: "*ImplementsPageBase"
     testDoc: 'Doc: baseMethod: {arg}'
     key: "*ImplementsPageBase;.baseMethod(Ljava/lang/String;)V"
   - name: "testBaseMethod"
     argVariables: [arg]
-    classKey: "*ImplementsTestBase;"
+    classKey: "*ImplementsTestBase"
     testDoc: 'Doc: testBaseMethod: {arg}'
     key: "*ImplementsTestBase;.testBaseMethod(Ljava/lang/String;)V"
 rootMethodTable:
@@ -45,25 +45,25 @@ rootMethodTable:
         args:
         - {value: RRR, original: '"RRR"', type: string}
     name: "implementsTest"
-    classKey: "*ImplementsTestMain;"
+    classKey: "*ImplementsTestMain"
     key: "*ImplementsTestMain;.implementsTest()V"
 subClassTable:
   classes:
   - testDoc: 'Doc: ImplementsPage'
-    key: "*ImplementsPage;"
+    key: "*ImplementsPage"
     methodKeys: ["*ImplementsPage;.baseMethod(Ljava/lang/String;)V",
       "*ImplementsPage;.childMethod(I)V"]
     qname: "*.ImplementsPage"
   - testDoc: 'Doc: ImplementsPageBase'
-    key: "*ImplementsPageBase;"
+    key: "*ImplementsPageBase"
     methodKeys: ["*ImplementsPageBase;.baseMethod(Ljava/lang/String;)V"]
     qname: "*.ImplementsPageBase"
   - testDoc: 'Doc: ImplementsTestBase'
-    key: "*ImplementsTestBase;"
+    key: "*ImplementsTestBase"
     methodKeys: ["*ImplementsTestBase;.testBaseMethod(Ljava/lang/String;)V"]
     qname: "*.ImplementsTestBase"
 rootClassTable:
   classes:
-  - key: "*ImplementsTestMain;"
+  - key: "*ImplementsTestMain"
     methodKeys: ["*ImplementsTestMain;.implementsTest()V"]
     qname: "*.ImplementsTestMain"

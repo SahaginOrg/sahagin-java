@@ -2,26 +2,26 @@ subMethodTable:
   methods:
   - name: "testDocMethod"
     capture: stepIn
-    classKey: "*TestMain;"
+    classKey: "*TestMain"
     testDoc: Doc:testDocMethod
     key: "*TestMain;.testDocMethod()V"
   - name: "innerClassMethod"
-    classKey: "*TestPage$InnerClass;"
+    classKey: "*TestPage.InnerClass"
     testDoc: Doc:innerClass
     key: "*TestPage$InnerClass;.innerClassMethod()V"
   - name: "TestPage"
-    classKey: "*TestPage;"
+    classKey: "*TestPage"
     testDoc: 'Doc: TestPage'
     key: "*TestPage;.()V"
   - name: "argMethod"
     argVariables: [arg1, arg2]
-    classKey: "*TestPage;"
+    classKey: "*TestPage"
     testDoc: Doc:argMethod:{arg1}:{arg2}:{0}:{1}:{this}
     key: "*TestPage;.argMethod(Ljava/lang/String;I)V"
   - codeBody:
     - code: {original: return "EEE";, type: unknown}
     name: "getData"
-    classKey: "*TestPage;"
+    classKey: "*TestPage"
     testDoc: data
     key: "*TestPage;.getData()Ljava/lang/String;"
   - codeBody:
@@ -31,7 +31,7 @@ subMethodTable:
         methodKey: "*TestPage$InnerClass;.innerClassMethod()V"
         thisInstance: {original: innerClass, type: unknown}
     name: "inenrClassCall"
-    classKey: "*TestPage;"
+    classKey: "*TestPage"
     testDoc: Doc:innerTestCall
     key: "*TestPage;.inenrClassCall()V"
   - codeBody:
@@ -42,7 +42,7 @@ subMethodTable:
         - {argIndex: 0, original: arg, type: arg}
     name: "nest1"
     argVariables: [arg]
-    classKey: "*TestPage;"
+    classKey: "*TestPage"
     testDoc: Doc:nest1:{arg}
     key: "*TestPage;.nest1(Ljava/lang/String;)V"
   - codeBody:
@@ -53,7 +53,7 @@ subMethodTable:
         - {argIndex: 0, original: arg, type: arg}
     name: "nest2"
     argVariables: [arg]
-    classKey: "*TestPage;"
+    classKey: "*TestPage"
     testDoc: Doc:nest2:{arg}
     key: "*TestPage;.nest2(Ljava/lang/String;)V"
   - codeBody:
@@ -72,7 +72,7 @@ subMethodTable:
         - {argIndex: 0, original: arg, type: arg}
     name: "nest3"
     argVariables: [arg]
-    classKey: "*TestPage;"
+    classKey: "*TestPage"
     testDoc: Doc:nest3:{arg}
     key: "*TestPage;.nest3(Ljava/lang/String;)V"
   - codeBody:
@@ -88,15 +88,15 @@ subMethodTable:
         original: recurseMethodCall();
         methodKey: "*TestPage;.recurseMethodCall()V"
     name: "recurseMethodCall"
-    classKey: "*TestPage;"
+    classKey: "*TestPage"
     testDoc: 'Doc: recurseMethodCall'
     key: "*TestPage;.recurseMethodCall()V"
   - name: "staticMethod"
-    classKey: "*TestPage;"
+    classKey: "*TestPage"
     testDoc: Doc:staticMethod
     key: "*TestPage;.staticMethod()V"
   - name: "subMethod"
-    classKey: "*TestSub;"
+    classKey: "*TestSub"
     testDoc: 'Doc: subMethod'
     key: "*TestSub;.subMethod()V"
 rootMethodTable:
@@ -167,27 +167,27 @@ rootMethodTable:
     - code: {original: wd.findElement(By.id("FFF")).click();, type: unknown}
     - code: {original: wd.findElement(By.cssSelector("GGG")).sendKeys("HHH");, type: unknown}
     name: "testMethod1"
-    classKey: "*TestMain;"
+    classKey: "*TestMain"
     key: "*TestMain;.testMethod1()V"
   - name: "testMethod2"
-    classKey: "*TestMain;"
+    classKey: "*TestMain"
     testDoc: Doc:TestMethod2
     key: "*TestMain;.testMethod2()V"
 subClassTable:
   classes:
   - testDoc: Doc:TestPage
     type: page
-    key: "*TestPage;"
+    key: "*TestPage"
     methodKeys: "*"
     qname: "*.TestPage"
-  - key: "*TestPage$InnerClass;"
+  - key: "*TestPage.InnerClass"
     methodKeys: ["*TestPage$InnerClass;.innerClassMethod()V"]
     qname: "*.TestPage.InnerClass"
-  - key: "*TestSub;"
+  - key: "*TestSub"
     methodKeys: ["*TestSub;.subMethod()V"]
     qname: "*.TestSub"
 formatVersion: "*"
 rootClassTable:
   classes:
-  - key: "*TestMain;"
+  - key: "*TestMain"
     qname: "*.TestMain"

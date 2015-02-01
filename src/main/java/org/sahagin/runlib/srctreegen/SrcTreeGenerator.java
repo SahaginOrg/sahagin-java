@@ -171,7 +171,7 @@ public class SrcTreeGenerator {
                 return super.visit(node);
             }
 
-            TestClass rootClass = rootClassTable.getByKey(classBinding.getKey());
+            TestClass rootClass = rootClassTable.getByKey(classBinding.getQualifiedName());
             if (rootClass == null) {
                 Pair<String, Boolean> pair = getTestDoc(classBinding);
                 if (pair.getRight()) {
@@ -179,7 +179,7 @@ public class SrcTreeGenerator {
                 } else {
                     rootClass = new TestClass();
                 }
-                rootClass.setKey(classBinding.getKey());
+                rootClass.setKey(classBinding.getQualifiedName());
                 rootClass.setQualifiedName(classBinding.getQualifiedName());
                 rootClass.setTestDoc(pair.getLeft());
                 rootClassTable.addTestClass(rootClass);
@@ -266,9 +266,9 @@ public class SrcTreeGenerator {
                 return super.visit(node);
             }
 
-            TestClass testClass = rootClassTable.getByKey(classBinding.getKey());
+            TestClass testClass = rootClassTable.getByKey(classBinding.getQualifiedName());
             if (testClass == null) {
-                testClass = subClassTable.getByKey(classBinding.getKey());
+                testClass = subClassTable.getByKey(classBinding.getQualifiedName());
                 if (testClass == null) {
                     Pair<String, Boolean> pair = getTestDoc(classBinding);
                     if (pair.getRight()) {
@@ -276,7 +276,7 @@ public class SrcTreeGenerator {
                     } else {
                         testClass = new TestClass();
                     }
-                    testClass.setKey(classBinding.getKey());
+                    testClass.setKey(classBinding.getQualifiedName());
                     testClass.setQualifiedName(classBinding.getQualifiedName());
                     testClass.setTestDoc(pair.getLeft());
                     subClassTable.addTestClass(testClass);

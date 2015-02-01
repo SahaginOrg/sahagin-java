@@ -65,7 +65,7 @@ public class AdditionalTestDocsSetter {
         } else {
             newClass = new TestClass();
         }
-        newClass.setKey(AdditionalClassTestDoc.generateClassKey(qualifiedName));
+        newClass.setKey(qualifiedName);
         newClass.setQualifiedName(qualifiedName);
         newClass.setTestDoc(testDoc);
         subClassTable.addTestClass(newClass);

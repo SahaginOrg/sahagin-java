@@ -1,7 +1,7 @@
 subMethodTable:
   methods:
   - testDoc: 'Doc: defaultMethod'
-    classKey: "*TestMain$InterfaceWithDefault;"
+    classKey: "*TestMain.InterfaceWithDefault"
     name: "defaultMethod"
   - name: "print"
 rootMethodTable:
