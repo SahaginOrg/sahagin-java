@@ -11,7 +11,7 @@ import org.sahagin.runlib.external.adapter.ResourceAdditionalTestDocsAdapter;
 import org.sahagin.runlib.external.adapter.ScreenCaptureAdapter;
 import org.sahagin.share.CommonPath;
 
-public class FluentleniumAdapter implements Adapter {
+public class FluentLeniumAdapter implements Adapter {
 
     @Override
     public void initialSetAdapter() {
