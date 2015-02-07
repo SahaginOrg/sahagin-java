@@ -81,6 +81,11 @@ public class SrcTreeGeneratorTest extends TestBase {
     }
 
     @Test
+    public void classAndMethodKey() {
+        testMain("classAndMethodKey", null, null);
+    }
+
+    @Test
     public void utf8Character() {
         testMain("utf8Character", null, null);
     }

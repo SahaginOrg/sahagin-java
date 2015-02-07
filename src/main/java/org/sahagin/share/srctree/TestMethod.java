@@ -62,10 +62,14 @@ public class TestMethod implements YamlConvertible {
                     result = result + String.class.getSimpleName();
                 } else if (StringUtils.equals(argClassQualifiedName, String[].class.getCanonicalName())) {
                     result = result + String[].class.getSimpleName();
+                } else if (StringUtils.equals(argClassQualifiedName, String[][].class.getCanonicalName())) {
+                    result = result + String[][].class.getSimpleName();
                 } else if (StringUtils.equals(argClassQualifiedName, Object.class.getCanonicalName())) {
                     result = result + Object.class.getSimpleName();
                 } else if (StringUtils.equals(argClassQualifiedName, Object[].class.getCanonicalName())) {
                     result = result + Object[].class.getSimpleName();
+                } else if (StringUtils.equals(argClassQualifiedName, Object[][].class.getCanonicalName())) {
+                    result = result + Object[][].class.getSimpleName();
                 } else {
                     result = result + argClassQualifiedName;
                 }

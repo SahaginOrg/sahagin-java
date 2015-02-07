@@ -1,0 +1,14 @@
+subClassTable:
+  classes:
+  - key: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.classAndMethodKey.input.TestMain
+  - key: "*TestMain$InneStaticClass"
+  - key: "*TestMain$InnerClass"
+subMethodTable:
+  methods:
+  - key: org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.classAndMethodKey.input.TestMain$InneStaticClass.innerStaticClassMethod-void
+  - key: "*TestMain$InnerClass.innerClassMethod-void"
+  - key: "*TestMain.arrayArg-int[],boolean[],String[],Object[],java.util.Date[],java.lang.Integer[],int[][],String[][],java.util.Date[][]"
+  - key: "*TestMain.genericsArg-Object,java.util.Date"
+  - key: "*TestMain.innerClassArg-*TestMain$InnerClass,*TestMain.InnerClass[],*InnerClass[][],*TestMain$InnerClass"
+  - key: "*TestMain.listArg-java.util.List,java.util.List,java.util.List"
+  - key: "*TestMain.simpleArg-int,boolean,String,Object,java.util.Date,java.lang.Integer"

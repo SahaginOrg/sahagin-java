@@ -2,27 +2,22 @@ subMethodTable:
   methods:
   - name: "testDocMethod"
     capture: stepIn
-    # not wildcard pattern
-    classKey: "org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData.input.TestMain"
+    classKey: "*TestMain"
     testDoc: Doc:testDocMethod
-    # not wildcard pattern
-    key: "org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData.input.TestMain.testDocMethod-void"
+    key: "*TestMain.testDocMethod-void"
   - name: "innerClassMethod"
     classKey: "*TestPage$InnerClass"
     testDoc: Doc:innerClass
-    # checks argument
-    key: "*TestPage$InnerClass.innerClassMethod-void"
+    key: "*TestPage$InnerClass.innerClassMethod*"
   - name: "TestPage"
     classKey: "*TestPage"
     testDoc: 'Doc: TestPage'
-    # checks argument
-    key: "*TestPage.TestPage-void"
+    key: "*TestPage.TestPage*"
   - name: "argMethod"
     argVariables: [arg1, arg2]
     classKey: "*TestPage"
     testDoc: Doc:argMethod:{arg1}:{arg2}:{0}:{1}:{this}
-    # checks argument
-    key: "*TestPage.argMethod-String,int"
+    key: "*TestPage.argMethod*"
   - codeBody:
     - code: {original: return "EEE";, type: unknown}
     name: "getData"

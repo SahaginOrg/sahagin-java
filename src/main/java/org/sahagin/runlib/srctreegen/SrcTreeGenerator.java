@@ -127,14 +127,14 @@ public class SrcTreeGenerator {
             // AdditionalTestDoc's argClassQualifiedNames are defined by type erasure.
             // TODO is this generic handling logic always work well??
             ITypeBinding erasure = param.getErasure();
-            if (erasure.isPrimitive()) {
+            if (erasure.isPrimitive() || erasure.isArray()) {
                 // "int", "boolean", etc
                 result.add(erasure.getQualifiedName());
             } else {
                 // getBinaryName and getQualifiedName are not the same.
                 // For example, getBinaryName returns parent$child for inner class,
                 // but getQualifiedName returns parent.child
-                result.add(param.getErasure().getBinaryName());
+                result.add(erasure.getBinaryName());
             }
         }
         return result;
