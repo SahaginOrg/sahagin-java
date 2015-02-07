@@ -90,12 +90,22 @@ public class FluentLeniumAdapter implements Adapter {
             methodAdd("org.fluentlenium.core.domain.FluentWebElement", "isSelected");
             methodAdd("org.fluentlenium.core.filter.FilterConstructor", "withClass", "String");
             methodAdd("org.fluentlenium.core.filter.FilterConstructor", "withName", "String");
-            methodAdd("org.fluentlenium.core.Fluent", "$", null, 1);
+            methodAdd("org.fluentlenium.core.filter.FilterConstructor", "withText", "String");
+            methodAdd("org.fluentlenium.core.Fluent", "$", "String,org.fluentlenium.core.filter.Filter[]", 1);
+            methodAdd("org.fluentlenium.core.Fluent", "$", "String,java.lang.Integer,org.fluentlenium.core.filter.Filter[]", 2);
             methodAdd("org.fluentlenium.core.Fluent", "clear", null, 1);
             methodAdd("org.fluentlenium.core.Fluent", "click", null, 1);
+            methodAdd("org.fluentlenium.core.Fluent", "executeScript", null, 1);
             methodAdd("org.fluentlenium.core.Fluent", "fill", null, 1);
-            methodAdd("org.fluentlenium.core.Fluent", "find", null, 1);
-            methodAdd("org.fluentlenium.core.Fluent", "goTo");
+            methodAdd("org.fluentlenium.core.Fluent", "find", "String,org.fluentlenium.core.filter.Filter[]", 1);
+            methodAdd("org.fluentlenium.core.Fluent", "find", "String,java.lang.Integer,org.fluentlenium.core.filter.Filter[]", 2);
+            methodAdd("org.fluentlenium.core.Fluent", "findFirst", "String,org.fluentlenium.core.filter.Filter[]", 1);
+            methodAdd("org.fluentlenium.core.Fluent", "goTo", "String");
+            methodAdd("org.fluentlenium.core.Fluent", "goTo", "org.fluentlenium.core.FluentPage");
+            methodAdd("org.fluentlenium.core.Fluent", "takeScreenShot", "String");
+            methodAdd("org.fluentlenium.core.Fluent", "title");
+            methodAdd("org.fluentlenium.core.FluentPage", "go");
+            methodAdd("org.fluentlenium.core.FluentPage", "isAt");
         }
 
     }

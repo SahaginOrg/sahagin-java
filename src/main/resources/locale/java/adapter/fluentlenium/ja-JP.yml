@@ -17,9 +17,25 @@ method:
     String: class = {0}
   org.fluentlenium.core.filter.FilterConstructor.withName:
     String: name = {0}
-  org.fluentlenium.core.Fluent.$: 要素「{0}{if:1} ({1}){end}」
+  org.fluentlenium.core.filter.FilterConstructor.withText:
+    String: text = {0}
+  org.fluentlenium.core.Fluent.$:
+    String,org.fluentlenium.core.filter.Filter[]: 要素「{0}{if:1} ({1}){end}」
+    String,java.lang.Integer,org.fluentlenium.core.filter.Filter[]: 「{0}{if:2} ({2}){end}」の{1}番目の要素
   org.fluentlenium.core.Fluent.clear: 要素「{0}{if:1} ({1}){end}」のテキストをクリア
   org.fluentlenium.core.Fluent.click: 要素「{0}{if:1} ({1}){end}」をクリック
+  org.fluentlenium.core.Fluent.executeScript: JavaScript「{0}」を実行
   org.fluentlenium.core.Fluent.fill: 要素「{0}{if:1} ({1}){end}」
-  org.fluentlenium.core.Fluent.find: 要素「{0}{if:1} ({1}){end}」
-  org.fluentlenium.core.Fluent.goTo: 「{0}」にページ遷移
+  org.fluentlenium.core.Fluent.find:
+    String,org.fluentlenium.core.filter.Filter[]: 要素「{0}{if:1} ({1}){end}」
+    String,java.lang.Integer,org.fluentlenium.core.filter.Filter[]: 「{0}{if:2} ({2}){end}」の{1}番目の要素
+  org.fluentlenium.core.Fluent.findFirst:
+    String,org.fluentlenium.core.filter.Filter[]: 「{0}{if:1} ({1}){end}」の最初の要素
+  org.fluentlenium.core.Fluent.goTo:
+    String: 「{0}」にページ遷移
+    org.fluentlenium.core.FluentPage: 「{0}」にページ遷移
+  org.fluentlenium.core.Fluent.takeScreenShot:
+    String: 画面キャプチャを「{0}」に保存
+  org.fluentlenium.core.Fluent.title: "{this}のページタイトル"
+  org.fluentlenium.core.FluentPage.go: "{this}にページ遷移"
+  org.fluentlenium.core.FluentPage.isAt: "{this}へのページ遷移が成功したことをチェック"

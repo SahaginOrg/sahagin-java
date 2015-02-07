@@ -17,9 +17,25 @@ method:
     String: class = {0}
   org.fluentlenium.core.filter.FilterConstructor.withName:
     String: name = {0}
-  org.fluentlenium.core.Fluent.$: element '{0}{if:1} ({1}){end}'
+  org.fluentlenium.core.filter.FilterConstructor.withText:
+    String: text = {0}
+  org.fluentlenium.core.Fluent.$:
+    String,org.fluentlenium.core.filter.Filter[]: element '{0}{if:1} ({1}){end}'
+    String,java.lang.Integer,org.fluentlenium.core.filter.Filter[]: "{1}th element of '{0}{if:2} ({2}){end}'"
   org.fluentlenium.core.Fluent.clear: clear the text of element '{0}{if:1} ({1}){end}'
   org.fluentlenium.core.Fluent.click: click element '{0}{if:1} ({1}){end}'
+  org.fluentlenium.core.Fluent.executeScript: execute JavaScript '{0}'
   org.fluentlenium.core.Fluent.fill: element '{0}{if:1} ({1}){end}'
-  org.fluentlenium.core.Fluent.find: element '{0}{if:1} ({1}){end}'
-  org.fluentlenium.core.Fluent.goTo: go to the page '{0}'
+  org.fluentlenium.core.Fluent.find:
+    String,org.fluentlenium.core.filter.Filter[]: element '{0}{if:1} ({1}){end}'
+    String,java.lang.Integer,org.fluentlenium.core.filter.Filter[]: "{1}th element of '{0}{if:2} ({2}){end}'"
+  org.fluentlenium.core.Fluent.findFirst:
+    String,org.fluentlenium.core.filter.Filter[]: first element of '{0}{if:1} ({1}){end}'
+  org.fluentlenium.core.Fluent.goTo:
+    String: go to the page '{0}'
+    org.fluentlenium.core.FluentPage: go to the page '{0}'  
+  org.fluentlenium.core.Fluent.takeScreenShot:
+    String: save screen capture to '{0}'
+  org.fluentlenium.core.Fluent.title: page title of {this}
+  org.fluentlenium.core.FluentPage.go: go to the page '{this}'
+  org.fluentlenium.core.FluentPage.isAt: check that the current page is '{this}'
