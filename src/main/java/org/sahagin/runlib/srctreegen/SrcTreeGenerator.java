@@ -530,7 +530,6 @@ public class SrcTreeGenerator {
                     code = expressionCode(expression, testMethod);
                 } else {
                     code = new UnknownCode();
-                    code.setOriginal(statementNode.toString().trim());
                 }
 
                 CodeLine codeLine = new CodeLine();
@@ -538,7 +537,7 @@ public class SrcTreeGenerator {
                 codeLine.setEndLine(compilationUnit.getLineNumber(
                         statementNode.getStartPosition() + statementNode.getLength()));
                 codeLine.setCode(code);
-                // sometimes original value set by expressionCode method does not equal to the on of statementNode
+                // sometimes original value set by expressionCode method does not equal to the one of statementNode
                 code.setOriginal(statementNode.toString().trim());
                 testMethod.addCodeBody(codeLine);
             }
