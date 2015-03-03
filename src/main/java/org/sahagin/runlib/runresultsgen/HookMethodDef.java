@@ -143,7 +143,9 @@ public class HookMethodDef {
         File runResultFile = new File(String.format("%s/%s/%s",
                 runResultsRootDir, rootMethod.getTestClass().getQualifiedName(),
                 rootMethod.getSimpleName()));
-        runResultFile.getParentFile().mkdirs();
+        if (runResultFile.getParentFile() != null) {
+            runResultFile.getParentFile().mkdirs();
+        }
         YamlUtils.dump(currentRunResult.toYamlObject(), runResultFile);
 
         // clear current captureNo and runResult
@@ -208,7 +210,9 @@ public class HookMethodDef {
                 rootMethod.getSimpleName(), currentCaptureNo));
         currentCaptureNo++;
 
-        captureFile.getParentFile().mkdirs();
+        if (captureFile.getParentFile() != null) {
+            captureFile.getParentFile().mkdirs();
+        }
         FileOutputStream stream = null;
         try {
             stream = new FileOutputStream(captureFile);

@@ -292,7 +292,9 @@ public class YamlUtils {
     }
 
     public static void dump(Map<String, Object> yamlObj, File dumpFile) {
-        dumpFile.getParentFile().mkdirs();
+        if (dumpFile.getParentFile() != null) {
+            dumpFile.getParentFile().mkdirs();
+        }
         Yaml yaml = new Yaml();
         FileWriterWithEncoding writer = null;
         try {

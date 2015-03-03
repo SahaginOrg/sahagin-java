@@ -513,7 +513,9 @@ public class HtmlReport {
 
     private void generateVelocityOutput(
             VelocityContext context, String templateResourcePath, File outputFile) {
-        outputFile.getParentFile().mkdirs();
+        if (outputFile.getParentFile() != null) {
+            outputFile.getParentFile().mkdirs();
+        }
         InputStream in = null;
         Reader reader = null;
         FileWriterWithEncoding writer = null;
@@ -537,7 +539,9 @@ public class HtmlReport {
     private void extractHtmlExternalResFromThisJar(File htmlExternalResourceRootDir, String copyPath) {
         InputStream in = this.getClass().getResourceAsStream("/" + copyPath);
         File destFile = new File(htmlExternalResourceRootDir, copyPath);
-        destFile.getParentFile().mkdirs();
+        if (destFile.getParentFile() != null) {
+            destFile.getParentFile().mkdirs();
+        }
         try {
             FileUtils.copyInputStreamToFile(in, destFile);
         } catch (IOException e) {
