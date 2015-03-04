@@ -203,6 +203,7 @@ public class HookMethodDefTest extends TestBase {
             testResultAssertion(normalTest, "innerClassTest", reportIntermediateDir, true);
             testResultAssertion(normalTest, "anonymousClassTest", reportIntermediateDir, true);
             testResultAssertion(normalTest, "multiLineStatementTest", reportIntermediateDir, true);
+            testResultAssertion(normalTest, "getScreenSizeTest", reportIntermediateDir, true);
             // Check only if test has been succeeded for the moment
             // since other result such as screen captures are still buggy..
             // TODO fix these bugs
@@ -230,6 +231,7 @@ public class HookMethodDefTest extends TestBase {
             String multiExtendsTest1 = "multiextendstest.Test1";
             testResultAssertion(multiExtendsTest1, "test1", reportIntermediateDir, true);
             captureAssertion(subDirName, multiExtendsTest1, "test1", reportIntermediateDir, 1);
+
             String multiExtendsTest2 = "multiextendstest.Test2";
             testResultAssertion(multiExtendsTest2, "test2", reportIntermediateDir, true);
             captureAssertion(subDirName, multiExtendsTest2, "test2", reportIntermediateDir, 1);

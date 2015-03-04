@@ -9,7 +9,9 @@ import org.sahagin.runlib.external.adapter.Adapter;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.runlib.external.adapter.ResourceAdditionalTestDocsAdapter;
 import org.sahagin.runlib.external.adapter.ScreenCaptureAdapter;
+import org.sahagin.runlib.external.adapter.ScreenSizeAdapter;
 import org.sahagin.share.CommonPath;
+import org.sahagin.share.runresults.RootMethodRunResult;
 
 public class FluentLeniumAdapter implements Adapter {
 
@@ -23,6 +25,7 @@ public class FluentLeniumAdapter implements Adapter {
     public static void setAdapter(Fluent fluent) {
         AdapterContainer container = AdapterContainer.globalInstance();
         container.setScreenCaptureAdapter(new ScreenCaptureAdapterImpl(fluent));
+        container.setScreenSizeAdapter(new ScreenSizeAdapterImpl(fluent));
     }
 
     public static class ScreenCaptureAdapterImpl implements
@@ -56,6 +59,39 @@ public class FluentLeniumAdapter implements Adapter {
 
     }
 
+    private static class ScreenSizeAdapterImpl implements ScreenSizeAdapter {
+        private Fluent fluent;
+
+        public ScreenSizeAdapterImpl(Fluent fluent) {
+            this.fluent = fluent;
+        }
+
+        @Override
+        public int getScreenWidth() {
+            if (fluent == null) {
+                return RootMethodRunResult.WIDTH_NOT_ASSIGNED;
+            }
+            WebDriver driver = fluent.getDriver();
+            if (driver == null) {
+                return RootMethodRunResult.WIDTH_NOT_ASSIGNED;
+            }
+            return driver.manage().window().getSize().width;
+        }
+
+        @Override
+        public int getScreenHeight() {
+            if (fluent == null) {
+                return RootMethodRunResult.HEIGHT_NOT_ASSIGNED;
+            }
+            WebDriver driver = fluent.getDriver();
+            if (driver == null) {
+                return RootMethodRunResult.HEIGHT_NOT_ASSIGNED;
+            }
+            return driver.manage().window().getSize().height;
+        }
+
+    }
+
     private static class AdditionalTestDocsAdapterImpl extends
             ResourceAdditionalTestDocsAdapter {
 
@@ -66,8 +102,7 @@ public class FluentLeniumAdapter implements Adapter {
         }
 
         @Override
-        public void classAdd() {
-        }
+        public void classAdd() {}
 
         @Override
         public void methodAdd() {

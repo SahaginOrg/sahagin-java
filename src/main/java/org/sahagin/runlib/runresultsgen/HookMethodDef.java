@@ -35,6 +35,8 @@ public class HookMethodDef {
     private static File runResultsRootDir;
     private static File captureRootDir;
     private static int currentCaptureNo = 1;
+    // become false when tried getting screen size
+    private static boolean needScreenSize = true;
     private static RootMethodRunResult currentRunResult = null;
     private static SrcTree srcTree;
 
@@ -105,6 +107,7 @@ public class HookMethodDef {
         // initialize current captureNo and runResult
         currentCaptureNo = 1;
         currentRunResult = new RootMethodRunResult();
+        needScreenSize = true;
         TestMethod rootMethod = StackLineUtils.getRootMethod(
                 srcTree.getRootMethodTable(), Thread.currentThread().getStackTrace());
         if (rootMethod == null) {
@@ -151,6 +154,7 @@ public class HookMethodDef {
         // clear current captureNo and runResult
         currentCaptureNo = -1;
         currentRunResult = null;
+        needScreenSize = false;
         logger.info("afterRootMethodHook: end");
     }
 
@@ -225,6 +229,18 @@ public class HookMethodDef {
         return captureFile;
     }
 
+    private static void setScreenSizeToCurrentRunResult() {
+        if (!needScreenSize) {
+            return;
+        }
+        // TODO when screen size has changed while test run
+        currentRunResult.setScreenWidth(
+                AdapterContainer.globalInstance().getScreenWidth());
+        currentRunResult.setScreenHeight(
+                AdapterContainer.globalInstance().getScreenHeight());
+        needScreenSize = false;
+    }
+
     // - returns null if fails to capture
     // - try to capture even for UnknownCode and no stepInCapture line
     //   as long as code line exists in srcTree
@@ -238,6 +254,7 @@ public class HookMethodDef {
         capture.setPath(new File(captureFile.getAbsolutePath()));
         capture.addAllStackLines(stackLines);
         currentRunResult.addLineScreenCapture(capture);
+        setScreenSizeToCurrentRunResult();
         return captureFile;
     }
 
@@ -255,6 +272,7 @@ public class HookMethodDef {
             capture.addStackLine(stackLine);
         }
         currentRunResult.addLineScreenCapture(capture);
+        setScreenSizeToCurrentRunResult();
         return captureFile;
     }
 
