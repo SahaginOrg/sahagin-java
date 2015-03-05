@@ -47,6 +47,8 @@
     #else
     <div>${methodName}</div>
     #end
+    <div id="showSrcButton" onclick="showSrcInfo()"><u>open &gt;&gt;</u></div>
+    <div id="hideSrcButton" onclick="hideSrcInfo()"><u>&lt;&lt; close</u></div>
     <br/>
     <div class="scrollContainer" id="script_table_container">
       <table border="1" cellpadding="1" cellspacing="1" id="script_table">
@@ -67,7 +69,7 @@
           <tr data-tt-id="${codeLine.getTtId()}" ${dataTtParentId} data-method-key="${codeLine.getMethodKey()}" class="${lineClass}">
             <td>${codeLine.getPageTestDoc()}</td>
             <td>${codeLine.getTestDoc()}</td>
-            <td>${codeLine.getCodeLine().getCode().getOriginal()}</td>
+            <td class="srcInfo">${codeLine.getCodeLine().getCode().getOriginal()}</td>
           </tr>
         #end
         </tbody>

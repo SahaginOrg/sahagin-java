@@ -11,6 +11,12 @@ var slider = null;
 var srcTree = null;
 
 /**
+ * visibility of scrInfo on script table
+ * @type {boolean}
+ */
+var srcInfoShown = true;
+
+/**
  * @param {number} slideIndex
  * @returns {string}
  */
@@ -308,6 +314,31 @@ function getSrcTree() {
   return srcTree;
 }
 
+function showSrcInfo() {
+   $(".srcInfo").show();
+   $("#showSrcButton").hide();
+   $("#hideSrcButton").show();
+   $("#script_table_container").css('width', '100%');
+   srcInfoShown = true;
+};
+
+function hideSrcInfo() {
+  $(".srcInfo").hide();  
+  $("#showSrcButton").show();
+  $("#hideSrcButton").hide();
+  $("#script_table_container").css('width', '60%');
+  srcInfoShown = false;
+};
+
+// reflect visibility to newly added srcInfo
+function refreshSrcInfoVisible() {
+  if (srcInfoShown) {
+    showSrcInfo();
+  } else {
+    hideSrcInfo();
+  }  
+};
+
 /**
  * @param {sahagin.Code} code
  * @returns {string}
@@ -370,8 +401,9 @@ function loadCodeBodyHiddenNode(tr) {
     
     childNodeHtml = childNodeHtml + sahagin.CommonUtils.strFormat(
       '<tr data-tt-id="{0}" data-tt-parent-id="{1}" data-method-key="{2}" class="{3}">'
-          + '<td>{4}</td><td>{5}</td><td>{6}</td></tr>',
+          + '<td>{4}</td><td>{5}</td><td class="srcInfo">{6}</td></tr>',
       ttId, parentTtId, methodKey, lineClass, pageTestDoc, testDoc, original);
+    refreshSrcInfoVisible();
     
     var methodArgTestDocs = sahagin.TestDocResolver.placeholderResolvedMethodArgTestDocs(
         codeLine.getCode(), parentMethodArgTestDocs);
@@ -469,4 +501,5 @@ $(document).ready(function() {
   var firstTtId = getSlideTtId(0);
   var firstTrObj = getTtIdTr(firstTtId);
   selectTr(firstTrObj);
+  showSrcInfo();
 });

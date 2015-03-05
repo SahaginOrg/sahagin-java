@@ -5,6 +5,21 @@
   height: 250px;
 }
 
+#showSrcButton {
+  position: absolute;
+  left: 54%;
+  right: 10px;
+  color: blue;
+  cursor: pointer;
+}
+
+#hideSrcButton {
+  position: absolute;
+  right: 10px;
+  color: blue;
+  cursor: pointer;
+}
+
 body {
   background-color: #fcfcff;
 }
