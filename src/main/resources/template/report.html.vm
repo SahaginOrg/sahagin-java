@@ -78,7 +78,7 @@
       <ul class="bxslider">
       #foreach( $capture in $captures )
         <li>
-          <div data-tt-id="${capture.getTtId()}" class="scrollContainer">
+          <div data-tt-id="${capture.getTtId()}" data-image-width="${capture.getImageWidth()}" data-image-height="${capture.getImageHeight()}" class="scrollContainer">
             <img src="${capture.getPath()}" />
           </div>
         </li>

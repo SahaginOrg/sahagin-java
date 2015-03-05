@@ -43,6 +43,8 @@ import org.sahagin.share.yaml.YamlUtils;
 
 public class HtmlReport {
     private static Logger logger = Logging.getLogger(HtmlReport.class.getName());
+    private static final int NO_IMAGE_WIDTH = 736;
+    private static final int NO_IMAGE_HEIGHT = 455;
 
     public HtmlReport() {
         // stop generating velocity.log
@@ -126,6 +128,8 @@ public class HtmlReport {
         // URL separator is always slash regardless of OS type
         noImageCapture.setPath(FilenameUtils.separatorsToUnix(noImageFilePath));
         noImageCapture.setTtId("noImage");
+        noImageCapture.setImageWidth(NO_IMAGE_WIDTH);
+        noImageCapture.setImageHeight(NO_IMAGE_HEIGHT);
         reportCaptures.add(noImageCapture);
 
         logger.info("inputCaptureRootDir: " + inputCaptureRootDir);
@@ -144,6 +148,7 @@ public class HtmlReport {
             reportCapture.setPath(FilenameUtils.separatorsToUnix(relOutputCapturePath.getPath()));
             String ttId = generateTtId(lineScreenCapture.getStackLines());
             reportCapture.setTtId(ttId);
+            reportCapture.setImageSizeFromImageFile(lineScreenCapture.getPath());
             reportCaptures.add(reportCapture);
         }
         return reportCaptures;

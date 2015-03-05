@@ -148,6 +148,66 @@ function syncSlideIndexToSelectedTr() {
 };
 
 /**
+ * @param {number} captureWidth
+ * @param {number} captureHeight
+ * @param {number} maxWidth
+ * @param {number} maxHeight
+ * @return {Object} object with width and height field
+ */
+function calcCaptureAreaSize(captureWidth, captureHeight, maxWidth, maxHeight) {
+  if (captureWidth <= 0 || captureHeight <= 0) {
+    // maybe fails to get valid value
+    return { width: maxWidth, height: maxHeight }  
+  }
+  var heightRatio = captureHeight / maxHeight;
+  var widthRatio = captureWidth / maxWidth;
+  if (heightRatio > widthRatio) {
+    var shrinkRatio = maxHeight / captureHeight;
+    if (shrinkRatio < 0.2) {
+      // avoid shrinking too match
+      return { width: maxWidth, height: maxHeight }      
+    } else {
+      // shrink width of capture area
+      return { width: parseInt(captureWidth * shrinkRatio, 10), height: maxHeight }
+    }
+  } else if (heightRatio < widthRatio) {
+    var shrinkRatio = maxWidth / captureWidth;
+    if (shrinkRatio < 0.2) {
+      // avoid shrinking too match
+      return { width: maxWidth, height: maxHeight }  
+    } else {
+      // shrink height of capture area
+      return { width: maxWidth, height: parseInt(captureHeight * shrinkRatio, 10) }
+    }
+  } else {
+    return { width: maxWidth, height: maxHeight }
+  }
+};
+
+/**
+ * 
+ */
+function adjustImageAreaSize() {
+  var selected = getSelectedTr();
+  var imageContainer;
+  if (selected.length == 0) {
+    imageContainer = $(".bxslider div.scrollContainer[data-tt-id='noImage']");
+  } else {
+    var ttId = getTrTtId(selected);
+    imageContainer = $(".bxslider div.scrollContainer[data-tt-id='" + ttId + "']");
+    if (imageContainer.length == 0) {
+      imageContainer = $(".bxslider div.scrollContainer[data-tt-id='noImage']");      
+    }
+  }
+  var width = imageContainer.attr("data-image-width");
+  var height = imageContainer.attr("data-image-height");
+  var areaSize = calcCaptureAreaSize(width, height, 500, 270);
+  $("#bxslider_container").css('width', areaSize.width + 'px');
+  $("#bxslider_container").css('height', areaSize.height + 'px');
+  $(window).resize(); // refresh element sizes
+}
+
+/**
  * @param {Object} trObject
  * @returns {number} positive value means down direction scroll
  */
@@ -373,6 +433,7 @@ $(document).ready(function() {
 
   $(document).on("mousedown", "#script_table tbody tr", function() {
     selectTr($(this));
+    adjustImageAreaSize();
     syncSlideIndexToSelectedTr();
   });
 
@@ -381,12 +442,14 @@ $(document).ready(function() {
     if (e.keyCode == "38") {
       // up key changes table line selection to next
       if (changeTrSelectionToPrev()) {
+        adjustImageAreaSize();
         syncSlideIndexToSelectedTr();
         scrollToShowSelectedTr();
       };
     } else if (e.keyCode == "40") {
       // down key changes table row selection to prev
       if (changeTrSelectionToNext()) {
+        adjustImageAreaSize();
         syncSlideIndexToSelectedTr();
         scrollToShowSelectedTr();
       };
