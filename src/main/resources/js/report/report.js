@@ -49,7 +49,7 @@ function getTtIdSlideIndex(ttId) {
  * @returns {Object} jQuery object for tr
  */
 function getTtIdTr(ttId) {
-  return $("#script_table tbody tr[data-tt-id='" + ttId + "'");
+  return $("#script_table tbody tr[data-tt-id='" + ttId + "']");
 };
 
 /**
