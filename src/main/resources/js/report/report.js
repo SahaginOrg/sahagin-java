@@ -208,9 +208,10 @@ function adjustImageAreaSize() {
   var width = imageContainer.attr("data-image-width");
   var height = imageContainer.attr("data-image-height");
   var areaSize = calcCaptureAreaSize(width, height, 500, 270);
+  // need to change also li elements width to reflect width change immediately
+  $(".bxslider li").css('width', areaSize.width + 'px');
   $("#bxslider_container").css('width', areaSize.width + 'px');
   $("#bxslider_container").css('height', areaSize.height + 'px');
-  $(window).resize(); // refresh element sizes
 }
 
 /**
@@ -465,7 +466,7 @@ $(document).ready(function() {
 
   $(document).on("mousedown", "#script_table tbody tr", function() {
     selectTr($(this));
-    adjustImageAreaSize();
+    adjustImageAreaSize(); // adjust before slider is working
     syncSlideIndexToSelectedTr();
   });
 
@@ -474,14 +475,14 @@ $(document).ready(function() {
     if (e.keyCode == "38") {
       // up key changes table line selection to next
       if (changeTrSelectionToPrev()) {
-        adjustImageAreaSize();
+        adjustImageAreaSize(); // adjust before slider is working
         syncSlideIndexToSelectedTr();
         scrollToShowSelectedTr();
       };
     } else if (e.keyCode == "40") {
       // down key changes table row selection to prev
       if (changeTrSelectionToNext()) {
-        adjustImageAreaSize();
+        adjustImageAreaSize(); // adjust before slider is working 
         syncSlideIndexToSelectedTr();
         scrollToShowSelectedTr();
       };
