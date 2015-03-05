@@ -194,6 +194,7 @@ public class HookMethodDefTest extends TestBase {
 
         // check test output
         File reportIntermediateDir = pair.getRight().getRootBaseReportIntermediateDataDir();
+
         try {
             String normalTest = "normal.TestMain";
             testResultAssertion(normalTest, "noTestDocMethodFailTest", reportIntermediateDir, false);
@@ -203,7 +204,6 @@ public class HookMethodDefTest extends TestBase {
             testResultAssertion(normalTest, "innerClassTest", reportIntermediateDir, true);
             testResultAssertion(normalTest, "anonymousClassTest", reportIntermediateDir, true);
             testResultAssertion(normalTest, "multiLineStatementTest", reportIntermediateDir, true);
-            testResultAssertion(normalTest, "getScreenSizeTest", reportIntermediateDir, true);
             // Check only if test has been succeeded for the moment
             // since other result such as screen captures are still buggy..
             // TODO fix these bugs

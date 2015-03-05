@@ -12,8 +12,6 @@ import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlConvertible;
 
 public class RootMethodRunResult implements YamlConvertible {
-    public static final int WIDTH_NOT_ASSIGNED = -1;
-    public static final int HEIGHT_NOT_ASSIGNED = -1;
     private static final String MSG_SRC_TREE_FORMAT_MISMATCH
     = "expected formatVersion is \"%s\", but actual is \"%s\"";
 
@@ -21,8 +19,6 @@ public class RootMethodRunResult implements YamlConvertible {
     private TestMethod rootMethod;
     private List<RunFailure> runFailures = new ArrayList<RunFailure>(16);
     private List<LineScreenCapture> lineScreenCaptures = new ArrayList<LineScreenCapture>(32);
-    private int screenWidth = WIDTH_NOT_ASSIGNED;
-    private int screenHeight = HEIGHT_NOT_ASSIGNED;
 
     public String getRootMethodKey() {
         return rootMethodKey;
@@ -56,34 +52,6 @@ public class RootMethodRunResult implements YamlConvertible {
         this.lineScreenCaptures.add(lineScreenCapture);
     }
 
-    public boolean isScreenWidthAssigned() {
-        return screenWidth != WIDTH_NOT_ASSIGNED;
-    }
-
-    // WIDTH_NOT_ASSIGNED may be returned
-    public int getScreenWidth() {
-        return screenWidth;
-    }
-
-    // can set WIDTH_NOT_ASSIGNED
-    public void setScreenWidth(int screenWidth) {
-        this.screenWidth = screenWidth;
-    }
-
-    public boolean isScreenHeightAssigned() {
-        return screenHeight != HEIGHT_NOT_ASSIGNED;
-    }
-
-    // HEIGHT_NOT_ASSIGNED may be returned
-    public int getScreenHeight() {
-        return screenHeight;
-    }
-
-    // can set HEIGHT_NOT_ASSIGNED
-    public void setScreenHeight(int screenHeight) {
-        this.screenHeight = screenHeight;
-    }
-
     @Override
     public Map<String, Object> toYamlObject() {
         Map<String, Object> result = new HashMap<String, Object>(4);
@@ -94,12 +62,6 @@ public class RootMethodRunResult implements YamlConvertible {
         }
         if (!lineScreenCaptures.isEmpty()) {
             result.put("lineScreenCaptures", YamlUtils.toYamlObjectList(lineScreenCaptures));
-        }
-        if (screenWidth != WIDTH_NOT_ASSIGNED) {
-            result.put("screenWidth", screenWidth);
-        }
-        if (screenHeight != HEIGHT_NOT_ASSIGNED) {
-            result.put("screenHeight", screenHeight);
         }
         return result;
     }
@@ -130,18 +92,6 @@ public class RootMethodRunResult implements YamlConvertible {
             LineScreenCapture lineScreenCapture = new LineScreenCapture();
             lineScreenCapture.fromYamlObject(lineScreenCaptureYamlObj);
             lineScreenCaptures.add(lineScreenCapture);
-        }
-        Integer screenWidthObj = YamlUtils.getIntValue(yamlObject, "screenWidth", true);
-        if (screenWidthObj != null) {
-            screenWidth = screenWidthObj;
-        } else {
-            screenWidth = WIDTH_NOT_ASSIGNED;
-        }
-        Integer screenHeightObj = YamlUtils.getIntValue(yamlObject, "screenHeight", true);
-        if (screenHeightObj != null) {
-            screenHeight = screenHeightObj;
-        } else {
-            screenHeight = HEIGHT_NOT_ASSIGNED;
         }
     }
 

@@ -9,7 +9,6 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.runlib.external.adapter.ScreenCaptureAdapter;
-import org.sahagin.runlib.external.adapter.ScreenSizeAdapter;
 
 public class Java6TestBase {
     private int counter = 1;
@@ -38,19 +37,6 @@ public class Java6TestBase {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-            }
-        });
-        // dummy screen size handler for this test
-        AdapterContainer.globalInstance().setScreenSizeAdapter(new ScreenSizeAdapter() {
-            
-            @Override
-            public int getScreenWidth() {
-                return 198;
-            }
-            
-            @Override
-            public int getScreenHeight() {
-                return 298;
             }
         });
     }

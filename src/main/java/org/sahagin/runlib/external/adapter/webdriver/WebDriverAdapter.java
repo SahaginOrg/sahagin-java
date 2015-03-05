@@ -8,9 +8,7 @@ import org.sahagin.runlib.external.adapter.Adapter;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.runlib.external.adapter.ResourceAdditionalTestDocsAdapter;
 import org.sahagin.runlib.external.adapter.ScreenCaptureAdapter;
-import org.sahagin.runlib.external.adapter.ScreenSizeAdapter;
 import org.sahagin.share.CommonPath;
-import org.sahagin.share.runresults.RootMethodRunResult;
 
 // TODO chromedriver has these problem (this is not sahagin problem, but the one of chromedriver)
 // - cannot capture entire page
@@ -28,7 +26,6 @@ public class WebDriverAdapter implements Adapter {
     public static void setAdapter(final WebDriver driver) {
         AdapterContainer container = AdapterContainer.globalInstance();
         container.setScreenCaptureAdapter(new ScreenCaptureAdapterImpl(driver));
-        container.setScreenSizeAdapter(new ScreenSizeAdapterImpl(driver));
     }
 
     public static class ScreenCaptureAdapterImpl implements
@@ -54,31 +51,6 @@ public class WebDriverAdapter implements Adapter {
                 // just do nothing if WebDriver instance is in invalid state
                 return null;
             }
-        }
-
-    }
-
-    private static class ScreenSizeAdapterImpl implements ScreenSizeAdapter {
-        private WebDriver driver;
-
-        public ScreenSizeAdapterImpl(WebDriver driver) {
-            this.driver = driver;
-        }
-
-        @Override
-        public int getScreenWidth() {
-            if (driver == null) {
-                return RootMethodRunResult.WIDTH_NOT_ASSIGNED;
-            }
-            return driver.manage().window().getSize().width;
-        }
-
-        @Override
-        public int getScreenHeight() {
-            if (driver == null) {
-                return RootMethodRunResult.HEIGHT_NOT_ASSIGNED;
-            }
-            return driver.manage().window().getSize().height;
         }
 
     }

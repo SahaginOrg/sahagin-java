@@ -3,8 +3,6 @@ package org.sahagin.runlib.external.adapter;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.sahagin.runlib.additionaltestdoc.AdditionalTestDocs;
 import org.sahagin.share.AcceptableLocales;
-import org.sahagin.share.runresults.RootMethodRunResult;
-
 import javassist.CtMethod;
 
 public class AdapterContainer {
@@ -13,7 +11,6 @@ public class AdapterContainer {
     private AcceptableLocales locales;
     private RootMethodAdapter rootMethodAdapter;
     private ScreenCaptureAdapter screenCaptureAdapter;
-    private ScreenSizeAdapter screenSizeAdapter;
     private AdditionalTestDocs additionalTestDocs = new AdditionalTestDocs();
 
     // make constructor private
@@ -65,25 +62,6 @@ public class AdapterContainer {
             return null;
         }
         return screenCaptureAdapter.captueScreen();
-    }
-
-    // set null if don't need screen size
-    public void setScreenSizeAdapter(ScreenSizeAdapter screenSizeAdapter) {
-        this.screenSizeAdapter = screenSizeAdapter;
-    }
-
-    public int getScreenWidth() {
-        if (screenSizeAdapter == null) {
-            return RootMethodRunResult.WIDTH_NOT_ASSIGNED;
-        }
-        return screenSizeAdapter.getScreenWidth();
-    }
-
-    public int getScreenHeight() {
-        if (screenSizeAdapter == null) {
-            return RootMethodRunResult.HEIGHT_NOT_ASSIGNED;
-        }
-        return screenSizeAdapter.getScreenHeight();
     }
 
     // TODO throw error if called　from other method than initialSetAdapter
