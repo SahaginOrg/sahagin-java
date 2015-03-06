@@ -37,69 +37,81 @@
     </script>
   </head>
   <body>
-    #if ( ${classTestDoc} )
-    <div>${classTestDoc} (${className})</div>
-    #else
-    <div>${className}</div>
-    #end
-    #if ( ${methodTestDoc} )
-    <div>${methodTestDoc} (${methodName})</div>
-    #else
-    <div>${methodName}</div>
-    #end
-    <div id="showSrcButton" onclick="showSrcInfo()"><u>open &gt;&gt;</u></div>
-    <div id="hideSrcButton" onclick="hideSrcInfo()"><u>&lt;&lt; close</u></div>
-    <br/>
-    <div class="scrollContainer" id="script_table_container">
-      <table border="1" cellpadding="1" cellspacing="1" id="script_table">
-        <tbody>
-        #foreach( $codeLine in $codeBody )
-          #if( ${codeLine.hasError()} )
-            #set( $lineClass = "errorLine" )
-          #elseif( ${codeLine.isAlreadyRun()} )
-            #set( $lineClass = "successLine" )
-          #else
-            #set( $lineClass = "notRunLine" )
-          #end
-          #if( ${codeLine.getParentTtId()} )
-            #set( $dataTtParentId = "data-tt-parent-id=${codeLine.getParentTtId()}" )
-          #else
-            #set( $dataTtParentId = "" )
-          #end
-          <tr data-tt-id="${codeLine.getTtId()}" ${dataTtParentId} data-method-key="${codeLine.getMethodKey()}" class="${lineClass}">
-            <td>${codeLine.getPageTestDoc()}</td>
-            <td>${codeLine.getTestDoc()}</td>
-            <td class="srcInfo">${codeLine.getCodeLine().getCode().getOriginal()}</td>
-          </tr>
-        #end
-        </tbody>
-      </table>
-    </div>
-    <br/>
-    <div id="bxslider_container">
-      <ul class="bxslider">
-      #foreach( $capture in $captures )
-        <li>
-          <div data-tt-id="${capture.getTtId()}" data-image-width="${capture.getImageWidth()}" data-image-height="${capture.getImageHeight()}" class="scrollContainer">
-            <img src="${capture.getPath()}" />
-          </div>
-        </li>
+    <header>
+      #if ( ${classTestDoc} )
+      <div>${classTestDoc} (${className})</div>
+      #else
+      <div>${className}</div>
       #end
-      </ul>
+      #if ( ${methodTestDoc} )
+      <div>${methodTestDoc} (${methodName})</div>
+      #else
+      <div>${methodName}</div>
+      #end
+    </header>
+    <div id="main_container">
+      <div id="button_container">
+        <div id="showSrcButton" onclick="showSrcInfo()"><u>show code &gt;&gt;</u></div>
+        <div id="hideSrcButton" onclick="hideSrcInfo()"><u>&lt;&lt; hide code</u></div>
+      </div>
+      <div id="left_container">
+        <div id="outer_script_table_container" class="noCode">
+          <div class="scrollContainer" id="script_table_container">
+            <table border="1" cellpadding="1" cellspacing="1" id="script_table">
+              <tbody>
+                #foreach( $codeLine in $codeBody )
+                #if( ${codeLine.hasError()} )
+                  #set( $lineClass = "errorLine" )
+                #elseif( ${codeLine.isAlreadyRun()} )
+                  #set( $lineClass = "successLine" )
+                #else
+                  #set( $lineClass = "notRunLine" )
+                #end
+                #if( ${codeLine.getParentTtId()} )
+                  #set( $dataTtParentId = "data-tt-parent-id=${codeLine.getParentTtId()}" )
+                #else
+                  #set( $dataTtParentId = "" )
+                #end
+                <tr data-tt-id="${codeLine.getTtId()}" ${dataTtParentId} data-method-key="${codeLine.getMethodKey()}" class="${lineClass}">
+                  <td>${codeLine.getPageTestDoc()}</td>
+                  <td>${codeLine.getTestDoc()}</td>
+                  <td class="srcInfo">${codeLine.getCodeLine().getCode().getOriginal()}</td>
+                </tr>
+                #end
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <br/>
+        <div id="msg_container">
+          #if( ${errMsg} )
+          <div id="err_msg_container">
+            [Error]
+            <br />
+            <span id="err_msg">${errMsg}</span>
+          </div>
+          #end
+        </div>
+      </div>
+      <div id="right_container">
+        <div id="bxslider_container">
+        <ul class="bxslider">
+          #foreach( $capture in $captures )
+          <li>
+            <div data-tt-id="${capture.getTtId()}" data-image-width="${capture.getImageWidth()}" data-image-height="${capture.getImageHeight()}" class="scrollContainer">
+              <img src="${capture.getPath()}" />
+            </div>
+          </li>
+          #end
+        </ul>
+      </div>
     </div>
-    #if( ${errMsg} )
-    <div id="err_msg_container">
-      [Error]
-      <br>
-      <span id="err_msg">${errMsg}</span>
-    </div>
-    #end
     <div id="methodArgTestDocs">
-    #foreach( $codeLine in $codeBody )
-    #foreach ( $methodArgTestDoc in ${codeLine.getMethodArgTestDocs()} )
-      <div class="hiddenMethodArgTestDoc" data-tt-id="${codeLine.getTtId()}">${methodArgTestDoc}</div>
-    #end
-    #end
+      #foreach( $codeLine in $codeBody )
+        #foreach ( $methodArgTestDoc in ${codeLine.getMethodArgTestDocs()} )
+        <div class="hiddenMethodArgTestDoc" data-tt-id="${codeLine.getTtId()}">${methodArgTestDoc}</div>
+        #end
+      #end
     </div>
   </body>
 </html>

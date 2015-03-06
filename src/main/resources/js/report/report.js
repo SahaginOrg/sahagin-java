@@ -207,11 +207,22 @@ function adjustImageAreaSize() {
   }
   var width = imageContainer.attr("data-image-width");
   var height = imageContainer.attr("data-image-height");
-  var areaSize = calcCaptureAreaSize(width, height, 500, 270);
+  var maxWidth = $("#right_container").width();
+  var maxHeight;
+  if (srcInfoShown) {
+    maxHeight = $("#right_container").height() - 315;
+  } else {
+    maxHeight = $("#right_container").height() - 15;
+  } 
+  if (maxHeight <= 0) {
+    maxHeight = 15;
+  }
+  var areaSize = calcCaptureAreaSize(width, height, maxWidth, maxHeight);
   // need to change also li elements width to reflect width change immediately
   $(".bxslider li").css('width', areaSize.width + 'px');
   $("#bxslider_container").css('width', areaSize.width + 'px');
   $("#bxslider_container").css('height', areaSize.height + 'px');
+  $("div.bx-viewport").css('height', areaSize.height + 'px');
 }
 
 /**
@@ -316,19 +327,31 @@ function getSrcTree() {
 }
 
 function showSrcInfo() {
-   $(".srcInfo").show();
-   $("#showSrcButton").hide();
-   $("#hideSrcButton").show();
-   $("#script_table_container").css('width', '100%');
-   srcInfoShown = true;
+  $(".srcInfo").show();
+  $("#showSrcButton").hide();
+  $("#hideSrcButton").show();
+  $("#script_table_container").removeClass("noCode");
+  $("#script_table_container").addClass("withCode");
+  $("#button_container").removeClass("noCode");
+  $("#button_container").addClass("withCode");
+  $("#bxslider_container").removeClass("noCode");
+  $("#bxslider_container").addClass("withCode");
+  srcInfoShown = true;
+  adjustImageAreaSize();
 };
 
 function hideSrcInfo() {
   $(".srcInfo").hide();  
   $("#showSrcButton").show();
   $("#hideSrcButton").hide();
-  $("#script_table_container").css('width', '60%');
+  $("#script_table_container").removeClass("withCode");
+  $("#script_table_container").addClass("noCode");
+  $("#button_container").removeClass("withCode");
+  $("#button_container").addClass("noCode");
+  $("#bxslider_container").removeClass("withCode");
+  $("#bxslider_container").addClass("noCode");
   srcInfoShown = false;
+  adjustImageAreaSize();
 };
 
 // reflect visibility to newly added srcInfo
@@ -498,9 +521,11 @@ $(document).ready(function() {
     return false;
   });
 
+  hideSrcInfo();
+
   // select table line for first capture
-  var firstTtId = getSlideTtId(0);
-  var firstTrObj = getTtIdTr(firstTtId);
+  var firstTrObj = $("#script_table tbody tr:first-child");
   selectTr(firstTrObj);
-  showSrcInfo();
+  adjustImageAreaSize();
+  syncSlideIndexToSelectedTr();
 });

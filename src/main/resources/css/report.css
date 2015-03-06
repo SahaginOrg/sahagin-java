@@ -1,27 +1,59 @@
-#script_table_container {
+body {
+  background-color: #fcfcff;
+}
+
+#main_container {
+  height: 90%;
+}
+
+#button_container {
   overflow: hidden;
-  position: relative;
-  width: 100%;
-  height: 250px;
+}
+
+#button_container.noCode {
+  width: 62%;	
+}
+
+#button_container.withCode {
+  width: 99%;	
 }
 
 #showSrcButton {
-  position: absolute;
-  left: 54%;
-  right: 10px;
   color: blue;
   cursor: pointer;
+  float: right;
 }
 
 #hideSrcButton {
-  position: absolute;
-  right: 10px;
   color: blue;
   cursor: pointer;
+  float: right;
 }
 
-body {
-  background-color: #fcfcff;
+#left_container {
+  width: 62%;
+  height: 100%;
+  float: left;
+}
+
+#outer_script_table_container {
+  height: 300px;
+}
+
+#script_table_container {
+  overflow: hidden;
+  height: 300px;
+  padding-bottom: 2px;
+}
+
+#script_table_container.withCode {
+  position: absolute; 
+  width: 98%;
+}
+
+#script_table_container.noCode {
+  position: relative; 
+  width: 100%;
 }
 
 #script_table {
@@ -40,27 +72,30 @@ body {
   background-color: #e7e8e2;
 }
 
-#methodArgTestDocs {
-  display: none;
-}
-
-.hiddenMethodArgTestDoc {
-  display: none;
-}
-
 #err_msg_container {
-  width: 50%
+  width: 100%;
 }
 
 #err_msg {
-  color: red    
+  color: red; 
 }
 
-#bxslider_container {
+#right_container {
+  width: 35%;
+  height: 100%;
+  float: right;
+  margin-right: 1%;
+}
+
+#bxslider_container.noCode {
+  float: right;
+  position: relative;
+}
+
+#bxslider_container.withCode {
+  bottom: 20px;
+  right: 2%;
   position: absolute;
-  width: 500px;
-  height: 270px;
-  right: 14px;
 }
 
 .bxslider > li > div {
@@ -74,4 +109,12 @@ body {
   overflow: hidden;
   width: 100%;
   height: auto;
+}
+
+#methodArgTestDocs {
+  display: none;
+}
+
+.hiddenMethodArgTestDoc {
+  display: none;
 }
