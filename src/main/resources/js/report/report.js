@@ -226,6 +226,7 @@ function adjustImageAreaSize() {
   var areaSize = calcCaptureAreaSize(width, height, maxWidth, maxHeight);
   // need to change also li elements width to reflect width change immediately
   $(".bxslider li").css('width', areaSize.width + 'px');
+  $(".bxslider div.scrollContainer").css('height', areaSize.height + 'px');
   $("#bxslider_container").css('width', areaSize.width + 'px');
   $("#bxslider_container").css('height', areaSize.height + 'px');
   $("div.bx-viewport").css('height', areaSize.height + 'px');
@@ -344,6 +345,9 @@ function showSrcInfo() {
   $("#bxslider_container").addClass("withCode");
   srcInfoShown = true;
   adjustImageAreaSize();
+  slider.reloadSlider();
+  syncSlideIndexToSelectedTr();
+   $(".scrollContainer").perfectScrollbar('update');
 };
 
 function hideSrcInfo() {
@@ -358,6 +362,9 @@ function hideSrcInfo() {
   $("#bxslider_container").addClass("noCode");
   srcInfoShown = false;
   adjustImageAreaSize();
+  slider.reloadSlider();
+  syncSlideIndexToSelectedTr();
+  $(".scrollContainer").perfectScrollbar('update');
 };
 
 // reflect visibility to newly added srcInfo
@@ -498,6 +505,7 @@ $(document).ready(function() {
     selectTr($(this));
     adjustImageAreaSize(); // adjust before slider is working
     syncSlideIndexToSelectedTr();
+    $(".scrollContainer").perfectScrollbar('update');
   });
 
   // "#script_table body tr"
@@ -508,6 +516,7 @@ $(document).ready(function() {
         adjustImageAreaSize(); // adjust before slider is working
         syncSlideIndexToSelectedTr();
         scrollToShowSelectedTr();
+        $(".scrollContainer").perfectScrollbar('update');
       };
     } else if (e.keyCode == "40") {
       // down key changes table row selection to prev
@@ -515,6 +524,7 @@ $(document).ready(function() {
         adjustImageAreaSize(); // adjust before slider is working 
         syncSlideIndexToSelectedTr();
         scrollToShowSelectedTr();
+        $(".scrollContainer").perfectScrollbar('update');
       };
     } else if (e.keyCode == "39") {
       // right key expands the selected node
@@ -535,4 +545,5 @@ $(document).ready(function() {
   selectTr(firstTrObj);
   adjustImageAreaSize();
   syncSlideIndexToSelectedTr();
+  $(".scrollContainer").perfectScrollbar('update');
 });
