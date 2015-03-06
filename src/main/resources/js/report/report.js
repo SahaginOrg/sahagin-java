@@ -166,26 +166,32 @@ function calcCaptureAreaSize(captureWidth, captureHeight, maxWidth, maxHeight) {
     return { width: maxWidth, height: maxHeight }  
   }
   var heightRatio = captureHeight / maxHeight;
+  var heightFactor = maxHeight / captureHeight;
   var widthRatio = captureWidth / maxWidth;
+  var widthFactor = maxWidth / captureWidth;
   if (heightRatio > widthRatio) {
-    var shrinkRatio = maxHeight / captureHeight;
-    if (shrinkRatio < 0.2) {
-      // avoid shrinking too match
-      return { width: maxWidth, height: maxHeight }      
+    if (heightFactor < 0.15) {
+      // Avoid shrinking too match.
+      // - Always area width is shrunk to maxWidth, and height is shrunk by the same ratio.
+      // - Cut off some bottom blank area if exists.
+      // - Bottom area out of the area will be under scroll area
+      var actualHeight = Math.min(maxHeight, captureHeight * widthFactor);
+      return { width: maxWidth, height: actualHeight }      
     } else {
-      // shrink width of capture area
-      return { width: parseInt(captureWidth * shrinkRatio, 10), height: maxHeight }
+      // shrink width of capture area and show image without scroll bar
+      return { width: parseInt(captureWidth * heightFactor, 10), height: maxHeight }
     }
   } else if (heightRatio < widthRatio) {
-    var shrinkRatio = maxWidth / captureWidth;
-    if (shrinkRatio < 0.2) {
-      // avoid shrinking too match
-      return { width: maxWidth, height: maxHeight }  
+    if (widthFactor < 0.15) {
+      // avoid shrinking too match.
+      var actualHeight = Math.min(maxHeight, captureHeight * widthFactor);
+      return { width: maxWidth, height: actualHeight }      
     } else {
-      // shrink height of capture area
-      return { width: maxWidth, height: parseInt(captureHeight * shrinkRatio, 10) }
+      // shrink height of capture area and show image without scroll bar
+      return { width: maxWidth, height: parseInt(captureHeight * widthFactor, 10) }
     }
   } else {
+    // maybe image is shown without scroll bar
     return { width: maxWidth, height: maxHeight }
   }
 };
@@ -210,7 +216,7 @@ function adjustImageAreaSize() {
   var maxWidth = $("#right_container").width();
   var maxHeight;
   if (srcInfoShown) {
-    maxHeight = $("#right_container").height() - 315;
+    maxHeight = $("#right_container").height() - $("#outer_script_table_container").height() - 15;
   } else {
     maxHeight = $("#right_container").height() - 15;
   } 
@@ -484,7 +490,8 @@ $(document).ready(function() {
   });
 
   $(".scrollContainer").perfectScrollbar({
-    useKeyboard: false
+    useKeyboard: false,
+    suppressScrollX: true
   });
 
   $(document).on("mousedown", "#script_table tbody tr", function() {
