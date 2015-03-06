@@ -333,6 +333,16 @@ function getSrcTree() {
   return srcTree;
 }
 
+function selectTrSlideAndRefresh() {
+  adjustImageAreaSize();
+  //reflect size adjust to the slider
+  slider.reloadSlider(); 
+  //select again since current selection has been lost by reloadSlider
+  syncSlideIndexToSelectedTr();
+  // refresh scroll bar
+  $(".scrollContainer").perfectScrollbar('update');
+}
+
 function showSrcInfo() {
   $(".srcInfo").show();
   $("#showSrcButton").hide();
@@ -344,10 +354,7 @@ function showSrcInfo() {
   $("#bxslider_container").removeClass("noCode");
   $("#bxslider_container").addClass("withCode");
   srcInfoShown = true;
-  adjustImageAreaSize();
-  slider.reloadSlider();
-  syncSlideIndexToSelectedTr();
-   $(".scrollContainer").perfectScrollbar('update');
+  selectTrSlideAndRefresh();
 };
 
 function hideSrcInfo() {
@@ -361,10 +368,7 @@ function hideSrcInfo() {
   $("#bxslider_container").removeClass("withCode");
   $("#bxslider_container").addClass("noCode");
   srcInfoShown = false;
-  adjustImageAreaSize();
-  slider.reloadSlider();
-  syncSlideIndexToSelectedTr();
-  $(".scrollContainer").perfectScrollbar('update');
+  selectTrSlideAndRefresh();
 };
 
 // reflect visibility to newly added srcInfo
@@ -503,9 +507,7 @@ $(document).ready(function() {
 
   $(document).on("mousedown", "#script_table tbody tr", function() {
     selectTr($(this));
-    adjustImageAreaSize(); // adjust before slider is working
-    syncSlideIndexToSelectedTr();
-    $(".scrollContainer").perfectScrollbar('update');
+    selectTrSlideAndRefresh();
   });
 
   // "#script_table body tr"
@@ -513,18 +515,14 @@ $(document).ready(function() {
     if (e.keyCode == "38") {
       // up key changes table line selection to next
       if (changeTrSelectionToPrev()) {
-        adjustImageAreaSize(); // adjust before slider is working
-        syncSlideIndexToSelectedTr();
         scrollToShowSelectedTr();
-        $(".scrollContainer").perfectScrollbar('update');
+        selectTrSlideAndRefresh();
       };
     } else if (e.keyCode == "40") {
       // down key changes table row selection to prev
       if (changeTrSelectionToNext()) {
-        adjustImageAreaSize(); // adjust before slider is working 
-        syncSlideIndexToSelectedTr();
         scrollToShowSelectedTr();
-        $(".scrollContainer").perfectScrollbar('update');
+        selectTrSlideAndRefresh();
       };
     } else if (e.keyCode == "39") {
       // right key expands the selected node
@@ -543,7 +541,5 @@ $(document).ready(function() {
   // select table line for first capture
   var firstTrObj = $("#script_table tbody tr:first-child");
   selectTr(firstTrObj);
-  adjustImageAreaSize();
-  syncSlideIndexToSelectedTr();
-  $(".scrollContainer").perfectScrollbar('update');
+  selectTrSlideAndRefresh();
 });
