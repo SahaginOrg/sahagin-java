@@ -216,12 +216,12 @@ function adjustImageAreaSize() {
   var maxWidth = $("#right_container").width();
   var maxHeight;
   if (srcInfoShown) {
-    maxHeight = $("#right_container").height() - $("#outer_script_table_container").height() - 15;
+    maxHeight = $("#right_container").height() - $("#outer_script_table_container").height() - 20;
   } else {
-    maxHeight = $("#right_container").height() - 15;
+    maxHeight = $("#right_container").height() - 20;
   } 
   if (maxHeight <= 0) {
-    maxHeight = 15;
+    maxHeight = 20;
   }
   var areaSize = calcCaptureAreaSize(width, height, maxWidth, maxHeight);
   // need to change also li elements width to reflect width change immediately
