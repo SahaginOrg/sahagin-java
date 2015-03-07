@@ -333,11 +333,20 @@ function getSrcTree() {
   return srcTree;
 }
 
-function selectTrSlideAndRefresh() {
+/**
+ * Reloading slider should be avoided as much as possible
+ * since it causes screen flicker.
+ * In many case it seems that reloading is not necessary..
+ * @param {boolean} sliderReload
+ */
+function selectTrSlideAndRefresh(sliderReload) {
   adjustImageAreaSize();
-  //reflect size adjust to the slider
-  slider.reloadSlider(); 
-  //select again since current selection has been lost by reloadSlider
+  if (sliderReload) {
+    // reflect size adjust to the slider
+    slider.reloadSlider();
+  }
+  // always need to select again 
+  // since current selection has been lost by reloadSlider
   syncSlideIndexToSelectedTr();
   // refresh scroll bar
   $(".scrollContainer").perfectScrollbar('update');
@@ -354,7 +363,7 @@ function showSrcInfo() {
   $("#bxslider_container").removeClass("noCode");
   $("#bxslider_container").addClass("withCode");
   srcInfoShown = true;
-  selectTrSlideAndRefresh();
+  selectTrSlideAndRefresh(true);
 };
 
 function hideSrcInfo() {
@@ -368,7 +377,7 @@ function hideSrcInfo() {
   $("#bxslider_container").removeClass("withCode");
   $("#bxslider_container").addClass("noCode");
   srcInfoShown = false;
-  selectTrSlideAndRefresh();
+  selectTrSlideAndRefresh(true);
 };
 
 // reflect visibility to newly added srcInfo
@@ -507,7 +516,7 @@ $(document).ready(function() {
 
   $(document).on("mousedown", "#script_table tbody tr", function() {
     selectTr($(this));
-    selectTrSlideAndRefresh();
+    selectTrSlideAndRefresh(false);
   });
 
   // "#script_table body tr"
@@ -516,13 +525,13 @@ $(document).ready(function() {
       // up key changes table line selection to next
       if (changeTrSelectionToPrev()) {
         scrollToShowSelectedTr();
-        selectTrSlideAndRefresh();
+        selectTrSlideAndRefresh(false);
       };
     } else if (e.keyCode == "40") {
       // down key changes table row selection to prev
       if (changeTrSelectionToNext()) {
         scrollToShowSelectedTr();
-        selectTrSlideAndRefresh();
+        selectTrSlideAndRefresh(false);
       };
     } else if (e.keyCode == "39") {
       // right key expands the selected node
@@ -541,5 +550,5 @@ $(document).ready(function() {
   // select table line for first capture
   var firstTrObj = $("#script_table tbody tr:first-child");
   selectTr(firstTrObj);
-  selectTrSlideAndRefresh();
+  selectTrSlideAndRefresh(true);
 });
