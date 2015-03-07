@@ -83,15 +83,15 @@
       <version>2.45.0</version>
     </dependency>
     <dependency>
+      <groupId>org.fluentlenium</groupId>
+      <artifactId>fluentlenium-core</artifactId>
+      <version>0.10.3</version>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.12</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.fluentlenium</groupId>
-      <artifactId>fluentlenium-core</artifactId>
-      <version>0.10.3</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.shared</groupId>

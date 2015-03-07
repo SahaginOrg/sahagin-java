@@ -21,6 +21,7 @@ public class JUnit4Adapter implements Adapter {
 
         @Override
         public boolean isRootMethod(IMethodBinding methodBinding) {
+            // TODO should check if public and no argument and void return method
             return ASTUtils.getAnnotationBinding(
                     methodBinding.getAnnotations(), "org.junit.Test") != null;
         }

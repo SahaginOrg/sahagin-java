@@ -19,6 +19,7 @@ public class Config implements YamlConvertible {
     private File rootDir;
     private File testDir;
     private List<String> adapterClassNames = new ArrayList<String>(8);
+    private boolean usesJUnit3 = false;
     private File reportIntermediateDataDir = REPORT_INTERMEDIATE_DATA_DIR_DEFAULT;
     private File reportOutputDir = REPORT_OUTPUDT_DATA_DIR_DEFAULT;
     private boolean outputLog = false; // TODO provisional. this is only for debugging
@@ -56,20 +57,28 @@ public class Config implements YamlConvertible {
         this.testDir = testDir;
     }
 
-    public File getRootBaseReportIntermediateDataDir() {
-        if (reportIntermediateDataDir.isAbsolute()) {
-            return reportIntermediateDataDir;
-        } else {
-            return new File(rootDir, reportIntermediateDataDir.getPath());
-        }
-    }
-
     public List<String> getAdapterClassNames() {
         return adapterClassNames;
     }
 
     public void addAdapterClassName(String adapterClassName) {
         adapterClassNames.add(adapterClassName);
+    }
+
+    public boolean usesJUnit3() {
+        return usesJUnit3;
+    }
+
+    public void setUsesJUnit3(boolean usesJUnit3) {
+        this.usesJUnit3 = usesJUnit3;
+    }
+
+    public File getRootBaseReportIntermediateDataDir() {
+        if (reportIntermediateDataDir.isAbsolute()) {
+            return reportIntermediateDataDir;
+        } else {
+            return new File(rootDir, reportIntermediateDataDir.getPath());
+        }
     }
 
     public void setReportIntermediateDataDir(File reportIntermediateDataDir) {
@@ -127,6 +136,7 @@ public class Config implements YamlConvertible {
         Map<String, Object> javaConf = new HashMap<String, Object>(4);
         javaConf.put("testDir", testDir.getPath());
         javaConf.put("adapters", adapterClassNames);
+        javaConf.put("jUnit3", usesJUnit3);
         Map<String, Object> commonConf = new HashMap<String, Object>(4);
         commonConf.put("reportIntermediateDataDir", reportIntermediateDataDir.getPath());
         commonConf.put("reportOutputDir", reportOutputDir.getPath());
@@ -152,6 +162,13 @@ public class Config implements YamlConvertible {
         // TODO support array testDir value (so, testDir can be string or string array)
         testDir = new File(YamlUtils.getStrValue(javaYamlObj, "testDir"));
         adapterClassNames = YamlUtils.getStrListValue(javaYamlObj, "adapters", true);
+
+        Boolean usesJUnit3Value = YamlUtils.getBooleanValue(javaYamlObj, "jUnit3", true);
+        if (usesJUnit3Value == null) {
+            usesJUnit3 = false;
+        } else {
+            usesJUnit3 = usesJUnit3Value;
+        }
 
         // common and it's child settings is not mandatory
         Map<String, Object> commonYamlObj = YamlUtils.getYamlObjectValue(yamlObject, "common", true);

@@ -20,6 +20,9 @@ public class AdapterContainer {
             throw new NullPointerException();
         }
         this.locales = locales;
+        this.rootMethodAdapter = null;
+        this.screenCaptureAdapter = null;
+        this.additionalTestDocs = new AdditionalTestDocs();
         initialized = true;
     }
 

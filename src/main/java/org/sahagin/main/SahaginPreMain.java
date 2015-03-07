@@ -8,6 +8,7 @@ import org.apache.commons.io.FileUtils;
 import org.sahagin.runlib.external.adapter.Adapter;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.runlib.external.adapter.fluentlenium.FluentLeniumAdapter;
+import org.sahagin.runlib.external.adapter.junit3.JUnit3Adapter;
 import org.sahagin.runlib.external.adapter.junit4.JUnit4Adapter;
 import org.sahagin.runlib.external.adapter.webdriver.WebDriverAdapter;
 import org.sahagin.runlib.runresultsgen.RunResultsGenerateHookSetter;
@@ -41,7 +42,11 @@ public class SahaginPreMain {
         AdapterContainer.globalInitialize(locales);
 
         // default adapters
-        new JUnit4Adapter().initialSetAdapter();
+        if (config.usesJUnit3()) {
+            new JUnit3Adapter().initialSetAdapter();
+        } else {
+            new JUnit4Adapter().initialSetAdapter();
+        }
         new WebDriverAdapter().initialSetAdapter();
         new FluentLeniumAdapter().initialSetAdapter();
 

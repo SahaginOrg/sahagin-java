@@ -1,0 +1,7 @@
+rootClassTable:
+  classes:
+  - qname: "*TestMain"
+    methodKeys: ["*TestMain.testRoot-void"]
+rootMethodTable:
+  methods:
+  - {classKey: "*TestMain", name: testRoot}
