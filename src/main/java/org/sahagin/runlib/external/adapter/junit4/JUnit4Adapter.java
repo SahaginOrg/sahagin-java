@@ -1,7 +1,5 @@
 package org.sahagin.runlib.external.adapter.junit4;
 
-import javassist.CtMethod;
-
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.junit.Test;
 import org.sahagin.runlib.external.adapter.Adapter;
@@ -26,15 +24,6 @@ public class JUnit4Adapter implements Adapter {
         public boolean isRootMethod(IMethodBinding methodBinding) {
             return ASTUtils.getAnnotationBinding(
                     methodBinding.getAnnotations(), Test.class) != null;
-        }
-
-        @Override
-        public boolean isRootMethod(CtMethod method) {
-            try {
-                return method.getAnnotation(Test.class) != null;
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
         }
 
     }

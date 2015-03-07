@@ -3,7 +3,6 @@ package org.sahagin.runlib.external.adapter;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.sahagin.runlib.additionaltestdoc.AdditionalTestDocs;
 import org.sahagin.share.AcceptableLocales;
-import javassist.CtMethod;
 
 public class AdapterContainer {
     private static AdapterContainer globalInstance = new AdapterContainer();
@@ -42,10 +41,6 @@ public class AdapterContainer {
             throw new NullPointerException();
         }
         this.rootMethodAdapter = rootMethodAdapter;
-    }
-
-    public boolean isRootMethod(CtMethod method) {
-        return rootMethodAdapter.isRootMethod(method);
     }
 
     public boolean isRootMethod(IMethodBinding methodBinding) {

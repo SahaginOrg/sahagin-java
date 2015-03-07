@@ -15,14 +15,13 @@ import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.openqa.selenium.io.IOUtils;
-import org.sahagin.runlib.external.TestDoc;
-import org.sahagin.runlib.external.TestDocs;
-import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.share.IllegalTestScriptException;
 import org.sahagin.share.Logging;
 import org.sahagin.share.srctree.SrcTree;
 import org.sahagin.share.srctree.TestMethod;
+import org.sahagin.share.srctree.TestMethodTable;
 import org.sahagin.share.srctree.code.CodeLine;
 import org.sahagin.share.yaml.YamlConvertException;
 
@@ -35,29 +34,6 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
             throws YamlConvertException, IllegalTestScriptException {
         this.configFilePath = configFilePath;
         this.srcTree = srcTree;
-    }
-
-    private boolean isSubMethod(CtMethod method) {
-        // root method also may be TestDoc method
-        if (AdapterContainer.globalInstance().isRootMethod(method)) {
-            return false;
-        }
-
-        try {
-            if (method.getAnnotation(TestDoc.class) != null) {
-                return true;
-            }
-            if (method.getAnnotation(TestDocs.class) != null) {
-                return true;
-            }
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        String classQualifiedName = method.getDeclaringClass().getName();
-        String methodSimpleName = method.getName();
-        List<String> argClassQualifiedNames = getArgClassQualifiedNames(method);
-        return AdapterContainer.globalInstance().getAdditionalTestDocs().getMethodTestDoc(
-                classQualifiedName, methodSimpleName, argClassQualifiedNames) != null;
     }
 
     private List<String> getArgClassQualifiedNames(CtMethod method) {
@@ -74,36 +50,38 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
         return result;
     }
 
-    private List<CtMethod> allSubMethods(CtClass ctClass) {
+    private String generateMethodKey(CtMethod method) {
+        String classQualifiedName = method.getDeclaringClass().getName();
+        String methodSimpleName = method.getName();
+        List<String> argClassQualifiedNames = getArgClassQualifiedNames(method);
+        return TestMethod.generateMethodKey(classQualifiedName, methodSimpleName, argClassQualifiedNames);
+    }
+
+    private List<Pair<CtMethod, TestMethod>> allMethodsSub(
+            TestMethodTable table, CtClass ctClass) {
         CtMethod[] allMethods = ctClass.getMethods();
-        List<CtMethod> result = new ArrayList<CtMethod>(allMethods.length);
-        for (CtMethod method : allMethods) {
-            if (!method.getDeclaringClass().getName().equals(ctClass.getName())) {
+        List<Pair<CtMethod, TestMethod>> result
+        = new ArrayList<Pair<CtMethod, TestMethod>>(allMethods.length);
+        for (CtMethod ctMethod : allMethods) {
+            if (!ctMethod.getDeclaringClass().getName().equals(ctClass.getName())) {
                 // methods defined on superclass are also included in the result list of
                 // CtClass.getMethods, so exclude such methods
                 continue;
             }
-            if (isSubMethod(method)) {
-                result.add(method);
+            TestMethod testMethod = table.getByKey(generateMethodKey(ctMethod));
+            if (testMethod != null) {
+                result.add(Pair.of(ctMethod, testMethod));
             }
         }
         return result;
     }
 
-    private List<CtMethod> allRootMethods(CtClass ctClass) {
-        CtMethod[] allMethods = ctClass.getMethods();
-        List<CtMethod> result = new ArrayList<CtMethod>(allMethods.length);
-        for (CtMethod method : allMethods) {
-            if (!method.getDeclaringClass().getName().equals(ctClass.getName())) {
-                // methods defined on superclass are also included in the result list of
-                // CtClass.getMethods, so exclude such methods
-                continue;
-            }
-            if (AdapterContainer.globalInstance().isRootMethod(method)) {
-                result.add(method);
-            }
-        }
-        return result;
+    private List<Pair<CtMethod, TestMethod>> allRootMethods(SrcTree srcTree, CtClass ctClass) {
+        return allMethodsSub(srcTree.getRootMethodTable(), ctClass);
+    }
+
+    private List<Pair<CtMethod, TestMethod>> allSubMethods(SrcTree srcTree, CtClass ctClass) {
+        return allMethodsSub(srcTree.getSubMethodTable(), ctClass);
     }
 
     private String hookInitializeSrc() {
@@ -121,18 +99,6 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
             return true;
         }
         return false;
-    }
-
-    private TestMethod getTestMethod(SrcTree srcTree, String classQualifiedName,
-            String methodSimpleName, List<String> argClassQualifiedNames) {
-        String methodKey = TestMethod.generateMethodKey(
-                classQualifiedName, methodSimpleName, argClassQualifiedNames);
-        TestMethod testMethod = srcTree.getTestMethodByKeyAllowsNotFound(methodKey);
-        if (testMethod != null) {
-            return testMethod;
-        }
-        methodKey = TestMethod.generateMethodKey(classQualifiedName, methodSimpleName);
-        return srcTree.getTestMethodByKeyAllowsNotFound(methodKey);
     }
 
     @Override
@@ -168,23 +134,15 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
                 // Since frozen classes are maybe system class, just ignore this exception
                 return null;
             }
-            List<CtMethod> subMethods = allSubMethods(ctClass);
-            for (CtMethod ctSubMethod : subMethods) {
+
+            for (Pair<CtMethod, TestMethod> pair : allSubMethods(srcTree, ctClass)) {
+                CtMethod ctSubMethod = pair.getLeft();
+                TestMethod subMethod = pair.getRight();
                 if (ctSubMethod.isEmpty()) {
                     logger.info("skip empty method: " + ctSubMethod.getLongName());
                     continue; // cannot hook empty method
                 }
 
-                String subClassQualifiedName = ctSubMethod.getDeclaringClass().getName();
-                String subMethodSimpleName = ctSubMethod.getName();
-                List<String> subMethodArgClassQualifiedNames = getArgClassQualifiedNames(ctSubMethod);
-                TestMethod subMethod = getTestMethod(
-                        srcTree, subClassQualifiedName, subMethodSimpleName, subMethodArgClassQualifiedNames);
-                if (subMethod == null) {
-                    logger.info(String.format("skip null subMethod: %s.%s",
-                            subClassQualifiedName, subMethodSimpleName));
-                    continue;
-                }
                 for (int i = 0; i < subMethod.getCodeBody().size(); i++) {
                     CodeLine codeLine = subMethod.getCodeBody().get(i);
                     if (i + 1 < subMethod.getCodeBody().size()) {
@@ -203,28 +161,24 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
                     // insert the hook code to the next line of the hook target line
                     // to take screen shot after the target line procedure has been finished
                     // (the code inserted by the insertAt method is inserted just before the target line)
+                    String subClassQualifiedName = subMethod.getTestClass().getQualifiedName();
                     int actualInsertedLine = ctSubMethod.insertAt(codeLine.getEndLine() + 1, false, null);
                     ctSubMethod.insertAt(codeLine.getEndLine() + 1,
                             String.format("%s%s.beforeSubCodeBodyHook(\"%s\", \"%s\", %d, %d);",
-                                    initializeSrc, hookClassName, subClassQualifiedName, subMethodSimpleName,
+                                    initializeSrc, hookClassName, subClassQualifiedName, subMethod.getSimpleName(),
                                     codeLine.getStartLine(), actualInsertedLine));
                     transformed = true;
                 }
             }
+
             CtClass exceptionType = classPool.get(Throwable.class.getCanonicalName());
-            List<CtMethod> rootMethods = allRootMethods(ctClass);
-            for (CtMethod ctRootMethod : rootMethods) {
+            for (Pair<CtMethod, TestMethod> pair : allRootMethods(srcTree, ctClass)) {
+                CtMethod ctRootMethod = pair.getLeft();
+                TestMethod rootMethod = pair.getRight();
                 if (ctRootMethod.isEmpty()) {
                     continue; // cannot hook empty method
                 }
-                String rootClassQualifiedName = ctRootMethod.getDeclaringClass().getName();
-                String rootMethodSimpleName = ctRootMethod.getName();
-                List<String> argClassQualifiedNames = getArgClassQualifiedNames(ctRootMethod);
-                TestMethod rootMethod = getTestMethod(
-                        srcTree, rootClassQualifiedName, rootMethodSimpleName, argClassQualifiedNames);
-                if (rootMethod == null) {
-                    continue;
-                }
+
                 for (int i = 0; i < rootMethod.getCodeBody().size(); i++) {
                     CodeLine codeLine = rootMethod.getCodeBody().get(i);
                     if (i + 1 < rootMethod.getCodeBody().size()) {
@@ -244,10 +198,11 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
                     // insert the hook code to the next line of the hook target line
                     // to take screen shot after the target line procedure has been finished
                     // (the code inserted by the insertAt method is inserted just before the target line)
+                    String rootClassQualifiedName = rootMethod.getTestClass().getQualifiedName();
                     int actualInsertedLine = ctRootMethod.insertAt(codeLine.getEndLine() + 1, false, null);
                     ctRootMethod.insertAt(codeLine.getEndLine() + 1,
                             String.format("%s%s.beforeRootCodeBodyHook(\"%s\", \"%s\", %d, %d);",
-                                    initializeSrc, hookClassName, rootClassQualifiedName, rootMethodSimpleName,
+                                    initializeSrc, hookClassName, rootClassQualifiedName, rootMethod.getSimpleName(),
                                     codeLine.getStartLine(), actualInsertedLine));
                 }
 
