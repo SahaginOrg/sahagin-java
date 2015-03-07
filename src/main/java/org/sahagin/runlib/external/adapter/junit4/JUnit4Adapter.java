@@ -1,7 +1,6 @@
 package org.sahagin.runlib.external.adapter.junit4;
 
 import org.eclipse.jdt.core.dom.IMethodBinding;
-import org.junit.Test;
 import org.sahagin.runlib.external.adapter.Adapter;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.runlib.external.adapter.ResourceAdditionalTestDocsAdapter;
@@ -23,7 +22,7 @@ public class JUnit4Adapter implements Adapter {
         @Override
         public boolean isRootMethod(IMethodBinding methodBinding) {
             return ASTUtils.getAnnotationBinding(
-                    methodBinding.getAnnotations(), Test.class) != null;
+                    methodBinding.getAnnotations(), "org.junit.Test") != null;
         }
 
     }
