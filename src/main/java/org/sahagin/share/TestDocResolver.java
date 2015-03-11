@@ -64,6 +64,7 @@ public class TestDocResolver {
         return null;
     }
 
+    // Gets the codes for the argument of the methodInvoke.
     // second argument..whether argument for variable is actually specified.
     // {this} and variable length argument can be empty
     private static Pair<List<Code>, Boolean> methodInvokeNormalVariableCodes(
@@ -299,7 +300,7 @@ public class TestDocResolver {
         if (!(code instanceof SubMethodInvoke)) {
             return null;
         }
-        // TODO if invoke code is A.B.C(..), page documents in A or B are not checked
+        // TODO if invoked code is A.B.C(..), page documents in A or B are not checked
         SubMethodInvoke invoke = (SubMethodInvoke) code;
         return methodInvokePageTestDocRecursive(invoke);
     }
