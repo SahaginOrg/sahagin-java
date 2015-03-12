@@ -70,8 +70,6 @@ public class WebDriverAdapter implements Adapter {
 
         @Override
         public void methodAdd() {
-            // TODO cannot handle methods defined on subclass?
-
             // in alphabetical order
             methodAdd("org.openqa.selenium.By", "className");
             methodAdd("org.openqa.selenium.By", "cssSelector");

@@ -53,7 +53,6 @@ public class JUnit3Adapter implements Adapter {
 
         @Override
         public void methodAdd() {
-            // TODO cannot handle methods defined on subclass
             // TODO if you use hamcrest with JUnit3
 
             // in alphabetical order

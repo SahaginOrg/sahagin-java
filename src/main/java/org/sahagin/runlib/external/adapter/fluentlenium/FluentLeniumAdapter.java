@@ -70,8 +70,6 @@ public class FluentLeniumAdapter implements Adapter {
 
         @Override
         public void methodAdd() {
-            // TODO cannot handle methods defined on subclass?
-
             // in alphabetical order
             methodAdd("org.fluentlenium.core.action.FillConstructor", "with");
             methodAdd("org.fluentlenium.core.domain.FluentList", "clear");

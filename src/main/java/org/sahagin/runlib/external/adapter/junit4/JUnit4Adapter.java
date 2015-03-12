@@ -41,8 +41,6 @@ public class JUnit4Adapter implements Adapter {
 
         @Override
         public void methodAdd() {
-            // TODO cannot handle methods defined on subclass
-
             // in alphabetical order
             methodAdd("org.hamcrest.core.Is", "is", "Object");
             methodAdd("org.hamcrest.core.Is", "is", "org.hamcrest.Matcher");
