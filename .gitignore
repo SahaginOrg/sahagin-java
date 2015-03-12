@@ -13,3 +13,6 @@ hs_err_pid*
 /bin/
 /target/
 /work/
+/.settings/
+/.classpath
+/.project
