@@ -21,14 +21,14 @@ method:
     String: text = {0}
   org.fluentlenium.core.Fluent.$:
     String,org.fluentlenium.core.filter.Filter[]: element '{0}{if:1} ({1}){end}'
-    String,java.lang.Integer,org.fluentlenium.core.filter.Filter[]: "{1}th element of '{0}{if:2} ({2}){end}'"
+    String,java.lang.Integer,org.fluentlenium.core.filter.Filter[]: "'{1}'th element of '{0}{if:2} ({2}){end}'"
   org.fluentlenium.core.Fluent.clear: clear the text of element '{0}{if:1} ({1}){end}'
   org.fluentlenium.core.Fluent.click: click element '{0}{if:1} ({1}){end}'
   org.fluentlenium.core.Fluent.executeScript: execute JavaScript '{0}'
   org.fluentlenium.core.Fluent.fill: element '{0}{if:1} ({1}){end}'
   org.fluentlenium.core.Fluent.find:
     String,org.fluentlenium.core.filter.Filter[]: element '{0}{if:1} ({1}){end}'
-    String,java.lang.Integer,org.fluentlenium.core.filter.Filter[]: "{1}th element of '{0}{if:2} ({2}){end}'"
+    String,java.lang.Integer,org.fluentlenium.core.filter.Filter[]: "'{1}'th element of '{0}{if:2} ({2}){end}'"
   org.fluentlenium.core.Fluent.findFirst:
     String,org.fluentlenium.core.filter.Filter[]: first element of '{0}{if:1} ({1}){end}'
   org.fluentlenium.core.Fluent.goTo:
