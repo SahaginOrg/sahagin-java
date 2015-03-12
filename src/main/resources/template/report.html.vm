@@ -51,8 +51,8 @@
     </header>
     <div id="main_container">
       <div id="button_container">
-        <div id="showSrcButton" onclick="showSrcInfo()"><u>show code &gt;&gt;</u></div>
-        <div id="hideSrcButton" onclick="hideSrcInfo()"><u>&lt;&lt; hide code</u></div>
+        <div id="showSrcButton" onclick="showSrcInfo()"><u>${msgShowCode} &gt;&gt;</u></div>
+        <div id="hideSrcButton" onclick="hideSrcInfo()"><u>&lt;&lt; ${msgHideCode}</u></div>
       </div>
       <div id="left_container">
         <div id="outer_script_table_container" class="noCode">

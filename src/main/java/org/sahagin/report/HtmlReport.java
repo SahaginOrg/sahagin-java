@@ -25,6 +25,7 @@ import org.sahagin.share.CommonUtils;
 import org.sahagin.share.IllegalDataStructureException;
 import org.sahagin.share.IllegalTestScriptException;
 import org.sahagin.share.Logging;
+import org.sahagin.share.SysMessages;
 import org.sahagin.share.TestDocResolver;
 import org.sahagin.share.runresults.LineScreenCapture;
 import org.sahagin.share.runresults.RootMethodRunResult;
@@ -216,7 +217,7 @@ public class HtmlReport {
         String methodTestDoc = TestDocResolver.placeholderResolvedMethodTestDoc(
                 codeLine.getCode(), parentMethodArgTestDocs);
         if (methodTestDoc == null) {
-            return "";
+            return  "- " + SysMessages.get(SysMessages.CODE_LINE_WITHOUT_TEST_DOC) + " -";
         }
         return methodTestDoc;
     }
@@ -475,6 +476,8 @@ public class HtmlReport {
             escapePut(methodContext, "classTestDoc", method.getTestClass().getTestDoc());
             escapePut(methodContext, "methodName", rootMethod.getSimpleName());
             escapePut(methodContext, "methodTestDoc", rootMethod.getTestDoc());
+            escapePut(methodContext, "msgShowCode", SysMessages.get(SysMessages.REPORT_SHOW_CODE));
+            escapePut(methodContext, "msgHideCode", SysMessages.get(SysMessages.REPORT_HIDE_CODE));
 
             RootMethodRunResult runResult = runResults.getRunResultByRootMethod(rootMethod);
             boolean executed = (runResult != null);

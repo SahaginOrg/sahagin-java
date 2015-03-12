@@ -9,11 +9,15 @@ import org.sahagin.runlib.external.Locale;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlUtils;
 
-public class SystemMessages {
+public class SysMessages {
+    public static final String CODE_LINE_WITHOUT_TEST_DOC = "codeLineWithoutTestDoc";
+    public static final String REPORT_HIDE_CODE = "reportHideCode";
+    public static final String REPORT_SHOW_CODE = "reportShowCode";
+
     // list of locale and its YAML object pair
     private Map<Locale, Map<String, Object>> localeYamlObjMap;
     private AcceptableLocales locales;
-    private static SystemMessages globalInstance = null;
+    private static SysMessages globalInstance = null;
 
     private void loadFromResource(AcceptableLocales locales) throws YamlConvertException {
         this.locales = locales;
@@ -52,7 +56,7 @@ public class SystemMessages {
     }
 
     public static void globalInitialize(AcceptableLocales locales) {
-        globalInstance = new SystemMessages();
+        globalInstance = new SysMessages();
         try {
             globalInstance.loadFromResource(locales);
         } catch (YamlConvertException e) {

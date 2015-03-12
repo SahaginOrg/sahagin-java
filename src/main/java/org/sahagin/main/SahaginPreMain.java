@@ -19,7 +19,7 @@ import org.sahagin.share.Config;
 import org.sahagin.share.IllegalTestScriptException;
 import org.sahagin.share.Logging;
 import org.sahagin.share.SrcTreeChecker;
-import org.sahagin.share.SystemMessages;
+import org.sahagin.share.SysMessages;
 import org.sahagin.share.srctree.SrcTree;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlUtils;
@@ -42,7 +42,7 @@ public class SahaginPreMain {
         Logging.setLoggerEnabled(config.isOutputLog());
         AcceptableLocales locales = AcceptableLocales.getInstance(config.getUserLocale());
         AdapterContainer.globalInitialize(locales);
-        SystemMessages.globalInitialize(locales);
+        SysMessages.globalInitialize(locales);
 
         // default adapters
         if (config.usesJUnit3()) {

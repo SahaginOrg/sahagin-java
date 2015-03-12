@@ -1,1 +1,3 @@
 codeLineWithoutTestDoc: hidden
+reportHideCode: hide code
+reportShowCode: show code
