@@ -150,7 +150,7 @@ public class TestMethod implements YamlConvertible {
     }
 
     public void setCaptureStyle(CaptureStyle captureStyle) {
-        if (captureStyle == CaptureStyle.NONE || captureStyle == CaptureStyle.STEP_IN_ONLY) {
+        if (captureStyle == CaptureStyle.STEP_IN_ONLY) {
             throw new RuntimeException("not supported yet: " + captureStyle);
         }
         this.captureStyle = captureStyle;

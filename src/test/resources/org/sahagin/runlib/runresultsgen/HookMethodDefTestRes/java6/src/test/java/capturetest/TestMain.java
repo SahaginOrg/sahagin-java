@@ -17,6 +17,7 @@ public class TestMain extends Java6TestBase {
     public void captureTest() {
         assertCaptureNextCounter(1);
         subMethod();
+        noCaptureMethod();
         assertCaptureNextCounter(5);
         assertCaptureNextCounterNoTestDoc(6);
         assertCaptureNextCounterNoTestDoc(6);
@@ -27,6 +28,9 @@ public class TestMain extends Java6TestBase {
         assertCaptureNextCounter(2);
         assertCaptureNextCounter(3);
     }
+
+    @TestDoc(value = "Doc: noCaptureMethod", capture = CaptureStyle.NONE)
+    public void noCaptureMethod() {}
 
     @TestDoc("Doc: assertCaptureNextCounter")
     public void assertCaptureNextCounter(int expected) {

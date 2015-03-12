@@ -4,15 +4,15 @@ lineScreenCaptures:
   - {codeBodyIndex: 0, methodKey: "*TestMain.captureTest*", line: 18}
 - path: "*002.png"
   stackLines:
-  - {codeBodyIndex: 0, methodKey: "*TestMain.subMethod*", line: 27}
+  - {codeBodyIndex: 0, methodKey: "*TestMain.subMethod*", line: 28}
   - {codeBodyIndex: 1, methodKey: "*TestMain.captureTest*", line: 19}
 - path: "*003.png"
   stackLines:
-  - {codeBodyIndex: 1, methodKey: "*TestMain.subMethod*", line: 28}
+  - {codeBodyIndex: 1, methodKey: "*TestMain.subMethod*", line: 29}
   - {codeBodyIndex: 1, methodKey: "*TestMain.captureTest*", line: 19}
 - path: "*004.png"
   stackLines:
   - {codeBodyIndex: 1, methodKey: "*TestMain.captureTest*", line: 19}
 - path: "*005.png"
   stackLines:
-  - {codeBodyIndex: 2, methodKey: "*TestMain.captureTest*", line: 20}
+  - {codeBodyIndex: 3, methodKey: "*TestMain.captureTest*", line: 21}
