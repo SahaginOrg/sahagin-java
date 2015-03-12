@@ -398,6 +398,9 @@ function getMethodKey(code) {
     return '';
   }
   var invoke = code;
+  if (invoke.isChildInvoke()) {
+    return '';
+  }
   return invoke.getSubMethodKey();
 }
 

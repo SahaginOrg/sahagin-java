@@ -120,6 +120,11 @@ public class SrcTreeGeneratorTest extends TestBase {
     }
 
     @Test
+    public void childInvoke() {
+        testMain("childInvoke", null, null, false);
+    }
+
+    @Test
     public void additionalTestDocs() {
         AcceptableLocales locales = AcceptableLocales.getInstance(Locale.EN_US);
         AdapterContainer.globalInitialize(locales);

@@ -293,21 +293,27 @@ public class HtmlReport {
             // add direct child to HTML report
             if (codeLine.getCode() instanceof SubMethodInvoke) {
                 SubMethodInvoke invoke = (SubMethodInvoke) codeLine.getCode();
-                List<String> parentMethodArgTestDocs = reportCodeLine.getMethodArgTestDocs();
-                List<CodeLine> codeBody = invoke.getSubMethod().getCodeBody();
-                for (int j = 0; j < codeBody.size(); j++) {
-                    CodeLine childCodeLine = codeBody.get(j);
+                // don't add child HTML report for childInvoke
+                // since the code body for the sub method is not the code body of
+                // the actually invoked method.
+                // TODO consider about this behavior
+                if (!invoke.isChildInvoke()) {
+                    List<String> parentMethodArgTestDocs = reportCodeLine.getMethodArgTestDocs();
+                    List<CodeLine> codeBody = invoke.getSubMethod().getCodeBody();
+                    for (int j = 0; j < codeBody.size(); j++) {
+                        CodeLine childCodeLine = codeBody.get(j);
 
-                    StackLine childStackLine = generateStackLine(invoke.getSubMethod(),
-                            invoke.getSubMethodKey(), j, childCodeLine.getStartLine());
-                    List<StackLine> childStackLines = new ArrayList<StackLine>(2);
-                    childStackLines.add(childStackLine);
-                    childStackLines.add(rootStackLine);
+                        StackLine childStackLine = generateStackLine(invoke.getSubMethod(),
+                                invoke.getSubMethodKey(), j, childCodeLine.getStartLine());
+                        List<StackLine> childStackLines = new ArrayList<StackLine>(2);
+                        childStackLines.add(childStackLine);
+                        childStackLines.add(rootStackLine);
 
-                    ReportCodeLine childReportCodeLine = generateReportCodeLine(
-                            childCodeLine, parentMethodArgTestDocs, childStackLines,
-                            runFailure, executed, rootTtId + "_" + j, rootTtId);
-                    result.add(childReportCodeLine);
+                        ReportCodeLine childReportCodeLine = generateReportCodeLine(
+                                childCodeLine, parentMethodArgTestDocs, childStackLines,
+                                runFailure, executed, rootTtId + "_" + j, rootTtId);
+                        result.add(childReportCodeLine);
+                    }
                 }
             }
         }

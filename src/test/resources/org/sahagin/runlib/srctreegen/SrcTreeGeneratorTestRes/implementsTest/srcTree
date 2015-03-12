@@ -23,7 +23,13 @@ subMethodTable:
 rootMethodTable:
   methods:
   - codeBody:
-    - code: {original: testBaseMethod("DEF");, type: unknown}
+    - code:
+        args:
+        - {type: string, value: DEF}
+        methodKey: "*ImplementsTestBase.testBaseMethod*"
+        childInvoke: true
+        original: testBaseMethod("DEF");
+        type: method
     - code: {original: ImplementsPage pageInstance=new ImplementsPage();, type: unknown}
     - code:
         original: pageInstance.baseMethod("QQQ");

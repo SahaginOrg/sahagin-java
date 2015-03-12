@@ -1,0 +1,29 @@
+subClassTable:
+  classes:
+  - key: "*ParentClass"
+  - key: "*ParentInterface"
+subMethodTable:
+  methods:
+  - testDoc: 'Doc: parentClassMethod: {arg}'
+    key: "*ParentClass.parentClassMethod*"
+  - testDoc: 'Doc: parentInterfaceMethod: {arg}'
+    key: "*ParentInterface.parentInterfaceMethod*"
+rootMethodTable:
+  methods:
+  - codeBody:
+    - code: "*"
+    - code:
+        childInvoke: true
+        type: method
+        methodKey: "*ParentClass.parentClassMethod*"
+        thisInstance: {type: unknown}
+        args:
+        - {value: abc, type: string}
+    - code:
+        childInvoke: true
+        type: method
+        methodKey: "*ParentInterface.parentInterfaceMethod*"
+        thisInstance: {type: unknown}
+        args:
+        - {value: def, type: string}
+    key: "*TestMain.callMain*"

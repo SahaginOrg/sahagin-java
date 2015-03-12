@@ -29,6 +29,13 @@ public class ReportCodeLine {
         }
 
         SubMethodInvoke invoke = (SubMethodInvoke) codeLine.getCode();
+        if (invoke.isChildInvoke()) {
+            // don't add child HTML report for childInvoke
+            // since the code body for the sub method is not the code body of
+            // the actually invoked method.
+            // TODO consider about this behavior
+            return "";
+        }
         return invoke.getSubMethodKey();
     }
 

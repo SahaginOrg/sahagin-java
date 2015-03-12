@@ -386,6 +386,56 @@ public class SrcTreeGenerator {
             this.compilationUnit = compilationUnit;
         }
 
+        // search super method of the specified method
+        // from the specified type and its super class and implementing interface recursively.
+        // type: class or interface
+        // superOnly: if true, does not check the specified type itself
+        private TestMethod getSuperMethodSub(
+                ITypeBinding type, IMethodBinding method, boolean superOnly) {
+            if (type == null) {
+                return null;
+            }
+            if (!superOnly) {
+                for (IMethodBinding declaredMethod : type.getDeclaredMethods()) {
+                    if (method.overrides(declaredMethod)) {
+                        TestMethod testMethod = getTestMethod(declaredMethod);
+                        if (testMethod != null) {
+                            return testMethod;
+                        }
+                    }
+                }
+            }
+            TestMethod testMethod = getSuperMethodSub(type.getSuperclass(), method, false);
+            if (testMethod != null) {
+                return testMethod;
+            }
+            for (ITypeBinding implInterface : type.getInterfaces()) {
+                testMethod = getSuperMethodSub(implInterface, method, false);
+                if (testMethod != null) {
+                    return testMethod;
+                }
+            }
+            return null;
+        }
+
+        private TestMethod getTestMethod(IMethodBinding method) {
+            TestMethod testMethod = subMethodTable.getByKey(generateMethodKey(method, false));
+            if (testMethod != null) {
+                return testMethod;
+            }
+            testMethod = subMethodTable.getByKey(generateMethodKey(method, true));
+            if (testMethod != null) {
+                return testMethod;
+            }
+            return null;
+        }
+
+        // First found super method of the specified method.
+        // returns null if not found
+        private TestMethod getSuperMethod(IMethodBinding method) {
+            return getSuperMethodSub(method.getDeclaringClass(), method, true);
+        }
+
         private Code methodBindingCode(IMethodBinding binding,
                 Expression thisInstance, List<?> arguments, String original, TestMethod parentMethod) {
             if (binding == null) {
@@ -394,14 +444,19 @@ public class SrcTreeGenerator {
                 return unknownCode;
             }
 
-            TestMethod invocationMethod = subMethodTable.getByKey(generateMethodKey(binding, false));
+            boolean childInvoke = false;
+            TestMethod invocationMethod = getTestMethod(binding);
             if (invocationMethod == null) {
-                invocationMethod = subMethodTable.getByKey(generateMethodKey(binding, true));
-                if (invocationMethod == null) {
-                    UnknownCode unknownCode = new UnknownCode();
-                    unknownCode.setOriginal(original);
-                    return unknownCode;
+                invocationMethod = getSuperMethod(binding);
+                if (invocationMethod != null) {
+                    childInvoke = true;
                 }
+            }
+
+            if (invocationMethod == null) {
+                UnknownCode unknownCode = new UnknownCode();
+                unknownCode.setOriginal(original);
+                return unknownCode;
             }
 
             SubMethodInvoke subMethodInvoke = new SubMethodInvoke();
@@ -416,6 +471,7 @@ public class SrcTreeGenerator {
                 Expression exp = (Expression) arg;
                 subMethodInvoke.addArg(expressionCode(exp, parentMethod));
             }
+            subMethodInvoke.setChildInvoke(childInvoke);
             subMethodInvoke.setOriginal(original);
             return subMethodInvoke;
         }

@@ -15,6 +15,8 @@ public class SubMethodInvoke extends Code {
     private TestMethod subMethod;
     private List<Code> args = new ArrayList<Code>(4);
     private Code thisInstance;
+    // whether the actual invoked method is the child method of the method for the subMethodKey
+    private boolean childInvoke = false;
 
     public String getSubMethodKey() {
         return subMethodKey;
@@ -48,6 +50,14 @@ public class SubMethodInvoke extends Code {
         this.thisInstance = thisInstance;
     }
 
+    public boolean isChildInvoke() {
+        return childInvoke;
+    }
+
+    public void setChildInvoke(boolean childInvoke) {
+        this.childInvoke = childInvoke;
+    }
+
     @Override
     protected String getType() {
         return TYPE;
@@ -62,6 +72,9 @@ public class SubMethodInvoke extends Code {
         }
         if (thisInstance != null) {
             result.put("thisInstance", thisInstance.toYamlObject());
+        }
+        if (childInvoke) {
+            result.put("childInvoke", childInvoke);
         }
         return result;
     }
@@ -83,6 +96,12 @@ public class SubMethodInvoke extends Code {
             thisInstance = null;
         } else {
             thisInstance = Code.newInstanceFromYamlObject(thisInstanceYamlObj);
+        }
+        Boolean childInvokeObj = YamlUtils.getBooleanValue(yamlObject, "childInvoke", true);
+        if (childInvokeObj == null) {
+            childInvoke = false;
+        } else {
+            childInvoke = childInvokeObj;
         }
     }
 
