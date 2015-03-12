@@ -81,14 +81,42 @@ public class WebDriverAdapter implements Adapter {
             methodAdd("org.openqa.selenium.By", "partialLinkText");
             methodAdd("org.openqa.selenium.By", "tagName");
             methodAdd("org.openqa.selenium.By", "xpath");
+            methodAdd("org.openqa.selenium.remote.RemoteWebDriver", "findElementByClassName");
+            methodAdd("org.openqa.selenium.remote.RemoteWebDriver", "findElementByCssSelector");
+            methodAdd("org.openqa.selenium.remote.RemoteWebDriver", "findElementById");
+            methodAdd("org.openqa.selenium.remote.RemoteWebDriver", "findElementByLinkText");
+            methodAdd("org.openqa.selenium.remote.RemoteWebDriver", "findElementByName");
+            methodAdd("org.openqa.selenium.remote.RemoteWebDriver", "findElementByPartialLinkText");
+            methodAdd("org.openqa.selenium.remote.RemoteWebDriver", "findElementByTagName");
+            methodAdd("org.openqa.selenium.remote.RemoteWebDriver", "findElementByXPath");
+            methodAdd("org.openqa.selenium.remote.RemoteWebDriver", "findElementsByClassName");
+            methodAdd("org.openqa.selenium.remote.RemoteWebDriver", "findElementsByCssSelector");
+            methodAdd("org.openqa.selenium.remote.RemoteWebDriver", "findElementsById");
+            methodAdd("org.openqa.selenium.remote.RemoteWebDriver", "findElementsByLinkText");
+            methodAdd("org.openqa.selenium.remote.RemoteWebDriver", "findElementsByName");
+            methodAdd("org.openqa.selenium.remote.RemoteWebDriver", "findElementsByPartialLinkText");
+            methodAdd("org.openqa.selenium.remote.RemoteWebDriver", "findElementsByTagName");
+            methodAdd("org.openqa.selenium.remote.RemoteWebDriver", "findElementsByXPath");
+            methodAdd("org.openqa.selenium.WebDriver", "close");
             methodAdd("org.openqa.selenium.WebDriver", "findElement");
+            methodAdd("org.openqa.selenium.WebDriver", "findElements");
             methodAdd("org.openqa.selenium.WebDriver", "get");
+            methodAdd("org.openqa.selenium.WebDriver", "getCurrentUrl");
+            methodAdd("org.openqa.selenium.WebDriver", "getTitle");
+            methodAdd("org.openqa.selenium.WebDriver", "quit");
+            methodAdd("org.openqa.selenium.WebDriver$Navigation", "back");
+            methodAdd("org.openqa.selenium.WebDriver$Navigation", "forward");
+            methodAdd("org.openqa.selenium.WebDriver$Navigation", "refresh");
+            methodAdd("org.openqa.selenium.WebDriver$Navigation", "to");
             methodAdd("org.openqa.selenium.WebElement", "clear");
             methodAdd("org.openqa.selenium.WebElement", "click");
             methodAdd("org.openqa.selenium.WebElement", "getAttribute");
             methodAdd("org.openqa.selenium.WebElement", "getText");
+            methodAdd("org.openqa.selenium.WebElement", "isDisplayed");
+            methodAdd("org.openqa.selenium.WebElement", "isEnabled");
             methodAdd("org.openqa.selenium.WebElement", "isSelected");
             methodAdd("org.openqa.selenium.WebElement", "sendKeys");
+            methodAdd("org.openqa.selenium.WebElement", "submit");
         }
 
     }

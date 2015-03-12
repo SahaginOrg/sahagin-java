@@ -5,13 +5,41 @@ method:
   org.openqa.selenium.By.linkText: text = {0}
   org.openqa.selenium.By.name: name = {0}
   org.openqa.selenium.By.partialLinkText: text = {0}(partial match)
-  org.openqa.selenium.By.xpath: xpath = {0}
   org.openqa.selenium.By.tagName: tag name = {0}
+  org.openqa.selenium.By.xpath: xpath = {0}
+  org.openqa.selenium.remote.RemoteWebDriver.findElementByClassName: element 'class name = {0}'
+  org.openqa.selenium.remote.RemoteWebDriver.findElementByCssSelector: element 'css = {0}'
+  org.openqa.selenium.remote.RemoteWebDriver.findElementById: element 'id = {0}'
+  org.openqa.selenium.remote.RemoteWebDriver.findElementByLinkText: element 'text = {0}'
+  org.openqa.selenium.remote.RemoteWebDriver.findElementByName: element 'name = {0}'
+  org.openqa.selenium.remote.RemoteWebDriver.findElementByPartialLinkText: element 'text = {0}(partial match)'
+  org.openqa.selenium.remote.RemoteWebDriver.findElementByTagName: element 'tag name = {0}'
+  org.openqa.selenium.remote.RemoteWebDriver.findElementByXPath: element 'xpath = {0}'
+  org.openqa.selenium.remote.RemoteWebDriver.findElementsByClassName: all elements for 'class name = {0}' 
+  org.openqa.selenium.remote.RemoteWebDriver.findElementsByCssSelector: all elements for 'css = {0}'
+  org.openqa.selenium.remote.RemoteWebDriver.findElementsById: all elements for 'id = {0}'
+  org.openqa.selenium.remote.RemoteWebDriver.findElementsByLinkText: all elements for 'text = {0}'
+  org.openqa.selenium.remote.RemoteWebDriver.findElementsByName: all elements for 'name = {0}'
+  org.openqa.selenium.remote.RemoteWebDriver.findElementsByPartialLinkText: all elements for 'text = {0}(partial match)'
+  org.openqa.selenium.remote.RemoteWebDriver.findElementsByTagName: all elements for 'tag name = {0}'
+  org.openqa.selenium.remote.RemoteWebDriver.findElementsByXPath: all elements for 'xpath = {0}'
+  org.openqa.selenium.WebDriver.close: close the current window
   org.openqa.selenium.WebDriver.findElement: element '{0}'
+  org.openqa.selenium.WebDriver.findElements: all elements for '{0}'
   org.openqa.selenium.WebDriver.get: go to the page '{0}'
+  org.openqa.selenium.WebDriver.getCurrentUrl: the current URL
+  org.openqa.selenium.WebDriver.getTitle: the page title
+  org.openqa.selenium.WebDriver.quit: terminate the browser
+  org.openqa.selenium.WebDriver$Navigation.back: go back to the previous page
+  org.openqa.selenium.WebDriver$Navigation.forward: go forward to the next page
+  org.openqa.selenium.WebDriver$Navigation.refresh: reload the page
+  org.openqa.selenium.WebDriver$Navigation.to: go to the page '{0}'
   org.openqa.selenium.WebElement.clear: clear the text of {this}
   org.openqa.selenium.WebElement.click: click {this}
   org.openqa.selenium.WebElement.getAttribute: the '{0}' attribute of {this}
   org.openqa.selenium.WebElement.getText: the text of {this}
+  org.openqa.selenium.WebElement.isDisplayed: is {this} displayed
+  org.openqa.selenium.WebElement.isEnabled: is {this} enabled
   org.openqa.selenium.WebElement.isSelected: is {this} selected
   org.openqa.selenium.WebElement.sendKeys: send keys '{0}' to {this}
+  org.openqa.selenium.WebElement.submit: submit the form data

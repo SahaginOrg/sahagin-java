@@ -5,13 +5,41 @@ method:
   org.openqa.selenium.By.linkText: テキスト = {0}
   org.openqa.selenium.By.name: name = {0}
   org.openqa.selenium.By.partialLinkText: テキスト = {0}(部分一致)
-  org.openqa.selenium.By.xpath: xpath = {0}
   org.openqa.selenium.By.tagName: タグ名 = {0}
+  org.openqa.selenium.By.xpath: xpath = {0}
+  org.openqa.selenium.remote.RemoteWebDriver.findElementByClassName: 要素「クラス名 = {0}」
+  org.openqa.selenium.remote.RemoteWebDriver.findElementByCssSelector: 要素「css = {0}」
+  org.openqa.selenium.remote.RemoteWebDriver.findElementById: 要素「id = {0}」
+  org.openqa.selenium.remote.RemoteWebDriver.findElementByLinkText: 要素「テキスト = {0}」
+  org.openqa.selenium.remote.RemoteWebDriver.findElementByName: 要素「name = {0}」
+  org.openqa.selenium.remote.RemoteWebDriver.findElementByPartialLinkText: 要素「テキスト = {0}(部分一致)」
+  org.openqa.selenium.remote.RemoteWebDriver.findElementByTagName: 要素「タグ名 = {0}」
+  org.openqa.selenium.remote.RemoteWebDriver.findElementByXPath: 要素「xpath = {0}」
+  org.openqa.selenium.remote.RemoteWebDriver.findElementsByClassName: 「クラス名 = {0}」を満たす全要素
+  org.openqa.selenium.remote.RemoteWebDriver.findElementsByCssSelector: 「css = {0}」を満たす全要素
+  org.openqa.selenium.remote.RemoteWebDriver.findElementsById: 「id = {0}」を満たす全要素
+  org.openqa.selenium.remote.RemoteWebDriver.findElementsByLinkText: 「テキスト = {0}」を満たす全要素
+  org.openqa.selenium.remote.RemoteWebDriver.findElementsByName: 「name = {0}」を満たす全要素
+  org.openqa.selenium.remote.RemoteWebDriver.findElementsByPartialLinkText: 「テキスト = {0}(部分一致)」を満たす全要素
+  org.openqa.selenium.remote.RemoteWebDriver.findElementsByTagName: 「タグ名 = {0}」を満たす全要素
+  org.openqa.selenium.remote.RemoteWebDriver.findElementsByXPath: 「xpath = {0}」を満たす全要素
+  org.openqa.selenium.WebDriver.close: 現在のウィンドウを閉じる
   org.openqa.selenium.WebDriver.findElement: 要素「{0}」
+  org.openqa.selenium.WebDriver.findElements: 「{0}」を満たす全要素
   org.openqa.selenium.WebDriver.get: 「{0}」にページ遷移
+  org.openqa.selenium.WebDriver.getCurrentUrl: 現在のURL
+  org.openqa.selenium.WebDriver.getTitle: ページタイトル
+  org.openqa.selenium.WebDriver.quit: ブラウザを閉じる
+  org.openqa.selenium.WebDriver$Navigation.back: 前ページに戻る
+  org.openqa.selenium.WebDriver$Navigation.forward: 次ページに進む
+  org.openqa.selenium.WebDriver$Navigation.refresh: ページ再読み込み
+  org.openqa.selenium.WebDriver$Navigation.to: 「{0}」にページ遷移
   org.openqa.selenium.WebElement.clear: "{this}のテキストをクリア"
   org.openqa.selenium.WebElement.click: "{this}をクリック"
   org.openqa.selenium.WebElement.getAttribute: "{this}の属性「{0}」"
   org.openqa.selenium.WebElement.getText: "{this}の表示テキスト"
+  org.openqa.selenium.WebElement.isDisplayed: "{this}が表示されているか"
+  org.openqa.selenium.WebElement.isEnabled: "{this}が有効になっているか"
   org.openqa.selenium.WebElement.isSelected: "{this}が選択されているか"
   org.openqa.selenium.WebElement.sendKeys: "{this}に「{0}」を入力"
+  org.openqa.selenium.WebElement.submit: フォームのデータを送信
