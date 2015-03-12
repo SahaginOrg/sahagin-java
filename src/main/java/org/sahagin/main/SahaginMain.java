@@ -3,10 +3,13 @@ package org.sahagin.main;
 import java.io.File;
 
 import org.sahagin.report.HtmlReport;
+import org.sahagin.runlib.external.adapter.AdapterContainer;
+import org.sahagin.share.AcceptableLocales;
 import org.sahagin.share.Config;
 import org.sahagin.share.IllegalDataStructureException;
 import org.sahagin.share.IllegalTestScriptException;
 import org.sahagin.share.Logging;
+import org.sahagin.share.SystemMessages;
 import org.sahagin.share.yaml.YamlConvertException;
 
 public class SahaginMain {
@@ -63,6 +66,8 @@ public class SahaginMain {
         }
         Config config = Config.generateFromYamlConfig(configFile);
         Logging.setLoggerEnabled(config.isOutputLog());
+        AcceptableLocales locales = AcceptableLocales.getInstance(config.getUserLocale());
+        SystemMessages.globalInitialize(locales);
 
         switch (action) {
         case Report:

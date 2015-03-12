@@ -19,6 +19,7 @@ import org.sahagin.share.Config;
 import org.sahagin.share.IllegalTestScriptException;
 import org.sahagin.share.Logging;
 import org.sahagin.share.SrcTreeChecker;
+import org.sahagin.share.SystemMessages;
 import org.sahagin.share.srctree.SrcTree;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlUtils;
@@ -38,8 +39,10 @@ public class SahaginPreMain {
             configFilePath = agentArgs;
         }
         Config config = Config.generateFromYamlConfig(new File(configFilePath));
+        Logging.setLoggerEnabled(config.isOutputLog());
         AcceptableLocales locales = AcceptableLocales.getInstance(config.getUserLocale());
         AdapterContainer.globalInitialize(locales);
+        SystemMessages.globalInitialize(locales);
 
         // default adapters
         if (config.usesJUnit3()) {
@@ -61,8 +64,6 @@ public class SahaginPreMain {
             Adapter adapter = (Adapter) adapterObj;
             adapter.initialSetAdapter();
         }
-
-        Logging.setLoggerEnabled(config.isOutputLog());
 
         // delete previous data
         if (config.getRootBaseReportIntermediateDataDir().exists()) {
