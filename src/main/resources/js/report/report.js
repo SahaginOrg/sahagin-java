@@ -456,7 +456,6 @@ function loadCodeBodyHiddenNode(tr) {
       '<tr data-tt-id="{0}" data-tt-parent-id="{1}" data-method-key="{2}" class="{3}">'
           + '<td>{4}</td><td>{5}</td><td class="srcInfo">{6}</td></tr>',
       ttId, parentTtId, methodKey, lineClass, pageTestDoc, testDoc, original);
-    refreshSrcInfoVisible();
     
     var methodArgTestDocs = sahagin.TestDocResolver.placeholderResolvedMethodArgTestDocs(
         codeLine.getCode(), parentMethodArgTestDocs);
@@ -475,6 +474,8 @@ function loadCodeBodyHiddenNode(tr) {
   // loadBranch automatically expand the trNode,
   // but this behavior is not desirable, so force collapse the trNode again
   $("#script_table").treetable("collapseNode", trTtId);
+  
+  refreshSrcInfoVisible();
 }
 
 $(document).ready(function() {
