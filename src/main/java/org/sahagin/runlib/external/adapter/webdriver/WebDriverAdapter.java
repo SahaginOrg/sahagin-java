@@ -1,14 +1,10 @@
 package org.sahagin.runlib.external.adapter.webdriver;
 
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.SessionNotFoundException;
 import org.sahagin.runlib.external.CaptureStyle;
 import org.sahagin.runlib.external.adapter.Adapter;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.runlib.external.adapter.ResourceAdditionalTestDocsAdapter;
-import org.sahagin.runlib.external.adapter.ScreenCaptureAdapter;
 import org.sahagin.share.CommonPath;
 
 // TODO chromedriver has these problem (this is not sahagin problem, but the one of chromedriver)
@@ -26,34 +22,7 @@ public class WebDriverAdapter implements Adapter {
     // can set null
     public static void setAdapter(final WebDriver driver) {
         AdapterContainer container = AdapterContainer.globalInstance();
-        container.setScreenCaptureAdapter(new ScreenCaptureAdapterImpl(driver));
-    }
-
-    private static class ScreenCaptureAdapterImpl implements
-            ScreenCaptureAdapter {
-        private WebDriver driver;
-
-        public ScreenCaptureAdapterImpl(WebDriver driver) {
-            this.driver = driver;
-        }
-
-        @Override
-        public byte[] captueScreen() {
-            if (driver == null) {
-                return null;
-            }
-            if (!(driver instanceof TakesScreenshot)) {
-                return null;
-            }
-            try {
-                return ((TakesScreenshot) driver)
-                        .getScreenshotAs(OutputType.BYTES);
-            } catch (SessionNotFoundException e) {
-                // just do nothing if WebDriver instance is in invalid state
-                return null;
-            }
-        }
-
+        container.setScreenCaptureAdapter(new WebDriverScreenCaptureAdapterImpl(driver));
     }
 
     private static class AdditionalTestDocsAdapterImpl extends
