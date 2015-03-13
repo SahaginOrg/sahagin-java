@@ -9,9 +9,11 @@ import org.sahagin.runlib.external.adapter.Adapter;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.runlib.external.adapter.appium.AppiumAdapter;
 import org.sahagin.runlib.external.adapter.fluentlenium.FluentLeniumAdapter;
+import org.sahagin.runlib.external.adapter.iosdriver.IOSDriverAdapter;
 import org.sahagin.runlib.external.adapter.javalib.JavaLibAdapter;
 import org.sahagin.runlib.external.adapter.junit3.JUnit3Adapter;
 import org.sahagin.runlib.external.adapter.junit4.JUnit4Adapter;
+import org.sahagin.runlib.external.adapter.selendroid.SelendroidAdapter;
 import org.sahagin.runlib.external.adapter.webdriver.WebDriverAdapter;
 import org.sahagin.runlib.runresultsgen.RunResultsGenerateHookSetter;
 import org.sahagin.runlib.srctreegen.SrcTreeGenerator;
@@ -55,6 +57,8 @@ public class SahaginPreMain {
         new JavaLibAdapter().initialSetAdapter();
         new WebDriverAdapter().initialSetAdapter();
         new AppiumAdapter().initialSetAdapter();
+        new SelendroidAdapter().initialSetAdapter();
+        new IOSDriverAdapter().initialSetAdapter();
         new FluentLeniumAdapter().initialSetAdapter();
 
         for (String adapterClassName : config.getAdapterClassNames()) {
