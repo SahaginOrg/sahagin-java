@@ -33,13 +33,13 @@ public class AdapterContainerTest {
         AdditionalMethodTestDoc isTestDoc1
         = testDocs.getMethodTestDoc("org.hamcrest.CoreMatchers", "is",
                 Arrays.asList(Object.class.getSimpleName()));
-        assertThat(isTestDoc1.getCaptureStyle(), is(CaptureStyle.THIS_LINE));
+        assertThat(isTestDoc1.getCaptureStyle(), is(CaptureStyle.NONE));
         assertThat(isTestDoc1.getTestDoc(), is("equals to '{0}'"));
 
         AdditionalMethodTestDoc isTestDoc2
         = testDocs.getMethodTestDoc("org.hamcrest.CoreMatchers", "is",
                 Arrays.asList(Matcher.class.getCanonicalName()));
-        assertThat(isTestDoc2.getCaptureStyle(), is(CaptureStyle.THIS_LINE));
+        assertThat(isTestDoc2.getCaptureStyle(), is(CaptureStyle.NONE));
         assertThat(isTestDoc2.getTestDoc(), is("{0}"));
     }
 

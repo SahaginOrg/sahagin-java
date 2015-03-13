@@ -5,6 +5,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.SessionNotFoundException;
+import org.sahagin.runlib.external.CaptureStyle;
 import org.sahagin.runlib.external.adapter.Adapter;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.runlib.external.adapter.ResourceAdditionalTestDocsAdapter;
@@ -25,7 +26,7 @@ public class FluentLeniumAdapter implements Adapter {
         container.setScreenCaptureAdapter(new ScreenCaptureAdapterImpl(fluent));
     }
 
-    public static class ScreenCaptureAdapterImpl implements
+    private static class ScreenCaptureAdapterImpl implements
             ScreenCaptureAdapter {
         private Fluent fluent;
 
@@ -85,15 +86,15 @@ public class FluentLeniumAdapter implements Adapter {
             methodAdd("org.fluentlenium.core.domain.FluentWebElement", "isDisplayed");
             methodAdd("org.fluentlenium.core.domain.FluentWebElement", "isEnabled");
             methodAdd("org.fluentlenium.core.domain.FluentWebElement", "isSelected");
-            methodAdd("org.fluentlenium.core.filter.FilterConstructor", "withClass", "String");
-            methodAdd("org.fluentlenium.core.filter.FilterConstructor", "withName", "String");
-            methodAdd("org.fluentlenium.core.filter.FilterConstructor", "withText", "String");
+            methodAdd("org.fluentlenium.core.filter.FilterConstructor", "withClass", "String", CaptureStyle.NONE);
+            methodAdd("org.fluentlenium.core.filter.FilterConstructor", "withName", "String", CaptureStyle.NONE);
+            methodAdd("org.fluentlenium.core.filter.FilterConstructor", "withText", "String", CaptureStyle.NONE);
             methodAdd("org.fluentlenium.core.Fluent", "$", "String,org.fluentlenium.core.filter.Filter[]", 1);
             methodAdd("org.fluentlenium.core.Fluent", "$", "String,java.lang.Integer,org.fluentlenium.core.filter.Filter[]", 2);
-            methodAdd("org.fluentlenium.core.Fluent", "clear", null, 1);
-            methodAdd("org.fluentlenium.core.Fluent", "click", null, 1);
-            methodAdd("org.fluentlenium.core.Fluent", "executeScript", null, 1);
-            methodAdd("org.fluentlenium.core.Fluent", "fill", null, 1);
+            methodAdd("org.fluentlenium.core.Fluent", "clear", 1);
+            methodAdd("org.fluentlenium.core.Fluent", "click", 1);
+            methodAdd("org.fluentlenium.core.Fluent", "executeScript", 1);
+            methodAdd("org.fluentlenium.core.Fluent", "fill", 1);
             methodAdd("org.fluentlenium.core.Fluent", "find", "String,org.fluentlenium.core.filter.Filter[]", 1);
             methodAdd("org.fluentlenium.core.Fluent", "find", "String,java.lang.Integer,org.fluentlenium.core.filter.Filter[]", 2);
             methodAdd("org.fluentlenium.core.Fluent", "findFirst", "String,org.fluentlenium.core.filter.Filter[]", 1);

@@ -4,6 +4,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.SessionNotFoundException;
+import org.sahagin.runlib.external.CaptureStyle;
 import org.sahagin.runlib.external.adapter.Adapter;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.runlib.external.adapter.ResourceAdditionalTestDocsAdapter;
@@ -28,7 +29,7 @@ public class WebDriverAdapter implements Adapter {
         container.setScreenCaptureAdapter(new ScreenCaptureAdapterImpl(driver));
     }
 
-    public static class ScreenCaptureAdapterImpl implements
+    private static class ScreenCaptureAdapterImpl implements
             ScreenCaptureAdapter {
         private WebDriver driver;
 
@@ -71,14 +72,14 @@ public class WebDriverAdapter implements Adapter {
         @Override
         public void methodAdd() {
             // in alphabetical order
-            methodAdd("org.openqa.selenium.By", "className");
-            methodAdd("org.openqa.selenium.By", "cssSelector");
-            methodAdd("org.openqa.selenium.By", "id");
-            methodAdd("org.openqa.selenium.By", "linkText");
-            methodAdd("org.openqa.selenium.By", "name");
-            methodAdd("org.openqa.selenium.By", "partialLinkText");
-            methodAdd("org.openqa.selenium.By", "tagName");
-            methodAdd("org.openqa.selenium.By", "xpath");
+            methodAdd("org.openqa.selenium.By", "className", CaptureStyle.NONE);
+            methodAdd("org.openqa.selenium.By", "cssSelector", CaptureStyle.NONE);
+            methodAdd("org.openqa.selenium.By", "id", CaptureStyle.NONE);
+            methodAdd("org.openqa.selenium.By", "linkText", CaptureStyle.NONE);
+            methodAdd("org.openqa.selenium.By", "name", CaptureStyle.NONE);
+            methodAdd("org.openqa.selenium.By", "partialLinkText", CaptureStyle.NONE);
+            methodAdd("org.openqa.selenium.By", "tagName", CaptureStyle.NONE);
+            methodAdd("org.openqa.selenium.By", "xpath", CaptureStyle.NONE);
             methodAdd("org.openqa.selenium.remote.RemoteWebDriver", "findElementByClassName");
             methodAdd("org.openqa.selenium.remote.RemoteWebDriver", "findElementByCssSelector");
             methodAdd("org.openqa.selenium.remote.RemoteWebDriver", "findElementById");

@@ -103,16 +103,36 @@ implements AdditionalTestDocsAdapter {
     // argClassesStr.. null means no overload
     protected final void methodAdd(String classQualifiedName,
             String methodSimpleName, String argClassesStr) {
-        methodAdd(classQualifiedName, methodSimpleName, argClassesStr, -1);
+        methodAdd(classQualifiedName, methodSimpleName,
+                argClassesStr, -1, CaptureStyle.getDefault());
+    }
+
+    protected final void methodAdd(String classQualifiedName,
+            String methodSimpleName, int varLengthArgIndex) {
+        methodAdd(classQualifiedName, methodSimpleName,
+                null, varLengthArgIndex, CaptureStyle.getDefault());
+    }
+
+    protected final void methodAdd(String classQualifiedName,
+            String methodSimpleName, CaptureStyle captureStyle) {
+        methodAdd(classQualifiedName, methodSimpleName,
+                null, -1, captureStyle);
     }
 
     // argClassesStr.. null means no overload
     protected final void methodAdd(String classQualifiedName,
-            String methodSimpleName, String argClassesStr,
-            int varLengthArgIndex) {
+            String methodSimpleName, String argClassesStr, int varLengthArgIndex) {
         methodAdd(classQualifiedName, methodSimpleName,
                 argClassesStr, varLengthArgIndex, CaptureStyle.getDefault());
     }
+
+    // argClassesStr.. null means no overload
+    protected final void methodAdd(String classQualifiedName,
+            String methodSimpleName, String argClassesStr, CaptureStyle captureStyle) {
+        methodAdd(classQualifiedName, methodSimpleName,
+                argClassesStr, -1, captureStyle);
+    }
+
 
     // argClassesStr.. null means no overload
     // TODO when qualified String or Object class name is used in argClassesStr

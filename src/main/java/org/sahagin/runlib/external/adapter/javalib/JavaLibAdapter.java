@@ -28,7 +28,7 @@ public class JavaLibAdapter implements Adapter {
         @Override
         public void methodAdd() {
             // in alphabetical order
-            methodAdd("java.util.List", "get", null, -1, CaptureStyle.NONE);
+            methodAdd("java.util.List", "get", CaptureStyle.NONE);
         }
 
     }
