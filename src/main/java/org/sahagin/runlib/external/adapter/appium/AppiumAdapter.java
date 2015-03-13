@@ -4,6 +4,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.SessionNotFoundException;
+import org.sahagin.runlib.external.CaptureStyle;
 import org.sahagin.runlib.external.adapter.Adapter;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.runlib.external.adapter.ResourceAdditionalTestDocsAdapter;
@@ -86,9 +87,9 @@ public class AppiumAdapter implements Adapter {
             methodAdd("io.appium.java_client.ios.IOSDriver", "findElementByIosUIAutomation");
             methodAdd("io.appium.java_client.ios.IOSDriver", "findElementsByIosUIAutomation");
             methodAdd("io.appium.java_client.ios.IOSDriver", "shake");
-            methodAdd("io.appium.java_client.MobileBy", "AccessibilityId");
-            methodAdd("io.appium.java_client.MobileBy", "AndroidUIAutomator");
-            methodAdd("io.appium.java_client.MobileBy", "IosUIAutomation");
+            methodAdd("io.appium.java_client.MobileBy", "AccessibilityId", CaptureStyle.NONE);
+            methodAdd("io.appium.java_client.MobileBy", "AndroidUIAutomator", CaptureStyle.NONE);
+            methodAdd("io.appium.java_client.MobileBy", "IosUIAutomation", CaptureStyle.NONE);
         }
 
     }
