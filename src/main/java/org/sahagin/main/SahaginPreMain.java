@@ -7,6 +7,7 @@ import java.lang.instrument.Instrumentation;
 import org.apache.commons.io.FileUtils;
 import org.sahagin.runlib.external.adapter.Adapter;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
+import org.sahagin.runlib.external.adapter.appium.AppiumAdapter;
 import org.sahagin.runlib.external.adapter.fluentlenium.FluentLeniumAdapter;
 import org.sahagin.runlib.external.adapter.javalib.JavaLibAdapter;
 import org.sahagin.runlib.external.adapter.junit3.JUnit3Adapter;
@@ -53,6 +54,7 @@ public class SahaginPreMain {
         }
         new JavaLibAdapter().initialSetAdapter();
         new WebDriverAdapter().initialSetAdapter();
+        new AppiumAdapter().initialSetAdapter();
         new FluentLeniumAdapter().initialSetAdapter();
 
         for (String adapterClassName : config.getAdapterClassNames()) {

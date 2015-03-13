@@ -1,0 +1,25 @@
+method:
+  io.appium.java_client.android.AndroidDriver.findElementByAndroidUIAutomator: element 'Android UiAutomator = {0}'
+  io.appium.java_client.android.AndroidDriver.findElementsByAndroidUIAutomator: all elements for 'Android UiAutomator = {0}'
+  io.appium.java_client.android.AndroidDriver.isLocked: is the screen locked
+  io.appium.java_client.AppiumDriver.findElementByAccessibilityId: element 'accessibility ID = {0}'
+  io.appium.java_client.AppiumDriver.findElementsByAccessibilityId: all elements for 'accessibility ID = {0}'
+  io.appium.java_client.AppiumDriver.getOrientation: the screen orientation
+  io.appium.java_client.AppiumDriver.hideKeyboard: hide the keyboard
+  io.appium.java_client.AppiumDriver.lockScreen: lock the screen for {0} seconds
+  io.appium.java_client.AppiumDriver.pinch:
+    int,int: "zoom out (x:{0}, y:{1}) by pinch-in"
+    org.openqa.selenium.WebElement: zoom out {0} by pinch-in
+  io.appium.java_client.AppiumDriver.swipe: "swipe from (x:{0}, y:{1}) to (x:{2}, y:{3}) in {4} milliseconds"
+  io.appium.java_client.AppiumDriver.tap:
+    int,int,int,int: "tap (x:{1}, y:{2}) with　{0} fingers for {3} milliseconds"
+    int,org.openqa.selenium.WebElement,int: tap {1} with {0} fingers for {2} milliseconds
+  io.appium.java_client.AppiumDriver.zoom:
+    int,int: "zoom in (x:{0}, y:{1}) by pinch-out"
+    org.openqa.selenium.WebElement: zoom in {0} by pinch-out
+  io.appium.java_client.ios.IOSDriver.findElementByIosUIAutomation: element 'iOS UIAutomation = {0}'
+  io.appium.java_client.ios.IOSDriver.findElementsByIosUIAutomation: all elements for 'iOS UIAutomation = {0}'
+  io.appium.java_client.ios.IOSDriver.shake: shake the device
+  io.appium.java_client.MobileBy.AccessibilityId: accessibility ID = {0}
+  io.appium.java_client.MobileBy.AndroidUIAutomator: Android UiAutomator = {0}
+  io.appium.java_client.MobileBy.IosUIAutomation: iOS UIAutomation = {0}

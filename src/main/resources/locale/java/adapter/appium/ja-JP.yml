@@ -1,0 +1,25 @@
+method:
+  io.appium.java_client.android.AndroidDriver.findElementByAndroidUIAutomator: 要素「Android UiAutomator = {0}」
+  io.appium.java_client.android.AndroidDriver.findElementsByAndroidUIAutomator: 「Android UiAutomator = {0}」を満たす全要素
+  io.appium.java_client.android.AndroidDriver.isLocked: 画面がロックされているか
+  io.appium.java_client.AppiumDriver.findElementByAccessibilityId: 要素「アクセシビリティID = {0}」
+  io.appium.java_client.AppiumDriver.findElementsByAccessibilityId: 「アクセシビリティID = {0}」を満たす全要素
+  io.appium.java_client.AppiumDriver.getOrientation: スクリーンの向き
+  io.appium.java_client.AppiumDriver.hideKeyboard: キーボードを隠す
+  io.appium.java_client.AppiumDriver.lockScreen: "{0}秒間画面をロック"
+  io.appium.java_client.AppiumDriver.pinch:
+    int,int: "(x:{0}, y:{1})をピンチインで縮小"
+    org.openqa.selenium.WebElement: "{0}をピンチインで縮小"
+  io.appium.java_client.AppiumDriver.swipe: "(x:{0}, y:{1})から(x:{2}, y:{3})へ、{4}ミリ秒間でスワイプ"
+  io.appium.java_client.AppiumDriver.tap:
+    int,int,int,int: "(x:{1}, y:{2})を、{0}本指で{3}ミリ秒間タップ"
+    int,org.openqa.selenium.WebElement,int: "{1}を{0}本指で{2}ミリ秒間タップ"
+  io.appium.java_client.AppiumDriver.zoom:
+    int,int: "(x:{0}, y:{1})をピンチアウトで拡大"
+    org.openqa.selenium.WebElement: "{0}をピンチアウトで拡大"
+  io.appium.java_client.ios.IOSDriver.findElementByIosUIAutomation: 要素「iOS UIAutomation = {0}」
+  io.appium.java_client.ios.IOSDriver.findElementsByIosUIAutomation: 「iOS UIAutomation = {0}」を満たす全要素
+  io.appium.java_client.ios.IOSDriver.shake: 端末をシェイク
+  io.appium.java_client.MobileBy.AccessibilityId: アクセシビリティID = {0}
+  io.appium.java_client.MobileBy.AndroidUIAutomator: Android UiAutomator = {0}
+  io.appium.java_client.MobileBy.IosUIAutomation: iOS UIAutomation = {0}
