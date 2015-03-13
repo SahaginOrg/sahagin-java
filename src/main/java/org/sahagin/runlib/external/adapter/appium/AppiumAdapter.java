@@ -27,8 +27,7 @@ public class AppiumAdapter implements Adapter {
 
         @Override
         public String resourceDirPath() {
-            return CommonPath.standardAdapdaterLocaleResDirPath()
-                    + "/appium";
+            return CommonPath.standardAdapdaterLocaleResDirPath()  + "/appium";
         }
 
         @Override
@@ -43,7 +42,6 @@ public class AppiumAdapter implements Adapter {
             methodAdd("io.appium.java_client.android.AndroidDriver", "isLocked");
             methodAdd("io.appium.java_client.AppiumDriver", "findElementByAccessibilityId");
             methodAdd("io.appium.java_client.AppiumDriver", "findElementsByAccessibilityId");
-            methodAdd("io.appium.java_client.AppiumDriver", "getOrientation");
             methodAdd("io.appium.java_client.AppiumDriver", "hideKeyboard");
             methodAdd("io.appium.java_client.AppiumDriver", "lockScreen");
             methodAdd("io.appium.java_client.AppiumDriver", "pinch", "int,int");

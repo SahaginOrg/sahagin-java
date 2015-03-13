@@ -62,8 +62,7 @@ public class FluentLeniumAdapter implements Adapter {
 
         @Override
         public String resourceDirPath() {
-            return CommonPath.standardAdapdaterLocaleResDirPath()
-                    + "/fluentlenium";
+            return CommonPath.standardAdapdaterLocaleResDirPath() + "/fluentlenium";
         }
 
         @Override

@@ -30,8 +30,7 @@ public class WebDriverAdapter implements Adapter {
 
         @Override
         public String resourceDirPath() {
-            return CommonPath.standardAdapdaterLocaleResDirPath()
-                    + "/webdriver";
+            return CommonPath.standardAdapdaterLocaleResDirPath() + "/webdriver";
         }
 
         @Override
@@ -65,6 +64,8 @@ public class WebDriverAdapter implements Adapter {
             methodAdd("org.openqa.selenium.remote.RemoteWebDriver", "findElementsByPartialLinkText");
             methodAdd("org.openqa.selenium.remote.RemoteWebDriver", "findElementsByTagName");
             methodAdd("org.openqa.selenium.remote.RemoteWebDriver", "findElementsByXPath");
+            methodAdd("org.openqa.selenium.Rotatable", "getOrientation");
+            methodAdd("org.openqa.selenium.Rotatable", "rotate");
             methodAdd("org.openqa.selenium.WebDriver", "close");
             methodAdd("org.openqa.selenium.WebDriver", "findElement");
             methodAdd("org.openqa.selenium.WebDriver", "findElements");

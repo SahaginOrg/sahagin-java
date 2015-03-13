@@ -23,6 +23,8 @@ method:
   org.openqa.selenium.remote.RemoteWebDriver.findElementsByPartialLinkText: 「テキスト = {0}(部分一致)」を満たす全要素
   org.openqa.selenium.remote.RemoteWebDriver.findElementsByTagName: 「タグ名 = {0}」を満たす全要素
   org.openqa.selenium.remote.RemoteWebDriver.findElementsByXPath: 「xpath = {0}」を満たす全要素
+  org.openqa.selenium.Rotatable.getOrientation: スクリーンの向き
+  org.openqa.selenium.Rotatable.rotate: スクリーンの向きを{0}に回転
   org.openqa.selenium.WebDriver.close: 現在のウィンドウを閉じる
   org.openqa.selenium.WebDriver.findElement: 要素「{0}」
   org.openqa.selenium.WebDriver.findElements: 「{0}」を満たす全要素

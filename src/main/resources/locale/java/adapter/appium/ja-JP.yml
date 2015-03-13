@@ -4,7 +4,6 @@ method:
   io.appium.java_client.android.AndroidDriver.isLocked: 画面がロックされているか
   io.appium.java_client.AppiumDriver.findElementByAccessibilityId: 要素「アクセシビリティID = {0}」
   io.appium.java_client.AppiumDriver.findElementsByAccessibilityId: 「アクセシビリティID = {0}」を満たす全要素
-  io.appium.java_client.AppiumDriver.getOrientation: スクリーンの向き
   io.appium.java_client.AppiumDriver.hideKeyboard: キーボードを隠す
   io.appium.java_client.AppiumDriver.lockScreen: "{0}秒間画面をロック"
   io.appium.java_client.AppiumDriver.pinch:

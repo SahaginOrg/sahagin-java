@@ -4,7 +4,6 @@ method:
   io.appium.java_client.android.AndroidDriver.isLocked: is the screen locked
   io.appium.java_client.AppiumDriver.findElementByAccessibilityId: element 'accessibility ID = {0}'
   io.appium.java_client.AppiumDriver.findElementsByAccessibilityId: all elements for 'accessibility ID = {0}'
-  io.appium.java_client.AppiumDriver.getOrientation: the screen orientation
   io.appium.java_client.AppiumDriver.hideKeyboard: hide the keyboard
   io.appium.java_client.AppiumDriver.lockScreen: lock the screen for {0} seconds
   io.appium.java_client.AppiumDriver.pinch:

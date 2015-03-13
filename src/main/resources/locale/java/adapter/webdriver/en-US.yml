@@ -23,6 +23,8 @@ method:
   org.openqa.selenium.remote.RemoteWebDriver.findElementsByPartialLinkText: all elements for 'text = {0}(partial match)'
   org.openqa.selenium.remote.RemoteWebDriver.findElementsByTagName: all elements for 'tag name = {0}'
   org.openqa.selenium.remote.RemoteWebDriver.findElementsByXPath: all elements for 'xpath = {0}'
+  org.openqa.selenium.Rotatable.getOrientation:　the screen orientation
+  org.openqa.selenium.Rotatable.rotate: rotate the screen to {0}
   org.openqa.selenium.WebDriver.close: close the current window
   org.openqa.selenium.WebDriver.findElement: element '{0}'
   org.openqa.selenium.WebDriver.findElements: all elements for '{0}'
