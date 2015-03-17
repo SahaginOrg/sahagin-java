@@ -141,21 +141,35 @@ function selectTr(trObject) {
 };
 
 /**
+ * @returns {number} -1 if no tr is selected
+ */
+function getSlideIndexForSelectedTr() {
+  var selected = getSelectedTr();
+  if (selected.length == 0) {
+    return -1;
+  }
+  var ttId = getTrTtId(selected);
+  var slideIndex = getTtIdSlideIndex(ttId);
+  if (slideIndex != -1) {
+    return slideIndex;
+  }
+  
+  slideIndex = getTtIdSlideIndex('noImage');
+  if (slideIndex != -1) {
+    return slideIndex;
+  }
+  
+  throw new Error("noImage slide not found");
+};
+
+/**
  * change current slide index to the index for the selected tr.
  * - do nothing if slider is not loaded yet
  */
 function syncSlideIndexToSelectedTr() {
-  var selected = getSelectedTr();
-  if (selected.length == 0) {
-    return;
-  }
-  var ttId = getTrTtId(selected);
-  var slideIndex = getTtIdSlideIndex(ttId);
+  var slideIndex = getSlideIndexForSelectedTr();
   if (slideIndex == -1) {
-    slideIndex = getTtIdSlideIndex('noImage');
-    if (slideIndex == -1) {
-      throw new Error("noImage slide not found");
-    }
+    return;
   }
   if (slider != null) {
     slider.goToSlide(slideIndex);
@@ -555,13 +569,19 @@ $(document).ready(function() {
   selectTr(firstTrObj);
 
   hideSrcInfo();
+  selectTrSlideAndRefresh(false);
 
+  var slideIndex = getSlideIndexForSelectedTr();
+  if (slideIndex == -1) {
+    slideIndex = 0;
+  }
   slider = $(".bxslider").bxSlider({
     speed: 1,
     infiniteLoop: false,
     hideControlOnEnd: true,
     pager: false,
-    controls: false
+    controls: false,
+    startSlide: slideIndex
   });
 
   $(".scrollContainer").perfectScrollbar({
@@ -569,6 +589,4 @@ $(document).ready(function() {
     suppressScrollX: true
   });
   slideScrollBarSet = true;
-
-  selectTrSlideAndRefresh(false);
 });
