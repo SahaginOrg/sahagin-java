@@ -11,6 +11,12 @@ var slider = null;
 var srcTree = null;
 
 /**
+ * whether scroll bar for slider has already been set
+ * @type {boolean}
+ */
+var slideScrollBarSet = false;
+
+/**
  * visibility of scrInfo on script table
  * @type {boolean}
  */
@@ -135,7 +141,8 @@ function selectTr(trObject) {
 };
 
 /**
- * change current slide index to the index for the selected tr
+ * change current slide index to the index for the selected tr.
+ * - do nothing if slider is not loaded yet
  */
 function syncSlideIndexToSelectedTr() {
   var selected = getSelectedTr();
@@ -150,7 +157,9 @@ function syncSlideIndexToSelectedTr() {
       throw new Error("noImage slide not found");
     }
   }
-  slider.goToSlide(slideIndex);
+  if (slider != null) {
+    slider.goToSlide(slideIndex);
+  }
 };
 
 /**
@@ -229,8 +238,10 @@ function adjustImageAreaSize() {
   $(".bxslider div.scrollContainer").css('height', areaSize.height + 'px');
   $("#bxslider_container").css('width', areaSize.width + 'px');
   $("#bxslider_container").css('height', areaSize.height + 'px');
-  $("div.bx-viewport").css('height', areaSize.height + 'px');
-}
+  if (slider != null) {
+    $("div.bx-viewport").css('height', areaSize.height + 'px');
+  }
+};
 
 /**
  * @param {Object} trObject
@@ -341,7 +352,7 @@ function getSrcTree() {
  */
 function selectTrSlideAndRefresh(sliderReload) {
   adjustImageAreaSize();
-  if (sliderReload) {
+  if (sliderReload && slider != null) {
     // reflect size adjust to the slider
     slider.reloadSlider();
   }
@@ -349,10 +360,13 @@ function selectTrSlideAndRefresh(sliderReload) {
   // since current selection has been lost by reloadSlider
   syncSlideIndexToSelectedTr();
   // refresh scroll bar
-  $(".scrollContainer").perfectScrollbar('update');
-}
+  $("#script_table_container").perfectScrollbar('update');
+  if (slideScrollBarSet) {
+    $(".bxslider .scrollContainer").perfectScrollbar('update');
+  }
+};
 
-function showSrcInfo() {
+function showSrcInfo(refresh) {
   $(".srcInfo").show();
   $("#showSrcButton").hide();
   $("#hideSrcButton").show();
@@ -505,19 +519,6 @@ $(document).ready(function() {
     }
   });
 
-  slider = $(".bxslider").bxSlider({
-    speed: 1,
-    infiniteLoop: false,
-    hideControlOnEnd: true,
-    pager: false,
-    controls: false
-  });
-
-  $(".scrollContainer").perfectScrollbar({
-    useKeyboard: false,
-    suppressScrollX: true
-  });
-
   $(document).on("mousedown", "#script_table tbody tr", function() {
     selectTr($(this));
     selectTrSlideAndRefresh(false);
@@ -549,10 +550,25 @@ $(document).ready(function() {
     return false;
   });
 
-  hideSrcInfo();
-
   // select table line for first capture
   var firstTrObj = $("#script_table tbody tr:first-child");
   selectTr(firstTrObj);
-  selectTrSlideAndRefresh(true);
+
+  hideSrcInfo();
+
+  slider = $(".bxslider").bxSlider({
+    speed: 1,
+    infiniteLoop: false,
+    hideControlOnEnd: true,
+    pager: false,
+    controls: false
+  });
+
+  $(".scrollContainer").perfectScrollbar({
+    useKeyboard: false,
+    suppressScrollX: true
+  });
+  slideScrollBarSet = true;
+
+  selectTrSlideAndRefresh(false);
 });
