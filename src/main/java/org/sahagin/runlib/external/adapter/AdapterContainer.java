@@ -59,7 +59,7 @@ public class AdapterContainer {
         if (screenCaptureAdapter == null) {
             return null;
         }
-        return screenCaptureAdapter.captueScreen();
+        return screenCaptureAdapter.captureScreen();
     }
 
     // TODO throw error if called　from other method than initialSetAdapter

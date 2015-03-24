@@ -35,7 +35,7 @@ public class FluentLeniumAdapter implements Adapter {
         }
 
         @Override
-        public byte[] captueScreen() {
+        public byte[] captureScreen() {
             if (fluent == null) {
                 return null;
             }

@@ -14,7 +14,7 @@ public class WebDriverScreenCaptureAdapter implements ScreenCaptureAdapter {
     }
 
     @Override
-    public byte[] captueScreen() {
+    public byte[] captureScreen() {
         if (driver == null) {
             return null;
         }
