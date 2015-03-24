@@ -24,7 +24,6 @@ import org.sahagin.share.srctree.SrcTree;
 import org.sahagin.share.srctree.TestMethod;
 import org.sahagin.share.srctree.code.CodeLine;
 import org.sahagin.share.srctree.code.SubMethodInvoke;
-import org.sahagin.share.srctree.code.UnknownCode;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlUtils;
 
