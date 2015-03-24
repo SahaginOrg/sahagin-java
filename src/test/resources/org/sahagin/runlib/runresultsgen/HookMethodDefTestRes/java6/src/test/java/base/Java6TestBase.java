@@ -27,7 +27,7 @@ public class Java6TestBase {
         AdapterContainer.globalInstance().setScreenCaptureAdapter(new ScreenCaptureAdapter() {
 
             @Override
-            public byte[] captueScreen() {
+            public byte[] captureScreen() {
                 File captureFile = getTestCapturePath(counter);
                 counter++;
                 try {
