@@ -5,7 +5,7 @@ import org.sahagin.runlib.external.CaptureStyle;
 import org.sahagin.runlib.external.adapter.Adapter;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.runlib.external.adapter.ResourceAdditionalTestDocsAdapter;
-import org.sahagin.runlib.external.adapter.webdriver.WebDriverScreenCaptureAdapterImpl;
+import org.sahagin.runlib.external.adapter.webdriver.WebDriverScreenCaptureAdapter;
 import org.sahagin.share.CommonPath;
 
 public class AppiumAdapter implements Adapter {
@@ -19,7 +19,7 @@ public class AppiumAdapter implements Adapter {
     // can set null
     public static void setAdapter(final WebDriver driver) {
         AdapterContainer container = AdapterContainer.globalInstance();
-        container.setScreenCaptureAdapter(new WebDriverScreenCaptureAdapterImpl(driver));
+        container.setScreenCaptureAdapter(new WebDriverScreenCaptureAdapter(driver));
     }
 
     private static class AdditionalTestDocsAdapterImpl extends

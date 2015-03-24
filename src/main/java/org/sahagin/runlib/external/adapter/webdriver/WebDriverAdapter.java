@@ -22,7 +22,7 @@ public class WebDriverAdapter implements Adapter {
     // can set null
     public static void setAdapter(final WebDriver driver) {
         AdapterContainer container = AdapterContainer.globalInstance();
-        container.setScreenCaptureAdapter(new WebDriverScreenCaptureAdapterImpl(driver));
+        container.setScreenCaptureAdapter(new WebDriverScreenCaptureAdapter(driver));
     }
 
     private static class AdditionalTestDocsAdapterImpl extends

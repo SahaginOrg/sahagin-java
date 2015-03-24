@@ -6,10 +6,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.SessionNotFoundException;
 import org.sahagin.runlib.external.adapter.ScreenCaptureAdapter;
 
-public class WebDriverScreenCaptureAdapterImpl implements ScreenCaptureAdapter {
+public class WebDriverScreenCaptureAdapter implements ScreenCaptureAdapter {
     private WebDriver driver;
 
-    public WebDriverScreenCaptureAdapterImpl(WebDriver driver) {
+    public WebDriverScreenCaptureAdapter(WebDriver driver) {
         this.driver = driver;
     }
 
@@ -28,6 +28,7 @@ public class WebDriverScreenCaptureAdapterImpl implements ScreenCaptureAdapter {
             // just do nothing if WebDriver instance is in invalid state
             return null;
         }
+        // TODO test should not fail when taking screen capture fails?
     }
 
 }
