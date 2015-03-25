@@ -117,3 +117,7 @@ body {
 .hiddenMethodArgTestDoc {
   display: none;
 }
+
+#localeData {
+  display: none;
+}

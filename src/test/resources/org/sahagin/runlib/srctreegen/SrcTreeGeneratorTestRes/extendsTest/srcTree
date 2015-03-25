@@ -47,32 +47,32 @@ rootMethodTable:
     - code:
         original: pageInstance.abstractMethod(123);
         methodKey: "*ExtendsPage.abstractMethod*"
-        thisInstance: {original: pageInstance, type: unknown}
+        thisInstance: {type: localVar, name: pageInstance}        
         args:
         - {original: '123', type: unknown}
     - code:
         original: pageInstance.finalMethod(null);
         methodKey: "*ExtendsPageBase.finalMethod*"
-        thisInstance: {original: pageInstance, type: unknown}
+        thisInstance: {type: localVar, name: pageInstance}
         args:
         - {original: 'null', type: unknown}
     - code:
         original: pageInstance.overriddenMethod("YYY");
         methodKey: "*ExtendsPage.overriddenMethod*"
-        thisInstance: {original: pageInstance, type: unknown}
+        thisInstance: {type: localVar, name: pageInstance}
         args:
         - {value: YYY, original: '"YYY"', type: string}
     - code: {original: ExtendsPageBase baseInstance=new ExtendsPage();, type: unknown}
     - code:
         original: baseInstance.abstractMethod(456);
         methodKey: "*ExtendsPageBase.abstractMethod*"
-        thisInstance: {original: baseInstance, type: unknown}
+        thisInstance: {type: localVar, name: baseInstance}
         args:
         - {original: '456', type: unknown}
     - code:
         original: baseInstance.finalMethod("WWW");
         methodKey: "*ExtendsPageBase.finalMethod*"
-        thisInstance: {original: baseInstance, type: unknown}
+        thisInstance: {type: localVar, name: baseInstance}
         args:
         - {value: WWW, original: '"WWW"', type: string}
     - code: {original: baseInstance.overriddenMethod("ZZZ");, type: unknown}

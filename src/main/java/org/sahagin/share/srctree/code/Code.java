@@ -46,6 +46,10 @@ public abstract class Code implements YamlConvertible {
             result = new MethodArgument();
         } else if (SubMethodInvoke.TYPE.equals(type)) {
             result = new SubMethodInvoke();
+        } else if (LocalVar.TYPE.equals(type)) {
+            result = new LocalVar();
+        } else if (LocalVarAssign.TYPE.equals(type)) {
+            result = new LocalVarAssign();
         } else if (UnknownCode.TYPE.equals(type)) {
             result = new UnknownCode();
         } else {

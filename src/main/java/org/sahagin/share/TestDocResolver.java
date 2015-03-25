@@ -10,6 +10,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.sahagin.share.srctree.PageClass;
 import org.sahagin.share.srctree.TestMethod;
 import org.sahagin.share.srctree.code.Code;
+import org.sahagin.share.srctree.code.LocalVar;
+import org.sahagin.share.srctree.code.LocalVarAssign;
 import org.sahagin.share.srctree.code.MethodArgument;
 import org.sahagin.share.srctree.code.StringCode;
 import org.sahagin.share.srctree.code.SubMethodInvoke;
@@ -237,6 +239,15 @@ public class TestDocResolver {
         } else if (code instanceof SubMethodInvoke) {
             SubMethodInvoke methodInvoke = (SubMethodInvoke) code;
             return methodInvokeTestDoc(methodInvoke, placeholderResolvedParentMethodArgTestDocs);
+        } else if (code instanceof LocalVar) {
+            return String.format(SysMessages.get(SysMessages.LOCAL_VAR),
+                    ((LocalVar) code).getName());
+        } else if (code instanceof LocalVarAssign) {
+            LocalVarAssign assign = (LocalVarAssign) code;
+            String valueTestDoc = methodTestDocSub(
+                    assign.getValue(), placeholderResolvedParentMethodArgTestDocs);
+            return String.format(SysMessages.get(SysMessages.LOCAL_VAR_ASSIGN),
+                    assign.getName(), valueTestDoc);
         } else {
             return code.getOriginal();
         }

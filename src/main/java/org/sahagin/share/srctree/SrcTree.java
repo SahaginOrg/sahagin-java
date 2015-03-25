@@ -7,6 +7,7 @@ import org.sahagin.share.CommonUtils;
 import org.sahagin.share.IllegalDataStructureException;
 import org.sahagin.share.srctree.code.Code;
 import org.sahagin.share.srctree.code.CodeLine;
+import org.sahagin.share.srctree.code.LocalVarAssign;
 import org.sahagin.share.srctree.code.SubMethodInvoke;
 import org.sahagin.share.yaml.YamlUtils;
 import org.sahagin.share.yaml.YamlConvertException;
@@ -193,6 +194,9 @@ public class SrcTree implements YamlConvertible {
             for (Code arg : invoke.getArgs()) {
                 resolveTestMethod(arg);
             }
+        } else if (code instanceof LocalVarAssign) {
+            LocalVarAssign assign = (LocalVarAssign) code;
+            resolveTestMethod(assign.getValue());
         }
     }
 

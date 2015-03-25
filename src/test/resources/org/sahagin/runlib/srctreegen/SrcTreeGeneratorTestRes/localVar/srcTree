@@ -1,0 +1,52 @@
+rootMethodTable:
+  methods:
+  - codeBody:
+    - code:
+        value: {value: A, original: '"A"', type: string}
+        original: String str1="A";
+        type: localVarAssign
+        name: str1
+    - code: {type: unknown}
+    - code:
+        value: {value: B, original: '"B"', type: string}
+        original: str1="B";
+        type: localVarAssign
+        name: str1
+    - code:
+        value: {value: C, original: '"C"', type: string}
+        original: str2="C";
+        type: localVarAssign
+        name: str2
+    - code:
+        type: method
+        args:
+        - {original: str1, type: localVar, name: str1}
+        - {original: str2, type: localVar, name: str2}
+    - code: {type: unknown}
+    - code: {type: unknown}
+    - code: {type: unknown}
+    - code: {type: unknown}
+    - code:
+        type: method
+        args:
+        - {original: int1, type: localVar, name: int1}
+        - {original: int2, type: localVar, name: int2}
+    - code: {type: method, methodKey: "*SubPage.SubPage-void"}
+    - code: {type: method, methodKey: "*SubPage.generate-void"}
+    - code:
+        type: method
+        args:
+        - {original: page1, type: localVar, name: page1}
+        - {original: page2, type: localVar, name: page2}
+    - code:
+        value:
+          type: method
+          methodKey: "*SubPage.get-void"
+          thisInstance: {original: page1, type: localVar, name: page1}
+        type: localVarAssign
+        name: int3
+    - code:
+        type: method
+        args:
+        - {original: int3, type: localVar, name: int3}
+        - {original: int3, type: localVar, name: int3}

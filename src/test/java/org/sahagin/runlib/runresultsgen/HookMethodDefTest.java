@@ -204,6 +204,7 @@ public class HookMethodDefTest extends TestBase {
             testResultAssertion(normalTest, "innerClassTest", reportIntermediateDir, true);
             testResultAssertion(normalTest, "anonymousClassTest", reportIntermediateDir, true);
             testResultAssertion(normalTest, "multiLineStatementTest", reportIntermediateDir, true);
+            testResultAssertion(normalTest, "localVarTest", reportIntermediateDir, true);
             // Check only if test has been succeeded for the moment
             // since other result such as screen captures are still buggy..
             // TODO fix these bugs
@@ -215,6 +216,7 @@ public class HookMethodDefTest extends TestBase {
             captureAssertion(subDirName, normalTest, "innerClassTest", reportIntermediateDir, 1);
             captureAssertion(subDirName, normalTest, "anonymousClassTest", reportIntermediateDir, 1);
             captureAssertion(subDirName, normalTest, "multiLineStatementTest", reportIntermediateDir, 1);
+            captureAssertion(subDirName, normalTest, "localVarTest", reportIntermediateDir, 1);
 
             String extendsTest = "extendstest.ExtendsTest";
             testResultAssertion(extendsTest, "extendsTest", reportIntermediateDir, true);

@@ -23,6 +23,7 @@ import org.sahagin.share.runresults.StackLine;
 import org.sahagin.share.srctree.SrcTree;
 import org.sahagin.share.srctree.TestMethod;
 import org.sahagin.share.srctree.code.CodeLine;
+import org.sahagin.share.srctree.code.LocalVarAssign;
 import org.sahagin.share.srctree.code.SubMethodInvoke;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlUtils;
@@ -181,11 +182,23 @@ public class HookMethodDef {
 
         CodeLine thisCodeLine = stackLines.get(0).getMethod().getCodeBody().get(
                 stackLines.get(0).getCodeBodyIndex());
-        if (!(thisCodeLine.getCode() instanceof SubMethodInvoke)) {
+        SubMethodInvoke thisMethodInvoke;
+        if (thisCodeLine.getCode() instanceof SubMethodInvoke) {
+            thisMethodInvoke = (SubMethodInvoke) thisCodeLine.getCode();
+        } else if (thisCodeLine.getCode() instanceof LocalVarAssign) {
+            LocalVarAssign assign = (LocalVarAssign) thisCodeLine.getCode();
+            if (assign.getValue() instanceof SubMethodInvoke) {
+                thisMethodInvoke = (SubMethodInvoke) assign.getValue();
+            } else {
+                logger.info("beforeCodeBodyHook: skip code: " + thisCodeLine.getCode().getOriginal());
+                return;
+            }
+        } else {
             logger.info("beforeCodeBodyHook: skip code: " + thisCodeLine.getCode().getOriginal());
             return;
         }
-        SubMethodInvoke thisMethodInvoke = (SubMethodInvoke) thisCodeLine.getCode();
+        assert thisMethodInvoke != null;
+        assert thisMethodInvoke.getSubMethod() != null;
         CaptureStyle thisCaptureStyle = thisMethodInvoke.getSubMethod().getCaptureStyle();
         if (thisCaptureStyle != CaptureStyle.THIS_LINE && thisCaptureStyle != CaptureStyle.STEP_IN) {
             logger.info("beforeCodeBodyHook: skip not capture line");

@@ -16,7 +16,7 @@ rootMethodTable:
     - code:
         methodKey: "*TestMain$InterfaceWithDefault.defaultMethod*"
         original: instance.defaultMethod();
-        thisInstance: {original: instance, type: unknown}
+        thisInstance: {type: localVar, name: instance}
     name: "defaultInterfaceTest"
   - codeBody:
     - code: {original: List<String> slist=new ArrayList<String>(2);, type: unknown}

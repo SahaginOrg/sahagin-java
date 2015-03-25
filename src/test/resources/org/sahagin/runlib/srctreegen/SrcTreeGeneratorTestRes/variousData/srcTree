@@ -29,7 +29,7 @@ subMethodTable:
     - code:
         original: innerClass.innerClassMethod();
         methodKey: "*TestPage$InnerClass.innerClassMethod*"
-        thisInstance: {original: innerClass, type: unknown}
+        thisInstance: {original: innerClass, type: localVar, name: innerClass}
     name: "inenrClassCall"
     classKey: "*TestPage"
     testDoc: Doc:innerTestCall
@@ -122,7 +122,7 @@ rootMethodTable:
     - code:
         original: page.inenrClassCall();
         methodKey: "*TestPage.inenrClassCall*"
-        thisInstance: {original: page, type: unknown}
+        thisInstance: {original: page, type: localVar, name: page}
     - code:
         original: TestPage.staticMethod();
         methodKey: "*TestPage.staticMethod*"
@@ -130,29 +130,25 @@ rootMethodTable:
     - code:
         original: page.staticMethod();
         methodKey: "*TestPage.staticMethod*"
-        thisInstance: {original: page, type: unknown}
+        thisInstance: {original: page, type: localVar, name: page}
     - code:
         original: page.argMethod("AAA",999);
         methodKey: "*TestPage.argMethod*"
-        thisInstance: {original: page, type: unknown}
         args:
         - {value: AAA, original: '"AAA"', type: string}
         - {original: '999', type: unknown}
     - code:
         original: page.argMethod(null,0);
         methodKey: "*TestPage.argMethod*"
-        thisInstance: {original: page, type: unknown}
         args:
         - {original: 'null', type: unknown}
         - {original: '0', type: unknown}
     - code:
         original: page.recurseMethodCall();
         methodKey: "*TestPage.recurseMethodCall*"
-        thisInstance: {original: page, type: unknown}
     - code:
         original: page.nest1("DDD");
         methodKey: "*TestPage.nest1*"
-        thisInstance: {original: page, type: unknown}
         args:
         - {value: DDD, original: '"DDD"', type: string}
     - code: {original: 'assertThat(page.getData(),is("EEE"));', type: unknown}

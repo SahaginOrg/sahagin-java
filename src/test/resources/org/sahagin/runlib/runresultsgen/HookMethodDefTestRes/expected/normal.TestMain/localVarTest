@@ -1,0 +1,4 @@
+lineScreenCaptures:
+- path: "*001.png"
+  stackLines:
+  - {methodKey: "*TestMain.localVarTest*", codeBodyIndex: 1}

@@ -476,7 +476,8 @@ function loadCodeBodyHiddenNode(tr) {
     var testDoc = sahagin.TestDocResolver.placeholderResolvedMethodTestDoc(
         codeLine.getCode(), parentMethodArgTestDocs);
     if (testDoc == null) {
-      testDoc = '';
+      // TODO implement locale logic in Js
+      testDoc = '- ' + $("#codeLineWithoutTestDoc").text() + ' -';
     }
     var original = codeLine.getCode().getOriginal();
     
@@ -507,6 +508,10 @@ function loadCodeBodyHiddenNode(tr) {
 }
 
 $(document).ready(function() {
+  // TODO very poor temporal logic.. implement locale handling logic!
+  sahagin.TestDocResolver.JS_LOCAL_VAR = $("#jsLocalVar").text();
+  sahagin.TestDocResolver.JS_LOCAL_VAR_ASSIGN = $("#jsLocalVarAssign").text();
+
   $("#script_table").treetable({
     expandable: true,
     onNodeExpand: function() {

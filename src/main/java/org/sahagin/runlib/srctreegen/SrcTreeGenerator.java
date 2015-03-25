@@ -53,6 +53,8 @@ import org.sahagin.share.srctree.TestMethod;
 import org.sahagin.share.srctree.TestMethodTable;
 import org.sahagin.share.srctree.code.Code;
 import org.sahagin.share.srctree.code.CodeLine;
+import org.sahagin.share.srctree.code.LocalVar;
+import org.sahagin.share.srctree.code.LocalVarAssign;
 import org.sahagin.share.srctree.code.MethodArgument;
 import org.sahagin.share.srctree.code.StringCode;
 import org.sahagin.share.srctree.code.SubMethodInvoke;
@@ -374,13 +376,16 @@ public class SrcTreeGenerator {
     }
 
     private class CollectCodeVisitor extends ASTVisitor {
+        private TestClassTable subClassTable;
         private TestMethodTable rootMethodTable;
         private TestMethodTable subMethodTable;
         private CompilationUnit compilationUnit;
 
         // set code information to method table
-        public CollectCodeVisitor(TestMethodTable rootMethodTable, TestMethodTable subMethodTable,
+        public CollectCodeVisitor(TestClassTable subClassTable,
+                TestMethodTable rootMethodTable, TestMethodTable subMethodTable,
                 CompilationUnit compilationUnit) {
+            this.subClassTable = subClassTable;
             this.rootMethodTable = rootMethodTable;
             this.subMethodTable = subMethodTable;
             this.compilationUnit = compilationUnit;
@@ -436,7 +441,7 @@ public class SrcTreeGenerator {
             return getSuperMethodSub(method.getDeclaringClass(), method, true);
         }
 
-        private Code methodBindingCode(IMethodBinding binding,
+        private Code generateMethodInvokeCode(IMethodBinding binding,
                 Expression thisInstance, List<?> arguments, String original, TestMethod parentMethod) {
             if (binding == null) {
                 UnknownCode unknownCode = new UnknownCode();
@@ -476,7 +481,7 @@ public class SrcTreeGenerator {
             return subMethodInvoke;
         }
 
-        private Code generateParamVarCode(Expression expression,
+        private Code generateMethodArgCode(SimpleName simpleName,
                 IVariableBinding paramVarBinding, TestMethod parentMethod) {
             int argIndex;
             if (parentMethod == null) {
@@ -488,13 +493,59 @@ public class SrcTreeGenerator {
 
             if (argIndex == -1) {
                 // when fails to resolve parameter variable
-                return generateUnknownCode(expression);
+                return generateUnknownCode(simpleName);
             }
 
             MethodArgument methodArg = new MethodArgument();
-            methodArg.setOriginal(expression.toString().trim());
+            methodArg.setOriginal(simpleName.toString().trim());
             methodArg.setArgIndex(argIndex);
             return methodArg;
+        }
+
+        private LocalVar generateLocalVarCode(SimpleName simpleName,
+                IVariableBinding localVarBinding) {
+            LocalVar localVar = new LocalVar();
+            localVar.setOriginal(simpleName.toString().trim());
+            localVar.setName(simpleName.getIdentifier());
+            return localVar;
+        }
+
+        // expression is used to get orginal code, and can be null
+        private Code generateLocalVarAssignCode(Expression expression,
+                Expression left, Expression right, TestMethod parentMethod) {
+            Code rightCode = expressionCode(right, parentMethod);
+            if (rightCode instanceof UnknownCode) {
+                // ignore left for UnknownCode assignment
+                return rightCode;
+            }
+            if (!(left instanceof SimpleName)) {
+                return rightCode; // ignore left
+            }
+            SimpleName simpleName = (SimpleName) left;
+            IBinding leftBinding = simpleName.resolveBinding();
+            if (!(leftBinding instanceof IVariableBinding)) {
+                return rightCode; // ignore left
+            }
+            IVariableBinding varBinding = (IVariableBinding) leftBinding;
+            if (varBinding.isField() || varBinding.isParameter()) {
+                // ignore left for field assignment and method argument assignment
+                return rightCode;
+            }
+
+            String classKey = varBinding.getType().getBinaryName();
+            TestClass subClass = subClassTable.getByKey(classKey);
+            if (subClass != null && subClass instanceof PageClass) {
+                // ignore left for page type variable assignment
+                // since usually page type variable is usually
+                // not used in other TestDoc
+                return rightCode;
+            }
+
+            LocalVarAssign assign = new LocalVarAssign();
+            assign.setOriginal(expression.toString().trim());
+            assign.setName(simpleName.getIdentifier());
+            assign.setValue(rightCode);
+            return assign;
         }
 
         private UnknownCode generateUnknownCode(Expression expression) {
@@ -503,6 +554,7 @@ public class SrcTreeGenerator {
             return unknownCode;
         }
 
+        // localVars is write only. not read in this expression
         private Code expressionCode(Expression expression, TestMethod parentMethod) {
             if (expression == null) {
                 StringCode strCode = new StringCode();
@@ -516,16 +568,17 @@ public class SrcTreeGenerator {
                 return strCode;
             } else if (expression instanceof Assignment) {
                 Assignment assignment = (Assignment) expression;
-                return expressionCode(assignment.getRightHandSide(), parentMethod);
+                return generateLocalVarAssignCode(expression, assignment.getLeftHandSide(),
+                        assignment.getRightHandSide(), parentMethod);
             } else if (expression instanceof MethodInvocation) {
                 MethodInvocation invocation = (MethodInvocation) expression;
                 IMethodBinding binding = invocation.resolveMethodBinding();
-                return methodBindingCode(binding, invocation.getExpression(),
+                return generateMethodInvokeCode(binding, invocation.getExpression(),
                         invocation.arguments(), expression.toString().trim(), parentMethod);
             } else if (expression instanceof ClassInstanceCreation) {
                 ClassInstanceCreation creation = (ClassInstanceCreation) expression;
                 IMethodBinding binding = creation.resolveConstructorBinding();
-                return methodBindingCode(binding, null, creation.arguments(),
+                return generateMethodInvokeCode(binding, null, creation.arguments(),
                         expression.toString().trim(), parentMethod);
             } else if (expression instanceof SimpleName) {
                SimpleName simpleName = (SimpleName) expression;
@@ -533,7 +586,11 @@ public class SrcTreeGenerator {
                if (binding instanceof IVariableBinding) {
                    IVariableBinding varBinding = (IVariableBinding) binding;
                    if (varBinding.isParameter()) {
-                       return generateParamVarCode(expression, varBinding, parentMethod);
+                       // method argument
+                       return generateMethodArgCode(simpleName, varBinding, parentMethod);
+                   } else if (!(varBinding.isField())) {
+                       // local variable reference
+                       return generateLocalVarCode(simpleName, varBinding);
                    } else {
                        return generateUnknownCode(expression);
                    }
@@ -583,7 +640,12 @@ public class SrcTreeGenerator {
                     VariableDeclarationFragment varFrag
                     = (VariableDeclarationFragment)(((VariableDeclarationStatement)statementNode).fragments().get(0));
                     Expression expression = varFrag.getInitializer();
-                    code = expressionCode(expression, testMethod);
+                    if (expression == null) {
+                        code = new UnknownCode();
+                    } else {
+                        code = generateLocalVarAssignCode(expression, varFrag.getName(),
+                                expression, testMethod);
+                    }
                 } else {
                     code = new UnknownCode();
                 }
@@ -602,17 +664,20 @@ public class SrcTreeGenerator {
     }
 
     private class CollectCodeRequestor extends FileASTRequestor {
+        private TestClassTable subClassTable;
         private TestMethodTable rootMethodTable;
         private TestMethodTable subMethodTable;
 
-        public CollectCodeRequestor(TestMethodTable rootMethodTable, TestMethodTable subMethodTable) {
+        public CollectCodeRequestor(TestClassTable subClassTable,
+                TestMethodTable rootMethodTable, TestMethodTable subMethodTable) {
+            this.subClassTable = subClassTable;
             this.rootMethodTable = rootMethodTable;
             this.subMethodTable = subMethodTable;
         }
 
         @Override
         public void acceptAST(String sourceFilePath, CompilationUnit ast) {
-            ast.accept(new CollectCodeVisitor(rootMethodTable, subMethodTable, ast));
+            ast.accept(new CollectCodeVisitor(subClassTable, rootMethodTable, subMethodTable, ast));
         }
     }
 
@@ -638,6 +703,7 @@ public class SrcTreeGenerator {
 
         // collect code
         CollectCodeRequestor codeRequestor = new CollectCodeRequestor(
+                subRequestor.getSubClassTable(),
                 rootRequestor.getRootMethodTable(), subRequestor.getSubMethodTable());
         parseAST(srcFiles, srcEncoding, classPathEntries, codeRequestor);
 

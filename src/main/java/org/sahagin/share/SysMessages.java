@@ -11,6 +11,10 @@ import org.sahagin.share.yaml.YamlUtils;
 
 public class SysMessages {
     public static final String CODE_LINE_WITHOUT_TEST_DOC = "codeLineWithoutTestDoc";
+    public static final String JS_LOCAL_VAR = "jsLocalVar";
+    public static final String JS_LOCAL_VAR_ASSIGN = "jsLocalVarAssign";
+    public static final String LOCAL_VAR = "localVar";
+    public static final String LOCAL_VAR_ASSIGN = "localVarAssign";
     public static final String REPORT_HIDE_CODE = "reportHideCode";
     public static final String REPORT_SHOW_CODE = "reportShowCode";
 

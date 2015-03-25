@@ -34,20 +34,20 @@ rootMethodTable:
     - code:
         original: pageInstance.baseMethod("QQQ");
         methodKey: "*ImplementsPage.baseMethod*"
-        thisInstance: {original: pageInstance, type: unknown}
+        thisInstance: {type: localVar, name: pageInstance}
         args:
         - {value: QQQ, original: '"QQQ"', type: string}
     - code:
         original: pageInstance.childMethod(-1);
         methodKey: "*ImplementsPage.childMethod*"
-        thisInstance: {original: pageInstance, type: unknown}
+        thisInstance: {type: localVar, name: pageInstance}
         args:
         - {original: '-1', type: unknown}
     - code: {original: ImplementsPageBase baseInstance=new ImplementsPage();, type: unknown}
     - code:
         original: baseInstance.baseMethod("RRR");
         methodKey: "*ImplementsPageBase.baseMethod*"
-        thisInstance: {original: baseInstance, type: unknown}
+        thisInstance: {name: baseInstance, type: localVar}
         args:
         - {value: RRR, original: '"RRR"', type: string}
     name: "implementsTest"

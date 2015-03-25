@@ -102,4 +102,16 @@ public class TestMain extends Java6TestBase {
         assertThat(1, is(1));assertThat(1, is(1));
     }
 
+    @TestDoc("Doc: strReturnMethod")
+    public String strReturnMethod(String str) {
+        return str;
+    }
+
+    @Test
+    public void localVarTest() {
+        String str1 = "test";
+        String str2 = strReturnMethod(str1);
+        int int1 = str2.length();
+    }
+
 }

@@ -16,14 +16,14 @@ rootMethodTable:
         childInvoke: true
         type: method
         methodKey: "*ParentClass.parentClassMethod*"
-        thisInstance: {type: unknown}
+        thisInstance: {type: localVar}
         args:
         - {value: abc, type: string}
     - code:
         childInvoke: true
         type: method
         methodKey: "*ParentInterface.parentInterfaceMethod*"
-        thisInstance: {type: unknown}
+        thisInstance: {type: localVar}
         args:
         - {value: def, type: string}
     key: "*TestMain.callMain*"

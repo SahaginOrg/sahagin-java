@@ -407,6 +407,8 @@ public class HtmlReport {
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/method-argument.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/unknown-code.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/sub-method-invoke.js");
+        extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/local-var.js");
+        extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/local-var-assign.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/code-line.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/test-class.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/page-class.js");
@@ -478,7 +480,12 @@ public class HtmlReport {
             escapePut(methodContext, "methodTestDoc", rootMethod.getTestDoc());
             escapePut(methodContext, "msgShowCode", SysMessages.get(SysMessages.REPORT_SHOW_CODE));
             escapePut(methodContext, "msgHideCode", SysMessages.get(SysMessages.REPORT_HIDE_CODE));
-
+            // TODO js logic should construct message according to the user locale
+            // without any information passed from the java logic
+            escapePut(methodContext, "codeLineWithoutTestDoc",
+                    SysMessages.get(SysMessages.CODE_LINE_WITHOUT_TEST_DOC));
+            escapePut(methodContext, "jsLocalVar", SysMessages.get(SysMessages.JS_LOCAL_VAR));
+            escapePut(methodContext, "jsLocalVarAssign", SysMessages.get(SysMessages.JS_LOCAL_VAR_ASSIGN));
             RootMethodRunResult runResult = runResults.getRunResultByRootMethod(rootMethod);
             boolean executed = (runResult != null);
             RunFailure runFailure = getRunFailure(runResult);
