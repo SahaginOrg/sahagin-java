@@ -7,26 +7,27 @@ import org.junit.Test;
 import org.sahagin.TestBase;
 import org.sahagin.runlib.additionaltestdoc.AdditionalTestDocs;
 import org.sahagin.runlib.external.Locale;
+import org.sahagin.runlib.external.adapter.Adapter;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.runlib.external.adapter.junit3.JUnit3Adapter;
 import org.sahagin.runlib.external.adapter.junit4.JUnit4Adapter;
+import org.sahagin.runlib.external.adapter.testng.TestNGAdapter;
 import org.sahagin.share.AcceptableLocales;
 import org.sahagin.share.IllegalTestScriptException;
 import org.sahagin.share.srctree.SrcTree;
 import org.sahagin.share.yaml.YamlUtils;
 
 public class SrcTreeGeneratorTest extends TestBase {
+    private static final JUnit3Adapter JUNIT3 = new JUnit3Adapter();
+    private static final JUnit4Adapter JUNIT4 = new JUnit4Adapter();
+    private static final TestNGAdapter TESTNG = new TestNGAdapter();
 
     private void testMain(String subDirName,
-            AdditionalTestDocs additionalTestDocs, Locale userLocale, boolean usesJUnit3) {
-        AdapterContainer.globalInitialize(AcceptableLocales.getInstance(null));
+            AdditionalTestDocs additionalTestDocs, Locale userLocale, Adapter adapter) {
         // set RootMethodAdapter
-        if (usesJUnit3) {
-            new JUnit3Adapter().initialSetAdapter();
-        } else {
-            new JUnit4Adapter().initialSetAdapter();
-        }
-
+        AdapterContainer.globalInitialize(
+                AcceptableLocales.getInstance(null), adapter.getName());
+        adapter.initialSetAdapter();
         File testSrcDir = new File(testResourceDir(subDirName), "input");
         AcceptableLocales locales = AcceptableLocales.getInstance(userLocale);
         SrcTreeGenerator gen = new SrcTreeGenerator(additionalTestDocs, locales);
@@ -76,78 +77,83 @@ public class SrcTreeGeneratorTest extends TestBase {
     // so split to multiple test method when srcTree YAML format is fixed.
     @Test
     public void variousData() {
-        testMain("variousData", null, null, false);
+        testMain("variousData", null, null, JUNIT4);
     }
 
     @Test
     public void classAndMethodKey() {
-        testMain("classAndMethodKey", null, null, false);
+        testMain("classAndMethodKey", null, null, JUNIT4);
     }
 
     @Test
     public void utf8Character() {
-        testMain("utf8Character", null, null, false);
+        testMain("utf8Character", null, null, JUNIT4);
     }
 
     @Test
     public void defaultLocale() {
-        testMain("defaultLocale", null, null, false);
+        testMain("defaultLocale", null, null, JUNIT4);
     }
 
     @Test
     public void jaJpLocale() {
-        testMain("jaJpLocale", null, Locale.JA_JP, false);
+        testMain("jaJpLocale", null, Locale.JA_JP, JUNIT4);
     }
 
     @Test
     public void extendsTest() {
-        testMain("extendsTest", null, null, false);
+        testMain("extendsTest", null, null, JUNIT4);
     }
 
     @Test
     public void implementsTest() {
-        testMain("implementsTest", null, null, false);
+        testMain("implementsTest", null, null, JUNIT4);
     }
 
     @Test
     public void exceptionHandler() {
-        testMain("exceptionHandler", null, null, false);
+        testMain("exceptionHandler", null, null, JUNIT4);
     }
 
     @Test
     public void varLengthArray() {
-        testMain("varLengthArray", null, null, false);
+        testMain("varLengthArray", null, null, JUNIT4);
     }
 
     @Test
     public void childInvoke() {
-        testMain("childInvoke", null, null, false);
+        testMain("childInvoke", null, null, JUNIT4);
     }
 
     @Test
     public void localVar() {
-        testMain("localVar", null, null, false);
+        testMain("localVar", null, null, JUNIT4);
     }
 
 
     @Test
     public void additionalTestDocs() {
         AcceptableLocales locales = AcceptableLocales.getInstance(Locale.EN_US);
-        AdapterContainer.globalInitialize(locales);
+        AdapterContainer.globalInitialize(locales, new JUnit4Adapter().getName());
         new JUnit4Adapter().initialSetAdapter();
         AdditionalTestDocs testDocs
         = AdapterContainer.globalInstance().getAdditionalTestDocs();
-        testMain("additionalTestDocs", testDocs, Locale.EN_US, false);
+        testMain("additionalTestDocs", testDocs, Locale.EN_US, JUNIT4);
     }
 
     @Test
     public void java8() {
-        testMain("java8", null, null, false);
+        testMain("java8", null, null, JUNIT4);
     }
 
     @Test
     public void jUnit3() {
-        testMain("jUnit3", null, null, true);
+        testMain("jUnit3", null, null, JUNIT3);
+    }
+
+    @Test
+    public void testNG() {
+        testMain("testNG", null, null, TESTNG);
     }
 
 }

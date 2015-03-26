@@ -15,11 +15,12 @@ public class Config implements YamlConvertible {
     private static final String INVALID_CONFIG_YAML = "failed to load config file \"%s\": %s";
     private static final File REPORT_INTERMEDIATE_DATA_DIR_DEFAULT = new File("sahagin-intermediate-data");
     private static final File REPORT_OUTPUDT_DATA_DIR_DEFAULT = new File("sahagin-report");
+    private static final String TEST_FRAMEWORK_DEFAULT = "jUnit4";
 
     private File rootDir;
     private File testDir;
     private List<String> adapterClassNames = new ArrayList<String>(8);
-    private boolean usesJUnit3 = false;
+    private String testFramework = TEST_FRAMEWORK_DEFAULT;
     private File reportIntermediateDataDir = REPORT_INTERMEDIATE_DATA_DIR_DEFAULT;
     private File reportOutputDir = REPORT_OUTPUDT_DATA_DIR_DEFAULT;
     private boolean outputLog = false; // TODO provisional. this is only for debugging
@@ -65,12 +66,12 @@ public class Config implements YamlConvertible {
         adapterClassNames.add(adapterClassName);
     }
 
-    public boolean usesJUnit3() {
-        return usesJUnit3;
+    public String getTestFramework() {
+        return testFramework;
     }
 
-    public void setUsesJUnit3(boolean usesJUnit3) {
-        this.usesJUnit3 = usesJUnit3;
+    public void setTestFramework(String testFramework) {
+        this.testFramework = testFramework;
     }
 
     public File getRootBaseReportIntermediateDataDir() {
@@ -136,7 +137,7 @@ public class Config implements YamlConvertible {
         Map<String, Object> javaConf = new HashMap<String, Object>(4);
         javaConf.put("testDir", testDir.getPath());
         javaConf.put("adapters", adapterClassNames);
-        javaConf.put("jUnit3", usesJUnit3);
+        javaConf.put("testFramework", testFramework);
         Map<String, Object> commonConf = new HashMap<String, Object>(4);
         commonConf.put("reportIntermediateDataDir", reportIntermediateDataDir.getPath());
         commonConf.put("reportOutputDir", reportOutputDir.getPath());
@@ -163,11 +164,11 @@ public class Config implements YamlConvertible {
         testDir = new File(YamlUtils.getStrValue(javaYamlObj, "testDir"));
         adapterClassNames = YamlUtils.getStrListValue(javaYamlObj, "adapters", true);
 
-        Boolean usesJUnit3Value = YamlUtils.getBooleanValue(javaYamlObj, "jUnit3", true);
-        if (usesJUnit3Value == null) {
-            usesJUnit3 = false;
+        String testFrameworkValue = YamlUtils.getStrValue(javaYamlObj, "testFramework", true);
+        if (testFrameworkValue == null) {
+            testFrameworkValue = TEST_FRAMEWORK_DEFAULT;
         } else {
-            usesJUnit3 = usesJUnit3Value;
+            testFramework = testFrameworkValue;
         }
 
         // common and it's child settings is not mandatory

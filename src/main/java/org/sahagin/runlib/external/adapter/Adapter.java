@@ -4,4 +4,6 @@ public interface Adapter {
 
     void initialSetAdapter();
 
+    String getName();
+
 }

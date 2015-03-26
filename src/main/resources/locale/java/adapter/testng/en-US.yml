@@ -1,0 +1,10 @@
+method:
+  org.hamcrest.MatcherAssert.assertThat:
+    Object,org.hamcrest.Matcher: check that '{0}' {1}
+    String,Object,org.hamcrest.Matcher: check that '{1}' {2}
+  org.testng.Assert.assertEquals:
+    boolean,boolean: check that '{0}' equals to '{1}'
+    int,int: check that '{0}' equals to '{1}'
+    long,long: check that '{0}' equals to '{1}'
+    Object,Object: check that '{0}' equals to '{1}'
+    Object[],Object[]: check that '{0}' equals to '{1}'

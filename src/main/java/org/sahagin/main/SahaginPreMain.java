@@ -14,6 +14,7 @@ import org.sahagin.runlib.external.adapter.javalib.JavaLibAdapter;
 import org.sahagin.runlib.external.adapter.junit3.JUnit3Adapter;
 import org.sahagin.runlib.external.adapter.junit4.JUnit4Adapter;
 import org.sahagin.runlib.external.adapter.selendroid.SelendroidAdapter;
+import org.sahagin.runlib.external.adapter.testng.TestNGAdapter;
 import org.sahagin.runlib.external.adapter.webdriver.WebDriverAdapter;
 import org.sahagin.runlib.runresultsgen.RunResultsGenerateHookSetter;
 import org.sahagin.runlib.srctreegen.SrcTreeGenerator;
@@ -31,6 +32,8 @@ import org.sahagin.share.yaml.YamlUtils;
 //provides premain method to generate SrcTree and RunResults and
 //generate HTML report from them
 public class SahaginPreMain {
+    private static final String MSG_TEST_FRAMEWORK_NOT_FOUND
+    = "testFramework not found: %s";
 
     // agentArgs is configuration YAML file path
     public static void premain(String agentArgs, Instrumentation inst)
@@ -45,15 +48,13 @@ public class SahaginPreMain {
         Config config = Config.generateFromYamlConfig(new File(configFilePath));
         Logging.setLoggerEnabled(config.isOutputLog());
         AcceptableLocales locales = AcceptableLocales.getInstance(config.getUserLocale());
-        AdapterContainer.globalInitialize(locales);
+        AdapterContainer.globalInitialize(locales, config.getTestFramework());
         SysMessages.globalInitialize(locales);
 
         // default adapters
-        if (config.usesJUnit3()) {
-            new JUnit3Adapter().initialSetAdapter();
-        } else {
-            new JUnit4Adapter().initialSetAdapter();
-        }
+        new JUnit3Adapter().initialSetAdapter();
+        new JUnit4Adapter().initialSetAdapter();
+        new TestNGAdapter().initialSetAdapter();
         new JavaLibAdapter().initialSetAdapter();
         new WebDriverAdapter().initialSetAdapter();
         new AppiumAdapter().initialSetAdapter();
@@ -71,6 +72,11 @@ public class SahaginPreMain {
             assert adapterObj instanceof Adapter;
             Adapter adapter = (Adapter) adapterObj;
             adapter.initialSetAdapter();
+        }
+
+        if (!AdapterContainer.globalInstance().isRootMethodAdapterSet()) {
+            throw new RuntimeException(String.format(
+                    MSG_TEST_FRAMEWORK_NOT_FOUND, config.getTestFramework()));
         }
 
         // delete previous data

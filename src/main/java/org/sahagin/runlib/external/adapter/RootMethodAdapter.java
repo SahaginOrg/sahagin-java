@@ -6,4 +6,6 @@ public interface RootMethodAdapter {
 
     boolean isRootMethod(IMethodBinding methodBinding);
 
+    String getName();
+
 }

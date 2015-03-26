@@ -14,17 +14,32 @@ public class JUnit4Adapter implements Adapter {
     @Override
     public void initialSetAdapter() {
         AdapterContainer container = AdapterContainer.globalInstance();
-        container.setRootMethodAdapter(new RootMethodAdapterImpl());
+        container.setRootMethodAdapter(new RootMethodAdapterImpl(getName()));
         container.addAdditionalTestDocsAdapter(new AdditionalTestDocsAdapterImpl());
     }
 
+    @Override
+    public String getName() {
+        return "jUnit4";
+    }
+
     private static class RootMethodAdapterImpl implements RootMethodAdapter {
+        private String name;
+
+        private RootMethodAdapterImpl(String name) {
+            this.name = name;
+        }
 
         @Override
         public boolean isRootMethod(IMethodBinding methodBinding) {
             // TODO should check if public and no argument and void return method
             return ASTUtils.getAnnotationBinding(
                     methodBinding.getAnnotations(), "org.junit.Test") != null;
+        }
+
+        @Override
+        public String getName() {
+            return name;
         }
 
     }

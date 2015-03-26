@@ -20,7 +20,7 @@ public class AdapterContainerTest {
     @Test
     public void testDocSetUpByEnUs() {
         AcceptableLocales locales = AcceptableLocales.getInstance(Locale.EN_US);
-        AdapterContainer.globalInitialize(locales);
+        AdapterContainer.globalInitialize(locales, new JUnit4Adapter().getName());
         new JUnit4Adapter().initialSetAdapter();
         new WebDriverAdapter().initialSetAdapter();
         AdditionalTestDocs testDocs
@@ -46,7 +46,7 @@ public class AdapterContainerTest {
     @Test
     public void testDocSetUpByJaJp() {
         AcceptableLocales locales = AcceptableLocales.getInstance(Locale.JA_JP);
-        AdapterContainer.globalInitialize(locales);
+        AdapterContainer.globalInitialize(locales, new JUnit4Adapter().getName());
         AdditionalTestDocs testDocs
         = AdapterContainer.globalInstance().getAdditionalTestDocs();
         testDocs.clear();

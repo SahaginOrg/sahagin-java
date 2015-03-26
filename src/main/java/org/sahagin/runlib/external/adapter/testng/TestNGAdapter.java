@@ -1,14 +1,14 @@
-package org.sahagin.runlib.external.adapter.junit3;
+package org.sahagin.runlib.external.adapter.testng;
 
 import org.eclipse.jdt.core.dom.IMethodBinding;
-import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.sahagin.runlib.external.adapter.Adapter;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.runlib.external.adapter.ResourceAdditionalTestDocsAdapter;
 import org.sahagin.runlib.external.adapter.RootMethodAdapter;
+import org.sahagin.runlib.srctreegen.ASTUtils;
 import org.sahagin.share.CommonPath;
 
-public class JUnit3Adapter implements Adapter {
+public class TestNGAdapter implements Adapter {
 
     @Override
     public void initialSetAdapter() {
@@ -19,7 +19,7 @@ public class JUnit3Adapter implements Adapter {
 
     @Override
     public String getName() {
-        return "jUnit3";
+        return "testNG";
     }
 
     private static class RootMethodAdapterImpl implements RootMethodAdapter {
@@ -31,21 +31,9 @@ public class JUnit3Adapter implements Adapter {
 
         @Override
         public boolean isRootMethod(IMethodBinding methodBinding) {
-            // TODO should check if public and no argument and void return method
-            String methodName = methodBinding.getName();
-            if (methodName == null || !methodName.startsWith("test")) {
-                return false;
-            }
-
-            ITypeBinding defClass = methodBinding.getDeclaringClass();
-            while (defClass != null) {
-                String className = defClass.getQualifiedName();
-                if ("junit.framework.TestCase".equals(className)) {
-                    return true;
-                }
-                defClass = defClass.getSuperclass();
-            }
-            return false;
+            // TODO maybe should check if public and void return method
+            return ASTUtils.getAnnotationBinding(
+                    methodBinding.getAnnotations(), "org.testng.annotations.Test") != null;
         }
 
         @Override
@@ -59,7 +47,7 @@ public class JUnit3Adapter implements Adapter {
 
         @Override
         public String resourceDirPath() {
-            return CommonPath.standardAdapdaterLocaleResDirPath() + "/junit3";
+            return CommonPath.standardAdapdaterLocaleResDirPath() + "/testng";
         }
 
         @Override
@@ -68,13 +56,14 @@ public class JUnit3Adapter implements Adapter {
 
         @Override
         public void methodAdd() {
-            // TODO if you use hamcrest with JUnit3
-
             // in alphabetical order
-            methodAdd("junit.framework.Assert", "assertEquals", "double,double");
-            methodAdd("junit.framework.Assert", "assertEquals", "long,long");
-            methodAdd("junit.framework.Assert", "assertEquals", "Object,Object");
-            methodAdd("junit.framework.Assert", "assertEquals", "Object[],Object[]");
+            methodAdd("org.hamcrest.MatcherAssert", "assertThat", "Object,org.hamcrest.Matcher");
+            methodAdd("org.hamcrest.MatcherAssert", "assertThat", "String,Object,org.hamcrest.Matcher");
+            methodAdd("org.testng.Assert", "assertEquals", "boolean,boolean");
+            methodAdd("org.testng.Assert", "assertEquals", "int,int");
+            methodAdd("org.testng.Assert", "assertEquals", "long,long");
+            methodAdd("org.testng.Assert", "assertEquals", "Object,Object");
+            methodAdd("org.testng.Assert", "assertEquals", "Object[],Object[]");
         }
 
     }

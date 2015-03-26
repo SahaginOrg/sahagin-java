@@ -16,6 +16,11 @@ public class AppiumAdapter implements Adapter {
         container.addAdditionalTestDocsAdapter(new AdditionalTestDocsAdapterImpl());
     }
 
+    @Override
+    public String getName() {
+        return "appium";
+    }
+
     // can set null
     public static void setAdapter(final WebDriver driver) {
         AdapterContainer container = AdapterContainer.globalInstance();

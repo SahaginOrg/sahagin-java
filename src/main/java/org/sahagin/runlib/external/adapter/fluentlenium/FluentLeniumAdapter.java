@@ -20,6 +20,11 @@ public class FluentLeniumAdapter implements Adapter {
         container.addAdditionalTestDocsAdapter(new AdditionalTestDocsAdapterImpl());
     }
 
+    @Override
+    public String getName() {
+        return "fluentLenium";
+    }
+
     // can set null
     public static void setAdapter(Fluent fluent) {
         AdapterContainer container = AdapterContainer.globalInstance();

@@ -14,6 +14,11 @@ public class JavaLibAdapter implements Adapter {
         container.addAdditionalTestDocsAdapter(new AdditionalTestDocsAdapterImpl());
     }
 
+    @Override
+    public String getName() {
+        return "javaLib";
+    }
+
     private static class AdditionalTestDocsAdapterImpl extends ResourceAdditionalTestDocsAdapter {
 
         @Override

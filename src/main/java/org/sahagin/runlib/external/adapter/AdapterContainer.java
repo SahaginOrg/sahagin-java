@@ -8,6 +8,7 @@ public class AdapterContainer {
     private static AdapterContainer globalInstance = new AdapterContainer();
     private boolean initialized = false;
     private AcceptableLocales locales;
+    private String acceptableTestFramework = null;
     private RootMethodAdapter rootMethodAdapter;
     private ScreenCaptureAdapter screenCaptureAdapter;
     private AdditionalTestDocs additionalTestDocs = new AdditionalTestDocs();
@@ -15,11 +16,15 @@ public class AdapterContainer {
     // make constructor private
     private AdapterContainer() {}
 
-    private void initialize(AcceptableLocales locales) {
+    private void initialize(AcceptableLocales locales, String acceptableTestFramework) {
         if (locales == null) {
             throw new NullPointerException();
         }
+        if (acceptableTestFramework == null) {
+            throw new NullPointerException();
+        }
         this.locales = locales;
+        this.acceptableTestFramework = acceptableTestFramework;
         this.rootMethodAdapter = null;
         this.screenCaptureAdapter = null;
         this.additionalTestDocs = new AdditionalTestDocs();
@@ -27,8 +32,8 @@ public class AdapterContainer {
     }
 
     // some method call of this class requires initialization before calling the method
-    public static void globalInitialize(AcceptableLocales locales) {
-        globalInstance.initialize(locales);
+    public static void globalInitialize(AcceptableLocales locales, String acceptableTestFramework) {
+        globalInstance.initialize(locales, acceptableTestFramework);
     }
 
     public static AdapterContainer globalInstance() {
@@ -43,7 +48,16 @@ public class AdapterContainer {
         if (rootMethodAdapter == null) {
             throw new NullPointerException();
         }
-        this.rootMethodAdapter = rootMethodAdapter;
+        if (acceptableTestFramework == null) {
+            throw new IllegalStateException("acceptableTestFramework is not set");
+        }
+        if (acceptableTestFramework.equals(rootMethodAdapter.getName())) {
+            this.rootMethodAdapter = rootMethodAdapter;
+        }
+    }
+
+    public boolean isRootMethodAdapterSet() {
+        return this.rootMethodAdapter != null;
     }
 
     public boolean isRootMethod(IMethodBinding methodBinding) {

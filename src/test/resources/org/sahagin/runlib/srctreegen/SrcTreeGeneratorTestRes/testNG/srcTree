@@ -1,0 +1,3 @@
+rootMethodTable:
+  methods:
+  - name: methodForTestNG
