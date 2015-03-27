@@ -64,6 +64,7 @@ public class TestNGAdapter implements Adapter {
             methodAdd("org.testng.Assert", "assertEquals", "long,long");
             methodAdd("org.testng.Assert", "assertEquals", "Object,Object");
             methodAdd("org.testng.Assert", "assertEquals", "Object[],Object[]");
+            methodAdd("org.testng.Assert", "assertEquals", "String,String");
         }
 
     }

@@ -8,3 +8,4 @@ method:
     long,long: check that '{0}' equals to '{1}'
     Object,Object: check that '{0}' equals to '{1}'
     Object[],Object[]: check that '{0}' equals to '{1}'
+    String,String: check that '{0}' equals to '{1}'
