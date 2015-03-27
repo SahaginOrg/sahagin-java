@@ -7,6 +7,7 @@ import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javassist.CannotCompileException;
@@ -36,13 +37,10 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
         this.srcTree = srcTree;
     }
 
-    private List<String> getArgClassQualifiedNames(CtMethod method) {
-        CtClass[] paramTypes;
-        try {
-            paramTypes = method.getParameterTypes();
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
-        }
+    // throws NotFoundException if fails to get names
+    // (for example when class of method argument type has not been loaded by class loader)
+    private List<String> getArgClassQualifiedNames(CtMethod method) throws NotFoundException {
+        CtClass[] paramTypes = method.getParameterTypes();
         List<String> result = new ArrayList<String>(paramTypes.length);
         for (CtClass paramType : paramTypes) {
             result.add(paramType.getName());
@@ -50,7 +48,9 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
         return result;
     }
 
-    private String generateMethodKey(CtMethod method) {
+    // throws NotFoundException if fails to get names
+    // (for example when class of method argument type has not been loaded by class loader)
+    private String generateMethodKey(CtMethod method) throws NotFoundException {
         String classQualifiedName = method.getDeclaringClass().getName();
         String methodSimpleName = method.getName();
         List<String> argClassQualifiedNames = getArgClassQualifiedNames(method);
@@ -68,9 +68,14 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
                 // CtClass.getMethods, so exclude such methods
                 continue;
             }
-            TestMethod testMethod = table.getByKey(generateMethodKey(ctMethod));
-            if (testMethod != null) {
-                result.add(Pair.of(ctMethod, testMethod));
+            try {
+                TestMethod testMethod = table.getByKey(generateMethodKey(ctMethod));
+                if (testMethod != null) {
+                    result.add(Pair.of(ctMethod, testMethod));
+                }
+            } catch (NotFoundException e) {
+                // just ignore this method
+                logger.log(Level.INFO, "ignore exceptin for " + ctMethod.getLongName(), e);
             }
         }
         return result;
