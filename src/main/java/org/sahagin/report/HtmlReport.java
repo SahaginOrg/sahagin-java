@@ -288,7 +288,7 @@ public class HtmlReport {
             rootStackLines.add(rootStackLine);
 
             ReportCodeLine reportCodeLine = generateReportCodeLine(codeLine,
-                    new ArrayList<String>(0), rootStackLines, runFailure, executed, rootTtId, null);
+                    rootMethod.getArgVariables(), rootStackLines, runFailure, executed, rootTtId, null);
             result.add(reportCodeLine);
 
             // add direct child to HTML report

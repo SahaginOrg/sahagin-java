@@ -253,6 +253,7 @@ public class TestDocResolver {
         }
     }
 
+    // code: SubMethodInvoke code
     public static List<String> placeholderResolvedMethodArgTestDocs(Code code,
             List<String> placeholderResolvedParentMethodArgTestDocs) throws IllegalTestScriptException {
         if (!(code instanceof SubMethodInvoke)) {
