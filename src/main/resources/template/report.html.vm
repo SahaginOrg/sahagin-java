@@ -13,6 +13,8 @@
     <script src="${externalResourceRootDir}/js/share/srctree/code/sub-method-invoke.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/code/local-var.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/code/local-var-assign.js"></script>
+    <script src="${externalResourceRootDir}/js/share/srctree/code/test-step.js"></script>
+    <script src="${externalResourceRootDir}/js/share/srctree/code/test-step-label.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/code/code-line.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/test-class.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/page-class.js"></script>

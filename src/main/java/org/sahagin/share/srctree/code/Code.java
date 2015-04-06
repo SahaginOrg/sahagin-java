@@ -52,6 +52,8 @@ public abstract class Code implements YamlConvertible {
             result = new LocalVarAssign();
         } else if (TestStep.TYPE.equals(type)) {
             result = new TestStep();
+        } else if (TestStepLabel.TYPE.equals(type)) {
+            result = new TestStepLabel();
         } else if (UnknownCode.TYPE.equals(type)) {
             result = new UnknownCode();
         } else {
