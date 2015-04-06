@@ -10,11 +10,6 @@ public class LocalVarAssign extends Code {
     private String name;
     private Code value;
 
-    @Override
-    protected String getType() {
-        return TYPE;
-    }
-
     public String getName() {
         return name;
     }
@@ -29,6 +24,11 @@ public class LocalVarAssign extends Code {
 
     public void setValue(Code value) {
         this.value = value;
+    }
+
+    @Override
+    protected String getType() {
+        return TYPE;
     }
 
     @Override

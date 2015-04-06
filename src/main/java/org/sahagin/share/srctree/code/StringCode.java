@@ -10,17 +10,17 @@ public class StringCode extends Code {
 
     private String value;
 
-    @Override
-    protected String getType() {
-        return TYPE;
-    }
-
     public String getValue() {
         return value;
     }
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    @Override
+    protected String getType() {
+        return TYPE;
     }
 
     @Override

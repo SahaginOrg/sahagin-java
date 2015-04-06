@@ -9,17 +9,17 @@ public class LocalVar extends Code {
     public static final String TYPE = "localVar";
     private String name;
 
-    @Override
-    protected String getType() {
-        return TYPE;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    protected String getType() {
+        return TYPE;
     }
 
     @Override

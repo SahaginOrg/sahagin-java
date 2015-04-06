@@ -10,17 +10,17 @@ public class MethodArgument extends Code {
 
     private int argIndex;
 
-    @Override
-    protected String getType() {
-        return TYPE;
-    }
-
     public int getArgIndex() {
         return argIndex;
     }
 
     public void setArgIndex(int argIndex) {
         this.argIndex = argIndex;
+    }
+
+    @Override
+    protected String getType() {
+        return TYPE;
     }
 
     @Override
