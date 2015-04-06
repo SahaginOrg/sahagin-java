@@ -9,6 +9,7 @@ import org.sahagin.share.srctree.code.Code;
 import org.sahagin.share.srctree.code.CodeLine;
 import org.sahagin.share.srctree.code.LocalVarAssign;
 import org.sahagin.share.srctree.code.SubMethodInvoke;
+import org.sahagin.share.srctree.code.TestStep;
 import org.sahagin.share.yaml.YamlUtils;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlConvertible;
@@ -197,6 +198,11 @@ public class SrcTree implements YamlConvertible {
         } else if (code instanceof LocalVarAssign) {
             LocalVarAssign assign = (LocalVarAssign) code;
             resolveTestMethod(assign.getValue());
+        } else if (code instanceof TestStep) {
+            TestStep testStep = (TestStep) code;
+            for (CodeLine step : testStep.getStepBody()) {
+                resolveTestMethod(step.getCode());
+            }
         }
     }
 
