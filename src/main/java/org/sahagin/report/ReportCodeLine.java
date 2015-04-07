@@ -23,6 +23,7 @@ public class ReportCodeLine {
     private String ttId;
     private String parentTtId = null; // null means no parent
     private String imageId;
+    private boolean childLoaded = false;
 
     public String getMethodKey() {
         if (!(codeLine.getCode() instanceof SubMethodInvoke)) {
@@ -128,6 +129,14 @@ public class ReportCodeLine {
 
     public void setImageId(String imageId) {
         this.imageId = imageId;
+    }
+
+    public boolean isChildLoaded() {
+        return childLoaded;
+    }
+
+    public void setChildLoaded(boolean childLoaded) {
+        this.childLoaded = childLoaded;
     }
 
 }

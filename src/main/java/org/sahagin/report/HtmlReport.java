@@ -250,6 +250,9 @@ public class HtmlReport {
         // Use ttId as imageId.
         // If image file for this imageId is not found, noImage image will be used
         result.setImageId(ttId);
+        // TestStepLabel must be root node.
+        // Grandchildren of this node have already been loaded.
+        result.setChildLoaded(codeLine.getCode() instanceof TestStepLabel);
         List<StackLine> errStackLines = null;
         if (runFailure != null) {
             errStackLines = runFailure.getStackLines();

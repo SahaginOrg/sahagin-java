@@ -76,7 +76,12 @@
                 #else
                   #set( $dataTtParentId = "" )
                 #end
-                <tr data-tt-id="${codeLine.getTtId()}" ${dataTtParentId} data-image-id="${codeLine.getImageId()}" data-method-key="${codeLine.getMethodKey()}" class="${lineClass}">
+                #if( ${codeLine.isChildLoaded()} )
+                  #set( $loadedClass = "loaded" )
+                #else
+                  #set( $loadedClass = "" )
+                #end
+                <tr data-tt-id="${codeLine.getTtId()}" ${dataTtParentId} data-image-id="${codeLine.getImageId()}" data-method-key="${codeLine.getMethodKey()}" class="${lineClass} ${loadedClass}">
                   <td>${codeLine.getPageTestDoc()}</td>
                   <td>${codeLine.getTestDoc()}</td>
                   <td class="srcInfo">${codeLine.getCodeLine().getCode().getOriginal()}</td>
