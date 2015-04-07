@@ -15,6 +15,8 @@ import org.sahagin.share.srctree.code.LocalVarAssign;
 import org.sahagin.share.srctree.code.MethodArgument;
 import org.sahagin.share.srctree.code.StringCode;
 import org.sahagin.share.srctree.code.SubMethodInvoke;
+import org.sahagin.share.srctree.code.TestStep;
+import org.sahagin.share.srctree.code.TestStepLabel;
 import org.sahagin.share.srctree.code.UnknownCode;
 
 // TODO convert {method} to method name (this specification is from Allure framework)
@@ -248,6 +250,28 @@ public class TestDocResolver {
                     assign.getValue(), placeholderResolvedParentMethodArgTestDocs);
             return String.format(SysMessages.get(SysMessages.LOCAL_VAR_ASSIGN),
                     assign.getName(), valueTestDoc);
+        } else if (code instanceof TestStep) {
+            TestStep testStep = (TestStep) code;
+            String result = "";
+            if (testStep.getLabel() != null) {
+                result = testStep.getLabel() + ": ";
+            }
+            if (testStep.getText() != null) {
+                result = result + testStep.getText();
+            }
+            return result;
+        } else if (code instanceof TestStepLabel) {
+            TestStepLabel testStepLabel = (TestStepLabel) code;
+            String result = "";
+            if (testStepLabel.getLabel() != null) {
+                // testStep text does not contain placeholder
+                result = testStepLabel.getLabel() + ": ";
+            }
+            if (testStepLabel.getText() != null) {
+                // testStepLabel text does not contain placeholder
+                result = result + testStepLabel.getText();
+            }
+            return result;
         } else {
             return code.getOriginal();
         }

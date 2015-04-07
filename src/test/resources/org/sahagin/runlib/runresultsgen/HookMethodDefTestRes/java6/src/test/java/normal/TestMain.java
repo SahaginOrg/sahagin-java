@@ -3,6 +3,7 @@ package normal;
 import static org.junit.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
+import static org.sahagin.runlib.external.TestStepLabelMethod.*;
 
 import org.junit.Test;
 import org.sahagin.runlib.external.CaptureStyle;
@@ -112,6 +113,18 @@ public class TestMain extends Java6TestBase {
         String str1 = "test";
         String str2 = strReturnMethod(str1);
         int int1 = str2.length();
+    }
+
+    @TestDoc(value = "Doc: sub", capture = CaptureStyle.STEP_IN)
+    public void subMethodWithTestStepLabel() {
+        TestDoc("Doc: sub");
+    }
+
+    @Test
+    public void testStepLabelTest() {
+        TestDoc("Doc: main1");
+        subMethodWithTestStepLabel();
+        TestDoc("Doc: main2");
     }
 
 }

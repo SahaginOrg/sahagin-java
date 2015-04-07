@@ -36,6 +36,8 @@ import org.sahagin.share.srctree.SrcTree;
 import org.sahagin.share.srctree.TestMethod;
 import org.sahagin.share.srctree.code.CodeLine;
 import org.sahagin.share.srctree.code.SubMethodInvoke;
+import org.sahagin.share.srctree.code.TestStep;
+import org.sahagin.share.srctree.code.TestStepLabel;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlUtils;
 
@@ -128,7 +130,7 @@ public class HtmlReport {
         ReportScreenCapture noImageCapture = new ReportScreenCapture();
         // URL separator is always slash regardless of OS type
         noImageCapture.setPath(FilenameUtils.separatorsToUnix(noImageFilePath));
-        noImageCapture.setTtId("noImage");
+        noImageCapture.setImageId("noImage");
         noImageCapture.setImageWidth(NO_IMAGE_WIDTH);
         noImageCapture.setImageHeight(NO_IMAGE_HEIGHT);
         reportCaptures.add(noImageCapture);
@@ -147,8 +149,9 @@ public class HtmlReport {
             File relOutputCapturePath = CommonUtils.relativize(absOutputCapturePath, methodReportParentDir);
             // URL separator is always slash regardless of OS type
             reportCapture.setPath(FilenameUtils.separatorsToUnix(relOutputCapturePath.getPath()));
+            // use ttId as imageId
             String ttId = generateTtId(lineScreenCapture.getStackLines());
-            reportCapture.setTtId(ttId);
+            reportCapture.setImageId(ttId);
             reportCapture.setImageSizeFromImageFile(lineScreenCapture.getPath());
             reportCaptures.add(reportCapture);
         }
@@ -222,9 +225,9 @@ public class HtmlReport {
         return methodTestDoc;
     }
 
-    private ReportCodeLine generateReportCodeLine(CodeLine codeLine, List<String> parentMethodArgTestDocs,
-            List<StackLine> stackLines, RunFailure runFailure, boolean executed,
-            String ttId, String parentTtId) throws IllegalTestScriptException {
+    private ReportCodeLine generateReportCodeLine(CodeLine codeLine,
+            List<String> parentMethodArgTestDocs, List<StackLine> stackLines, RunFailure runFailure,
+            boolean executed, String ttId, String parentTtId) throws IllegalTestScriptException {
         if (parentMethodArgTestDocs == null) {
             throw new NullPointerException();
         }
@@ -243,6 +246,9 @@ public class HtmlReport {
         result.setStackLines(stackLines);
         result.setTtId(ttId);
         result.setParentTtId(parentTtId);
+        // Use ttId as imageId.
+        // If image file for this imageId is not found, noImage image will be used
+        result.setImageId(ttId);
         List<StackLine> errStackLines = null;
         if (runFailure != null) {
             errStackLines = runFailure.getStackLines();
@@ -274,21 +280,31 @@ public class HtmlReport {
     }
 
     // runFailure... set null if not error
-    private List<ReportCodeLine> generateReportCodeBody(
-            TestMethod rootMethod, RunFailure runFailure, boolean executed)
-                    throws IllegalTestScriptException {
+    private List<ReportCodeLine> generateReportCodeBody(TestMethod rootMethod,
+            RunFailure runFailure, boolean executed) throws IllegalTestScriptException {
+        String currentStepLabelTtId = null;
         List<ReportCodeLine> result = new ArrayList<ReportCodeLine>(rootMethod.getCodeBody().size());
         for (int i = 0; i < rootMethod.getCodeBody().size(); i++) {
             CodeLine codeLine = rootMethod.getCodeBody().get(i);
             String rootTtId = Integer.toString(i);
+            String parentTtIdForRoot = null;
+            if (codeLine.getCode() instanceof TestStepLabel) {
+                parentTtIdForRoot = null;
+                currentStepLabelTtId = rootTtId;
+            } else if (codeLine.getCode() instanceof TestStep) {
+                throw new RuntimeException("not supported");
+            } else {
+                parentTtIdForRoot = currentStepLabelTtId;
+            }
 
             StackLine rootStackLine = generateStackLine(
                     rootMethod, rootMethod.getKey(), i, codeLine.getStartLine());
             List<StackLine> rootStackLines = new ArrayList<StackLine>(1);
             rootStackLines.add(rootStackLine);
 
-            ReportCodeLine reportCodeLine = generateReportCodeLine(codeLine,
-                    rootMethod.getArgVariables(), rootStackLines, runFailure, executed, rootTtId, null);
+            ReportCodeLine reportCodeLine = generateReportCodeLine(
+                    codeLine, rootMethod.getArgVariables(), rootStackLines,
+                    runFailure, executed, rootTtId, parentTtIdForRoot);
             result.add(reportCodeLine);
 
             // add direct child to HTML report
@@ -301,8 +317,19 @@ public class HtmlReport {
                 if (!invoke.isChildInvoke()) {
                     List<String> parentMethodArgTestDocs = reportCodeLine.getMethodArgTestDocs();
                     List<CodeLine> codeBody = invoke.getSubMethod().getCodeBody();
+                    String childCurrentStepLabelTtId = rootTtId;
                     for (int j = 0; j < codeBody.size(); j++) {
                         CodeLine childCodeLine = codeBody.get(j);
+                        String childTtId = rootTtId + "_" + j;
+                        String parentTtIdForChild = null;
+                        if (childCodeLine.getCode() instanceof TestStepLabel) {
+                            parentTtIdForChild = rootTtId;
+                            childCurrentStepLabelTtId = childTtId;
+                        } else if (childCodeLine.getCode() instanceof TestStep) {
+                            throw new RuntimeException("not supported");
+                        } else {
+                            parentTtIdForChild = childCurrentStepLabelTtId;
+                        }
 
                         StackLine childStackLine = generateStackLine(invoke.getSubMethod(),
                                 invoke.getSubMethodKey(), j, childCodeLine.getStartLine());
@@ -312,7 +339,7 @@ public class HtmlReport {
 
                         ReportCodeLine childReportCodeLine = generateReportCodeLine(
                                 childCodeLine, parentMethodArgTestDocs, childStackLines,
-                                runFailure, executed, rootTtId + "_" + j, rootTtId);
+                                runFailure, executed, childTtId, parentTtIdForChild);
                         result.add(childReportCodeLine);
                     }
                 }

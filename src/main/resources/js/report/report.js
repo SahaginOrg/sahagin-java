@@ -26,8 +26,8 @@ var srcInfoShown = true;
  * @param {number} slideIndex
  * @returns {string}
  */
-function getSlideTtId(slideIndex) {
-  return $(".bxslider div.scrollContainer").eq(slideIndex).attr("data-tt-id");
+function getSlideImageId(slideIndex) {
+  return $(".bxslider div.scrollContainer").eq(slideIndex).attr("data-image-id");
 };
 
 /**
@@ -39,23 +39,23 @@ function getTrTtId(trObject) {
 };
 
 /**
- * @param {string} ttId
+ * @param {Object} trObject jQuery object for table tr element
+ * @returns {string}
+ */
+function getTrImageId(trObject) {
+  return trObject.attr("data-image-id");
+};
+
+/**
+ * @param {string} imageId
  * @returns {number} -1 means not found
  */
-function getTtIdSlideIndex(ttId) {
-  var slideObj = $(".bxslider div.scrollContainer[data-tt-id='" + ttId + "']");
+function getImageIdSlideIndex(imageId) {
+  var slideObj = $(".bxslider div.scrollContainer[data-image-id='" + imageId + "']");
   if (slideObj.length == 0) {
     return -1;
   }
   return $(".bxslider div.scrollContainer").index(slideObj);
-};
-
-/**
- * @param {string} ttId
- * @returns {Object} jQuery object for tr
- */
-function getTtIdTr(ttId) {
-  return $("#script_table tbody tr[data-tt-id='" + ttId + "']");
 };
 
 /**
@@ -148,13 +148,13 @@ function getSlideIndexForSelectedTr() {
   if (selected.length == 0) {
     return -1;
   }
-  var ttId = getTrTtId(selected);
-  var slideIndex = getTtIdSlideIndex(ttId);
+  var imageId = getTrImageId(selected);
+  var slideIndex = getImageIdSlideIndex(imageId);
   if (slideIndex != -1) {
     return slideIndex;
   }
   
-  slideIndex = getTtIdSlideIndex('noImage');
+  slideIndex = getImageIdSlideIndex('noImage');
   if (slideIndex != -1) {
     return slideIndex;
   }
@@ -226,12 +226,12 @@ function adjustImageAreaSize() {
   var selected = getSelectedTr();
   var imageContainer;
   if (selected.length == 0) {
-    imageContainer = $(".bxslider div.scrollContainer[data-tt-id='noImage']");
+    imageContainer = $(".bxslider div.scrollContainer[data-image-id='noImage']");
   } else {
-    var ttId = getTrTtId(selected);
-    imageContainer = $(".bxslider div.scrollContainer[data-tt-id='" + ttId + "']");
+    var imageId = getTrImageId(selected);
+    imageContainer = $(".bxslider div.scrollContainer[data-image-id='" + imageId + "']");
     if (imageContainer.length == 0) {
-      imageContainer = $(".bxslider div.scrollContainer[data-tt-id='noImage']");      
+      imageContainer = $(".bxslider div.scrollContainer[data-image-id='noImage']");      
     }
   }
   var width = imageContainer.attr("data-image-width");
@@ -482,7 +482,7 @@ function loadCodeBodyHiddenNode(tr) {
     var original = codeLine.getCode().getOriginal();
     
     childNodeHtml = childNodeHtml + sahagin.CommonUtils.strFormat(
-      '<tr data-tt-id="{0}" data-tt-parent-id="{1}" data-method-key="{2}" class="{3}">'
+      '<tr data-tt-id="{0}" data-tt-parent-id="{1}" data-image-id="{0}" data-method-key="{2}" class="{3}">'
           + '<td>{4}</td><td>{5}</td><td class="srcInfo">{6}</td></tr>',
       ttId, parentTtId, methodKey, lineClass, pageTestDoc, testDoc, original);
     

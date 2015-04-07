@@ -16,7 +16,7 @@ public class ReportScreenCapture {
 
     // relative path from HTML report file
     private String path;
-    private String ttId;
+    private String imageId;
     private int imageWidth;
     private int imageHeight;
 
@@ -28,12 +28,12 @@ public class ReportScreenCapture {
         this.path = path;
     }
 
-    public String getTtId() {
-        return ttId;
+    public String getImageId() {
+        return imageId;
     }
 
-    public void setTtId(String ttId) {
-        this.ttId = ttId;
+    public void setImageId(String imageId) {
+        this.imageId = imageId;
     }
 
     public int getImageWidth() {

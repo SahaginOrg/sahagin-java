@@ -22,6 +22,7 @@ public class ReportCodeLine {
     private boolean alreadyRun = false;
     private String ttId;
     private String parentTtId = null; // null means no parent
+    private String imageId;
 
     public String getMethodKey() {
         if (!(codeLine.getCode() instanceof SubMethodInvoke)) {
@@ -119,6 +120,14 @@ public class ReportCodeLine {
 
     public void setParentTtId(String parentTtId) {
         this.parentTtId = parentTtId;
+    }
+
+    public String getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(String imageId) {
+        this.imageId = imageId;
     }
 
 }

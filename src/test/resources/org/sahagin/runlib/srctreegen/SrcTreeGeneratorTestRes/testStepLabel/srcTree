@@ -1,0 +1,18 @@
+subMethodTable:
+  methods:
+  - codeBody:
+    - code: {text: 'Doc: Nested Step1', type: stepLabel}
+    - code: {text: 'Doc: Nested Step2', type: stepLabel}
+    - code: {type: unknown}
+    - code: {text: 'Doc: Nested Step3', type: stepLabel}
+    - code: {type: unknown}
+    name: subMethod
+rootMethodTable:
+  methods:
+  - codeBody:
+    - code: {text: 'Doc: Step1', type: stepLabel}
+    - code: {type: unknown}
+    - code: {text: 'Doc: Step2', type: stepLabel}
+    - code: {type: method}
+    - code: {text: 'Doc: Step3', type: stepLabel}
+    name: testMethod

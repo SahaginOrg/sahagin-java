@@ -1,0 +1,14 @@
+lineScreenCaptures:
+- path: "*001.png"
+  stackLines:
+  - {methodKey: "*subMethodWithTestStepLabel*", codeBodyIndex: 0}
+  - {methodKey: "*testStepLabelTest*", codeBodyIndex: 1}
+- path: "*002.png"
+  stackLines:
+  - {methodKey: "*testStepLabelTest*", codeBodyIndex: 1}
+- path: "*003.png"
+  stackLines:
+  - {methodKey: "*testStepLabelTest*", codeBodyIndex: 0}
+- path: "*004.png"
+  stackLines:
+  - {methodKey: "*testStepLabelTest*", codeBodyIndex: 2}

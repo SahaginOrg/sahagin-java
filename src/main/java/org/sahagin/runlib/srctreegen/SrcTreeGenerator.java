@@ -40,6 +40,7 @@ import org.sahagin.runlib.additionaltestdoc.AdditionalMethodTestDoc;
 import org.sahagin.runlib.additionaltestdoc.AdditionalPage;
 import org.sahagin.runlib.additionaltestdoc.AdditionalTestDocs;
 import org.sahagin.runlib.external.CaptureStyle;
+import org.sahagin.runlib.external.TestStepLabelMethod;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.share.AcceptableLocales;
 import org.sahagin.share.CommonUtils;
@@ -58,6 +59,7 @@ import org.sahagin.share.srctree.code.LocalVarAssign;
 import org.sahagin.share.srctree.code.MethodArgument;
 import org.sahagin.share.srctree.code.StringCode;
 import org.sahagin.share.srctree.code.SubMethodInvoke;
+import org.sahagin.share.srctree.code.TestStepLabel;
 import org.sahagin.share.srctree.code.UnknownCode;
 
 public class SrcTreeGenerator {
@@ -548,6 +550,38 @@ public class SrcTreeGenerator {
             return assign;
         }
 
+        // return null if method does not represent TestStepLabel
+        private TestStepLabel generateTestStepLabelCode(
+                MethodInvocation invocation, TestMethod parentMethod) {
+            IMethodBinding method = invocation.resolveMethodBinding();
+            if (method == null) {
+                return null;
+            }
+            String methodName = method.getName();
+            if (methodName == null || !methodName.equals("TestDoc")) {
+                return null;
+            }
+
+            ITypeBinding defClass = method.getDeclaringClass();
+            if (defClass == null
+                    || defClass.getQualifiedName() == null
+                    || !defClass.getQualifiedName().equals(TestStepLabelMethod.class.getCanonicalName())) {
+                return null;
+            }
+            assert invocation.arguments().size() == 1;
+            Expression arg = (Expression) invocation.arguments().get(0);
+            Code argCode = expressionCode(arg, parentMethod);
+            if (!(argCode instanceof StringCode)) {
+                throw new RuntimeException(
+                        "testDoc method argument must be string literal argument at this moment");
+            }
+
+            TestStepLabel stepLabel = new TestStepLabel();
+            stepLabel.setLabel(null);
+            stepLabel.setText(((StringCode) argCode).getValue());
+            return stepLabel;
+        }
+
         private UnknownCode generateUnknownCode(Expression expression) {
             UnknownCode unknownCode = new UnknownCode();
             unknownCode.setOriginal(expression.toString().trim());
@@ -572,6 +606,10 @@ public class SrcTreeGenerator {
                         assignment.getRightHandSide(), parentMethod);
             } else if (expression instanceof MethodInvocation) {
                 MethodInvocation invocation = (MethodInvocation) expression;
+                TestStepLabel stepLabel = generateTestStepLabelCode(invocation, parentMethod);
+                if (stepLabel != null) {
+                    return stepLabel;
+                }
                 IMethodBinding binding = invocation.resolveMethodBinding();
                 return generateMethodInvokeCode(binding, invocation.getExpression(),
                         invocation.arguments(), expression.toString().trim(), parentMethod);

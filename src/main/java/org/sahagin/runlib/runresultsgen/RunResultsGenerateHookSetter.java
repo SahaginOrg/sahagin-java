@@ -24,6 +24,7 @@ import org.sahagin.share.srctree.SrcTree;
 import org.sahagin.share.srctree.TestMethod;
 import org.sahagin.share.srctree.TestMethodTable;
 import org.sahagin.share.srctree.code.CodeLine;
+import org.sahagin.share.srctree.code.TestStepLabel;
 import org.sahagin.share.yaml.YamlConvertException;
 
 public class RunResultsGenerateHookSetter implements ClassFileTransformer {
@@ -106,6 +107,32 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
         return false;
     }
 
+    // the stepLabelLineIndex Code line which will be passed to insertAt method.
+    private int insertedLine(List<CodeLine> codeBody, int stepLabelLineIndex) {
+        assert codeBody.size() > 0;
+        if (!(codeBody.get(stepLabelLineIndex).getCode() instanceof TestStepLabel)) {
+            // Hook should be inserted just after the code has finished
+            // since the code inserted by the insertAt method is inserted just before the specified line.
+            return codeBody.get(stepLabelLineIndex).getEndLine() + 1;
+        }
+
+        // Hook should be inserted just after the code block for TestStepLabel has finished.
+        for (int i = stepLabelLineIndex + 1; i < codeBody.size(); i++) {
+            CodeLine codeLine = codeBody.get(i);
+            if (codeLine.getCode() instanceof TestStepLabel) {
+                if (i - 1 >= 0) {
+                    CodeLine prevCodeLine = codeBody.get(i - 1);
+                    if (prevCodeLine.getEndLine() == codeLine.getStartLine()) {
+                        throw new RuntimeException("TestStepLabelMethod and other method are found on the same line."
+                                + " Such case is not supported now");
+                    }
+                }
+                return codeLine.getStartLine();
+            }
+        }
+        return codeBody.get(codeBody.size() - 1).getEndLine() + 1;
+    }
+
     @Override
     public byte[] transform(ClassLoader loader, String className,
             Class<?> classBeingRedefined,
@@ -163,12 +190,10 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
                         }
                     }
 
-                    // insert the hook code to the next line of the hook target line
-                    // to take screen shot after the target line procedure has been finished
-                    // (the code inserted by the insertAt method is inserted just before the target line)
                     String subClassQualifiedName = subMethod.getTestClass().getQualifiedName();
-                    int actualInsertedLine = ctSubMethod.insertAt(codeLine.getEndLine() + 1, false, null);
-                    ctSubMethod.insertAt(codeLine.getEndLine() + 1,
+                    int insertedLine = insertedLine(subMethod.getCodeBody(), i);
+                    int actualInsertedLine = ctSubMethod.insertAt(insertedLine, false, null);
+                    ctSubMethod.insertAt(insertedLine,
                             String.format("%s%s.beforeSubCodeBodyHook(\"%s\", \"%s\", %d, %d);",
                                     initializeSrc, hookClassName, subClassQualifiedName, subMethod.getSimpleName(),
                                     codeLine.getStartLine(), actualInsertedLine));
@@ -200,12 +225,10 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
                         }
                     }
 
-                    // insert the hook code to the next line of the hook target line
-                    // to take screen shot after the target line procedure has been finished
-                    // (the code inserted by the insertAt method is inserted just before the target line)
                     String rootClassQualifiedName = rootMethod.getTestClass().getQualifiedName();
-                    int actualInsertedLine = ctRootMethod.insertAt(codeLine.getEndLine() + 1, false, null);
-                    ctRootMethod.insertAt(codeLine.getEndLine() + 1,
+                    int insertedLine = insertedLine(rootMethod.getCodeBody(), i);
+                    int actualInsertedLine = ctRootMethod.insertAt(insertedLine, false, null);
+                    ctRootMethod.insertAt(insertedLine,
                             String.format("%s%s.beforeRootCodeBodyHook(\"%s\", \"%s\", %d, %d);",
                                     initializeSrc, hookClassName, rootClassQualifiedName, rootMethod.getSimpleName(),
                                     codeLine.getStartLine(), actualInsertedLine));

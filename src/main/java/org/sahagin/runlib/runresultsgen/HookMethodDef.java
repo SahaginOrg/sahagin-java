@@ -25,6 +25,8 @@ import org.sahagin.share.srctree.TestMethod;
 import org.sahagin.share.srctree.code.CodeLine;
 import org.sahagin.share.srctree.code.LocalVarAssign;
 import org.sahagin.share.srctree.code.SubMethodInvoke;
+import org.sahagin.share.srctree.code.TestStep;
+import org.sahagin.share.srctree.code.TestStepLabel;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlUtils;
 
@@ -182,24 +184,27 @@ public class HookMethodDef {
 
         CodeLine thisCodeLine = stackLines.get(0).getMethod().getCodeBody().get(
                 stackLines.get(0).getCodeBodyIndex());
-        SubMethodInvoke thisMethodInvoke;
+        CaptureStyle thisCaptureStyle;
         if (thisCodeLine.getCode() instanceof SubMethodInvoke) {
-            thisMethodInvoke = (SubMethodInvoke) thisCodeLine.getCode();
+            SubMethodInvoke thisMethodInvoke = (SubMethodInvoke) thisCodeLine.getCode();
+            thisCaptureStyle = thisMethodInvoke.getSubMethod().getCaptureStyle();
         } else if (thisCodeLine.getCode() instanceof LocalVarAssign) {
             LocalVarAssign assign = (LocalVarAssign) thisCodeLine.getCode();
             if (assign.getValue() instanceof SubMethodInvoke) {
-                thisMethodInvoke = (SubMethodInvoke) assign.getValue();
+                SubMethodInvoke thisMethodInvoke = (SubMethodInvoke) assign.getValue();
+                thisCaptureStyle = thisMethodInvoke.getSubMethod().getCaptureStyle();
             } else {
                 logger.info("beforeCodeBodyHook: skip code: " + thisCodeLine.getCode().getOriginal());
                 return;
             }
+        } else if (thisCodeLine.getCode() instanceof TestStepLabel) {
+            thisCaptureStyle = CaptureStyle.THIS_LINE;
+        } else if (thisCodeLine.getCode() instanceof TestStep) {
+            throw new RuntimeException("not supported");
         } else {
             logger.info("beforeCodeBodyHook: skip code: " + thisCodeLine.getCode().getOriginal());
             return;
         }
-        assert thisMethodInvoke != null;
-        assert thisMethodInvoke.getSubMethod() != null;
-        CaptureStyle thisCaptureStyle = thisMethodInvoke.getSubMethod().getCaptureStyle();
         if (thisCaptureStyle != CaptureStyle.THIS_LINE && thisCaptureStyle != CaptureStyle.STEP_IN) {
             logger.info("beforeCodeBodyHook: skip not capture line");
             return;

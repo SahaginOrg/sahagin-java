@@ -72,11 +72,11 @@
                   #set( $lineClass = "notRunLine" )
                 #end
                 #if( ${codeLine.getParentTtId()} )
-                  #set( $dataTtParentId = "data-tt-parent-id=${codeLine.getParentTtId()}" )
+                  #set( $dataTtParentId = "data-tt-parent-id=""${codeLine.getParentTtId()}""" )
                 #else
                   #set( $dataTtParentId = "" )
                 #end
-                <tr data-tt-id="${codeLine.getTtId()}" ${dataTtParentId} data-method-key="${codeLine.getMethodKey()}" class="${lineClass}">
+                <tr data-tt-id="${codeLine.getTtId()}" ${dataTtParentId} data-image-id="${codeLine.getImageId()}" data-method-key="${codeLine.getMethodKey()}" class="${lineClass}">
                   <td>${codeLine.getPageTestDoc()}</td>
                   <td>${codeLine.getTestDoc()}</td>
                   <td class="srcInfo">${codeLine.getCodeLine().getCode().getOriginal()}</td>
@@ -102,7 +102,7 @@
         <ul class="bxslider">
           #foreach( $capture in $captures )
           <li>
-            <div data-tt-id="${capture.getTtId()}" data-image-width="${capture.getImageWidth()}" data-image-height="${capture.getImageHeight()}" class="scrollContainer">
+            <div data-image-id="${capture.getImageId()}" data-image-width="${capture.getImageWidth()}" data-image-height="${capture.getImageHeight()}" class="scrollContainer">
               <img src="${capture.getPath()}" />
             </div>
           </li>
