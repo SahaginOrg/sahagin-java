@@ -457,6 +457,11 @@ function loadCodeBodyHiddenNode(tr) {
   var methodArgTestDocHtml = "";
   for (var i = 0; i < testMethod.getCodeBody().length; i++) {
     var codeLine = testMethod.getCodeBody()[i];
+    if (codeLine.getCode() instanceof sahagin.TestStepLabel) {
+      throw new Error("nested TestStepLabel is not supported now");
+    } else if (codeLine.getCode() instanceof sahagin.TestStep) {
+      throw new Error("nested TestStep is not supported now");
+    }
     var parentTtId = trTtId;
     var ttId = parentTtId + '_' + i.toString(10);
     var methodKey = getMethodKey(codeLine.getCode());

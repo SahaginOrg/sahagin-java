@@ -34,6 +34,7 @@ import org.sahagin.share.runresults.RunResults;
 import org.sahagin.share.runresults.StackLine;
 import org.sahagin.share.srctree.SrcTree;
 import org.sahagin.share.srctree.TestMethod;
+import org.sahagin.share.srctree.code.Code;
 import org.sahagin.share.srctree.code.CodeLine;
 import org.sahagin.share.srctree.code.SubMethodInvoke;
 import org.sahagin.share.srctree.code.TestStep;
@@ -317,20 +318,13 @@ public class HtmlReport {
                 if (!invoke.isChildInvoke()) {
                     List<String> parentMethodArgTestDocs = reportCodeLine.getMethodArgTestDocs();
                     List<CodeLine> codeBody = invoke.getSubMethod().getCodeBody();
-                    String childCurrentStepLabelTtId = rootTtId;
                     for (int j = 0; j < codeBody.size(); j++) {
                         CodeLine childCodeLine = codeBody.get(j);
-                        String childTtId = rootTtId + "_" + j;
-                        String parentTtIdForChild = null;
                         if (childCodeLine.getCode() instanceof TestStepLabel) {
-                            parentTtIdForChild = rootTtId;
-                            childCurrentStepLabelTtId = childTtId;
+                            throw new RuntimeException("nested TestStepLabel is not supported yet");
                         } else if (childCodeLine.getCode() instanceof TestStep) {
                             throw new RuntimeException("not supported");
-                        } else {
-                            parentTtIdForChild = childCurrentStepLabelTtId;
                         }
-
                         StackLine childStackLine = generateStackLine(invoke.getSubMethod(),
                                 invoke.getSubMethodKey(), j, childCodeLine.getStartLine());
                         List<StackLine> childStackLines = new ArrayList<StackLine>(2);
@@ -339,12 +333,41 @@ public class HtmlReport {
 
                         ReportCodeLine childReportCodeLine = generateReportCodeLine(
                                 childCodeLine, parentMethodArgTestDocs, childStackLines,
-                                runFailure, executed, childTtId, parentTtIdForChild);
+                                runFailure, executed, rootTtId + "_" + j, rootTtId);
                         result.add(childReportCodeLine);
                     }
                 }
             }
         }
+
+        // update hasError and alreadyRun status of TestStepLabel CodeLine
+        // according to its child code block
+        ReportCodeLine currentStepLabelLine = null;
+        for (int i = 0; i < result.size(); i++) {
+            ReportCodeLine reportCodeLine = result.get(i);
+            Code code = reportCodeLine.getCodeLine().getCode();
+            if (code instanceof TestStepLabel) {
+                currentStepLabelLine = result.get(i);
+                continue;
+            }
+            if (currentStepLabelLine == null) {
+                continue; // no TestStepLabel to be updated
+            }
+            if (reportCodeLine.hasError()) {
+                // If child code block contains error,
+                // TestStepLabel also has error
+                currentStepLabelLine.setHasError(true);
+                currentStepLabelLine.setAlreadyRun(true);
+                // use error image for child code block
+                currentStepLabelLine.setImageId(reportCodeLine.getImageId());
+            } else if (!reportCodeLine.isAlreadyRun() && !currentStepLabelLine.hasError()) {
+                // If child code block contains not executed line,
+                // TestStepLabel is also not executed
+                currentStepLabelLine.setHasError(false);
+                currentStepLabelLine.setAlreadyRun(false);
+            }
+        }
+
         return result;
     }
 
