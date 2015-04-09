@@ -143,8 +143,10 @@ public class HtmlReport {
         // add each line screen capture
         for (LineScreenCapture lineScreenCapture : lineScreenCaptures) {
             ReportScreenCapture reportCapture = new ReportScreenCapture();
-            File relInputCapturePath = CommonUtils.relativize(
-                    lineScreenCapture.getPath(), inputCaptureRootDir);
+            // replace special keyword for Sahagin internal test
+            File actualPath = new File(lineScreenCapture.getPath().getPath().replace(
+                    "${inputCaptureRootDirForSahaginInternalTest}", inputCaptureRootDir.getPath()));
+            File relInputCapturePath = CommonUtils.relativize(actualPath, inputCaptureRootDir);
             File absOutputCapturePath = new File(
                     CommonPath.htmlReportCaptureRootDir(reportOutputDir), relInputCapturePath.getPath());
             File relOutputCapturePath = CommonUtils.relativize(absOutputCapturePath, methodReportParentDir);

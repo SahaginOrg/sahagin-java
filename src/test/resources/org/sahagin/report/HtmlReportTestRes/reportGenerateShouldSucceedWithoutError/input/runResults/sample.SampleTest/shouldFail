@@ -4,7 +4,7 @@ runFailures:
   - {codeBodyIndex: 0, methodKey: sample.SampleTest.shouldFail-void, line: 29}
   stackTrace: "err"
 lineScreenCaptures:
-- path: dummy.png
+- path: ${inputCaptureRootDirForSahaginInternalTest}/001.png
   stackLines:
   - {codeBodyIndex: 0, methodKey: sample.SampleTest.shouldFail-void, line: 29}
 formatVersion: "*"

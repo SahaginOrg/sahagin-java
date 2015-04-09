@@ -1,6 +1,6 @@
 runFailures: []
 lineScreenCaptures:
-- path: dummy.png
+- path: ${inputCaptureRootDirForSahaginInternalTest}/001.png
   stackLines:
   - {codeBodyIndex: 0, methodKey: sample.SampleTest.shouldSucceed-void, line: 24}
 formatVersion: "*"
