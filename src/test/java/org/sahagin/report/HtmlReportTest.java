@@ -70,7 +70,7 @@ public class HtmlReportTest extends TestBase {
             }
         } catch (Exception e) {
             quietQuit(driver);
-            Assume.assumeNoException("This Driver can not work on this enviroment", e);
+           // Assume.assumeNoException("This Driver can not work on this enviroment", e);
         }
 
         // TODO need more check such as Js error check

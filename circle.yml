@@ -5,7 +5,7 @@ checkout:
 general:
   # this setting is just to try Circle CI artifacts feature
   artifacts:
-    - "work"
+    - "work/org/sahagin/report"
 test:
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
