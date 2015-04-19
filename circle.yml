@@ -2,3 +2,6 @@ checkout:
   post:
     - git submodule sync
     - git submodule update --init
+general:
+  artifacts:
+    - "work"
