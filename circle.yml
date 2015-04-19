@@ -9,4 +9,4 @@ general:
 test:
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
-    - find . -type f -regex ".*/target/surefire-reports/org.sahagin.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+    - find . -type f -regex ".*/target/surefire-reports/TEST-org.sahagin.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
