@@ -5,6 +5,7 @@ import static org.junit.Assert.assertThat;
 
 import java.io.File;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.Assume;
 import org.junit.Test;
@@ -63,6 +64,13 @@ public class HtmlReportTest extends TestBase {
 
         try {
             if (chrome) {
+                // Don't execute ChromeDriver test on Travis CI
+                // because the test will freeze..
+                boolean onTravisCI =
+                        StringUtils.equals(System.getenv("CI"), "true")
+                        && StringUtils.equals(System.getenv("TRAVIS"), "true");
+                Assume.assumeTrue(!onTravisCI);
+
                 System.setProperty("webdriver.chrome.driver", chromeDriverPath());
                 driver = new ChromeDriver();
             } else {
