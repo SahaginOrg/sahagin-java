@@ -5,10 +5,12 @@ import static org.junit.Assert.assertThat;
 
 import java.io.File;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.junit.Assume;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.sahagin.TestBase;
 import org.sahagin.share.AcceptableLocales;
@@ -17,6 +19,20 @@ import org.sahagin.share.IllegalTestScriptException;
 import org.sahagin.share.SysMessages;
 
 public class HtmlReportTest extends TestBase {
+
+    private String chromeDriverPath() {
+        File file;
+        if (SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_MAC_OSX) {
+            file = new File(testResourceRoot(), "selenium/mac/chromedriver");
+        } else if (SystemUtils.IS_OS_LINUX) {
+            file = new File(testResourceRoot(), "selenium/linux/chromedriver");
+        } else if (SystemUtils.IS_OS_WINDOWS) {
+            file = new File(testResourceDir(), "selenium/win/chromedriver.exe");
+        } else {
+            throw new RuntimeException("not supported OS environment");
+        }
+        return file.getAbsolutePath();
+    }
 
     // returns generated index.html
     private File generateTestReport()
@@ -42,13 +58,19 @@ public class HtmlReportTest extends TestBase {
         return indexHtml;
     }
 
-    private void seleniumTestRun(File indexHtml) {
+    private void seleniumTestRun(File indexHtml, boolean chrome) {
         WebDriver driver = null;
+
         try {
-            driver = new FirefoxDriver();
+            if (chrome) {
+                System.setProperty("webdriver.chrome.driver", chromeDriverPath());
+                driver = new ChromeDriver();
+            } else {
+                driver = new FirefoxDriver();
+            }
         } catch (Exception e) {
             quietQuit(driver);
-            Assume.assumeNoException("FirefoxDriver can not work on this enviroment", e);
+            Assume.assumeNoException("This Driver can not work on this enviroment", e);
         }
 
         // TODO need more check such as Js error check
@@ -70,10 +92,17 @@ public class HtmlReportTest extends TestBase {
     }
 
     @Test
-    public void generatedReportShouldWork()
+    public void generatedReportShouldWorkOnFirefox()
             throws IllegalDataStructureException, IllegalTestScriptException {
         File indexHtml = generateTestReport();
-        seleniumTestRun(indexHtml);
+        seleniumTestRun(indexHtml, false);
+    }
+
+    @Test
+    public void generatedReportShouldWorkOnChrome()
+            throws IllegalDataStructureException, IllegalTestScriptException {
+        File indexHtml = generateTestReport();
+        seleniumTestRun(indexHtml, true);
     }
 
     private void quietQuit(WebDriver driver) {

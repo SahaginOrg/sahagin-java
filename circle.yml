@@ -3,5 +3,6 @@ checkout:
     - git submodule sync
     - git submodule update --init
 general:
+  # this setting is just to try Circle CI artifacts feature
   artifacts:
     - "work"

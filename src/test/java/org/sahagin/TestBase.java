@@ -17,6 +17,10 @@ public abstract class TestBase {
         return this.getClass().getCanonicalName().replace(".", "/");
     }
 
+    public final File testResourceRoot() {
+        return new File(TEST_RESOURCE_ROOT);
+    }
+
     public final File testResourceDir() {
         return new File(TEST_RESOURCE_ROOT, classFullPath() + "Res");
     }
