@@ -61,17 +61,17 @@ public class HtmlReportTest extends TestBase {
     private void seleniumTestRun(File indexHtml, boolean chrome) {
         WebDriver driver = null;
 
-        try {
+ //       try {
             if (chrome) {
                 System.setProperty("webdriver.chrome.driver", chromeDriverPath());
                 driver = new ChromeDriver();
             } else {
                 driver = new FirefoxDriver();
             }
-        } catch (Exception e) {
+   /*     } catch (Exception e) {
             quietQuit(driver);
-           // Assume.assumeNoException("This Driver can not work on this enviroment", e);
-        }
+            Assume.assumeNoException("This Driver can not work on this enviroment", e);
+        } */
 
         // TODO need more check such as Js error check
         try {
