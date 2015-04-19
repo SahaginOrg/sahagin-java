@@ -57,7 +57,7 @@ public class HtmlReportTest extends TestBase {
             driver.get(indexHtmlUrl);
             driver.findElement(By.linkText("sample.SampleTest.shouldSucceed")).click();
             driver.navigate().back();
-            driver.findElement(By.linkText("sample.SampleTest.shouldFail")).click();
+            driver.findElement(By.linkText("sample.SsampleTest.shouldFail")).click();
         } finally {
             quietQuit(driver);
         }
