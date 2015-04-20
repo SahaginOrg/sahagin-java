@@ -44,6 +44,7 @@ public class AdditionalTestDocs {
     }
 
     // returns null if not found
+    // TODO delegation should work for not additional TestDoc
     public AdditionalMethodTestDoc getMethodTestDoc(String classQualifiedName,
             String methodSimpleName, List<String> argClassQualifiedNames) {
         if (classQualifiedName == null) {
@@ -57,21 +58,41 @@ public class AdditionalTestDocs {
         }
         for (int i = 0; i < methodTestDocs.size(); i++) {
             AdditionalMethodTestDoc methodTestDoc = methodTestDocs.get(i);
-            if (StringUtils.equals(methodTestDoc.getClassQualifiedName(), classQualifiedName)
-                    && StringUtils.equals(methodTestDoc.getSimpleName(), methodSimpleName)) {
-                if (!methodTestDoc.isOverloaded()) {
-                    return methodTestDoc; // ignore method argument classes difference
-                }
-
-                String methodKey = TestMethod.generateMethodKey(classQualifiedName, methodSimpleName, argClassQualifiedNames);
-                String testDocMethodKey = TestMethod.generateMethodKey(
-                        methodTestDoc.getClassQualifiedName(), methodTestDoc.getSimpleName(), methodTestDoc.getArgClassesStr());
-                if (methodKey.equals(testDocMethodKey)) {
+            String targetClassQualifiedName = classQualifiedName;
+            while (targetClassQualifiedName != null) {
+                if (matchesToMethodTestDoc(methodTestDoc,
+                        targetClassQualifiedName, methodSimpleName, argClassQualifiedNames)) {
                     return methodTestDoc;
                 }
+                // TODO delegation should work for not additional TestDoc
+                AdditionalClassTestDoc classTestDoc = getClassTestDoc(targetClassQualifiedName);
+                if (classTestDoc == null) {
+                    break;
+                }
+                targetClassQualifiedName = classTestDoc.getDelegateToQualifiedName();
             }
         }
         return null;
+    }
+
+    private boolean matchesToMethodTestDoc(AdditionalMethodTestDoc methodTestDoc,
+            String classQualifiedName, String methodSimpleName, List<String> argClassQualifiedNames) {
+        if (StringUtils.equals(methodTestDoc.getClassQualifiedName(), classQualifiedName)
+                && StringUtils.equals(methodTestDoc.getSimpleName(), methodSimpleName)) {
+            if (!methodTestDoc.isOverloaded()) {
+                return true; // ignore method argument classes difference
+            }
+
+            String methodKey = TestMethod.generateMethodKey(
+                    classQualifiedName, methodSimpleName, argClassQualifiedNames);
+            String testDocMethodKey = TestMethod.generateMethodKey(
+                    methodTestDoc.getClassQualifiedName(),
+                    methodTestDoc.getSimpleName(), methodTestDoc.getArgClassesStr());
+            if (methodKey.equals(testDocMethodKey)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void clear() {

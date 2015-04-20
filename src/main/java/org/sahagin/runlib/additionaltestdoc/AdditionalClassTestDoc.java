@@ -4,6 +4,8 @@ package org.sahagin.runlib.additionaltestdoc;
 public class AdditionalClassTestDoc {
     private String qualifiedName;
     private String testDoc;
+    // null represents no delegation
+    private String delegateToQualifiedName = null;
 
     public String getSimpleName() {
         if (qualifiedName == null) {
@@ -30,6 +32,15 @@ public class AdditionalClassTestDoc {
 
     public void setTestDoc(String testDoc) {
         this.testDoc = testDoc;
+    }
+
+    public String getDelegateToQualifiedName() {
+        return delegateToQualifiedName;
+    }
+
+    public void setDelegateToQualifiedName(
+            String delegateToQualifiedName) {
+        this.delegateToQualifiedName = delegateToQualifiedName;
     }
 
 }

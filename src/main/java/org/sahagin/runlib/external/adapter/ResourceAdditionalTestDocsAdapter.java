@@ -88,8 +88,20 @@ implements AdditionalTestDocsAdapter {
         classAddSub(new AdditionalClassTestDoc(), qualifiedName);
     }
 
+    protected final void classAdd(String qualifiedName, String delegateToQualifiedName) {
+        AdditionalClassTestDoc testDoc = new AdditionalClassTestDoc();
+        testDoc.setDelegateToQualifiedName(delegateToQualifiedName);
+        classAddSub(testDoc, qualifiedName);
+    }
+
     protected final void pageAdd(String qualifiedName) {
         classAddSub(new AdditionalPage(), qualifiedName);
+    }
+
+    protected final void pageAdd(String qualifiedName, String delegateToQualifiedName) {
+        AdditionalPage testDoc = new AdditionalPage();
+        testDoc.setDelegateToQualifiedName(delegateToQualifiedName);
+        classAddSub(testDoc, qualifiedName);
     }
 
     public abstract void classAdd();
