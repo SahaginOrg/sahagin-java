@@ -32,7 +32,7 @@ public class AppiumAdapter implements Adapter {
 
         @Override
         public String resourceDirPath() {
-            return CommonPath.standardAdapdaterLocaleResDirPath()  + "/appium";
+            return CommonPath.standardAdapdaterLocaleResDirPath("java")  + "/appium";
         }
 
         @Override

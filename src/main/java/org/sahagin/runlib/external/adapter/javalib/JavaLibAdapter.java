@@ -23,7 +23,7 @@ public class JavaLibAdapter implements Adapter {
 
         @Override
         public String resourceDirPath() {
-            return CommonPath.standardAdapdaterLocaleResDirPath() + "/javalib";
+            return CommonPath.standardAdapdaterLocaleResDirPath("java") + "/javalib";
         }
 
         @Override

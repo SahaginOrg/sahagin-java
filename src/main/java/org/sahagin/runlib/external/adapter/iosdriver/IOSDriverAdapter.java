@@ -31,7 +31,7 @@ public class IOSDriverAdapter implements Adapter {
 
         @Override
         public String resourceDirPath() {
-            return CommonPath.standardAdapdaterLocaleResDirPath() + "/iosdriver";
+            return CommonPath.standardAdapdaterLocaleResDirPath("java") + "/iosdriver";
         }
 
         @Override

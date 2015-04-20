@@ -35,7 +35,7 @@ public class WebDriverAdapter implements Adapter {
 
         @Override
         public String resourceDirPath() {
-            return CommonPath.standardAdapdaterLocaleResDirPath() + "/webdriver";
+            return CommonPath.standardAdapdaterLocaleResDirPath("java") + "/webdriver";
         }
 
         @Override

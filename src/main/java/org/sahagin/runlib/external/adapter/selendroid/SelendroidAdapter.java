@@ -31,7 +31,7 @@ public class SelendroidAdapter implements Adapter {
 
         @Override
         public String resourceDirPath() {
-            return CommonPath.standardAdapdaterLocaleResDirPath() + "/selendroid";
+            return CommonPath.standardAdapdaterLocaleResDirPath("java") + "/selendroid";
         }
 
         @Override

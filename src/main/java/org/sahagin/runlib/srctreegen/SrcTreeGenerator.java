@@ -101,6 +101,7 @@ public class SrcTreeGenerator {
 
     // null pair if not found
     private Pair<String, CaptureStyle> getTestDoc(IMethodBinding method) {
+        // TODO additional TestDoc should be prior to annotation TestDoc !?
         Pair<String, CaptureStyle> pair = ASTUtils.getTestDoc(method, locales);
         if (pair.getLeft() != null) {
             return pair;
@@ -733,7 +734,7 @@ public class SrcTreeGenerator {
         CollectSubRequestor subRequestor = new CollectSubRequestor(rootRequestor.getRootClassTable());
         parseAST(srcFiles, srcEncoding, classPathEntries, subRequestor);
 
-        // add not used additional TestDoc to the table
+        // add additional TestDoc to the table
         AdditionalTestDocsSetter setter = new AdditionalTestDocsSetter(
                 rootRequestor.getRootClassTable(), subRequestor.getSubClassTable(),
                 rootRequestor.getRootMethodTable(), subRequestor.getSubMethodTable());

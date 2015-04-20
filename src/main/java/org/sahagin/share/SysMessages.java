@@ -28,7 +28,7 @@ public class SysMessages {
         localeYamlObjMap = new HashMap<Locale, Map<String, Object>>(8);
         for (Locale locale : this.locales.getLocales()) {
             InputStream in = this.getClass().getResourceAsStream(
-                    CommonPath.standardSystemLocaleResDirPath()
+                    CommonPath.standardSystemLocaleResDirPath("java")
                     + "/" + locale.getValue() + ".yml");
             if (in == null) {
                 // language resource does not exist

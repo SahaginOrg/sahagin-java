@@ -48,7 +48,7 @@ public class JUnit4Adapter implements Adapter {
 
         @Override
         public String resourceDirPath() {
-            return CommonPath.standardAdapdaterLocaleResDirPath() + "/junit4";
+            return CommonPath.standardAdapdaterLocaleResDirPath("java") + "/junit4";
         }
 
         @Override

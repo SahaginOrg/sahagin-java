@@ -47,7 +47,7 @@ public class TestNGAdapter implements Adapter {
 
         @Override
         public String resourceDirPath() {
-            return CommonPath.standardAdapdaterLocaleResDirPath() + "/testng";
+            return CommonPath.standardAdapdaterLocaleResDirPath("java") + "/testng";
         }
 
         @Override

@@ -33,12 +33,14 @@ public class CommonPath {
         return new File(reportOutputDir, "captures");
     }
 
-    public static String standardAdapdaterLocaleResDirPath() {
-        return "/locale/java/adapter";
+    // bindingName: java, groovy, etc
+    public static String standardAdapdaterLocaleResDirPath(String bindingName) {
+        return "/locale/" + bindingName + "/adapter";
     }
 
-    public static String standardSystemLocaleResDirPath() {
-        return "/locale/java/system";
+    // bindingName: java, groovy, etc
+    public static String standardSystemLocaleResDirPath(String bindingName) {
+        return "/locale/" + bindingName + "/system";
     }
 
 }
