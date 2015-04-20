@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
@@ -83,6 +84,7 @@ public class HtmlReportTest extends TestBase {
 
         // TODO need more check such as Js error check
         try {
+            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
             String indexHtmlUrl = "file:///" + indexHtml.getAbsolutePath();
             driver.get(indexHtmlUrl);
             driver.findElement(By.linkText("sample.SampleTest.shouldSucceed")).click();
