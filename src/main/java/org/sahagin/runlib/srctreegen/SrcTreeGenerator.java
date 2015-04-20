@@ -446,9 +446,7 @@ public class SrcTreeGenerator {
         private Code generateMethodInvokeCode(IMethodBinding binding,
                 Expression thisInstance, List<?> arguments, String original, TestMethod parentMethod) {
             if (binding == null) {
-                UnknownCode unknownCode = new UnknownCode();
-                unknownCode.setOriginal(original);
-                return unknownCode;
+                return generateUnknownCode(original);
             }
 
             boolean childInvoke = false;
@@ -461,9 +459,7 @@ public class SrcTreeGenerator {
             }
 
             if (invocationMethod == null) {
-                UnknownCode unknownCode = new UnknownCode();
-                unknownCode.setOriginal(original);
-                return unknownCode;
+                return generateUnknownCode(original);
             }
 
             SubMethodInvoke subMethodInvoke = new SubMethodInvoke();
@@ -582,10 +578,14 @@ public class SrcTreeGenerator {
             return stepLabel;
         }
 
-        private UnknownCode generateUnknownCode(Expression expression) {
+        private UnknownCode generateUnknownCode(String original) {
             UnknownCode unknownCode = new UnknownCode();
-            unknownCode.setOriginal(expression.toString().trim());
+            unknownCode.setOriginal(original);
             return unknownCode;
+        }
+
+        private UnknownCode generateUnknownCode(Expression expression) {
+            return generateUnknownCode(expression.toString().trim());
         }
 
         // localVars is write only. not read in this expression
