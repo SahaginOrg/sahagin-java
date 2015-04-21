@@ -40,16 +40,25 @@ public class AdditionalTestDocsSetter {
             AdditionalMethodTestDoc testDoc = testDocs.getMethodTestDocs().get(i);
             setMethod(testDoc);
         }
+        // resolve delegate
+        for (TestClass testClass: rootClassTable.getTestClasses()) {
+            testClass.setDelegateToTestClass(
+                    getTestClass(testClass.getDelegateToTestClassKey()));
+        }
+        for (TestClass testClass: subClassTable.getTestClasses()) {
+            testClass.setDelegateToTestClass(
+                    getTestClass(testClass.getDelegateToTestClassKey()));
+        }
     }
 
-    // return the newly set TestClass instance or already set instance.
-    private TestClass setClass(String qualifiedName, String testDoc,
-            String delegateToClassQualifiedName, boolean isPage) {
+    private TestClass getTestClass(String qualifiedName) {
+        if (qualifiedName == null) {
+            return null;
+        }
+
         for (TestClass testClass : subClassTable.getTestClasses()) {
             // class qualified name must be unique
             if (qualifiedName.equals(testClass.getQualifiedName())) {
-                // override existing testDoc ( don't override other information)
-                testClass.setTestDoc(testDoc);
                 return testClass;
             }
         }
@@ -57,10 +66,20 @@ public class AdditionalTestDocsSetter {
         for (TestClass testClass : rootClassTable.getTestClasses()) {
             // class qualified name must be unique
             if (qualifiedName.equals(testClass.getQualifiedName())) {
-                // override existing testDoc ( don't override other information)
-                testClass.setTestDoc(testDoc);
                 return testClass;
             }
+        }
+        return null;
+    }
+
+    // return the newly set TestClass instance or already set instance.
+    private TestClass setClass(String qualifiedName, String testDoc,
+            String delegateToClassQualifiedName, boolean isPage) {
+        TestClass testClass = getTestClass(qualifiedName);
+        if (testClass != null) {
+            // override existing testDoc ( don't override other information)
+            testClass.setTestDoc(testDoc);
+            return testClass;
         }
 
         TestClass newClass;
