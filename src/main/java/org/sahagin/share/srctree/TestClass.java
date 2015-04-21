@@ -18,6 +18,9 @@ public class TestClass implements YamlConvertible {
     private String key;
     private String qualifiedName;
     private String testDoc;
+    // null represents no delegation
+    private String delegateToTestClassKey = null;
+    private TestClass delegateToTestClass = null;
     private List<String> testMethodKeys = new ArrayList<String>(16);
     private List<TestMethod> testMethods = new ArrayList<TestMethod>(16);
 
@@ -56,6 +59,22 @@ public class TestClass implements YamlConvertible {
         this.testDoc = testDoc;
     }
 
+    public String getDelegateToTestClassKey() {
+        return delegateToTestClassKey;
+    }
+
+    public void setDelegateToTestClassKey(String delegateToTestClassKey) {
+        this.delegateToTestClassKey = delegateToTestClassKey;
+    }
+
+    public TestClass getDelegateToTestClass() {
+        return delegateToTestClass;
+    }
+
+    public void setDelegateToTestClass(TestClass delegateToTestClass) {
+        this.delegateToTestClass = delegateToTestClass;
+    }
+
     public List<String> getTestMethodKeys() {
         return testMethodKeys;
     }
@@ -91,6 +110,9 @@ public class TestClass implements YamlConvertible {
         if (testDoc != null) {
             result.put("testDoc", testDoc);
         }
+        if (delegateToTestClassKey != null) {
+            result.put("delegateToClassKey", delegateToTestClassKey);
+        }
         if (!testMethodKeys.isEmpty()) {
             result.put("methodKeys", testMethodKeys);
         }
@@ -104,6 +126,8 @@ public class TestClass implements YamlConvertible {
         key = YamlUtils.getStrValue(yamlObject, "key");
         qualifiedName = YamlUtils.getStrValue(yamlObject, "qname");
         testDoc = YamlUtils.getStrValue(yamlObject, "testDoc", true);
+        delegateToTestClassKey = YamlUtils.getStrValue(yamlObject, "delegateToClassKey", true);
+        delegateToTestClass = null;
         testMethodKeys = YamlUtils.getStrListValue(yamlObject, "methodKeys", true);
         testMethods.clear();
     }

@@ -58,18 +58,9 @@ public class AdditionalTestDocs {
         }
         for (int i = 0; i < methodTestDocs.size(); i++) {
             AdditionalMethodTestDoc methodTestDoc = methodTestDocs.get(i);
-            String targetClassQualifiedName = classQualifiedName;
-            while (targetClassQualifiedName != null) {
-                if (matchesToMethodTestDoc(methodTestDoc,
-                        targetClassQualifiedName, methodSimpleName, argClassQualifiedNames)) {
-                    return methodTestDoc;
-                }
-                // TODO delegation should work for not additional TestDoc
-                AdditionalClassTestDoc classTestDoc = getClassTestDoc(targetClassQualifiedName);
-                if (classTestDoc == null) {
-                    break;
-                }
-                targetClassQualifiedName = classTestDoc.getDelegateToQualifiedName();
+            if (matchesToMethodTestDoc(methodTestDoc,
+                    classQualifiedName, methodSimpleName, argClassQualifiedNames)) {
+                return methodTestDoc;
             }
         }
         return null;

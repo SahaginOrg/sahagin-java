@@ -34,7 +34,7 @@ public class AdditionalTestDocsSetter {
         for (int i = 0; i < testDocs.getClassTestDocs().size(); i++) {
             AdditionalClassTestDoc classTestDoc = testDocs.getClassTestDocs().get(i);
             setClass(classTestDoc.getQualifiedName(), classTestDoc.getTestDoc(),
-                    classTestDoc instanceof AdditionalPage);
+                    classTestDoc.getDelegateToQualifiedName(), classTestDoc instanceof AdditionalPage);
         }
         for (int i = 0; i < testDocs.getMethodTestDocs().size(); i++) {
             AdditionalMethodTestDoc testDoc = testDocs.getMethodTestDocs().get(i);
@@ -43,7 +43,8 @@ public class AdditionalTestDocsSetter {
     }
 
     // return the newly set TestClass instance or already set instance.
-    private TestClass setClass(String qualifiedName, String testDoc, boolean isPage) {
+    private TestClass setClass(String qualifiedName, String testDoc,
+            String delegateToClassQualifiedName, boolean isPage) {
         for (TestClass testClass : subClassTable.getTestClasses()) {
             // class qualified name must be unique
             if (qualifiedName.equals(testClass.getQualifiedName())) {
@@ -71,6 +72,7 @@ public class AdditionalTestDocsSetter {
         newClass.setKey(qualifiedName);
         newClass.setQualifiedName(qualifiedName);
         newClass.setTestDoc(testDoc);
+        newClass.setDelegateToTestClassKey(delegateToClassQualifiedName);
         subClassTable.addTestClass(newClass);
         return newClass;
     }
@@ -102,7 +104,7 @@ public class AdditionalTestDocsSetter {
         }
 
         TestMethod newMethod = new TestMethod();
-        TestClass testClass = setClass(testDoc.getClassQualifiedName(), null, false);
+        TestClass testClass = setClass(testDoc.getClassQualifiedName(), null, null, false);
         newMethod.setTestClassKey(testClass.getKey());
         newMethod.setTestClass(testClass);
         testClass.addTestMethod(newMethod);

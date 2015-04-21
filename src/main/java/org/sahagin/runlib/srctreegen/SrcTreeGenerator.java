@@ -394,6 +394,18 @@ public class SrcTreeGenerator {
             this.compilationUnit = compilationUnit;
         }
 
+        private TestMethod getTestMethod(IMethodBinding method) {
+            TestMethod testMethod = subMethodTable.getByKey(generateMethodKey(method, false));
+            if (testMethod != null) {
+                return testMethod;
+            }
+            testMethod = subMethodTable.getByKey(generateMethodKey(method, true));
+            if (testMethod != null) {
+                return testMethod;
+            }
+            return null;
+        }
+
         // search super method of the specified method
         // from the specified type and its super class and implementing interface recursively.
         // type: class or interface
@@ -422,18 +434,6 @@ public class SrcTreeGenerator {
                 if (testMethod != null) {
                     return testMethod;
                 }
-            }
-            return null;
-        }
-
-        private TestMethod getTestMethod(IMethodBinding method) {
-            TestMethod testMethod = subMethodTable.getByKey(generateMethodKey(method, false));
-            if (testMethod != null) {
-                return testMethod;
-            }
-            testMethod = subMethodTable.getByKey(generateMethodKey(method, true));
-            if (testMethod != null) {
-                return testMethod;
             }
             return null;
         }
@@ -509,7 +509,7 @@ public class SrcTreeGenerator {
             return localVar;
         }
 
-        // expression is used to get orginal code, and can be null
+        // expression is used to get original code, and can be null
         private Code generateLocalVarAssignCode(Expression expression,
                 Expression left, Expression right, TestMethod parentMethod) {
             Code rightCode = expressionCode(right, parentMethod);
