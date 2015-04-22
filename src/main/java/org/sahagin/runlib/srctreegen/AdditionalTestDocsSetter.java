@@ -13,6 +13,8 @@ import org.sahagin.share.srctree.TestMethodTable;
 // If TestClass or TestMethod for the AdditionlTestDoc does not exist in the table,
 // add them as sub TestClass or sub TestMethod.
 // If already exists, override it's TestDoc value.
+// This class does not resolve method invocation reference and delegate reference
+// (so delegation destination TestClass may not be created yet)
 //
 // - This class assumes class qualifiedName is unique
 public class AdditionalTestDocsSetter {
@@ -39,15 +41,6 @@ public class AdditionalTestDocsSetter {
         for (int i = 0; i < testDocs.getMethodTestDocs().size(); i++) {
             AdditionalMethodTestDoc testDoc = testDocs.getMethodTestDocs().get(i);
             setMethod(testDoc);
-        }
-        // resolve delegate
-        for (TestClass testClass: rootClassTable.getTestClasses()) {
-            testClass.setDelegateToTestClass(
-                    getTestClass(testClass.getDelegateToTestClassKey()));
-        }
-        for (TestClass testClass: subClassTable.getTestClasses()) {
-            testClass.setDelegateToTestClass(
-                    getTestClass(testClass.getDelegateToTestClassKey()));
         }
     }
 
