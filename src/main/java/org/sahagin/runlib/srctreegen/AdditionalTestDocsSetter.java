@@ -85,6 +85,7 @@ public class AdditionalTestDocsSetter {
         newClass.setQualifiedName(qualifiedName);
         newClass.setTestDoc(testDoc);
         newClass.setDelegateToTestClassKey(delegateToClassQualifiedName);
+        // class without root method and sub method is regarded as sub class
         subClassTable.addTestClass(newClass);
         return newClass;
     }
