@@ -1,7 +1,6 @@
 language: java
 
 jdk:
-  - openjdk6
   - openjdk7
   - oraclejdk8
 
@@ -13,10 +12,6 @@ env:
     
 matrix:
   exclude:
-    - jdk: openjdk6
-      env: COMPILE_VERSION=java7-compile
-    - jdk: openjdk6
-      env: COMPILE_VERSION=java8-compile
     - jdk: openjdk7
       env: COMPILE_VERSION=java8-compile
     - jdk: oraclejdk8
