@@ -1,13 +1,9 @@
 package org.sahagin.share.srctree;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.sahagin.runlib.external.CaptureStyle;
 import org.sahagin.share.srctree.code.Code;
-import org.sahagin.share.srctree.code.CodeLine;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlConvertible;
 import org.sahagin.share.yaml.YamlUtils;

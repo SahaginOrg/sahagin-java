@@ -12,12 +12,15 @@
     <script src="${externalResourceRootDir}/js/share/srctree/code/unknown-code.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/code/sub-method-invoke.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/code/local-var.js"></script>
-    <script src="${externalResourceRootDir}/js/share/srctree/code/local-var-assign.js"></script>
+    <script src="${externalResourceRootDir}/js/share/srctree/code/field.js"></script>
+    <script src="${externalResourceRootDir}/js/share/srctree/code/var-assign.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/code/test-step.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/code/test-step-label.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/code/code-line.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/test-class.js"></script>
-    <script src="${externalResourceRootDir}/js/share/srctree/page-class.js"></script>
+    <script src="${externalResourceRootDir}/js/share/srctree/page-class.js"></script> 
+    <script src="${externalResourceRootDir}/js/share/srctree/test-field.js"></script>
+    <script src="${externalResourceRootDir}/js/share/srctree/test-field-table.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/test-method.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/test-method-table.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/test-class-table.js"></script>
@@ -125,7 +128,7 @@
     <div id="localeData">
       <div id="codeLineWithoutTestDoc">${codeLineWithoutTestDoc}</div>
       <div id="jsLocalVar">${jsLocalVar}</div>
-      <div id="jsLocalVarAssign">${jsLocalVarAssign}</div>
+      <div id="jsVarAssign">${jsVarAssign}</div>
     </div>
   </body>
 </html>

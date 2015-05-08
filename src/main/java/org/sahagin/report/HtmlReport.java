@@ -463,12 +463,15 @@ public class HtmlReport {
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/unknown-code.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/sub-method-invoke.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/local-var.js");
-        extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/local-var-assign.js");
+        extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/field.js");
+        extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/var-assign.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/test-step.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/test-step-label.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/code-line.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/test-class.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/page-class.js");
+        extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/test-field.js");
+        extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/test-field-table.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/test-method.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/test-method-table.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/test-class-table.js");
@@ -542,7 +545,7 @@ public class HtmlReport {
             escapePut(methodContext, "codeLineWithoutTestDoc",
                     SysMessages.get(SysMessages.CODE_LINE_WITHOUT_TEST_DOC));
             escapePut(methodContext, "jsLocalVar", SysMessages.get(SysMessages.JS_LOCAL_VAR));
-            escapePut(methodContext, "jsLocalVarAssign", SysMessages.get(SysMessages.JS_LOCAL_VAR_ASSIGN));
+            escapePut(methodContext, "jsVarAssign", SysMessages.get(SysMessages.JS_VAR_ASSIGN));
             RootMethodRunResult runResult = runResults.getRunResultByRootMethod(rootMethod);
             boolean executed = (runResult != null);
             RunFailure runFailure = getRunFailure(runResult);

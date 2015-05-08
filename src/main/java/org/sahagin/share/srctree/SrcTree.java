@@ -7,9 +7,9 @@ import org.sahagin.share.CommonUtils;
 import org.sahagin.share.IllegalDataStructureException;
 import org.sahagin.share.srctree.code.Code;
 import org.sahagin.share.srctree.code.CodeLine;
-import org.sahagin.share.srctree.code.LocalVarAssign;
 import org.sahagin.share.srctree.code.SubMethodInvoke;
 import org.sahagin.share.srctree.code.TestStep;
+import org.sahagin.share.srctree.code.VarAssign;
 import org.sahagin.share.yaml.YamlUtils;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlConvertible;
@@ -23,10 +23,9 @@ public class SrcTree implements YamlConvertible {
 
     private TestClassTable rootClassTable = new TestClassTable();
     private TestMethodTable rootMethodTable = new TestMethodTable();
-    private TestFieldTable rootFieldTable = new TestFieldTable();
     private TestClassTable subClassTable = new TestClassTable();
     private TestMethodTable subMethodTable = new TestMethodTable();
-    private TestFieldTable subFieldTable = new TestFieldTable();
+    private TestFieldTable fieldTable = new TestFieldTable();
 
     public TestClassTable getRootClassTable() {
         return rootClassTable;
@@ -48,17 +47,6 @@ public class SrcTree implements YamlConvertible {
             throw new NullPointerException();
         }
         this.rootMethodTable = rootMethodTable;
-    }
-
-    public TestFieldTable getRootFieldTable() {
-        return rootFieldTable;
-    }
-
-    public void setRootFieldTable(TestFieldTable rootFieldTable) {
-        if (rootFieldTable == null) {
-            throw new NullPointerException();
-        }
-        this.rootFieldTable = rootFieldTable;
     }
 
     public TestClassTable getSubClassTable() {
@@ -83,35 +71,31 @@ public class SrcTree implements YamlConvertible {
         this.subMethodTable = subMethodTable;
     }
 
-    public TestFieldTable getSubFieldTable() {
-        return subFieldTable;
+    public TestFieldTable getFieldTable() {
+        return fieldTable;
     }
 
-    public void setSubFieldTable(TestFieldTable subFieldTable) {
-        if (subFieldTable == null) {
+    public void setFieldTable(TestFieldTable fieldTable) {
+        if (fieldTable == null) {
             throw new NullPointerException();
         }
-        this.subFieldTable = subFieldTable;
+        this.fieldTable = fieldTable;
     }
 
     public void sort() {
         rootClassTable.sort();
         rootMethodTable.sort();
-        rootFieldTable.sort();
         subClassTable.sort();
         subMethodTable.sort();
-        subFieldTable.sort();
+        fieldTable.sort();
     }
 
     @Override
     public Map<String, Object> toYamlObject() {
         Map<String, Object> result = new HashMap<String, Object>(8);
         result.put("formatVersion", CommonUtils.formatVersion());
-        if (!rootFieldTable.isEmpty()) {
-            result.put("rootFieldTable", rootFieldTable.toYamlObject());
-        }
-        if (!subFieldTable.isEmpty()) {
-            result.put("subFieldTable", subFieldTable.toYamlObject());
+        if (!fieldTable.isEmpty()) {
+            result.put("fieldTable", fieldTable.toYamlObject());
         }
         if (!rootMethodTable.isEmpty()) {
             result.put("rootMethodTable", rootMethodTable.toYamlObject());
@@ -139,18 +123,11 @@ public class SrcTree implements YamlConvertible {
                     (MSG_SRC_TREE_FORMAT_MISMATCH, CommonUtils.formatVersion(), formatVersion));
         }
 
-        rootFieldTable = new TestFieldTable();
-        Map<String, Object> rootFieldTableYamlObj
-        = YamlUtils.getYamlObjectValue(yamlObject, "rootFieldTable", true);
-        if (rootFieldTableYamlObj != null) {
-            rootFieldTable.fromYamlObject(rootFieldTableYamlObj);
-        }
-
-        subFieldTable = new TestFieldTable();
-        Map<String, Object> subFieldTableYamlObj
-        = YamlUtils.getYamlObjectValue(yamlObject, "subFieldTable", true);
-        if (subFieldTableYamlObj != null) {
-            subFieldTable.fromYamlObject(subFieldTableYamlObj);
+        fieldTable = new TestFieldTable();
+        Map<String, Object> fieldTableYamlObj
+        = YamlUtils.getYamlObjectValue(yamlObject, "fieldTable", true);
+        if (fieldTableYamlObj != null) {
+            fieldTable.fromYamlObject(fieldTableYamlObj);
         }
 
         rootMethodTable = new TestMethodTable();
@@ -209,13 +186,9 @@ public class SrcTree implements YamlConvertible {
 
     public TestField getTestFieldByKey(String testFieldKey)
             throws IllegalDataStructureException {
-        TestField subField = subFieldTable.getByKey(testFieldKey);
-        if (subField != null) {
-            return subField;
-        }
-        TestField rootField = rootFieldTable.getByKey(testFieldKey);
-        if (rootField != null) {
-            return rootField;
+        TestField field = fieldTable.getByKey(testFieldKey);
+        if (field != null) {
+            return field;
         }
         throw new IllegalDataStructureException(String.format(MSG_FIELD_NOT_FOUND, testFieldKey));
     }
@@ -259,8 +232,9 @@ public class SrcTree implements YamlConvertible {
             for (Code arg : invoke.getArgs()) {
                 resolveTestMethod(arg);
             }
-        } else if (code instanceof LocalVarAssign) {
-            LocalVarAssign assign = (LocalVarAssign) code;
+        } else if (code instanceof VarAssign) {
+            VarAssign assign = (VarAssign) code;
+            resolveTestMethod(assign.getVariable());
             resolveTestMethod(assign.getValue());
         } else if (code instanceof TestStep) {
             TestStep testStep = (TestStep) code;

@@ -55,12 +55,12 @@ import org.sahagin.share.srctree.TestMethodTable;
 import org.sahagin.share.srctree.code.Code;
 import org.sahagin.share.srctree.code.CodeLine;
 import org.sahagin.share.srctree.code.LocalVar;
-import org.sahagin.share.srctree.code.LocalVarAssign;
 import org.sahagin.share.srctree.code.MethodArgument;
 import org.sahagin.share.srctree.code.StringCode;
 import org.sahagin.share.srctree.code.SubMethodInvoke;
 import org.sahagin.share.srctree.code.TestStepLabel;
 import org.sahagin.share.srctree.code.UnknownCode;
+import org.sahagin.share.srctree.code.VarAssign;
 
 public class SrcTreeGenerator {
     private static Logger logger = Logging.getLogger(SrcTreeGenerator.class.getName());
@@ -540,9 +540,10 @@ public class SrcTreeGenerator {
                 return rightCode;
             }
 
-            LocalVarAssign assign = new LocalVarAssign();
+            LocalVar localVar = generateLocalVarCode(simpleName, varBinding);
+            VarAssign assign = new VarAssign();
             assign.setOriginal(expression.toString().trim());
-            assign.setName(simpleName.getIdentifier());
+            assign.setVariable(localVar);
             assign.setValue(rightCode);
             return assign;
         }

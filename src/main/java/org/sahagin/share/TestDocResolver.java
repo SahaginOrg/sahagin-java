@@ -11,13 +11,13 @@ import org.sahagin.share.srctree.PageClass;
 import org.sahagin.share.srctree.TestMethod;
 import org.sahagin.share.srctree.code.Code;
 import org.sahagin.share.srctree.code.LocalVar;
-import org.sahagin.share.srctree.code.LocalVarAssign;
 import org.sahagin.share.srctree.code.MethodArgument;
 import org.sahagin.share.srctree.code.StringCode;
 import org.sahagin.share.srctree.code.SubMethodInvoke;
 import org.sahagin.share.srctree.code.TestStep;
 import org.sahagin.share.srctree.code.TestStepLabel;
 import org.sahagin.share.srctree.code.UnknownCode;
+import org.sahagin.share.srctree.code.VarAssign;
 
 // TODO convert {method} to method name (this specification is from Allure framework)
 // TODO cannot get argVariables for the files out of Config.testDir
@@ -244,12 +244,14 @@ public class TestDocResolver {
         } else if (code instanceof LocalVar) {
             return String.format(SysMessages.get(SysMessages.LOCAL_VAR),
                     ((LocalVar) code).getName());
-        } else if (code instanceof LocalVarAssign) {
-            LocalVarAssign assign = (LocalVarAssign) code;
+        } else if (code instanceof VarAssign) {
+            VarAssign assign = (VarAssign) code;
+            String variableTestDoc = methodTestDocSub(
+                    assign.getVariable(), placeholderResolvedParentMethodArgTestDocs);
             String valueTestDoc = methodTestDocSub(
                     assign.getValue(), placeholderResolvedParentMethodArgTestDocs);
-            return String.format(SysMessages.get(SysMessages.LOCAL_VAR_ASSIGN),
-                    assign.getName(), valueTestDoc);
+            return String.format(SysMessages.get(SysMessages.VAR_ASSIGN),
+                    valueTestDoc, variableTestDoc);
         } else if (code instanceof TestStep) {
             TestStep testStep = (TestStep) code;
             String result = "";

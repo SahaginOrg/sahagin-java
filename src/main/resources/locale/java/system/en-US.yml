@@ -1,7 +1,7 @@
 codeLineWithoutTestDoc: hidden
 jsLocalVar: variable '{0}'
-jsLocalVarAssign: set '{0}' to variable '{1}'
+jsVarAssign: set '{0}' to {1}
 localVar: variable '%s'
-localVarAssign: set '%1$s' to variable '%2$s'
+varAssign: set '%s' to %s
 reportHideCode: hide code
 reportShowCode: show code

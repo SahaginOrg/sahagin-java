@@ -515,7 +515,7 @@ function loadCodeBodyHiddenNode(tr) {
 $(document).ready(function() {
   // TODO very poor temporal logic.. implement locale handling logic!
   sahagin.TestDocResolver.JS_LOCAL_VAR = $("#jsLocalVar").text();
-  sahagin.TestDocResolver.JS_LOCAL_VAR_ASSIGN = $("#jsLocalVarAssign").text();
+  sahagin.TestDocResolver.JS_VAR_ASSIGN = $("#jsVarAssign").text();
 
   $("#script_table").treetable({
     expandable: true,

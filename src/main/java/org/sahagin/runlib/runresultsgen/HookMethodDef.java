@@ -23,10 +23,10 @@ import org.sahagin.share.runresults.StackLine;
 import org.sahagin.share.srctree.SrcTree;
 import org.sahagin.share.srctree.TestMethod;
 import org.sahagin.share.srctree.code.CodeLine;
-import org.sahagin.share.srctree.code.LocalVarAssign;
 import org.sahagin.share.srctree.code.SubMethodInvoke;
 import org.sahagin.share.srctree.code.TestStep;
 import org.sahagin.share.srctree.code.TestStepLabel;
+import org.sahagin.share.srctree.code.VarAssign;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlUtils;
 
@@ -188,8 +188,8 @@ public class HookMethodDef {
         if (thisCodeLine.getCode() instanceof SubMethodInvoke) {
             SubMethodInvoke thisMethodInvoke = (SubMethodInvoke) thisCodeLine.getCode();
             thisCaptureStyle = thisMethodInvoke.getSubMethod().getCaptureStyle();
-        } else if (thisCodeLine.getCode() instanceof LocalVarAssign) {
-            LocalVarAssign assign = (LocalVarAssign) thisCodeLine.getCode();
+        } else if (thisCodeLine.getCode() instanceof VarAssign) {
+            VarAssign assign = (VarAssign) thisCodeLine.getCode();
             if (assign.getValue() instanceof SubMethodInvoke) {
                 SubMethodInvoke thisMethodInvoke = (SubMethodInvoke) assign.getValue();
                 thisCaptureStyle = thisMethodInvoke.getSubMethod().getCaptureStyle();

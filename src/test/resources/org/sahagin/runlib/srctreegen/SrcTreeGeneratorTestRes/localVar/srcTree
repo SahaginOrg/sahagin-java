@@ -2,21 +2,21 @@ rootMethodTable:
   methods:
   - codeBody:
     - code:
-        value: {value: A, original: '"A"', type: string}
         original: String str1="A";
-        type: localVarAssign
-        name: str1
+        type: varAssign
+        value: {value: A, original: '"A"', type: string}
+        var: {name: str1, original: str1, type: localVar}
     - code: {type: unknown}
     - code:
-        value: {value: B, original: '"B"', type: string}
         original: str1="B";
-        type: localVarAssign
-        name: str1
+        type: varAssign
+        value: {value: B, original: '"B"', type: string}
+        var: {name: str1, original: str1, type: localVar}
     - code:
-        value: {value: C, original: '"C"', type: string}
         original: str2="C";
-        type: localVarAssign
-        name: str2
+        type: varAssign
+        value: {value: C, original: '"C"', type: string}
+        var: {name: str2, original: str2, type: localVar}
     - code:
         type: method
         args:
@@ -39,12 +39,12 @@ rootMethodTable:
         - {original: page1, type: localVar, name: page1}
         - {original: page2, type: localVar, name: page2}
     - code:
+        type: varAssign
         value:
           type: method
           methodKey: "*SubPage.get-void"
           thisInstance: {original: page1, type: localVar, name: page1}
-        type: localVarAssign
-        name: int3
+        var: {name: int3, original: int3, type: localVar}
     - code:
         type: method
         args:
