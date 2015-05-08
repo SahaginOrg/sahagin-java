@@ -32,6 +32,7 @@ import org.sahagin.share.runresults.RootMethodRunResult;
 import org.sahagin.share.runresults.RunFailure;
 import org.sahagin.share.runresults.RunResults;
 import org.sahagin.share.runresults.StackLine;
+import org.sahagin.share.srctree.PageClass;
 import org.sahagin.share.srctree.SrcTree;
 import org.sahagin.share.srctree.TestMethod;
 import org.sahagin.share.srctree.code.Code;
@@ -210,11 +211,11 @@ public class HtmlReport {
     }
 
     private String pageTestDoc(CodeLine codeLine) {
-        String pageTestDoc = TestDocResolver.pageTestDoc(codeLine.getCode());
-        if (pageTestDoc == null || pageTestDoc.equals("")) {
+        PageClass pageClass = TestDocResolver.codePage(codeLine.getCode());
+        if (pageClass == null || pageClass.getTestDoc() == null || pageClass.getTestDoc().equals("")) {
             return "-";
         } else {
-            return pageTestDoc;
+            return pageClass.getTestDoc();
         }
     }
 

@@ -535,8 +535,7 @@ public class SrcTreeGenerator {
             TestClass subClass = subClassTable.getByKey(classKey);
             if (subClass != null && subClass instanceof PageClass) {
                 // ignore left for page type variable assignment
-                // since usually page type variable is usually
-                // not used in other TestDoc
+                // since usually page type variable is not used in other TestDoc
                 return rightCode;
             }
 

@@ -474,8 +474,8 @@ function loadCodeBodyHiddenNode(tr) {
     } else {
       lineClass = "successLine";
     }
-    var pageTestDoc = sahagin.TestDocResolver.pageTestDoc(codeLine.getCode());
-    if (pageTestDoc == null) {
+    var pageClass = sahagin.TestDocResolver.codePage(codeLine.getCode());
+    if (pageClass == null || pageClass.getTestDoc() == null) {
       pageTestDoc = '-';
     }
     var testDoc = sahagin.TestDocResolver.placeholderResolvedMethodTestDoc(

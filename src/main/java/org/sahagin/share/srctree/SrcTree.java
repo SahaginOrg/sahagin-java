@@ -7,6 +7,7 @@ import org.sahagin.share.CommonUtils;
 import org.sahagin.share.IllegalDataStructureException;
 import org.sahagin.share.srctree.code.Code;
 import org.sahagin.share.srctree.code.CodeLine;
+import org.sahagin.share.srctree.code.Field;
 import org.sahagin.share.srctree.code.SubMethodInvoke;
 import org.sahagin.share.srctree.code.TestStep;
 import org.sahagin.share.srctree.code.VarAssign;
@@ -223,23 +224,28 @@ public class SrcTree implements YamlConvertible {
         }
     }
 
-    private void resolveTestMethod(Code code) throws IllegalDataStructureException {
+    private void resolveKeyReferenceInCode(Code code) throws IllegalDataStructureException {
         if (code instanceof SubMethodInvoke) {
             SubMethodInvoke invoke = (SubMethodInvoke) code;
             TestMethod testMethod = getTestMethodByKey(invoke.getSubMethodKey());
             invoke.setSubMethod(testMethod);
-            resolveTestMethod(invoke.getThisInstance());
+            resolveKeyReferenceInCode(invoke.getThisInstance());
             for (Code arg : invoke.getArgs()) {
-                resolveTestMethod(arg);
+                resolveKeyReferenceInCode(arg);
             }
+        } else if (code instanceof Field) {
+            Field field = (Field) code;
+            TestField testField = getTestFieldByKey(field.getFieldKey());
+            field.setField(testField);
+            resolveKeyReferenceInCode(field.getThisInstance());
         } else if (code instanceof VarAssign) {
             VarAssign assign = (VarAssign) code;
-            resolveTestMethod(assign.getVariable());
-            resolveTestMethod(assign.getValue());
+            resolveKeyReferenceInCode(assign.getVariable());
+            resolveKeyReferenceInCode(assign.getValue());
         } else if (code instanceof TestStep) {
             TestStep testStep = (TestStep) code;
             for (CodeLine step : testStep.getStepBody()) {
-                resolveTestMethod(step.getCode());
+                resolveKeyReferenceInCode(step.getCode());
             }
         }
     }
@@ -260,13 +266,13 @@ public class SrcTree implements YamlConvertible {
         for (TestMethod testMethod : rootMethodTable.getTestMethods()) {
             resolveTestClass(testMethod);
             for (CodeLine codeLine : testMethod.getCodeBody()) {
-                resolveTestMethod(codeLine.getCode());
+                resolveKeyReferenceInCode(codeLine.getCode());
             }
         }
         for (TestMethod testMethod : subMethodTable.getTestMethods()) {
             resolveTestClass(testMethod);
             for (CodeLine codeLine : testMethod.getCodeBody()) {
-                resolveTestMethod(codeLine.getCode());
+                resolveKeyReferenceInCode(codeLine.getCode());
             }
         }
     }

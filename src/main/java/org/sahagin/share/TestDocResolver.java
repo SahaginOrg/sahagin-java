@@ -8,8 +8,10 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.sahagin.share.srctree.PageClass;
+import org.sahagin.share.srctree.TestClass;
 import org.sahagin.share.srctree.TestMethod;
 import org.sahagin.share.srctree.code.Code;
+import org.sahagin.share.srctree.code.Field;
 import org.sahagin.share.srctree.code.LocalVar;
 import org.sahagin.share.srctree.code.MethodArgument;
 import org.sahagin.share.srctree.code.StringCode;
@@ -244,6 +246,14 @@ public class TestDocResolver {
         } else if (code instanceof LocalVar) {
             return String.format(SysMessages.get(SysMessages.LOCAL_VAR),
                     ((LocalVar) code).getName());
+        } else if (code instanceof Field) {
+            String testDoc = ((Field) code).getField().getTestDoc();
+            if (testDoc == null) {
+                // TODO resolve {this} keyword in the testDoc of the Field
+                return code.getOriginal();
+            } else {
+                return testDoc;
+            }
         } else if (code instanceof VarAssign) {
             VarAssign assign = (VarAssign) code;
             String variableTestDoc = methodTestDocSub(
@@ -304,43 +314,47 @@ public class TestDocResolver {
         }
     }
 
-    // returns null if Page not found
-    private static String methodInvokePageTestDocNoRecursive(SubMethodInvoke methodInvoke) {
-        if (!(methodInvoke.getSubMethod().getTestClass() instanceof PageClass)) {
-            return null;
-        }
-        PageClass page = (PageClass) methodInvoke.getSubMethod().getTestClass();
-        return page.getTestDoc();
-    }
-
-    // returns first found page testDoc.
+    // Returns first found page testDoc.
     // returns null if page testDoc not found
-    private static String methodInvokePageTestDocRecursive(SubMethodInvoke methodInvoke) {
-        String pageTestDoc = methodInvokePageTestDocNoRecursive(methodInvoke);
-        if (pageTestDoc != null) {
-            return pageTestDoc;
-        }
-        for (Code code : methodInvoke.getArgs()) {
-            if (code instanceof SubMethodInvoke) {
-                String codeLinePageTestDoc
-                = methodInvokePageTestDocRecursive((SubMethodInvoke) code);
-                if (codeLinePageTestDoc != null) {
-                    return codeLinePageTestDoc;
+    public static PageClass codePage(Code code) {
+        if (code instanceof SubMethodInvoke) {
+            SubMethodInvoke invoke = (SubMethodInvoke) code;
+            TestClass testClass = invoke.getSubMethod().getTestClass();
+            if (testClass instanceof PageClass) {
+                return (PageClass) testClass;
+            }
+            PageClass thisPage = codePage(invoke.getThisInstance());
+            if (thisPage != null) {
+                return thisPage;
+            }
+            for (Code arg : invoke.getArgs()) {
+                PageClass argPage = codePage(arg);
+                if (argPage != null) {
+                    return argPage;
                 }
+            }
+        } else if (code instanceof Field) {
+            Field field = (Field) code;
+            TestClass testClass = field.getField().getTestClass();
+            if (testClass instanceof PageClass) {
+                return (PageClass) testClass;
+            }
+            PageClass thisPage = codePage(field.getThisInstance());
+            if (thisPage != null) {
+                return thisPage;
+            }
+        } else if (code instanceof VarAssign) {
+            VarAssign assign = (VarAssign) code;
+            PageClass varPage = codePage(assign.getVariable());
+            if (varPage != null) {
+                return varPage;
+            }
+            PageClass valuePage = codePage(assign.getValue());
+            if (valuePage != null) {
+                return valuePage;
             }
         }
         return null;
-    }
-
-    // uses first found page testDoc
-    // (in most case, this is top level method related Page)
-    public static String pageTestDoc(Code code) {
-        if (!(code instanceof SubMethodInvoke)) {
-            return null;
-        }
-        // TODO if invoked code is A.B.C(..), page documents in A or B are not checked
-        SubMethodInvoke invoke = (SubMethodInvoke) code;
-        return methodInvokePageTestDocRecursive(invoke);
     }
 
 }
