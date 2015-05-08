@@ -17,16 +17,16 @@ import org.sahagin.share.yaml.YamlConvertible;
 public class SrcTree implements YamlConvertible {
     private static final String MSG_CLASS_NOT_FOUND = "class not found; key: %s";
     private static final String MSG_METHOD_NOT_FOUND = "method not found; key: %s";
-    private static final String MSG_PROP_NOT_FOUND = "property not found; key: %s";
+    private static final String MSG_FIELD_NOT_FOUND = "field not found; key: %s";
     private static final String MSG_SRC_TREE_FORMAT_MISMATCH
     = "expected formatVersion is \"%s\", but actual is \"%s\"";
 
     private TestClassTable rootClassTable = new TestClassTable();
     private TestMethodTable rootMethodTable = new TestMethodTable();
-    private TestPropTable rootPropTable = new TestPropTable();
+    private TestFieldTable rootFieldTable = new TestFieldTable();
     private TestClassTable subClassTable = new TestClassTable();
     private TestMethodTable subMethodTable = new TestMethodTable();
-    private TestPropTable subPropTable = new TestPropTable();
+    private TestFieldTable subFieldTable = new TestFieldTable();
 
     public TestClassTable getRootClassTable() {
         return rootClassTable;
@@ -50,15 +50,15 @@ public class SrcTree implements YamlConvertible {
         this.rootMethodTable = rootMethodTable;
     }
 
-    public TestPropTable getRootPropTable() {
-        return rootPropTable;
+    public TestFieldTable getRootFieldTable() {
+        return rootFieldTable;
     }
 
-    public void setRootPropTable(TestPropTable rootPropTable) {
-        if (rootPropTable == null) {
+    public void setRootFieldTable(TestFieldTable rootFieldTable) {
+        if (rootFieldTable == null) {
             throw new NullPointerException();
         }
-        this.rootPropTable = rootPropTable;
+        this.rootFieldTable = rootFieldTable;
     }
 
     public TestClassTable getSubClassTable() {
@@ -83,35 +83,35 @@ public class SrcTree implements YamlConvertible {
         this.subMethodTable = subMethodTable;
     }
 
-    public TestPropTable getSubPropTable() {
-        return subPropTable;
+    public TestFieldTable getSubFieldTable() {
+        return subFieldTable;
     }
 
-    public void setSubPropTable(TestPropTable subPropTable) {
-        if (subPropTable == null) {
+    public void setSubFieldTable(TestFieldTable subFieldTable) {
+        if (subFieldTable == null) {
             throw new NullPointerException();
         }
-        this.subPropTable = subPropTable;
+        this.subFieldTable = subFieldTable;
     }
 
     public void sort() {
         rootClassTable.sort();
         rootMethodTable.sort();
-        rootPropTable.sort();
+        rootFieldTable.sort();
         subClassTable.sort();
         subMethodTable.sort();
-        subPropTable.sort();
+        subFieldTable.sort();
     }
 
     @Override
     public Map<String, Object> toYamlObject() {
         Map<String, Object> result = new HashMap<String, Object>(8);
         result.put("formatVersion", CommonUtils.formatVersion());
-        if (!rootPropTable.isEmpty()) {
-            result.put("rootPropTable", rootPropTable.toYamlObject());
+        if (!rootFieldTable.isEmpty()) {
+            result.put("rootFieldTable", rootFieldTable.toYamlObject());
         }
-        if (!subPropTable.isEmpty()) {
-            result.put("subPropTable", subPropTable.toYamlObject());
+        if (!subFieldTable.isEmpty()) {
+            result.put("subFieldTable", subFieldTable.toYamlObject());
         }
         if (!rootMethodTable.isEmpty()) {
             result.put("rootMethodTable", rootMethodTable.toYamlObject());
@@ -139,18 +139,18 @@ public class SrcTree implements YamlConvertible {
                     (MSG_SRC_TREE_FORMAT_MISMATCH, CommonUtils.formatVersion(), formatVersion));
         }
 
-        rootPropTable = new TestPropTable();
-        Map<String, Object> rootPropTableYamlObj
-        = YamlUtils.getYamlObjectValue(yamlObject, "rootPropTable", true);
-        if (rootPropTableYamlObj != null) {
-            rootPropTable.fromYamlObject(rootPropTableYamlObj);
+        rootFieldTable = new TestFieldTable();
+        Map<String, Object> rootFieldTableYamlObj
+        = YamlUtils.getYamlObjectValue(yamlObject, "rootFieldTable", true);
+        if (rootFieldTableYamlObj != null) {
+            rootFieldTable.fromYamlObject(rootFieldTableYamlObj);
         }
 
-        subPropTable = new TestPropTable();
-        Map<String, Object> subPropTableYamlObj
-        = YamlUtils.getYamlObjectValue(yamlObject, "subPropTable", true);
-        if (subPropTableYamlObj != null) {
-            subPropTable.fromYamlObject(subPropTableYamlObj);
+        subFieldTable = new TestFieldTable();
+        Map<String, Object> subFieldTableYamlObj
+        = YamlUtils.getYamlObjectValue(yamlObject, "subFieldTable", true);
+        if (subFieldTableYamlObj != null) {
+            subFieldTable.fromYamlObject(subFieldTableYamlObj);
         }
 
         rootMethodTable = new TestMethodTable();
@@ -207,17 +207,17 @@ public class SrcTree implements YamlConvertible {
         throw new IllegalDataStructureException(String.format(MSG_METHOD_NOT_FOUND, testMethodKey));
     }
 
-    public TestProp getTestPropByKey(String testPropKey)
+    public TestField getTestFieldByKey(String testFieldKey)
             throws IllegalDataStructureException {
-        TestProp subProp = subPropTable.getByKey(testPropKey);
-        if (subProp != null) {
-            return subProp;
+        TestField subField = subFieldTable.getByKey(testFieldKey);
+        if (subField != null) {
+            return subField;
         }
-        TestProp rootProp = rootPropTable.getByKey(testPropKey);
-        if (rootProp != null) {
-            return rootProp;
+        TestField rootField = rootFieldTable.getByKey(testFieldKey);
+        if (rootField != null) {
+            return rootField;
         }
-        throw new IllegalDataStructureException(String.format(MSG_PROP_NOT_FOUND, testPropKey));
+        throw new IllegalDataStructureException(String.format(MSG_FIELD_NOT_FOUND, testFieldKey));
     }
 
     private void resolveTestClass(TestMethod testMethod) throws IllegalDataStructureException {
@@ -232,11 +232,11 @@ public class SrcTree implements YamlConvertible {
         }
     }
 
-    private void resolveTestProp(TestClass testClass) throws IllegalDataStructureException {
-        testClass.clearTestProps();
-        for (String testPropKey : testClass.getTestPropKeys()) {
-            TestProp testProp = getTestPropByKey(testPropKey);
-            testClass.addTestProp(testProp);
+    private void resolveTestField(TestClass testClass) throws IllegalDataStructureException {
+        testClass.clearTestFields();
+        for (String testFieldKey : testClass.getTestFieldKeys()) {
+            TestField testField = getTestFieldByKey(testFieldKey);
+            testClass.addTestField(testField);
         }
     }
 
@@ -275,12 +275,12 @@ public class SrcTree implements YamlConvertible {
     public void resolveKeyReference() throws IllegalDataStructureException {
         for (TestClass testClass : rootClassTable.getTestClasses()) {
             resolveTestMethod(testClass);
-            resolveTestProp(testClass);
+            resolveTestField(testClass);
             resolveDelegateToTestClass(testClass);
         }
         for (TestClass testClass : subClassTable.getTestClasses()) {
             resolveTestMethod(testClass);
-            resolveTestProp(testClass);
+            resolveTestField(testClass);
             resolveDelegateToTestClass(testClass);
         }
         for (TestMethod testMethod : rootMethodTable.getTestMethods()) {

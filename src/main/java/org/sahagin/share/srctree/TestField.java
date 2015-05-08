@@ -12,7 +12,7 @@ import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlConvertible;
 import org.sahagin.share.yaml.YamlUtils;
 
-public class TestProp implements YamlConvertible {
+public class TestField implements YamlConvertible {
     private String testClassKey;
     private TestClass testClass;
     private String key;

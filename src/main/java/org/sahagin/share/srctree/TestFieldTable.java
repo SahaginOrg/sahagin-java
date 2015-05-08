@@ -13,59 +13,59 @@ import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlConvertible;
 import org.sahagin.share.yaml.YamlUtils;
 
-public class TestPropTable implements YamlConvertible {
-    private List<TestProp> testProps = new ArrayList<TestProp>(512);
+public class TestFieldTable implements YamlConvertible {
+    private List<TestField> testFields = new ArrayList<TestField>(512);
 
-    public List<TestProp> getTestProps() {
-        return testProps;
+    public List<TestField> getTestFields() {
+        return testFields;
     }
 
-    public void addTestProp(TestProp testProp) {
-        testProps.add(testProp);
+    public void addTestField(TestField testField) {
+        testFields.add(testField);
     }
 
     public boolean isEmpty() {
-        return testProps.isEmpty();
+        return testFields.isEmpty();
     }
 
     // returns null if not found
-    public TestProp getByKey(String key) {
+    public TestField getByKey(String key) {
         if (key == null) {
             throw new NullPointerException();
         }
-        for (TestProp testProp : testProps) {
-            if (key.equals(testProp.getKey())) {
-                return testProp;
+        for (TestField testField : testFields) {
+            if (key.equals(testField.getKey())) {
+                return testField;
             }
         }
         return null;
     }
 
     // returns null if not found
-    public List<TestProp> getByName(String classQualifiedName, String propSimpleName) {
+    public List<TestField> getByName(String classQualifiedName, String FieldSimpleName) {
         if (classQualifiedName == null) {
             throw new NullPointerException();
         }
-        if (propSimpleName == null) {
+        if (FieldSimpleName == null) {
             throw new NullPointerException();
         }
-        List<TestProp> result = new ArrayList<TestProp>(1);
-        for (TestProp testProp : testProps) {
-            if (StringUtils.equals(classQualifiedName, testProp.getTestClass().getQualifiedName())
-                    && StringUtils.equals(propSimpleName, testProp.getSimpleName())) {
-                result.add(testProp);
+        List<TestField> result = new ArrayList<TestField>(1);
+        for (TestField testField : testFields) {
+            if (StringUtils.equals(classQualifiedName, testField.getTestClass().getQualifiedName())
+                    && StringUtils.equals(FieldSimpleName, testField.getSimpleName())) {
+                result.add(testField);
             }
         }
         return result;
     }
 
     public void sort() {
-        Collections.sort(testProps, new Comparator<TestProp>() {
+        Collections.sort(testFields, new Comparator<TestField>() {
 
             // sort by name as much as possible
             // since sometimes key differs between Windows and OSX
             @Override
-            public int compare(TestProp left, TestProp right) {
+            public int compare(TestField left, TestField right) {
                 int nameCompareResult = CommonUtils.compare(left.getQualifiedName(), right.getQualifiedName());
                 if (nameCompareResult == 0) {
                     return CommonUtils.compare(left.getKey(), right.getKey());
@@ -80,7 +80,7 @@ public class TestPropTable implements YamlConvertible {
     public Map<String, Object> toYamlObject() {
         Map<String, Object> result = new HashMap<String, Object>(1);
         if (!isEmpty()) {
-            result.put("props", YamlUtils.toYamlObjectList(testProps));
+            result.put("fields", YamlUtils.toYamlObjectList(testFields));
         }
         return result;
     }
@@ -88,13 +88,13 @@ public class TestPropTable implements YamlConvertible {
     @Override
     public void fromYamlObject(Map<String, Object> yamlObject)
             throws YamlConvertException {
-        List<Map<String, Object>> testPropsYamlObj
-        = YamlUtils.getYamlObjectListValue(yamlObject, "props", true);
-        testProps = new ArrayList<TestProp>(testPropsYamlObj.size());
-        for (Map<String, Object> testPropYamlObj : testPropsYamlObj) {
-            TestProp testProp = new TestProp();
-            testProp.fromYamlObject(testPropYamlObj);
-            testProps.add(testProp);
+        List<Map<String, Object>> testFieldsYamlObj
+        = YamlUtils.getYamlObjectListValue(yamlObject, "fields", true);
+        testFields = new ArrayList<TestField>(testFieldsYamlObj.size());
+        for (Map<String, Object> testFieldYamlObj : testFieldsYamlObj) {
+            TestField testField = new TestField();
+            testField.fromYamlObject(testFieldYamlObj);
+            testFields.add(testField);
         }
     }
 

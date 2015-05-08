@@ -23,8 +23,8 @@ public class TestClass implements YamlConvertible {
     private TestClass delegateToTestClass = null;
     private List<String> testMethodKeys = new ArrayList<String>(16);
     private List<TestMethod> testMethods = new ArrayList<TestMethod>(16);
-    private List<String> testPropKeys = new ArrayList<String>(16);
-    private List<TestProp> testProps = new ArrayList<TestProp>(16);
+    private List<String> testFieldKeys = new ArrayList<String>(16);
+    private List<TestField> testFields = new ArrayList<TestField>(16);
 
     public String getKey() {
         return key;
@@ -97,24 +97,24 @@ public class TestClass implements YamlConvertible {
         testMethods.clear();
     }
 
-    public List<String> getTestPropKeys() {
-        return testPropKeys;
+    public List<String> getTestFieldKeys() {
+        return testFieldKeys;
     }
 
-    public void addTestPropKey(String testPropKey) {
-        testPropKeys.add(testPropKey);
+    public void addTestFieldKey(String testFieldKey) {
+        testFieldKeys.add(testFieldKey);
     }
 
-    public List<TestProp> getTestProps() {
-        return testProps;
+    public List<TestField> getTestFields() {
+        return testFields;
     }
 
-    public void addTestProp(TestProp testProp) {
-        testProps.add(testProp);
+    public void addTestField(TestField testField) {
+        testFields.add(testField);
     }
 
-    public void clearTestProps() {
-        testProps.clear();
+    public void clearTestFields() {
+        testFields.clear();
     }
 
     protected String getType() {
@@ -138,8 +138,8 @@ public class TestClass implements YamlConvertible {
         if (!testMethodKeys.isEmpty()) {
             result.put("methodKeys", testMethodKeys);
         }
-        if (!testPropKeys.isEmpty()) {
-            result.put("propKeys", testPropKeys);
+        if (!testFieldKeys.isEmpty()) {
+            result.put("propKeys", testFieldKeys);
         }
         return result;
     }
@@ -155,8 +155,8 @@ public class TestClass implements YamlConvertible {
         delegateToTestClass = null;
         testMethodKeys = YamlUtils.getStrListValue(yamlObject, "methodKeys", true);
         testMethods.clear();
-        testPropKeys = YamlUtils.getStrListValue(yamlObject, "propKeys", true);
-        testProps.clear();
+        testFieldKeys = YamlUtils.getStrListValue(yamlObject, "propKeys", true);
+        testFields.clear();
     }
 
     public static TestClass newInstanceFromYamlObject(Map<String, Object> yamlObject)
