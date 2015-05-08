@@ -23,6 +23,8 @@ public class TestClass implements YamlConvertible {
     private TestClass delegateToTestClass = null;
     private List<String> testMethodKeys = new ArrayList<String>(16);
     private List<TestMethod> testMethods = new ArrayList<TestMethod>(16);
+    private List<String> testPropKeys = new ArrayList<String>(16);
+    private List<TestProp> testProps = new ArrayList<TestProp>(16);
 
     public String getKey() {
         return key;
@@ -95,6 +97,26 @@ public class TestClass implements YamlConvertible {
         testMethods.clear();
     }
 
+    public List<String> getTestPropKeys() {
+        return testPropKeys;
+    }
+
+    public void addTestPropKey(String testPropKey) {
+        testPropKeys.add(testPropKey);
+    }
+
+    public List<TestProp> getTestProps() {
+        return testProps;
+    }
+
+    public void addTestProp(TestProp testProp) {
+        testProps.add(testProp);
+    }
+
+    public void clearTestProps() {
+        testProps.clear();
+    }
+
     protected String getType() {
         return TYPE;
     }
@@ -116,6 +138,9 @@ public class TestClass implements YamlConvertible {
         if (!testMethodKeys.isEmpty()) {
             result.put("methodKeys", testMethodKeys);
         }
+        if (!testPropKeys.isEmpty()) {
+            result.put("propKeys", testPropKeys);
+        }
         return result;
     }
 
@@ -130,6 +155,8 @@ public class TestClass implements YamlConvertible {
         delegateToTestClass = null;
         testMethodKeys = YamlUtils.getStrListValue(yamlObject, "methodKeys", true);
         testMethods.clear();
+        testPropKeys = YamlUtils.getStrListValue(yamlObject, "propKeys", true);
+        testProps.clear();
     }
 
     public static TestClass newInstanceFromYamlObject(Map<String, Object> yamlObject)
