@@ -37,14 +37,16 @@ public class CodeLine implements YamlConvertible {
         this.code = code;
     }
 
+    @Override
     public Map<String, Object> toYamlObject() {
         Map<String, Object> result = new HashMap<String, Object>(4);
         result.put("startLine", startLine);
         result.put("endLine", endLine);
-        result.put("code", code.toYamlObject());
+        result.put("code", YamlUtils.toYamlObject(code));
         return result;
     }
 
+    @Override
     public void fromYamlObject(Map<String, Object> yamlObject) throws YamlConvertException {
         startLine = YamlUtils.getIntValue(yamlObject, "startLine");
         endLine = YamlUtils.getIntValue(yamlObject, "endLine");

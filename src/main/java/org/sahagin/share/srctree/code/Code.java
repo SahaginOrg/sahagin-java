@@ -38,6 +38,9 @@ public abstract class Code implements YamlConvertible {
 
     public static Code newInstanceFromYamlObject(Map<String, Object> yamlObject)
             throws YamlConvertException {
+        if (yamlObject == null) {
+            return null;
+        }
         String type = YamlUtils.getStrValue(yamlObject, "type");
         Code result;
         if (StringCode.TYPE.equals(type)) {

@@ -238,6 +238,14 @@ public class YamlUtils {
         return getIntListValue(yamlObject, key, false);
     }
 
+    public static Map<String, Object> toYamlObject(YamlConvertible src) {
+        if (src == null) {
+            return null;
+        } else {
+            return src.toYamlObject();
+        }
+    }
+
     // for null or not found key, returns empty list
     public static List<Map<String, Object>> getYamlObjectListValue(Map<String, Object> yamlObject,
             String key, boolean allowsEmpty) throws YamlConvertException {
@@ -261,7 +269,7 @@ public class YamlUtils {
     public static <T extends YamlConvertible> List<Map<String, Object>> toYamlObjectList(List<T> srcList) {
         List<Map<String, Object>> result = new ArrayList<Map<String, Object>>(srcList.size());
         for (T src : srcList) {
-            Map<String, Object> yamlObj = src.toYamlObject();
+            Map<String, Object> yamlObj = toYamlObject(src);
             result.add(yamlObj);
         }
         return result;

@@ -35,11 +35,7 @@ public class LocalVarAssign extends Code {
     public Map<String, Object> toYamlObject() {
         Map<String, Object> result = super.toYamlObject();
         result.put("name", name);
-        if (value == null) {
-            result.put("value", null);
-        } else {
-            result.put("value", value.toYamlObject());
-        }
+        result.put("value", YamlUtils.toYamlObject(value));
         return result;
     }
 
@@ -49,11 +45,7 @@ public class LocalVarAssign extends Code {
         super.fromYamlObject(yamlObject);
         name = YamlUtils.getStrValue(yamlObject, "name");
         Map<String, Object> valueYamlObj = YamlUtils.getYamlObjectValue(yamlObject, "value");
-        if (valueYamlObj == null) {
-            value = null;
-        } else {
-            value = Code.newInstanceFromYamlObject(valueYamlObj);
-        }
+        value = Code.newInstanceFromYamlObject(valueYamlObj);
     }
 
 }

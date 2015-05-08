@@ -71,7 +71,7 @@ public class SubMethodInvoke extends Code {
             result.put("args", YamlUtils.toYamlObjectList(args));
         }
         if (thisInstance != null) {
-            result.put("thisInstance", thisInstance.toYamlObject());
+            result.put("thisInstance", YamlUtils.toYamlObject(thisInstance));
         }
         if (childInvoke) {
             result.put("childInvoke", childInvoke);
@@ -92,11 +92,7 @@ public class SubMethodInvoke extends Code {
             args.add(code);
         }
         Map<String, Object> thisInstanceYamlObj = YamlUtils.getYamlObjectValue(yamlObject, "thisInstance", true);
-        if (thisInstanceYamlObj == null) {
-            thisInstance = null;
-        } else {
-            thisInstance = Code.newInstanceFromYamlObject(thisInstanceYamlObj);
-        }
+        thisInstance = Code.newInstanceFromYamlObject(thisInstanceYamlObj);
         Boolean childInvokeObj = YamlUtils.getBooleanValue(yamlObject, "childInvoke", true);
         if (childInvokeObj == null) {
             childInvoke = false;
