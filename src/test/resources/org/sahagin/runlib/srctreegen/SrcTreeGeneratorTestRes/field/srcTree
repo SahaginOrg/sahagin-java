@@ -1,0 +1,20 @@
+fieldTable:
+  fields:
+  - {name: field1, testDoc: 'Doc: field1', classKey: "*TestMain", value: null, key: "*TestMain.field1"}
+  - {name: field2, testDoc: 'Doc: field2', classKey: "*TestMain", value: null, key: "*TestMain.field2"}
+rootClassTable:
+  classes:
+  - propKeys: ["*TestMain.field1", "*TestMain.field2"]
+rootMethodTable:
+  methods:
+  - name: test
+    codeBody:
+    - code:
+        type: varAssign
+        value: {original: field1, type: field, fieldKey: "*TestMain.field1"}
+        var: {name: localVar1, type: localVar}
+    - code:
+        type: varAssign
+        value: {original: field2, type: field, fieldKey: "*TestMain.field2"}
+        var: {name: localVar2, type: localVar}
+    - code: {type: unknown}

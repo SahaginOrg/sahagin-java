@@ -131,10 +131,14 @@ public class SrcTreeGeneratorTest extends TestBase {
     }
 
     @Test
+    public void field() {
+        testMain("field", null, null, JUNIT4);
+    }
+
+    @Test
     public void testStepLabel() {
         testMain("testStepLabel", null, null, JUNIT4);
     }
-
 
     @Test
     public void additionalTestDocs() {

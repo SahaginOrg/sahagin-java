@@ -265,4 +265,9 @@ public class ASTUtils {
         return getTestDoc(method.getAnnotations(), locales);
     }
 
+    public static String getTestDoc(
+            IVariableBinding variable, AcceptableLocales locales) {
+        return getTestDoc(variable.getAnnotations(), locales).getLeft();
+    }
+
 }

@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.sahagin.share.CommonUtils;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlConvertible;
@@ -39,24 +38,6 @@ public class TestFieldTable implements YamlConvertible {
             }
         }
         return null;
-    }
-
-    // returns null if not found
-    public List<TestField> getByName(String classQualifiedName, String FieldSimpleName) {
-        if (classQualifiedName == null) {
-            throw new NullPointerException();
-        }
-        if (FieldSimpleName == null) {
-            throw new NullPointerException();
-        }
-        List<TestField> result = new ArrayList<TestField>(1);
-        for (TestField testField : testFields) {
-            if (StringUtils.equals(classQualifiedName, testField.getTestClass().getQualifiedName())
-                    && StringUtils.equals(FieldSimpleName, testField.getSimpleName())) {
-                result.add(testField);
-            }
-        }
-        return result;
     }
 
     public void sort() {

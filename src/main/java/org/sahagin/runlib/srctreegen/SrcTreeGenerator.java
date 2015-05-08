@@ -23,6 +23,7 @@ import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.FileASTRequestor;
 import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.IMethodBinding;
@@ -50,10 +51,13 @@ import org.sahagin.share.srctree.PageClass;
 import org.sahagin.share.srctree.SrcTree;
 import org.sahagin.share.srctree.TestClass;
 import org.sahagin.share.srctree.TestClassTable;
+import org.sahagin.share.srctree.TestField;
+import org.sahagin.share.srctree.TestFieldTable;
 import org.sahagin.share.srctree.TestMethod;
 import org.sahagin.share.srctree.TestMethodTable;
 import org.sahagin.share.srctree.code.Code;
 import org.sahagin.share.srctree.code.CodeLine;
+import org.sahagin.share.srctree.code.Field;
 import org.sahagin.share.srctree.code.LocalVar;
 import org.sahagin.share.srctree.code.MethodArgument;
 import org.sahagin.share.srctree.code.StringCode;
@@ -116,6 +120,28 @@ public class SrcTreeGenerator {
         return Pair.of(null, null);
     }
 
+    // returns null pair if the method is not sub method
+    private Pair<String, CaptureStyle> testDocIfSubMethod(IMethodBinding methodBinding) {
+        // rootMethod also can have its TestDoc value
+        if (AdapterContainer.globalInstance().isRootMethod(methodBinding)) {
+            return Pair.of(null, null);
+        }
+        return getTestDoc(methodBinding);
+    }
+
+    private IVariableBinding getVariableBinding(FieldDeclaration declaration) {
+        for (Object fragment : declaration.fragments()) {
+            if (fragment instanceof VariableDeclarationFragment) {
+                VariableDeclarationFragment varDecl = (VariableDeclarationFragment) fragment;
+                IVariableBinding binding = varDecl.resolveBinding();
+                if (binding != null) {
+                    return binding;
+                }
+            }
+        }
+        return null;
+    }
+
     private List<String> getArgClassQualifiedNames(IMethodBinding method) {
         ITypeBinding[] paramTypes;
         if (method.isParameterizedMethod()) {
@@ -155,14 +181,6 @@ public class SrcTreeGenerator {
             return TestMethod.generateMethodKey(
                     classQualifiedName, methodSimpleName, argClassQualifiedNames);
         }
-    }
-
-    private boolean isSubMethod(IMethodBinding methodBinding) {
-        // rootMethod also can have its TestDoc value
-        if (AdapterContainer.globalInstance().isRootMethod(methodBinding)) {
-            return false;
-        }
-        return getTestDoc(methodBinding).getLeft() != null;
     }
 
     // srcFiles..parse target files
@@ -284,30 +302,22 @@ public class SrcTreeGenerator {
         private TestClassTable subClassTable;
         private TestMethodTable subMethodTable;
         private TestClassTable rootClassTable;
+        private TestFieldTable fieldTable;
 
         // rootClassTable if only for read, not write any data.
         // old value in subClassTable is not replaced.
-        // old value in subMethodTable is replaced.
+        // old value in subMethodTable and fieldTable is replaced.
         public CollectSubVisitor(TestClassTable rootClassTable,
-                TestClassTable subClassTable, TestMethodTable subMethodTable) {
+                TestClassTable subClassTable, TestMethodTable subMethodTable, TestFieldTable fieldTable) {
             this.rootClassTable = rootClassTable;
             this.subClassTable = subClassTable;
             this.subMethodTable = subMethodTable;
+            this.fieldTable = fieldTable;
         }
 
-        @Override
-        public boolean visit(MethodDeclaration node) {
-            IMethodBinding methodBinding = node.resolveBinding();
-            if (!isSubMethod(methodBinding)) {
-                return super.visit(node);
-            }
-
-            ITypeBinding classBinding = methodBinding.getDeclaringClass();
-            if (!classBinding.isClass() && !classBinding.isInterface()) {
-                // enum method, etc
-                return super.visit(node);
-            }
-
+        // Returns existing TestClass in rootClassTable or subClassTable if found in these table.
+        // If not found, create new TestClass and add it to subClassTable and returns it
+        private TestClass classBindingTestClass(ITypeBinding classBinding) {
             TestClass testClass = rootClassTable.getByKey(classBinding.getBinaryName());
             if (testClass == null) {
                 testClass = subClassTable.getByKey(classBinding.getBinaryName());
@@ -324,13 +334,64 @@ public class SrcTreeGenerator {
                     subClassTable.addTestClass(testClass);
                 }
             }
+            return testClass;
+        }
+
+        @Override
+        public boolean visit(FieldDeclaration node) {
+            IVariableBinding variable = getVariableBinding(node);
+            if (variable == null) {
+                return super.visit(node);
+            }
+            ITypeBinding classBinding = variable.getDeclaringClass();
+            if (!classBinding.isClass() && !classBinding.isInterface()) {
+                // enum method, etc
+                return super.visit(node);
+            }
+
+            // TODO support additional testDoc for Field
+            String testDoc = ASTUtils.getTestDoc(variable, locales);
+            if (testDoc == null) {
+                return super.visit(node);
+            }
+
+            TestClass testClass = classBindingTestClass(classBinding);
+            TestField testField = new TestField();
+            testField.setTestClassKey(testClass.getKey());
+            testField.setTestClass(testClass);
+            testField.setKey(testClass.getKey() + "." + variable.getName());
+            testField.setSimpleName(variable.getName());
+            testField.setTestDoc(testDoc);
+            testField.setValue(null); // TODO currently not supported
+            fieldTable.addTestField(testField);
+
+            testClass.addTestFieldKey(testField.getKey());
+            testClass.addTestField(testField);
+
+            return super.visit(node);
+        }
+
+        @Override
+        public boolean visit(MethodDeclaration node) {
+            IMethodBinding methodBinding = node.resolveBinding();
+            Pair<String, CaptureStyle> testDocPair = testDocIfSubMethod(methodBinding);
+            if (testDocPair.getLeft() == null) {
+                return super.visit(node);
+            }
+
+            ITypeBinding classBinding = methodBinding.getDeclaringClass();
+            if (!classBinding.isClass() && !classBinding.isInterface()) {
+                // enum method, etc
+                return super.visit(node);
+            }
+
+            TestClass testClass = classBindingTestClass(classBinding);
 
             TestMethod testMethod = new TestMethod();
             testMethod.setKey(generateMethodKey(methodBinding, false));
             testMethod.setSimpleName(methodBinding.getName());
-            Pair<String, CaptureStyle> pair = getTestDoc(methodBinding);
-            testMethod.setTestDoc(pair.getLeft());
-            testMethod.setCaptureStyle(pair.getRight());
+            testMethod.setTestDoc(testDocPair.getLeft());
+            testMethod.setCaptureStyle(testDocPair.getRight());
             for (Object element : node.parameters()) {
                 if (!(element instanceof SingleVariableDeclaration)) {
                     throw new RuntimeException("not supported yet: " + element);
@@ -356,11 +417,13 @@ public class SrcTreeGenerator {
         private TestClassTable subClassTable;
         private TestMethodTable subMethodTable;
         private TestClassTable rootClassTable;
+        private TestFieldTable fieldTable;
 
         public CollectSubRequestor(TestClassTable rootClassTable) {
             this.rootClassTable = rootClassTable;
             subClassTable = new TestClassTable();
             subMethodTable = new TestMethodTable();
+            fieldTable = new TestFieldTable();
         }
 
         public TestClassTable getSubClassTable() {
@@ -371,10 +434,14 @@ public class SrcTreeGenerator {
             return subMethodTable;
         }
 
+        public TestFieldTable getFieldTable() {
+            return fieldTable;
+        }
+
         @Override
         public void acceptAST(String sourceFilePath, CompilationUnit ast) {
             ast.accept(new CollectSubVisitor(
-                    rootClassTable, subClassTable, subMethodTable));
+                    rootClassTable, subClassTable, subMethodTable, fieldTable));
         }
     }
 
@@ -382,15 +449,17 @@ public class SrcTreeGenerator {
         private TestClassTable subClassTable;
         private TestMethodTable rootMethodTable;
         private TestMethodTable subMethodTable;
+        private TestFieldTable fieldTable;
         private CompilationUnit compilationUnit;
 
         // set code information to method table
         public CollectCodeVisitor(TestClassTable subClassTable,
                 TestMethodTable rootMethodTable, TestMethodTable subMethodTable,
-                CompilationUnit compilationUnit) {
+                TestFieldTable fieldTable, CompilationUnit compilationUnit) {
             this.subClassTable = subClassTable;
             this.rootMethodTable = rootMethodTable;
             this.subMethodTable = subMethodTable;
+            this.fieldTable = fieldTable;
             this.compilationUnit = compilationUnit;
         }
 
@@ -501,6 +570,22 @@ public class SrcTreeGenerator {
             return methodArg;
         }
 
+        private Code generateFieldCode(SimpleName simpleName,
+                IVariableBinding localVarBinding) {
+            String key = localVarBinding.getDeclaringClass().getBinaryName()
+                    + "." + localVarBinding.getName();
+            TestField testField = fieldTable.getByKey(key);
+            if (testField == null) {
+                return generateUnknownCode(simpleName.toString().trim());
+            }
+            Field field = new Field();
+            field.setFieldKey(testField.getKey());
+            field.setField(testField);
+            field.setOriginal(simpleName.toString().trim());
+            field.setThisInstance(null); // TODO really null??
+            return field;
+        }
+
         private LocalVar generateLocalVarCode(SimpleName simpleName,
                 IVariableBinding localVarBinding) {
             LocalVar localVar = new LocalVar();
@@ -528,6 +613,7 @@ public class SrcTreeGenerator {
             IVariableBinding varBinding = (IVariableBinding) leftBinding;
             if (varBinding.isField() || varBinding.isParameter()) {
                 // ignore left for field assignment and method argument assignment
+                // TODO should handle field assignment as VarAssign for Field ??
                 return rightCode;
             }
 
@@ -627,11 +713,11 @@ public class SrcTreeGenerator {
                    if (varBinding.isParameter()) {
                        // method argument
                        return generateMethodArgCode(simpleName, varBinding, parentMethod);
-                   } else if (!(varBinding.isField())) {
+                   } else if (varBinding.isField()) {
+                       return generateFieldCode(simpleName, varBinding);
+                   } else {
                        // local variable reference
                        return generateLocalVarCode(simpleName, varBinding);
-                   } else {
-                       return generateUnknownCode(expression);
                    }
                } else {
                    return generateUnknownCode(expression);
@@ -651,7 +737,8 @@ public class SrcTreeGenerator {
                 if (testMethod == null) {
                     testMethod = rootMethodTable.getByKey(generateMethodKey(methodBinding, true));
                 }
-            } else if (isSubMethod(methodBinding)) {
+            } else if (testDocIfSubMethod(methodBinding).getLeft() != null) {
+                // subMethod
                 // TODO searching twice from table is not elegant logic..
                 testMethod = subMethodTable.getByKey(generateMethodKey(methodBinding, false));
                 if (testMethod == null) {
@@ -706,17 +793,21 @@ public class SrcTreeGenerator {
         private TestClassTable subClassTable;
         private TestMethodTable rootMethodTable;
         private TestMethodTable subMethodTable;
+        private TestFieldTable fieldTable;
 
         public CollectCodeRequestor(TestClassTable subClassTable,
-                TestMethodTable rootMethodTable, TestMethodTable subMethodTable) {
+                TestMethodTable rootMethodTable, TestMethodTable subMethodTable,
+                TestFieldTable fieldTable) {
             this.subClassTable = subClassTable;
             this.rootMethodTable = rootMethodTable;
             this.subMethodTable = subMethodTable;
+            this.fieldTable = fieldTable;
         }
 
         @Override
         public void acceptAST(String sourceFilePath, CompilationUnit ast) {
-            ast.accept(new CollectCodeVisitor(subClassTable, rootMethodTable, subMethodTable, ast));
+            ast.accept(new CollectCodeVisitor(
+                    subClassTable, rootMethodTable, subMethodTable, fieldTable, ast));
         }
     }
 
@@ -742,8 +833,8 @@ public class SrcTreeGenerator {
 
         // collect code
         CollectCodeRequestor codeRequestor = new CollectCodeRequestor(
-                subRequestor.getSubClassTable(),
-                rootRequestor.getRootMethodTable(), subRequestor.getSubMethodTable());
+                subRequestor.getSubClassTable(), rootRequestor.getRootMethodTable(),
+                subRequestor.getSubMethodTable(), subRequestor.getFieldTable());
         parseAST(srcFiles, srcEncoding, classPathEntries, codeRequestor);
 
         SrcTree result = new SrcTree();
@@ -751,6 +842,7 @@ public class SrcTreeGenerator {
         result.setSubClassTable(subRequestor.getSubClassTable());
         result.setRootMethodTable(rootRequestor.getRootMethodTable());
         result.setSubMethodTable(subRequestor.getSubMethodTable());
+        result.setFieldTable(subRequestor.getFieldTable());
         return result;
     }
 
