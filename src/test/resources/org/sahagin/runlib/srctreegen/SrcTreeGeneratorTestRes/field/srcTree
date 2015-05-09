@@ -4,7 +4,7 @@ fieldTable:
   - {name: field2, testDoc: 'Doc: field2', classKey: "*TestMain", value: null, key: "*TestMain.field2"}
 rootClassTable:
   classes:
-  - propKeys: ["*TestMain.field1", "*TestMain.field2"]
+  - fieldKeys: ["*TestMain.field1", "*TestMain.field2"]
 rootMethodTable:
   methods:
   - name: test

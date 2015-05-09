@@ -139,7 +139,7 @@ public class TestClass implements YamlConvertible {
             result.put("methodKeys", testMethodKeys);
         }
         if (!testFieldKeys.isEmpty()) {
-            result.put("propKeys", testFieldKeys);
+            result.put("fieldKeys", testFieldKeys);
         }
         return result;
     }
@@ -155,7 +155,7 @@ public class TestClass implements YamlConvertible {
         delegateToTestClass = null;
         testMethodKeys = YamlUtils.getStrListValue(yamlObject, "methodKeys", true);
         testMethods.clear();
-        testFieldKeys = YamlUtils.getStrListValue(yamlObject, "propKeys", true);
+        testFieldKeys = YamlUtils.getStrListValue(yamlObject, "fieldKeys", true);
         testFields.clear();
     }
 

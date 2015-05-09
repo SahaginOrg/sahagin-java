@@ -198,6 +198,10 @@ public class SrcTree implements YamlConvertible {
         testMethod.setTestClass(getTestClassByKey(testMethod.getTestClassKey()));
     }
 
+    private void resolveTestClass(TestField testField) throws IllegalDataStructureException {
+        testField.setTestClass(getTestClassByKey(testField.getTestClassKey()));
+    }
+
     private void resolveTestMethod(TestClass testClass) throws IllegalDataStructureException {
         testClass.clearTestMethods();
         for (String testMethodKey : testClass.getTestMethodKeys()) {
@@ -274,6 +278,9 @@ public class SrcTree implements YamlConvertible {
             for (CodeLine codeLine : testMethod.getCodeBody()) {
                 resolveKeyReferenceInCode(codeLine.getCode());
             }
+        }
+        for (TestField testField : fieldTable.getTestFields()) {
+            resolveTestClass(testField);
         }
     }
 
