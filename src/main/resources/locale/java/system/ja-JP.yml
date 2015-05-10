@@ -1,7 +1,7 @@
 codeLineWithoutTestDoc: 非表示
 jsLocalVar: 変数「{0}」
-jsVarAssign: 「{0}」を「{1}」にセット
+jsVarAssign: 「{1}」に「{0}」をセット
 localVar: 変数「%s」
-varAssign: 「%s」を「%s」にセット
+varAssign: 「%2$s」に「%1$s」をセット
 reportHideCode: コード非表示
 reportShowCode: コード表示
