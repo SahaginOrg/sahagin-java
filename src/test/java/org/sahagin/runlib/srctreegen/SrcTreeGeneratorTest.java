@@ -24,7 +24,7 @@ public class SrcTreeGeneratorTest extends TestBase {
 
     private void testMain(String subDirName,
             AdditionalTestDocs additionalTestDocs, Locale userLocale, Adapter adapter) {
-        // set RootMethodAdapter
+        // set JavaRootMethodAdapter
         AdapterContainer.globalInitialize(
                 AcceptableLocales.getInstance(null), adapter.getName());
         adapter.initialSetAdapter();

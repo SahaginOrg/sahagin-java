@@ -9,7 +9,7 @@ public class AdapterContainer {
     private boolean initialized = false;
     private AcceptableLocales locales;
     private String acceptableTestFramework = null;
-    private RootMethodAdapter rootMethodAdapter;
+    private JavaRootMethodAdapter rootMethodAdapter;
     private ScreenCaptureAdapter screenCaptureAdapter;
     private AdditionalTestDocs additionalTestDocs = new AdditionalTestDocs();
 
@@ -44,7 +44,7 @@ public class AdapterContainer {
     }
 
     // TODO throw error if called　from other method than initialSetAdapter
-    public void setRootMethodAdapter(RootMethodAdapter rootMethodAdapter) {
+    public void setRootMethodAdapter(JavaRootMethodAdapter rootMethodAdapter) {
         if (rootMethodAdapter == null) {
             throw new NullPointerException();
         }
