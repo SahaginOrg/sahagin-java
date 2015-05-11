@@ -15,6 +15,7 @@ import org.sahagin.share.CommonPath;
 import org.sahagin.share.Config;
 import org.sahagin.share.IllegalDataStructureException;
 import org.sahagin.share.IllegalTestScriptException;
+import org.sahagin.share.JavaConfig;
 import org.sahagin.share.Logging;
 import org.sahagin.share.runresults.LineScreenCapture;
 import org.sahagin.share.runresults.RootMethodRunResult;
@@ -50,7 +51,7 @@ public class HookMethodDef {
 
         final Config config;
         try {
-            config = Config.generateFromYamlConfig(new File(configFilePath));
+            config = JavaConfig.generateFromYamlConfig(new File(configFilePath));
         } catch (YamlConvertException e) {
             throw new RuntimeException(e);
         }

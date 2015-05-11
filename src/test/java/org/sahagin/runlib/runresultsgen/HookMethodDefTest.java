@@ -24,7 +24,7 @@ import org.apache.maven.shared.invoker.MavenInvocationException;
 import org.junit.Test;
 import org.sahagin.TestBase;
 import org.sahagin.share.CommonPath;
-import org.sahagin.share.Config;
+import org.sahagin.share.JavaConfig;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlUtils;
 
@@ -153,12 +153,12 @@ public class HookMethodDefTest extends TestBase {
         throw new RuntimeException(String.format("fails to get JRE verion"));
     }
 
-    private Pair<MavenInvokeResult, Config> invokeChildTest(
+    private Pair<MavenInvokeResult, JavaConfig> invokeChildTest(
             String subDirName, String additionalProfile) throws IOException {
         // set up working directory
         clearWorkDir(subDirName);
         File workDir = mkWorkDir(subDirName).getAbsoluteFile();
-        Config conf = new Config(workDir);
+        JavaConfig conf = new JavaConfig(workDir);
         conf.setTestDir(new File(workDir, "src/test/java"));
         conf.setRunTestOnly(true);
         YamlUtils.dump(conf.toYamlObject(), new File(workDir, "sahagin.yml"));
@@ -190,7 +190,7 @@ public class HookMethodDefTest extends TestBase {
     public void java6() throws MavenInvocationException, YamlConvertException, IOException {
         String subDirName = "java6";
         generateTempJar(subDirName);
-        Pair<MavenInvokeResult, Config> pair = invokeChildTest(subDirName, null);
+        Pair<MavenInvokeResult, JavaConfig> pair = invokeChildTest(subDirName, null);
 
         // check test output
         File reportIntermediateDir = pair.getRight().getRootBaseReportIntermediateDataDir();
@@ -254,7 +254,7 @@ public class HookMethodDefTest extends TestBase {
 
         String subDirName = "java8";
         generateTempJar(subDirName);
-        Pair<MavenInvokeResult, Config> pair = invokeChildTest(subDirName, "java8-compile");
+        Pair<MavenInvokeResult, JavaConfig> pair = invokeChildTest(subDirName, "java8-compile");
 
         // check test output
         File reportIntermediateDir = pair.getRight().getRootBaseReportIntermediateDataDir();

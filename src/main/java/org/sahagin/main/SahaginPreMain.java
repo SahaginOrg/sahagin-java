@@ -20,8 +20,8 @@ import org.sahagin.runlib.runresultsgen.RunResultsGenerateHookSetter;
 import org.sahagin.runlib.srctreegen.SrcTreeGenerator;
 import org.sahagin.share.AcceptableLocales;
 import org.sahagin.share.CommonPath;
-import org.sahagin.share.Config;
 import org.sahagin.share.IllegalTestScriptException;
+import org.sahagin.share.JavaConfig;
 import org.sahagin.share.Logging;
 import org.sahagin.share.SrcTreeChecker;
 import org.sahagin.share.SysMessages;
@@ -45,7 +45,7 @@ public class SahaginPreMain {
         } else {
             configFilePath = agentArgs;
         }
-        Config config = Config.generateFromYamlConfig(new File(configFilePath));
+        JavaConfig config = JavaConfig.generateFromYamlConfig(new File(configFilePath));
         Logging.setLoggerEnabled(config.isOutputLog());
         AcceptableLocales locales = AcceptableLocales.getInstance(config.getUserLocale());
         AdapterContainer.globalInitialize(locales, config.getTestFramework());
@@ -89,7 +89,7 @@ public class SahaginPreMain {
         inst.addTransformer(transformer);
     }
 
-    private static SrcTree generateAndDumpSrcTree(Config config, AcceptableLocales locales)
+    private static SrcTree generateAndDumpSrcTree(JavaConfig config, AcceptableLocales locales)
             throws IllegalTestScriptException {
         // generate and dump srcTree
         SrcTreeGenerator generator = new SrcTreeGenerator(
