@@ -9,6 +9,7 @@ import org.sahagin.runlib.additionaltestdoc.AdditionalTestDocs;
 import org.sahagin.runlib.external.Locale;
 import org.sahagin.runlib.external.adapter.Adapter;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
+import org.sahagin.runlib.external.adapter.JavaAdapterContainer;
 import org.sahagin.runlib.external.adapter.junit3.JUnit3Adapter;
 import org.sahagin.runlib.external.adapter.junit4.JUnit4Adapter;
 import org.sahagin.runlib.external.adapter.testng.TestNGAdapter;
@@ -25,7 +26,7 @@ public class SrcTreeGeneratorTest extends TestBase {
     private void testMain(String subDirName,
             AdditionalTestDocs additionalTestDocs, Locale userLocale, Adapter adapter) {
         // set JavaRootMethodAdapter
-        AdapterContainer.globalInitialize(
+        JavaAdapterContainer.globalInitialize(
                 AcceptableLocales.getInstance(null), adapter.getName());
         adapter.initialSetAdapter();
         File testSrcDir = new File(testResourceDir(subDirName), "input");
@@ -143,7 +144,7 @@ public class SrcTreeGeneratorTest extends TestBase {
     @Test
     public void additionalTestDocs() {
         AcceptableLocales locales = AcceptableLocales.getInstance(Locale.EN_US);
-        AdapterContainer.globalInitialize(locales, new JUnit4Adapter().getName());
+        JavaAdapterContainer.globalInitialize(locales, new JUnit4Adapter().getName());
         new JUnit4Adapter().initialSetAdapter();
         AdditionalTestDocs testDocs
         = AdapterContainer.globalInstance().getAdditionalTestDocs();

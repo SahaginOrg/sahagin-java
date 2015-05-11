@@ -7,6 +7,7 @@ import java.lang.instrument.Instrumentation;
 import org.apache.commons.io.FileUtils;
 import org.sahagin.runlib.external.adapter.Adapter;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
+import org.sahagin.runlib.external.adapter.JavaAdapterContainer;
 import org.sahagin.runlib.external.adapter.appium.AppiumAdapter;
 import org.sahagin.runlib.external.adapter.fluentlenium.FluentLeniumAdapter;
 import org.sahagin.runlib.external.adapter.iosdriver.IOSDriverAdapter;
@@ -48,7 +49,7 @@ public class SahaginPreMain {
         JavaConfig config = JavaConfig.generateFromYamlConfig(new File(configFilePath));
         Logging.setLoggerEnabled(config.isOutputLog());
         AcceptableLocales locales = AcceptableLocales.getInstance(config.getUserLocale());
-        AdapterContainer.globalInitialize(locales, config.getTestFramework());
+        JavaAdapterContainer.globalInitialize(locales, config.getTestFramework());
         SysMessages.globalInitialize(locales);
 
         // default adapters
@@ -74,7 +75,7 @@ public class SahaginPreMain {
             adapter.initialSetAdapter();
         }
 
-        if (!AdapterContainer.globalInstance().isRootMethodAdapterSet()) {
+        if (!JavaAdapterContainer.globalInstance().isRootMethodAdapterSet()) {
             throw new RuntimeException(String.format(
                     MSG_TEST_FRAMEWORK_NOT_FOUND, config.getTestFramework()));
         }

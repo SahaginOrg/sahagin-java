@@ -42,7 +42,7 @@ import org.sahagin.runlib.additionaltestdoc.AdditionalPage;
 import org.sahagin.runlib.additionaltestdoc.AdditionalTestDocs;
 import org.sahagin.runlib.external.CaptureStyle;
 import org.sahagin.runlib.external.TestStepLabelMethod;
-import org.sahagin.runlib.external.adapter.AdapterContainer;
+import org.sahagin.runlib.external.adapter.JavaAdapterContainer;
 import org.sahagin.share.AcceptableLocales;
 import org.sahagin.share.CommonUtils;
 import org.sahagin.share.IllegalTestScriptException;
@@ -123,7 +123,7 @@ public class SrcTreeGenerator {
     // returns null pair if the method is not sub method
     private Pair<String, CaptureStyle> testDocIfSubMethod(IMethodBinding methodBinding) {
         // rootMethod also can have its TestDoc value
-        if (AdapterContainer.globalInstance().isRootMethod(methodBinding)) {
+        if (JavaAdapterContainer.globalInstance().isRootMethod(methodBinding)) {
             return Pair.of(null, null);
         }
         return getTestDoc(methodBinding);
@@ -221,7 +221,7 @@ public class SrcTreeGenerator {
         @Override
         public boolean visit(MethodDeclaration node) {
             IMethodBinding methodBinding = node.resolveBinding();
-            if (!AdapterContainer.globalInstance().isRootMethod(methodBinding)) {
+            if (!JavaAdapterContainer.globalInstance().isRootMethod(methodBinding)) {
                 return super.visit(node);
             }
 
@@ -731,7 +731,7 @@ public class SrcTreeGenerator {
         public boolean visit(MethodDeclaration node) {
             TestMethod testMethod;
             IMethodBinding methodBinding = node.resolveBinding();
-            if (AdapterContainer.globalInstance().isRootMethod(methodBinding)) {
+            if (JavaAdapterContainer.globalInstance().isRootMethod(methodBinding)) {
                 // TODO searching twice from table is not elegant logic..
                 testMethod = rootMethodTable.getByKey(generateMethodKey(methodBinding, false));
                 if (testMethod == null) {

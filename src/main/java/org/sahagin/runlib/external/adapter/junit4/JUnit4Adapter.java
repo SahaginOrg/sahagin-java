@@ -3,7 +3,7 @@ package org.sahagin.runlib.external.adapter.junit4;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.sahagin.runlib.external.CaptureStyle;
 import org.sahagin.runlib.external.adapter.Adapter;
-import org.sahagin.runlib.external.adapter.AdapterContainer;
+import org.sahagin.runlib.external.adapter.JavaAdapterContainer;
 import org.sahagin.runlib.external.adapter.ResourceAdditionalTestDocsAdapter;
 import org.sahagin.runlib.external.adapter.JavaRootMethodAdapter;
 import org.sahagin.runlib.srctreegen.ASTUtils;
@@ -13,8 +13,8 @@ public class JUnit4Adapter implements Adapter {
 
     @Override
     public void initialSetAdapter() {
-        AdapterContainer container = AdapterContainer.globalInstance();
-        container.setRootMethodAdapter(new RootMethodAdapterImpl(getName()));
+        JavaAdapterContainer container = JavaAdapterContainer.globalInstance();
+        container.setRootMethodAdapter(new JavaRootMethodAdapterImpl(getName()));
         container.addAdditionalTestDocsAdapter(new AdditionalTestDocsAdapterImpl());
     }
 
@@ -23,10 +23,10 @@ public class JUnit4Adapter implements Adapter {
         return "jUnit4";
     }
 
-    private static class RootMethodAdapterImpl implements JavaRootMethodAdapter {
+    private static class JavaRootMethodAdapterImpl implements JavaRootMethodAdapter {
         private String name;
 
-        private RootMethodAdapterImpl(String name) {
+        private JavaRootMethodAdapterImpl(String name) {
             this.name = name;
         }
 

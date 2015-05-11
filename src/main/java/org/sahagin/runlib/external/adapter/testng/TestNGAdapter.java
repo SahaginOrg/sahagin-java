@@ -2,7 +2,7 @@ package org.sahagin.runlib.external.adapter.testng;
 
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.sahagin.runlib.external.adapter.Adapter;
-import org.sahagin.runlib.external.adapter.AdapterContainer;
+import org.sahagin.runlib.external.adapter.JavaAdapterContainer;
 import org.sahagin.runlib.external.adapter.ResourceAdditionalTestDocsAdapter;
 import org.sahagin.runlib.external.adapter.JavaRootMethodAdapter;
 import org.sahagin.runlib.srctreegen.ASTUtils;
@@ -12,8 +12,8 @@ public class TestNGAdapter implements Adapter {
 
     @Override
     public void initialSetAdapter() {
-        AdapterContainer container = AdapterContainer.globalInstance();
-        container.setRootMethodAdapter(new RootMethodAdapterImpl(getName()));
+        JavaAdapterContainer container = JavaAdapterContainer.globalInstance();
+        container.setRootMethodAdapter(new JavaRootMethodAdapterImpl(getName()));
         container.addAdditionalTestDocsAdapter(new AdditionalTestDocsAdapterImpl());
     }
 
@@ -22,10 +22,10 @@ public class TestNGAdapter implements Adapter {
         return "testNG";
     }
 
-    private static class RootMethodAdapterImpl implements JavaRootMethodAdapter {
+    private static class JavaRootMethodAdapterImpl implements JavaRootMethodAdapter {
         private String name;
 
-        private RootMethodAdapterImpl(String name) {
+        private JavaRootMethodAdapterImpl(String name) {
             this.name = name;
         }
 
