@@ -12,7 +12,7 @@ import org.sahagin.share.yaml.YamlUtils;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlConvertible;
 
-public class TestMethod implements YamlConvertible {
+public class TestMethod extends ASTData implements YamlConvertible {
     private String testClassKey;
     private TestClass testClass;
     private String key;
@@ -240,6 +240,7 @@ public class TestMethod implements YamlConvertible {
             codeLine.fromYamlObject(codeLineYamlObj);
             codeBody.add(codeLine);
         }
+        clearMemo();
     }
 
 }

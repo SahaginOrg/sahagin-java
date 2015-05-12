@@ -3,37 +3,18 @@ package org.sahagin.share.srctree.code;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.sahagin.share.srctree.ASTData;
 import org.sahagin.share.yaml.YamlUtils;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlConvertible;
 
-public abstract class Code implements YamlConvertible {
+public abstract class Code extends ASTData implements YamlConvertible {
     public static final String MSG_INVALID_TYPE = "invalid type: %s";
 
     private String original;
-    // Memo data are not write to nor read from YAML data.
-    // They are only temporal data mainly used for SrcTree generation
-    private Object rawASTObjectMemo;
-    private Object rawASTTypeMemo;
 
     public String getOriginal() {
         return original;
-    }
-
-    public Object getRawASTObjectMemo() {
-        return rawASTObjectMemo;
-    }
-
-    public void setRawASTObjectMemo(Object rawASTObjectMemo) {
-        this.rawASTObjectMemo = rawASTObjectMemo;
-    }
-
-    public Object getRawASTTypeMemo() {
-        return rawASTTypeMemo;
-    }
-
-    public void setRawASTTypeMemo(Object rawASTTypeMemo) {
-        this.rawASTTypeMemo = rawASTTypeMemo;
     }
 
     public void setOriginal(String original) {
@@ -54,8 +35,7 @@ public abstract class Code implements YamlConvertible {
     public void fromYamlObject(Map<String, Object> yamlObject) throws YamlConvertException {
         YamlUtils.strValueEqualsCheck(yamlObject, "type", getType());
         original = YamlUtils.getStrValue(yamlObject, "original");
-        rawASTObjectMemo = null;
-        rawASTTypeMemo = null;
+        clearMemo();
     }
 
     public static Code newInstanceFromYamlObject(Map<String, Object> yamlObject)

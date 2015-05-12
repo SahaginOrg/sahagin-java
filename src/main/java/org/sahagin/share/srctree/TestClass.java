@@ -10,7 +10,7 @@ import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlConvertible;
 
 // class or interface
-public class TestClass implements YamlConvertible {
+public class TestClass extends ASTData implements YamlConvertible {
     public static final String MSG_INVALID_TYPE = "invalid type: %s";
     public static final String TYPE = "class";
     private static final String DEFAULT_TYPE = TYPE;
@@ -157,6 +157,7 @@ public class TestClass implements YamlConvertible {
         testMethods.clear();
         testFieldKeys = YamlUtils.getStrListValue(yamlObject, "fieldKeys", true);
         testFields.clear();
+        clearMemo();
     }
 
     public static TestClass newInstanceFromYamlObject(Map<String, Object> yamlObject)

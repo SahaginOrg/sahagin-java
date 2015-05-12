@@ -3,11 +3,12 @@ package org.sahagin.share.srctree.code;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.sahagin.share.srctree.ASTData;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlConvertible;
 import org.sahagin.share.yaml.YamlUtils;
 
-public class CodeLine implements YamlConvertible {
+public class CodeLine extends ASTData implements YamlConvertible {
     // line start from 1
     private int startLine; // -1 means no information
     private int endLine; // -1 means no information
@@ -51,6 +52,7 @@ public class CodeLine implements YamlConvertible {
         startLine = YamlUtils.getIntValue(yamlObject, "startLine");
         endLine = YamlUtils.getIntValue(yamlObject, "endLine");
         code = Code.newInstanceFromYamlObject(YamlUtils.getYamlObjectValue(yamlObject, "code"));
+        clearMemo();
     }
 
 }
