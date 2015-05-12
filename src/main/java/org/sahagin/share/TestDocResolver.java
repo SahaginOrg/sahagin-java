@@ -10,6 +10,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.sahagin.share.srctree.PageClass;
 import org.sahagin.share.srctree.TestClass;
 import org.sahagin.share.srctree.TestMethod;
+import org.sahagin.share.srctree.code.ClassInstance;
 import org.sahagin.share.srctree.code.Code;
 import org.sahagin.share.srctree.code.Field;
 import org.sahagin.share.srctree.code.LocalVar;
@@ -262,6 +263,14 @@ public class TestDocResolver {
                     assign.getValue(), placeholderResolvedParentMethodArgTestDocs);
             return String.format(SysMessages.get(SysMessages.VAR_ASSIGN),
                     valueTestDoc, variableTestDoc);
+        } else if (code instanceof ClassInstance) {
+            ClassInstance classInstance = (ClassInstance) code;
+            String testDoc = classInstance.getTestClass().getTestDoc();
+            if (testDoc == null || testDoc.equals("")) {
+                return classInstance.getTestClass().getSimpleName();
+            } else {
+                return testDoc;
+            }
         } else if (code instanceof TestStep) {
             TestStep testStep = (TestStep) code;
             String result = "";

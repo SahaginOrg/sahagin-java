@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.sahagin.share.CommonUtils;
 import org.sahagin.share.IllegalDataStructureException;
+import org.sahagin.share.srctree.code.ClassInstance;
 import org.sahagin.share.srctree.code.Code;
 import org.sahagin.share.srctree.code.CodeLine;
 import org.sahagin.share.srctree.code.Field;
@@ -246,6 +247,10 @@ public class SrcTree implements YamlConvertible {
             VarAssign assign = (VarAssign) code;
             resolveKeyReferenceInCode(assign.getVariable());
             resolveKeyReferenceInCode(assign.getValue());
+        } else if (code instanceof ClassInstance) {
+            ClassInstance classInstance = (ClassInstance) code;
+            TestClass testClass = getTestClassByKey(classInstance.getTestClassKey());
+            classInstance.setTestClass(testClass);
         } else if (code instanceof TestStep) {
             TestStep testStep = (TestStep) code;
             for (CodeLine step : testStep.getStepBody()) {

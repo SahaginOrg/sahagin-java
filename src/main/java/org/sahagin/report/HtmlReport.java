@@ -466,6 +466,7 @@ public class HtmlReport {
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/local-var.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/field.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/var-assign.js");
+        extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/class-instance.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/test-step.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/test-step-label.js");
         extractHtmlExternalResFromThisJar(htmlExternalResRootDir, "js/share/srctree/code/code-line.js");

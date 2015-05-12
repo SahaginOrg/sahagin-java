@@ -1,5 +1,6 @@
 package org.sahagin.share.srctree;
 
+// TODO define ASTData also on sahagin-js-share
 public class ASTData {
     // Memo data are not write to nor read from YAML data.
     // They are only temporal data mainly used for SrcTree generation

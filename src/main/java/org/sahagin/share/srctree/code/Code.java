@@ -57,6 +57,8 @@ public abstract class Code extends ASTData implements YamlConvertible {
             result = new LocalVar();
         } else if (VarAssign.TYPE.equals(type)) {
             result = new VarAssign();
+        } else if (ClassInstance.TYPE.equals(type)) {
+            result = new ClassInstance();
         } else if (TestStep.TYPE.equals(type)) {
             result = new TestStep();
         } else if (TestStepLabel.TYPE.equals(type)) {

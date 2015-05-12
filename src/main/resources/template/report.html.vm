@@ -14,6 +14,7 @@
     <script src="${externalResourceRootDir}/js/share/srctree/code/local-var.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/code/field.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/code/var-assign.js"></script>
+    <script src="${externalResourceRootDir}/js/share/srctree/code/class-instance.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/code/test-step.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/code/test-step-label.js"></script>
     <script src="${externalResourceRootDir}/js/share/srctree/code/code-line.js"></script>
