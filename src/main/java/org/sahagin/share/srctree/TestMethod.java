@@ -184,6 +184,10 @@ public class TestMethod implements YamlConvertible {
         codeBody.add(codeLine);
     }
 
+    public void addAllCodeBodies(List<CodeLine> codeLines) {
+        codeBody.addAll(codeLines);
+    }
+
     @Override
     public Map<String, Object> toYamlObject() {
         Map<String, Object> result = new HashMap<String, Object>(8);
