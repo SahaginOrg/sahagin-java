@@ -54,6 +54,8 @@ public abstract class Code implements YamlConvertible {
     public void fromYamlObject(Map<String, Object> yamlObject) throws YamlConvertException {
         YamlUtils.strValueEqualsCheck(yamlObject, "type", getType());
         original = YamlUtils.getStrValue(yamlObject, "original");
+        rawASTObjectMemo = null;
+        rawASTTypeMemo = null;
     }
 
     public static Code newInstanceFromYamlObject(Map<String, Object> yamlObject)
