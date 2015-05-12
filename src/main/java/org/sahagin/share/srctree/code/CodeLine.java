@@ -9,8 +9,8 @@ import org.sahagin.share.yaml.YamlUtils;
 
 public class CodeLine implements YamlConvertible {
     // line start from 1
-    private int startLine;
-    private int endLine;
+    private int startLine; // -1 means no information
+    private int endLine; // -1 means no information
     private Code code;
 
     public int getStartLine() {
