@@ -362,6 +362,12 @@ public class TestDocResolver {
             if (valuePage != null) {
                 return valuePage;
             }
+        } else if (code instanceof ClassInstance) {
+            ClassInstance classInstance = (ClassInstance) code;
+            TestClass testClass = classInstance.getTestClass();
+            if (testClass instanceof PageClass) {
+                return (PageClass) testClass;
+            }
         }
         return null;
     }
