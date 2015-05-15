@@ -56,10 +56,8 @@ public class HookMethodDef {
             throw new RuntimeException(e);
         }
 
-        HookMethodDef.runResultsRootDir
-        = CommonPath.runResultRootDir(config.getRootBaseReportIntermediateDataDir());
-        HookMethodDef.captureRootDir
-        = CommonPath.inputCaptureRootDir(config.getRootBaseReportIntermediateDataDir());
+        runResultsRootDir = CommonPath.runResultRootDir(config.getRootBaseReportIntermediateDataDir());
+        captureRootDir = CommonPath.inputCaptureRootDir(config.getRootBaseReportIntermediateDataDir());
         final File srcTreeFile = CommonPath.srcTreeFile(config.getRootBaseReportIntermediateDataDir());
 
         // load srcTree from already dumped srcTree YAML
