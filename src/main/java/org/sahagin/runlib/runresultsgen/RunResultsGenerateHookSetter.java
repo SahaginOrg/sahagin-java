@@ -175,6 +175,10 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
                     continue; // cannot hook empty method
                 }
 
+                String subClassQualifiedName = subMethod.getTestClass().getQualifiedName();
+                String subMethodSimpleName = subMethod.getSimpleName();
+                String subMethodArgClassesStr = TestMethod.argClassQualifiedNamesToArgClassesStr(
+                        getArgClassQualifiedNames(ctSubMethod));
                 for (int i = 0; i < subMethod.getCodeBody().size(); i++) {
                     CodeLine codeLine = subMethod.getCodeBody().get(i);
                     if (i + 1 < subMethod.getCodeBody().size()) {
@@ -190,13 +194,12 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
                         }
                     }
 
-                    String subClassQualifiedName = subMethod.getTestClass().getQualifiedName();
                     int insertedLine = insertedLine(subMethod.getCodeBody(), i);
                     int actualInsertedLine = ctSubMethod.insertAt(insertedLine, false, null);
                     ctSubMethod.insertAt(insertedLine,
-                            String.format("%s%s.beforeSubCodeBodyHook(\"%s\", \"%s\", %d, %d);",
-                                    initializeSrc, hookClassName, subClassQualifiedName, subMethod.getSimpleName(),
-                                    codeLine.getStartLine(), actualInsertedLine));
+                            String.format("%s%s.beforeCodeLineHook(\"%s\",\"%s\",\"%s\",%d, %d);",
+                                    initializeSrc, hookClassName, subClassQualifiedName, subMethodSimpleName,
+                                    subMethodArgClassesStr, codeLine.getStartLine(), actualInsertedLine));
                     transformed = true;
                 }
             }
@@ -209,6 +212,10 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
                     continue; // cannot hook empty method
                 }
 
+                String rootClassQualifiedName = rootMethod.getTestClass().getQualifiedName();
+                String rootMethodSimpleName = rootMethod.getSimpleName();
+                String rootMethodArgClassesStr = TestMethod.argClassQualifiedNamesToArgClassesStr(
+                        getArgClassQualifiedNames(ctRootMethod));
                 for (int i = 0; i < rootMethod.getCodeBody().size(); i++) {
                     CodeLine codeLine = rootMethod.getCodeBody().get(i);
                     if (i + 1 < rootMethod.getCodeBody().size()) {
@@ -225,19 +232,23 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
                         }
                     }
 
-                    String rootClassQualifiedName = rootMethod.getTestClass().getQualifiedName();
                     int insertedLine = insertedLine(rootMethod.getCodeBody(), i);
                     int actualInsertedLine = ctRootMethod.insertAt(insertedLine, false, null);
                     ctRootMethod.insertAt(insertedLine,
-                            String.format("%s%s.beforeRootCodeBodyHook(\"%s\", \"%s\", %d, %d);",
-                                    initializeSrc, hookClassName, rootClassQualifiedName, rootMethod.getSimpleName(),
-                                    codeLine.getStartLine(), actualInsertedLine));
+                            String.format("%s%s.beforeCodeLineHook(\"%s\",\"%s\",\"%s\",%d,%d);",
+                                    initializeSrc, hookClassName, rootClassQualifiedName, rootMethodSimpleName,
+                                    rootMethodArgClassesStr, codeLine.getStartLine(), actualInsertedLine));
                 }
 
-                ctRootMethod.insertBefore(initializeSrc + hookClassName + ".beforeRootMethodHook();");
-                ctRootMethod.addCatch(
-                        "{ " + initializeSrc + hookClassName + ".rootMethodErrorHook($e); throw $e; }", exceptionType);
-                ctRootMethod.insertAfter(initializeSrc + hookClassName + ".afterRootMethodHook();", true);
+                String c = String.format("%s%s.beforeMethodHook(\"%s\",\"%s\");",
+                        initializeSrc, hookClassName, rootClassQualifiedName, rootMethodSimpleName);
+                ctRootMethod.insertBefore(String.format("%s%s.beforeMethodHook(\"%s\",\"%s\");",
+                        initializeSrc, hookClassName, rootClassQualifiedName, rootMethodSimpleName));
+                System.out.println("inserted : " + c);
+                ctRootMethod.addCatch(String.format("{ %s%s.methodErrorHook(\"%s\",\"%s\",$e); throw $e; }",
+                        initializeSrc, hookClassName, rootClassQualifiedName, rootMethodSimpleName), exceptionType);
+                ctRootMethod.insertAfter(String.format("%s%s.afterMethodHook(\"%s\",\"%s\");",
+                        initializeSrc, hookClassName, rootClassQualifiedName, rootMethodSimpleName), true);
                 transformed = true;
             }
 

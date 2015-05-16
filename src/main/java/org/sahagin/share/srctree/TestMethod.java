@@ -47,7 +47,7 @@ public class TestMethod extends ASTData implements YamlConvertible {
         this.key = key;
     }
 
-    private static String argClassQualifiedNamesToArgClassesStr(
+    public static String argClassQualifiedNamesToArgClassesStr(
             List<String> argClassQualifiedNames) {
         if (argClassQualifiedNames.size() == 0) {
             return "void";

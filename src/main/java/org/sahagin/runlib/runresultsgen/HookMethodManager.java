@@ -8,14 +8,11 @@ import java.util.logging.Logger;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.openqa.selenium.io.IOUtils;
-import org.sahagin.report.HtmlReport;
 import org.sahagin.runlib.external.CaptureStyle;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.share.CommonPath;
 import org.sahagin.share.Config;
 import org.sahagin.share.IllegalDataStructureException;
-import org.sahagin.share.IllegalTestScriptException;
-import org.sahagin.share.JavaConfig;
 import org.sahagin.share.Logging;
 import org.sahagin.share.runresults.LineScreenCapture;
 import org.sahagin.share.runresults.RootMethodRunResult;
@@ -28,123 +25,96 @@ import org.sahagin.share.srctree.code.SubMethodInvoke;
 import org.sahagin.share.srctree.code.TestStep;
 import org.sahagin.share.srctree.code.TestStepLabel;
 import org.sahagin.share.srctree.code.VarAssign;
-import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlUtils;
 
-// TODO support multiple thread concurrent test execution
+public class HookMethodManager {
+    private static Logger logger = Logging.getLogger(HookMethodManager.class.getName());
+    private SrcTree srcTree;
+    private File runResultsRootDir;
+    private File captureRootDir;
+    private int currentCaptureNo = 1;
+    private RootMethodRunResult currentRunResult = null;
+    // method for last called beforeCodeLineHook is cached
+    private TestMethod codeLineHookedMethodCache = null;
 
-public class HookMethodDef {
-    private static Logger logger = Logging.getLogger(HookMethodDef.class.getName());
-    private static boolean initialized = false;
-    private static File runResultsRootDir;
-    private static File captureRootDir;
-    private static int currentCaptureNo = 1;
-    private static RootMethodRunResult currentRunResult = null;
-    private static SrcTree srcTree;
-
-    // if called multiple times, just ignored
-    public static void initialize(String configFilePath) {
-        if (initialized) {
-            return;
+    public HookMethodManager(SrcTree srcTree, Config config) {
+        if (srcTree == null) {
+            throw new NullPointerException();
         }
-        logger.info("initialize");
-
-        final Config config;
-        try {
-            config = JavaConfig.generateFromYamlConfig(new File(configFilePath));
-        } catch (YamlConvertException e) {
-            throw new RuntimeException(e);
+        if (config == null) {
+            throw new NullPointerException();
         }
-
+        this.srcTree = srcTree;
         runResultsRootDir = CommonPath.runResultRootDir(config.getRootBaseReportIntermediateDataDir());
         captureRootDir = CommonPath.inputCaptureRootDir(config.getRootBaseReportIntermediateDataDir());
-        final File srcTreeFile = CommonPath.srcTreeFile(config.getRootBaseReportIntermediateDataDir());
-
-        // load srcTree from already dumped srcTree YAML
-        srcTree = new SrcTree();
-        try {
-            srcTree.fromYamlObject(YamlUtils.load(srcTreeFile));
-        } catch (YamlConvertException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            srcTree.resolveKeyReference();
-        } catch (IllegalDataStructureException e) {
-            throw new RuntimeException(e);
-        }
-
-        if (!config.isRunTestOnly()) {
-            // set up shutdown hook which generates HTML report
-            Runtime.getRuntime().addShutdownHook(new Thread() {
-                @Override
-                public void run() {
-                    HtmlReport report = new HtmlReport();
-                    try {
-                        report.generate(config.getRootBaseReportIntermediateDataDir(),
-                                config.getRootBaseReportOutputDir());
-                    } catch (IllegalDataStructureException e) {
-                        throw new RuntimeException(e);
-                    } catch (IllegalTestScriptException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            });
-        }
-
-        initialized = true;
     }
 
-    private static void initializedCheck() {
-        if (!initialized) {
-            throw new IllegalStateException("initialize first");
+    // initialize runResult information if the method for the arguments is root method
+    public void beforeMethodHook(String hookedClassQualifiedName, String hookedMethodSimpleName) {
+        if (currentRunResult != null) {
+            return; // maybe called inside of the root method
         }
-    }
 
-    // initialize runResult information
-    public static void beforeRootMethodHook() {
-        logger.info("beforeRootMethodHook: start");
-        initializedCheck();
+        List<TestMethod> rootMethods = srcTree.getRootMethodTable().getByName(
+                hookedClassQualifiedName, hookedMethodSimpleName);
+        if (rootMethods.size() == 0) {
+            return; // hooked method is not root method
+        }
+        assert rootMethods.size() == 1;
+        TestMethod rootMethod = rootMethods.get(0);
+
+        logger.info("beforeMethodHook: " + hookedMethodSimpleName);
+
         // initialize current captureNo and runResult
         currentCaptureNo = 1;
         currentRunResult = new RootMethodRunResult();
-        TestMethod rootMethod = StackLineUtils.getRootMethod(
-                srcTree.getRootMethodTable(), Thread.currentThread().getStackTrace());
-        if (rootMethod == null) {
-            throw new RuntimeException("implementation error");
-        }
         currentRunResult.setRootMethodKey(rootMethod.getKey());
         currentRunResult.setRootMethod(rootMethod);
-        logger.info("beforeRootMethodHook: end");
     }
 
     // set up runFailure information
-    public static void rootMethodErrorHook(Throwable e) {
-        initializedCheck();
+    // This method must be called before afterMethodHook is called
+    public void methodErrorHook(String hookedClassQualifiedName,
+            String hookedMethodSimpleName, Throwable e) {
+        if (currentRunResult == null) {
+            return; // maybe called outside of the root method
+        }
+        TestMethod rootMethod = currentRunResult.getRootMethod();
+        if (!rootMethod.getTestClassKey().equals(hookedClassQualifiedName)
+                || !rootMethod.getSimpleName().equals(hookedMethodSimpleName)) {
+            return; // hooked method is not current root method
+        }
+
         RunFailure runFailure = new RunFailure();
         runFailure.setMessage(e.getClass().getCanonicalName() + ": " + e.getLocalizedMessage());
         runFailure.setStackTrace(ExceptionUtils.getStackTrace(e));
+        // TODO if groovy
         List<StackLine> stackLines = StackLineUtils.getStackLines(srcTree, e.getStackTrace());
         for (StackLine stackLine : stackLines) {
             runFailure.addStackLine(stackLine);
         }
         currentRunResult.addRunFailure(runFailure);
 
-        assert currentRunResult.getRootMethod() instanceof TestMethod;
-        TestMethod rootMethod = currentRunResult.getRootMethod();
+        // TODO if groovy
         captureScreenForStackLine(rootMethod, stackLines);
     }
 
-    // write runResult to YAML file
-    public static void afterRootMethodHook() {
-        logger.info("afterRootMethodHook: start");
-        initializedCheck();
-
-        assert currentRunResult != null;
+    // write runResult to YAML file if the method for the arguments is root method
+    public void afterMethodHook(String hookedClassQualifiedName, String hookedMethodSimpleName) {
+        if (currentRunResult == null) {
+            return; // maybe called outside of the root method
+        }
         TestMethod rootMethod = currentRunResult.getRootMethod();
-        assert rootMethod.getTestClass() != null;
-        File runResultFile = new File(String.format("%s/%s/%s",
-                runResultsRootDir, rootMethod.getTestClass().getQualifiedName(),
-                rootMethod.getSimpleName()));
+        if (!rootMethod.getTestClassKey().equals(hookedClassQualifiedName)
+                || !rootMethod.getSimpleName().equals(hookedMethodSimpleName)) {
+            return; // hooked method is not current root method
+        }
+
+        logger.info("afterMethodHook: " + hookedMethodSimpleName);
+
+        // write runResult to YAML file
+        File runResultFile = new File(String.format(
+                "%s/%s/%s", runResultsRootDir, hookedClassQualifiedName, hookedMethodSimpleName));
         if (runResultFile.getParentFile() != null) {
             runResultFile.getParentFile().mkdirs();
         }
@@ -153,30 +123,42 @@ public class HookMethodDef {
         // clear current captureNo and runResult
         currentCaptureNo = -1;
         currentRunResult = null;
-        logger.info("afterRootMethodHook: end");
     }
 
-    public static void beforeRootCodeBodyHook(String classQualifiedName, String methodSimpleName,
-            int line, int actualInsertedLine) {
-        beforeCodeBodyHook(classQualifiedName, methodSimpleName, line, actualInsertedLine);
-    }
-
-    public static void beforeSubCodeBodyHook(String classQualifiedName, String methodSimpleName,
-            int line, int actualInsertedLine) {
-        beforeCodeBodyHook(classQualifiedName, methodSimpleName, line, actualInsertedLine);
-    }
-
-    private static void beforeCodeBodyHook(String classQualifiedName, String methodSimpleName,
-            int line, int actualInsertedLine) {
-        initializedCheck();
+    public void beforeCodeLineHook(String hookedClassQualifiedName, String hookedMethodSimpleName,
+            String hookedArgClassesStr, int line, int actualInsertedLine) {
         if (currentRunResult == null) {
             return; // maybe called outside of the root method
         }
 
-        logger.info("beforeCodeBodyHook: start: " + classQualifiedName + "." + methodSimpleName + ": " + line);
+        // method containing this line
+        String hookedMethodKey = TestMethod.generateMethodKey(
+                hookedClassQualifiedName, hookedMethodSimpleName, hookedArgClassesStr);
+        TestMethod hookedTestMethod;
+        if (codeLineHookedMethodCache != null
+                && hookedMethodKey.equals(codeLineHookedMethodCache.getKey())) {
+            // re-use cache
+            hookedTestMethod = codeLineHookedMethodCache;
+        } else {
+            try {
+                hookedTestMethod = srcTree.getTestMethodByKey(hookedMethodKey);
+            } catch (IllegalDataStructureException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        if (hookedTestMethod == null) {
+            return; // hooked method is not current root method
+        }
+
+        // cache method to improve method search performance
+        codeLineHookedMethodCache = hookedTestMethod;
+
+        logger.info(String.format("beforeCodeBodyHook: start: %s(%d)", hookedMethodSimpleName, line));
+        // TODO if groovy
         List<StackLine> stackLines = StackLineUtils.getStackLinesReplacingActualLine(
                 srcTree, Thread.currentThread().getStackTrace(),
-                classQualifiedName, methodSimpleName, actualInsertedLine, line);
+                hookedClassQualifiedName, hookedMethodSimpleName, actualInsertedLine, line);
         if (stackLines.size() == 0) {
             throw new RuntimeException("implementation error");
         }
@@ -214,15 +196,28 @@ public class HookMethodDef {
         }
 
         // screen capture
-        TestMethod rootMethod = currentRunResult.getRootMethod();
-        File captureFile = captureScreen(rootMethod, stackLines);
+        File captureFile = captureScreen(currentRunResult.getRootMethod(), stackLines);
         if (captureFile != null) {
             logger.info("beforeCodeBodyHook: end with capture " + captureFile.getName());
         }
     }
 
+    // - returns null if fails to capture
+    private File captureScreenForStackLine(
+            TestMethod rootMethod, List<StackLine> stackLines) {
+        File captureFile = captureScreen(rootMethod);
+        if (captureFile == null) {
+            return null;
+        }
+        LineScreenCapture capture = new LineScreenCapture();
+        capture.setPath(new File(captureFile.getAbsolutePath()));
+        capture.addAllStackLines(stackLines);
+        currentRunResult.addLineScreenCapture(capture);
+        return captureFile;
+    }
+
     // returns null if not executed
-    private static File captureScreen(TestMethod rootMethod) {
+    private File captureScreen(TestMethod rootMethod) {
         byte[] screenData = AdapterContainer.globalInstance().captureScreen();
         if (screenData == null) {
             return null;
@@ -248,25 +243,9 @@ public class HookMethodDef {
         return captureFile;
     }
 
-    // - returns null if fails to capture
-    // - try to capture even for UnknownCode and no stepInCapture line
-    //   as long as code line exists in srcTree
-    private static File captureScreenForStackLine(
-            TestMethod rootMethod, List<StackLine> stackLines) {
-        File captureFile = captureScreen(rootMethod);
-        if (captureFile == null) {
-            return null;
-        }
-        LineScreenCapture capture = new LineScreenCapture();
-        capture.setPath(new File(captureFile.getAbsolutePath()));
-        capture.addAllStackLines(stackLines);
-        currentRunResult.addLineScreenCapture(capture);
-        return captureFile;
-    }
-
     // returns screen capture file
     // returns null if fail to capture
-    private static File captureScreen(TestMethod rootMethod, List<StackLine> stackLines) {
+    private File captureScreen(TestMethod rootMethod, List<StackLine> stackLines) {
         File captureFile = captureScreen(rootMethod);
         if (captureFile == null) {
             return null;
@@ -282,7 +261,7 @@ public class HookMethodDef {
     }
 
     // if method is called from not stepInCapture line, then returns false.
-    private static boolean canStepInCaptureTo(List<StackLine> stackLines) {
+    private boolean canStepInCaptureTo(List<StackLine> stackLines) {
         // stack bottom line ( = root line) is always regarded as stepIn true line
         for (int i = 0; i < stackLines.size() - 1; i++) {
             StackLine stackLine = stackLines.get(i);
