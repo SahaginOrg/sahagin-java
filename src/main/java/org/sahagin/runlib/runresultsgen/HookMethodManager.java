@@ -34,7 +34,8 @@ public class HookMethodManager {
     private File captureRootDir;
     private int currentCaptureNo = 1;
     private RootMethodRunResult currentRunResult = null;
-    // method for last called beforeCodeLineHook is cached
+    // method and key for last called beforeCodeLineHook is cached
+    private String codeLineHookedMethodKeyCache = null;
     private TestMethod codeLineHookedMethodCache = null;
 
     public HookMethodManager(SrcTree srcTree, Config config) {
@@ -125,8 +126,9 @@ public class HookMethodManager {
         currentRunResult = null;
     }
 
-    public void beforeCodeLineHook(String hookedClassQualifiedName, String hookedMethodSimpleName,
-            String hookedArgClassesStr, int line, int actualInsertedLine) {
+    public void beforeCodeLineHook(String hookedClassQualifiedName,
+            String hookedMethodSimpleName, String actualHookedMethodSimpleName,
+            String hookedArgClassesStr, int hookedLine, int actualHookedLine) {
         if (currentRunResult == null) {
             return; // maybe called outside of the root method
         }
@@ -135,30 +137,33 @@ public class HookMethodManager {
         String hookedMethodKey = TestMethod.generateMethodKey(
                 hookedClassQualifiedName, hookedMethodSimpleName, hookedArgClassesStr);
         TestMethod hookedTestMethod;
-        if (codeLineHookedMethodCache != null
-                && hookedMethodKey.equals(codeLineHookedMethodCache.getKey())) {
+        if (codeLineHookedMethodKeyCache != null
+                && codeLineHookedMethodKeyCache.equals(hookedMethodKey)) {
             // re-use cache
             hookedTestMethod = codeLineHookedMethodCache;
         } else {
             try {
-                hookedTestMethod = srcTree.getTestMethodByKey(hookedMethodKey);
+                hookedTestMethod = srcTree.getTestMethodByKey(hookedMethodKey, true);
             } catch (IllegalDataStructureException e) {
                 throw new RuntimeException(e);
             }
         }
 
+        // cache key and method to improve method search performance
+        // caching is executed even if method is not found
+        codeLineHookedMethodKeyCache = hookedMethodKey;
+        codeLineHookedMethodCache = hookedTestMethod;
+
         if (hookedTestMethod == null) {
             return; // hooked method is not current root method
         }
 
-        // cache method to improve method search performance
-        codeLineHookedMethodCache = hookedTestMethod;
-
-        logger.info(String.format("beforeCodeBodyHook: start: %s(%d)", hookedMethodSimpleName, line));
+        logger.info(String.format("beforeCodeBodyHook: start: %s(%d)", hookedMethodSimpleName, hookedLine));
         // TODO if groovy
-        List<StackLine> stackLines = StackLineUtils.getStackLinesReplacingActualLine(
-                srcTree, Thread.currentThread().getStackTrace(),
-                hookedClassQualifiedName, hookedMethodSimpleName, actualInsertedLine, line);
+        List<StackLine> stackLines = StackLineUtils.getStackLinesReplacingActual(
+                srcTree, Thread.currentThread().getStackTrace(), hookedClassQualifiedName,
+                actualHookedMethodSimpleName, hookedMethodSimpleName,
+                actualHookedLine, hookedLine);
         if (stackLines.size() == 0) {
             throw new RuntimeException("implementation error");
         }

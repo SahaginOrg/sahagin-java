@@ -94,11 +94,13 @@ public class HookMethodDef {
         manager.afterMethodHook(hookedClassQualifiedName, hookedMethodSimpleName);
     }
 
-    public static void beforeCodeLineHook(String hookedClassQualifiedName, String hookedMethodSimpleName,
-            String hookedArgClassesStr, int line, int actualInsertedLine) {
+    public static void beforeCodeLineHook(String hookedClassQualifiedName,
+            String hookedMethodSimpleName, String actualHookedMethodSimpleName,
+            String hookedArgClassesStr, int hookedLine, int actualInsertedLine) {
         initializedCheck();
         manager.beforeCodeLineHook(hookedClassQualifiedName,
-                hookedMethodSimpleName, hookedArgClassesStr, line, actualInsertedLine);
+                hookedMethodSimpleName, actualHookedMethodSimpleName,
+                hookedArgClassesStr, hookedLine, actualInsertedLine);
     }
 
 }

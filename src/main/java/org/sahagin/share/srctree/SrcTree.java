@@ -161,7 +161,8 @@ public class SrcTree implements YamlConvertible {
         }
     }
 
-    public TestClass getTestClassByKey(String testClassKey) throws IllegalDataStructureException {
+    public TestClass getTestClassByKey(String testClassKey, boolean allowsNotFound)
+            throws IllegalDataStructureException {
         TestClass subClass = subClassTable.getByKey(testClassKey);
         if (subClass != null) {
             return subClass;
@@ -170,10 +171,18 @@ public class SrcTree implements YamlConvertible {
         if (rootClass != null) {
             return rootClass;
         }
-        throw new IllegalDataStructureException(String.format(MSG_CLASS_NOT_FOUND, testClassKey));
+        if (allowsNotFound) {
+            return null;
+        } else {
+            throw new IllegalDataStructureException(String.format(MSG_CLASS_NOT_FOUND, testClassKey));
+        }
     }
 
-    public TestMethod getTestMethodByKey(String testMethodKey)
+    public TestClass getTestClassByKey(String testClassKey) throws IllegalDataStructureException {
+        return getTestClassByKey(testClassKey, false);
+    }
+
+    public TestMethod getTestMethodByKey(String testMethodKey, boolean allowsNotFound)
             throws IllegalDataStructureException {
         TestMethod subMethod = subMethodTable.getByKey(testMethodKey);
         if (subMethod != null) {
@@ -183,16 +192,32 @@ public class SrcTree implements YamlConvertible {
         if (rootMethod != null) {
             return rootMethod;
         }
-        throw new IllegalDataStructureException(String.format(MSG_METHOD_NOT_FOUND, testMethodKey));
+        if (allowsNotFound) {
+            return null;
+        } else {
+            throw new IllegalDataStructureException(String.format(MSG_METHOD_NOT_FOUND, testMethodKey));
+        }
     }
 
-    public TestField getTestFieldByKey(String testFieldKey)
+    public TestMethod getTestMethodByKey(String testMethodKey) throws IllegalDataStructureException {
+        return getTestMethodByKey(testMethodKey, false);
+    }
+
+    public TestField getTestFieldByKey(String testFieldKey, boolean allowsNotFound)
             throws IllegalDataStructureException {
         TestField field = fieldTable.getByKey(testFieldKey);
         if (field != null) {
             return field;
         }
-        throw new IllegalDataStructureException(String.format(MSG_FIELD_NOT_FOUND, testFieldKey));
+        if (allowsNotFound) {
+            return null;
+        } else {
+            throw new IllegalDataStructureException(String.format(MSG_FIELD_NOT_FOUND, testFieldKey));
+        }
+    }
+
+    public TestField getTestFieldByKey(String testFieldKey) throws IllegalDataStructureException {
+        return getTestFieldByKey(testFieldKey, false);
     }
 
     private void resolveTestClass(TestMethod testMethod) throws IllegalDataStructureException {

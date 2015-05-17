@@ -197,8 +197,9 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
                     int insertedLine = insertedLine(subMethod.getCodeBody(), i);
                     int actualInsertedLine = ctSubMethod.insertAt(insertedLine, false, null);
                     ctSubMethod.insertAt(insertedLine,
-                            String.format("%s%s.beforeCodeLineHook(\"%s\",\"%s\",\"%s\",%d, %d);",
-                                    initializeSrc, hookClassName, subClassQualifiedName, subMethodSimpleName,
+                            String.format("%s%s.beforeCodeLineHook(\"%s\",\"%s\",\"%s\",\"%s\",%d, %d);",
+                                    initializeSrc, hookClassName, subClassQualifiedName,
+                                    subMethodSimpleName, subMethodSimpleName,
                                     subMethodArgClassesStr, codeLine.getStartLine(), actualInsertedLine));
                     transformed = true;
                 }
@@ -235,8 +236,9 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
                     int insertedLine = insertedLine(rootMethod.getCodeBody(), i);
                     int actualInsertedLine = ctRootMethod.insertAt(insertedLine, false, null);
                     ctRootMethod.insertAt(insertedLine,
-                            String.format("%s%s.beforeCodeLineHook(\"%s\",\"%s\",\"%s\",%d,%d);",
-                                    initializeSrc, hookClassName, rootClassQualifiedName, rootMethodSimpleName,
+                            String.format("%s%s.beforeCodeLineHook(\"%s\",\"%s\",\"%s\",\"%s\",%d,%d);",
+                                    initializeSrc, hookClassName, rootClassQualifiedName,
+                                    rootMethodSimpleName, rootMethodSimpleName,
                                     rootMethodArgClassesStr, codeLine.getStartLine(), actualInsertedLine));
                 }
 

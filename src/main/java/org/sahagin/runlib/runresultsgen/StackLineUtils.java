@@ -84,20 +84,20 @@ class StackLineUtils {
         return stackLines;
     }
 
-    // line for hookedMethodName, hookedLine will be replaced to originalLine
+    // line for actual method and line will be replaced by replacing method and line
     // - gap line (the line out of SrcTree) is skipped
-    public static List<StackLine> getStackLinesReplacingActualLine(
-            SrcTree srcTree, StackTraceElement[] elements,
-            String hookedClassQualifiedName, String hookedMethodSimpleName,
-            int hookedLine, int originalLine) {
+    public static List<StackLine> getStackLinesReplacingActual(
+            SrcTree srcTree, StackTraceElement[] elements, String classQualifiedName,
+            String actualMethodSimpleName, String replacingMethodSimpleName,
+            int actualLine, int replacingLine) {
         List<StackLine> stackLines = new ArrayList<StackLine>(elements.length);
         for (StackTraceElement element : elements) {
             StackLine stackLine;
-            if (StringUtils.equals(element.getClassName(), hookedClassQualifiedName)
-                    && StringUtils.equals(element.getMethodName(), hookedMethodSimpleName)
-                    && element.getLineNumber() == hookedLine) {
+            if (StringUtils.equals(element.getClassName(), classQualifiedName)
+                    && StringUtils.equals(element.getMethodName(), actualMethodSimpleName)
+                    && element.getLineNumber() == actualLine) {
                 stackLine = getStackLine(srcTree,
-                        hookedClassQualifiedName, hookedMethodSimpleName, originalLine);
+                        classQualifiedName, replacingMethodSimpleName, replacingLine);
             } else {
                 stackLine = getStackLine(srcTree, element);
             }
