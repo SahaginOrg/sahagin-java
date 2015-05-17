@@ -242,11 +242,8 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
                                     rootMethodArgClassesStr, codeLine.getStartLine(), actualInsertedLine));
                 }
 
-                String c = String.format("%s%s.beforeMethodHook(\"%s\",\"%s\");",
-                        initializeSrc, hookClassName, rootClassQualifiedName, rootMethodSimpleName);
-                ctRootMethod.insertBefore(String.format("%s%s.beforeMethodHook(\"%s\",\"%s\");",
-                        initializeSrc, hookClassName, rootClassQualifiedName, rootMethodSimpleName));
-                System.out.println("inserted : " + c);
+                ctRootMethod.insertBefore(String.format("%s%s.beforeMethodHook(\"%s\",\"%s\",\"%s\");",
+                        initializeSrc, hookClassName, rootClassQualifiedName, rootMethodSimpleName, rootMethodSimpleName));
                 ctRootMethod.addCatch(String.format("{ %s%s.methodErrorHook(\"%s\",\"%s\",$e); throw $e; }",
                         initializeSrc, hookClassName, rootClassQualifiedName, rootMethodSimpleName), exceptionType);
                 ctRootMethod.insertAfter(String.format("%s%s.afterMethodHook(\"%s\",\"%s\");",

@@ -6,10 +6,12 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.openqa.selenium.io.IOUtils;
 import org.sahagin.runlib.external.CaptureStyle;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
+import org.sahagin.runlib.runresultsgen.StackLineUtils.LineReplacer;
 import org.sahagin.share.CommonPath;
 import org.sahagin.share.Config;
 import org.sahagin.share.IllegalDataStructureException;
@@ -35,6 +37,7 @@ public class HookMethodManager {
     private File captureRootDir;
     private int currentCaptureNo = 1;
     private RootMethodRunResult currentRunResult = null;
+    private String currentActualRootMethodSimpleName = null;
     // method and key for last called beforeCodeLineHook is cached
     private String codeLineHookedMethodKeyCache = null;
     private TestMethod codeLineHookedMethodCache = null;
@@ -52,7 +55,8 @@ public class HookMethodManager {
     }
 
     // initialize runResult information if the method for the arguments is root method
-    public void beforeMethodHook(String hookedClassQualifiedName, String hookedMethodSimpleName) {
+    public void beforeMethodHook(String hookedClassQualifiedName,
+            String hookedMethodSimpleName, String actualHookedMethodSimpleName) {
         if (currentRunResult != null) {
             return; // maybe called inside of the root method
         }
@@ -72,6 +76,7 @@ public class HookMethodManager {
         currentRunResult = new RootMethodRunResult();
         currentRunResult.setRootMethodKey(rootMethod.getKey());
         currentRunResult.setRootMethod(rootMethod);
+        currentActualRootMethodSimpleName = actualHookedMethodSimpleName;
     }
 
     // set up runFailure information
@@ -90,8 +95,17 @@ public class HookMethodManager {
         RunFailure runFailure = new RunFailure();
         runFailure.setMessage(e.getClass().getCanonicalName() + ": " + e.getLocalizedMessage());
         runFailure.setStackTrace(ExceptionUtils.getStackTrace(e));
-        // TODO if groovy
-        List<StackLine> stackLines = StackLineUtils.getStackLines(srcTree, e.getStackTrace());
+        LineReplacer replacer = new LineReplacer() {
+
+            @Override
+            public void replace(String classQualifiedName, String methodSimpleName, int line) {
+                super.replace(classQualifiedName, methodSimpleName, line);
+                if (StringUtils.equals(methodSimpleName, currentActualRootMethodSimpleName)) {
+                    replaceMethodSimpleName(currentRunResult.getRootMethod().getSimpleName());
+                }
+            }
+        };
+        List<StackLine> stackLines = StackLineUtils.getStackLines(srcTree, e.getStackTrace(), replacer);
         for (StackLine stackLine : stackLines) {
             runFailure.addStackLine(stackLine);
         }
@@ -125,11 +139,12 @@ public class HookMethodManager {
         // clear current captureNo and runResult
         currentCaptureNo = -1;
         currentRunResult = null;
+        currentActualRootMethodSimpleName = null;
     }
 
     public void beforeCodeLineHook(String hookedClassQualifiedName,
-            String hookedMethodSimpleName, String actualHookedMethodSimpleName,
-            String hookedArgClassesStr, int hookedLine, int actualHookedLine) {
+            final String hookedMethodSimpleName, final String actualHookedMethodSimpleName,
+            String hookedArgClassesStr, final int hookedLine, final int actualHookedLine) {
         if (currentRunResult == null) {
             return; // maybe called outside of the root method
         }
@@ -160,11 +175,23 @@ public class HookMethodManager {
         }
 
         logger.info(String.format("beforeCodeBodyHook: start: %s(%d)", hookedMethodSimpleName, hookedLine));
-        // TODO if groovy
-        List<StackLine> stackLines = StackLineUtils.getStackLinesReplacingActual(
-                srcTree, Thread.currentThread().getStackTrace(), hookedClassQualifiedName,
-                actualHookedMethodSimpleName, hookedMethodSimpleName,
-                actualHookedLine, hookedLine);
+        LineReplacer replacer = new LineReplacer() {
+
+            @Override
+            public void replace(String classQualifiedName, String methodSimpleName, int line) {
+                super.replace(classQualifiedName, methodSimpleName, line);
+                if (StringUtils.equals(methodSimpleName, currentActualRootMethodSimpleName)) {
+                    replaceMethodSimpleName(currentRunResult.getRootMethod().getSimpleName());
+                }
+                if (StringUtils.equals(methodSimpleName, actualHookedMethodSimpleName)
+                        && (line == actualHookedLine)) {
+                    replaceMethodSimpleName(hookedMethodSimpleName);
+                    replaceLine(hookedLine);
+                }
+            }
+        };
+        List<StackLine> stackLines = StackLineUtils.getStackLines(
+                srcTree, Thread.currentThread().getStackTrace(), replacer);
         if (stackLines.size() == 0) {
             throw new RuntimeException("implementation error");
         }

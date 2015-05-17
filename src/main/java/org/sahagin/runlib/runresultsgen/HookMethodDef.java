@@ -76,10 +76,11 @@ public class HookMethodDef {
         }
     }
 
-    public static void beforeMethodHook(
-            String hookedClassQualifiedName, String hookedMethodSimpleName) {
+    public static void beforeMethodHook(String hookedClassQualifiedName,
+            String hookedMethodSimpleName, String actualHookedMethodSimpleName) {
         initializedCheck();
-        manager.beforeMethodHook(hookedClassQualifiedName, hookedMethodSimpleName);
+        manager.beforeMethodHook(
+                hookedClassQualifiedName, hookedMethodSimpleName, actualHookedMethodSimpleName);
     }
 
     public static void methodErrorHook(

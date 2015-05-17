@@ -3,7 +3,6 @@ package org.sahagin.runlib.runresultsgen;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.sahagin.share.runresults.StackLine;
 import org.sahagin.share.srctree.SrcTree;
 import org.sahagin.share.srctree.TestMethod;
@@ -11,6 +10,44 @@ import org.sahagin.share.srctree.TestMethodTable;
 import org.sahagin.share.srctree.code.CodeLine;
 
 class StackLineUtils {
+
+    public static abstract class LineReplacer {
+        private String classQualifiedName = null;
+        private String methodSimpleName = null;
+        private int line = -1;
+
+        // override this method
+        public void replace(
+                String classQualifiedName, String methodSimpleName, int line) {
+            this.classQualifiedName = classQualifiedName;
+            this.methodSimpleName = methodSimpleName;
+            this.line = line;
+        }
+
+        public final String getReplacedClassQualifiedName() {
+            return classQualifiedName;
+        }
+
+        public final void replaceClassQualifiedName(String classQualifiedName) {
+            this.classQualifiedName = classQualifiedName;
+        }
+
+        public final String getReplacedMethodSimpleName() {
+            return methodSimpleName;
+        }
+
+        public final void replaceMethodSimpleName(String methodSimpleName) {
+            this.methodSimpleName = methodSimpleName;
+        }
+
+        public final int getReplacedLine() {
+            return line;
+        }
+
+        public final void replaceLine(int line) {
+            this.line = line;
+        }
+    }
 
     // - assume only 1 root method line exists in currentStackTrace
     //   and overloaded root method does not exists
@@ -67,40 +104,19 @@ class StackLineUtils {
         return null;
     }
 
-    private static StackLine getStackLine(SrcTree srcTree, StackTraceElement element) {
-        return getStackLine(
-                srcTree, element.getClassName(), element.getMethodName(), element.getLineNumber());
+    private static StackLine getStackLine(SrcTree srcTree,
+            StackTraceElement element, LineReplacer replacer) {
+        replacer.replace(element.getClassName(), element.getMethodName(), element.getLineNumber());
+        return getStackLine(srcTree, replacer.getReplacedClassQualifiedName(),
+                replacer.getReplacedMethodSimpleName(), replacer.getReplacedLine());
     }
 
     // gap line (the line out of SrcTree) is skipped
-    public static List<StackLine> getStackLines(SrcTree srcTree, StackTraceElement[] elements) {
+    public static List<StackLine> getStackLines(SrcTree srcTree,
+            StackTraceElement[] elements, LineReplacer replacer) {
         List<StackLine> stackLines = new ArrayList<StackLine>(elements.length);
         for (StackTraceElement element : elements) {
-            StackLine stackLine = getStackLine(srcTree, element);
-            if (stackLine != null) {
-                stackLines.add(stackLine);
-            }
-        }
-        return stackLines;
-    }
-
-    // line for actual method and line will be replaced by replacing method and line
-    // - gap line (the line out of SrcTree) is skipped
-    public static List<StackLine> getStackLinesReplacingActual(
-            SrcTree srcTree, StackTraceElement[] elements, String classQualifiedName,
-            String actualMethodSimpleName, String replacingMethodSimpleName,
-            int actualLine, int replacingLine) {
-        List<StackLine> stackLines = new ArrayList<StackLine>(elements.length);
-        for (StackTraceElement element : elements) {
-            StackLine stackLine;
-            if (StringUtils.equals(element.getClassName(), classQualifiedName)
-                    && StringUtils.equals(element.getMethodName(), actualMethodSimpleName)
-                    && element.getLineNumber() == actualLine) {
-                stackLine = getStackLine(srcTree,
-                        classQualifiedName, replacingMethodSimpleName, replacingLine);
-            } else {
-                stackLine = getStackLine(srcTree, element);
-            }
+            StackLine stackLine = getStackLine(srcTree, element, replacer);
             if (stackLine != null) {
                 stackLines.add(stackLine);
             }
