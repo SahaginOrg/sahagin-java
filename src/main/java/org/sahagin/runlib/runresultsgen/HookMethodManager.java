@@ -21,6 +21,7 @@ import org.sahagin.share.runresults.StackLine;
 import org.sahagin.share.srctree.SrcTree;
 import org.sahagin.share.srctree.TestMethod;
 import org.sahagin.share.srctree.code.CodeLine;
+import org.sahagin.share.srctree.code.Field;
 import org.sahagin.share.srctree.code.SubMethodInvoke;
 import org.sahagin.share.srctree.code.TestStep;
 import org.sahagin.share.srctree.code.TestStepLabel;
@@ -179,6 +180,8 @@ public class HookMethodManager {
             if (assign.getValue() instanceof SubMethodInvoke) {
                 SubMethodInvoke thisMethodInvoke = (SubMethodInvoke) assign.getValue();
                 thisCaptureStyle = thisMethodInvoke.getSubMethod().getCaptureStyle();
+            } else if (assign.getVariable() instanceof Field) {
+                thisCaptureStyle = CaptureStyle.THIS_LINE;
             } else {
                 logger.info("beforeCodeBodyHook: skip code: " + thisCodeLine.getCode().getOriginal());
                 return;
