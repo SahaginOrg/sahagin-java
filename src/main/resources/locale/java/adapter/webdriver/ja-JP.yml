@@ -25,6 +25,10 @@ method:
   org.openqa.selenium.remote.RemoteWebDriver.findElementsByXPath: 「xpath = {0}」を満たす全要素
   org.openqa.selenium.Rotatable.getOrientation: スクリーンの向き
   org.openqa.selenium.Rotatable.rotate: スクリーンの向きを{0}に回転
+  org.openqa.selenium.support.ui.Select.Select: "{0}のプルダウン"
+  org.openqa.selenium.support.ui.Select.selectByIndex: "{this}の、{0}番目の項目を選択"
+  org.openqa.selenium.support.ui.Select.selectByValue: "{this}の、「値 = {0}」の項目を選択"
+  org.openqa.selenium.support.ui.Select.selectByVisibleText: "{this}の、「テキスト = {0}」の項目を選択"
   org.openqa.selenium.WebDriver.close: 現在のウィンドウを閉じる
   org.openqa.selenium.WebDriver.findElement: 要素「{0}」
   org.openqa.selenium.WebDriver.findElements: 「{0}」を満たす全要素

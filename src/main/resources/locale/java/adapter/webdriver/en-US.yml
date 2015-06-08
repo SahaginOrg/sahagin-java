@@ -25,6 +25,10 @@ method:
   org.openqa.selenium.remote.RemoteWebDriver.findElementsByXPath: all elements for 'xpath = {0}'
   org.openqa.selenium.Rotatable.getOrientation: the screen orientation
   org.openqa.selenium.Rotatable.rotate: rotate the screen to {0}
+  org.openqa.selenium.support.ui.Select.Select: pull-down for {0}
+  org.openqa.selenium.support.ui.Select.selectByIndex: select '{0}'th item of {this}
+  org.openqa.selenium.support.ui.Select.selectByValue: select 'value = {0}' item of {this}
+  org.openqa.selenium.support.ui.Select.selectByVisibleText: select 'text = {0}' item of {this}
   org.openqa.selenium.WebDriver.close: close the current window
   org.openqa.selenium.WebDriver.findElement: element '{0}'
   org.openqa.selenium.WebDriver.findElements: all elements for '{0}'

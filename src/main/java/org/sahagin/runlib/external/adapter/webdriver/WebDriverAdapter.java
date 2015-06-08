@@ -71,6 +71,10 @@ public class WebDriverAdapter implements Adapter {
             methodAdd("org.openqa.selenium.remote.RemoteWebDriver", "findElementsByXPath");
             methodAdd("org.openqa.selenium.Rotatable", "getOrientation");
             methodAdd("org.openqa.selenium.Rotatable", "rotate");
+            methodAdd("org.openqa.selenium.support.ui.Select", "Select");
+            methodAdd("org.openqa.selenium.support.ui.Select", "selectByIndex");
+            methodAdd("org.openqa.selenium.support.ui.Select", "selectByValue");
+            methodAdd("org.openqa.selenium.support.ui.Select", "selectByVisibleText");
             methodAdd("org.openqa.selenium.WebDriver", "close");
             methodAdd("org.openqa.selenium.WebDriver", "findElement");
             methodAdd("org.openqa.selenium.WebDriver", "findElements");
