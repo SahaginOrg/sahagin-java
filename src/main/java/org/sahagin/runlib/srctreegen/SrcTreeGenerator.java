@@ -851,6 +851,9 @@ public class SrcTreeGenerator {
             return; // do nothing
         }
         Manifest manifest = CommonUtils.readManifestFromExternalJar(jarFile);
+        if (manifest == null) {
+            return; // just ignore no manifest jar file
+        }
         // jar class path is sometimes not set at java.class.path property
         // (this case happens for Maven surefire plug-in.
         //  see http://maven.apache.org/surefire/maven-surefire-plugin/examples/class-loading.html)

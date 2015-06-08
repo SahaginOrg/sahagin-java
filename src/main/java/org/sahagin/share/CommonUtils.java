@@ -1,6 +1,7 @@
 package org.sahagin.share;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.JarURLConnection;
@@ -105,6 +106,7 @@ public class CommonUtils {
         }
     }
 
+    // returns null if no manifest found
     public static Manifest readManifestFromExternalJar(File jarFile) {
         if (!jarFile.getName().endsWith(".jar")) {
             throw new IllegalArgumentException("not jar file : " + jarFile);
@@ -116,6 +118,8 @@ public class CommonUtils {
             JarURLConnection conn = (JarURLConnection) inputURL.openConnection();
             in = conn.getInputStream();
             return new Manifest(in);
+          } catch (FileNotFoundException e) {
+              return null;
           } catch (MalformedURLException e) {
               throw new RuntimeException(e);
           } catch (IOException e) {
