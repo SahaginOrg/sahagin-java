@@ -44,7 +44,7 @@ public class ASTUtils {
 
     // Get the method annotation whose class equals to annotationClass.
     // Return null if specified name annotation is not found.
-    public static IAnnotationBinding getAnnotationBinding(
+    private static IAnnotationBinding getAnnotationBinding(
             IAnnotationBinding[] annotations, Class<?> annotationClass) {
         if (annotationClass == null) {
             throw new NullPointerException();
@@ -53,7 +53,7 @@ public class ASTUtils {
     }
 
     // returns null if specified varName annotation is not found
-    public static Object getAnnotationValue(IAnnotationBinding annotation, String varName) {
+    private static Object getAnnotationValue(IAnnotationBinding annotation, String varName) {
         if (annotation == null) {
             throw new NullPointerException();
         }
@@ -72,7 +72,7 @@ public class ASTUtils {
 
     // - for example, returns string "STEP_IN" for CaptureStyle.STEP_IN
     // returns null if specified varName annotation is not found
-    public static String getEnumAnnotationFieldName(IAnnotationBinding annotation, String varName) {
+    private static String getEnumAnnotationFieldName(IAnnotationBinding annotation, String varName) {
         if (annotation == null) {
             throw new NullPointerException();
         }
@@ -92,7 +92,7 @@ public class ASTUtils {
     }
 
     // returns default value if varName value is not specified
-    public static CaptureStyle getAnnotationCaptureStyleValue(
+    private static CaptureStyle getAnnotationCaptureStyleValue(
             IAnnotationBinding annotation, String varName) {
         String fieldName = getEnumAnnotationFieldName(annotation, varName);
         if (fieldName == null) {
@@ -106,7 +106,7 @@ public class ASTUtils {
     }
 
     // returns default value if varName value is not specified
-    public static Locale getAnnotationLocaleValue(
+    private static Locale getAnnotationLocaleValue(
             IAnnotationBinding annotation, String varName) {
         String fieldName = getEnumAnnotationFieldName(annotation, varName);
         if (fieldName == null) {
