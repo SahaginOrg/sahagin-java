@@ -103,7 +103,7 @@ public class SrcTreeGenerator {
         return Pair.of(null, false);
     }
 
-    // null pair if not found
+    // null and default CaptureStyle pair if not found
     private Pair<String, CaptureStyle> getTestDoc(IMethodBinding method) {
         // TODO additional TestDoc should be prior to annotation TestDoc !?
         Pair<String, CaptureStyle> pair = ASTUtils.getTestDoc(method, locales);
@@ -117,14 +117,14 @@ public class SrcTreeGenerator {
         if (additional != null) {
             return Pair.of(additional.getTestDoc(), additional.getCaptureStyle());
         }
-        return Pair.of(null, null);
+        return Pair.of(null, CaptureStyle.getDefault());
     }
 
-    // returns null pair if the method is not sub method
+    // returns null and default CaptureStyle pair if the method is not sub method
     private Pair<String, CaptureStyle> testDocIfSubMethod(IMethodBinding methodBinding) {
         // rootMethod also can have its TestDoc value
         if (JavaAdapterContainer.globalInstance().isRootMethod(methodBinding)) {
-            return Pair.of(null, null);
+            return Pair.of(null, CaptureStyle.getDefault());
         }
         return getTestDoc(methodBinding);
     }

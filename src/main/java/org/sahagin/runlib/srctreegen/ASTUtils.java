@@ -119,7 +119,7 @@ public class ASTUtils {
         return resultLocale;
     }
 
-    // return empty list and null pair if no TestDoc is found
+    // return empty list and default CaptureStyle pair if no TestDoc is found
     private static Pair<Map<Locale, String>, CaptureStyle> getAllTestDocs(
             IAnnotationBinding[] annotations) {
         IAnnotationBinding testDocAnnotation = getAnnotationBinding(annotations, TestDoc.class);
@@ -204,13 +204,13 @@ public class ASTUtils {
 
     // first... value
     // second... captureStyle value.
-    // return null pair if no TestDoc is found
+    // return null and default CaptureStyle pair if no TestDoc is found
     private static Pair<String, CaptureStyle> getTestDoc(
             IAnnotationBinding[] annotations, AcceptableLocales locales) {
         Pair<Map<Locale, String>, CaptureStyle> allTestDocs = getAllTestDocs(annotations);
         Map<Locale, String> testDocMap = allTestDocs.getLeft();
         if (testDocMap.isEmpty()) {
-            return Pair.of(null, null); // no @TestDoc found
+            return Pair.of(null, CaptureStyle.getDefault()); // no @TestDoc found
         }
 
         String testDoc = null;
