@@ -129,7 +129,7 @@ public class ASTUtils {
             throw new RuntimeException("don't use @TestDoc and @TestDocs at the same place");
         }
 
-        // all testDoc value on @TestDoc and @TestDocs
+        // all @testDoc annotations including annotations contained in @TestDocs
         List<IAnnotationBinding> allTestDocAnnotations = new ArrayList<IAnnotationBinding>(2);
         CaptureStyle resultCaptureStyle = null;
 
@@ -165,7 +165,7 @@ public class ASTUtils {
         return Pair.of(resultTestDocMap, resultCaptureStyle);
     }
 
-    // return empty list and null pair if no Page is found
+    // return empty list if no Page is found
     private static Map<Locale, String> getAllPageTestDocs(
             IAnnotationBinding[] annotations) {
         IAnnotationBinding pageAnnotation = getAnnotationBinding(annotations, Page.class);
@@ -175,7 +175,7 @@ public class ASTUtils {
             throw new RuntimeException("don't use @Page and @Pages at the same place");
         }
 
-        // all testDoc value on @Page and @Pages
+        // all @Page annotations including annotations contained in @Pages
         List<IAnnotationBinding> allPageAnnotations = new ArrayList<IAnnotationBinding>(2);
 
         if (pageAnnotation != null) {
@@ -201,7 +201,6 @@ public class ASTUtils {
 
         return resultPageMap;
     }
-
 
     // first... value
     // second... captureStyle value.
