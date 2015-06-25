@@ -3,6 +3,7 @@ package org.sahagin.runlib.runresultsgen;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -112,7 +113,9 @@ public class HookMethodManager {
         currentRunResult.addRunFailure(runFailure);
 
         // TODO if groovy
-        captureScreenForStackLine(rootMethod, stackLines);
+        List<List<StackLine>> stackLinesList = new ArrayList<List<StackLine>>(2);
+        stackLinesList.add(stackLines);
+        captureScreenForStackLines(rootMethod, stackLinesList);
     }
 
     // write runResult to YAML file if the method for the arguments is root method
@@ -140,6 +143,29 @@ public class HookMethodManager {
         currentCaptureNo = -1;
         currentRunResult = null;
         currentActualRootMethodSimpleName = null;
+    }
+
+    // If the code line for the specified method and codeLineIndex is the last line
+    // of a TestStepLabel block,
+    // this method returns the code body index for the TestStepLabel, otherwise returns -1.
+    private int getTestStepLabelIndexIfThisLineIsStepLastCode(
+            TestMethod method, int codeLineIndex) {
+        if (method.getCodeBody().size() -1 > codeLineIndex
+                && !(method.getCodeBody().get(codeLineIndex + 1).getCode() instanceof TestStepLabel)) {
+            // next code line is not TestStepLabel
+            return -1;
+        }
+
+        // Next line is the next TestStepLabel, or this line is method last line,
+        // so searches the TestSTepLabel for this statement
+        int index = codeLineIndex;
+        while (index >= 0) {
+            if (method.getCodeBody().get(index).getCode() instanceof TestStepLabel) {
+                return index;
+            }
+            index--;
+        }
+        return -1; // not TestStepLabel is found before the specified codeLineIndex line
     }
 
     public void beforeCodeLineHook(String hookedClassQualifiedName,
@@ -190,65 +216,86 @@ public class HookMethodManager {
                 }
             }
         };
-        List<StackLine> stackLines = StackLineUtils.getStackLines(
-                srcTree, Thread.currentThread().getStackTrace(), replacer);
-        if (stackLines.size() == 0) {
-            throw new RuntimeException("implementation error");
-        }
 
-        CodeLine thisCodeLine = stackLines.get(0).getMethod().getCodeBody().get(
-                stackLines.get(0).getCodeBodyIndex());
-        CaptureStyle thisCaptureStyle;
+        // calculate thisStackLines and capturesThisLine value
+        List<StackLine> thisStackLines = StackLineUtils.getStackLines(
+                srcTree, Thread.currentThread().getStackTrace(), replacer);
+        assert thisStackLines.size() > 0;
+        CodeLine thisCodeLine = thisStackLines.get(0).getMethod().getCodeBody().get(
+                thisStackLines.get(0).getCodeBodyIndex());
+        boolean capturesThisLine;
         if (thisCodeLine.getCode() instanceof SubMethodInvoke) {
             SubMethodInvoke thisMethodInvoke = (SubMethodInvoke) thisCodeLine.getCode();
-            thisCaptureStyle = thisMethodInvoke.getSubMethod().getCaptureStyle();
+            CaptureStyle thisCaptureStyle = thisMethodInvoke.getSubMethod().getCaptureStyle();
+            capturesThisLine
+            = (thisCaptureStyle == CaptureStyle.THIS_LINE || thisCaptureStyle == CaptureStyle.STEP_IN);
         } else if (thisCodeLine.getCode() instanceof VarAssign) {
             VarAssign assign = (VarAssign) thisCodeLine.getCode();
             if (assign.getValue() instanceof SubMethodInvoke) {
                 SubMethodInvoke thisMethodInvoke = (SubMethodInvoke) assign.getValue();
-                thisCaptureStyle = thisMethodInvoke.getSubMethod().getCaptureStyle();
+                CaptureStyle thisCaptureStyle = thisMethodInvoke.getSubMethod().getCaptureStyle();
+                capturesThisLine
+                = (thisCaptureStyle == CaptureStyle.THIS_LINE || thisCaptureStyle == CaptureStyle.STEP_IN);
             } else if (assign.getVariable() instanceof Field) {
-                thisCaptureStyle = CaptureStyle.THIS_LINE;
+                capturesThisLine = true;
             } else {
-                logger.info("beforeCodeBodyHook: skip code: " + thisCodeLine.getCode().getOriginal());
-                return;
+                capturesThisLine = false;
             }
-        } else if (thisCodeLine.getCode() instanceof TestStepLabel) {
-            thisCaptureStyle = CaptureStyle.THIS_LINE;
         } else if (thisCodeLine.getCode() instanceof TestStep) {
             throw new RuntimeException("not supported");
         } else {
-            logger.info("beforeCodeBodyHook: skip code: " + thisCodeLine.getCode().getOriginal());
-            return;
+            // don't take screenshot for this line
+            capturesThisLine = false;
         }
-        if (thisCaptureStyle != CaptureStyle.THIS_LINE && thisCaptureStyle != CaptureStyle.STEP_IN) {
+
+        // calculate testStepLabelStackLines and capturesTestStepLabel.
+        // capturesTestStepLabel is set true only when this line is TestStepLabel block last line.
+        List<StackLine> testStepLabelStackLines = null;
+        boolean capturesTestStepLabel = false;
+        int stepLabelIndex = getTestStepLabelIndexIfThisLineIsStepLastCode(
+                hookedTestMethod, thisStackLines.get(0).getCodeBodyIndex());
+        if (stepLabelIndex != -1) {
+            capturesTestStepLabel = true;
+            // testStepLabelStackLines can be obtained
+            // by changing the top element of thisStackLines
+            CodeLine stepLabelCodeLine = hookedTestMethod.getCodeBody().get(stepLabelIndex);
+            testStepLabelStackLines = new ArrayList<StackLine>(thisStackLines.size());
+            for (StackLine stackLine : thisStackLines) {
+                // clone and add new StackLine instance
+                testStepLabelStackLines.add(new StackLine(stackLine));
+            }
+            StackLine topStackLine = testStepLabelStackLines.get(0);
+            topStackLine.setLine(stepLabelCodeLine.getStartLine());
+            topStackLine.setCodeBodyIndex(stepLabelIndex);
+        }
+
+        if (!capturesThisLine && !capturesTestStepLabel) {
             logger.info("beforeCodeBodyHook: skip not capture line");
             return;
         }
-        if (!canStepInCaptureTo(stackLines)) {
+
+        if (!canStepInCaptureTo(thisStackLines)) {
             logger.info("beforeCodeBodyHook: skip not stepInCapture line");
             return;
         }
 
         // screen capture
-        File captureFile = captureScreen(currentRunResult.getRootMethod(), stackLines);
+        List<List<StackLine>> stackLinesList = new ArrayList<List<StackLine>>(2);
+        if (capturesThisLine) {
+            stackLinesList.add(thisStackLines);
+        }
+        if (capturesTestStepLabel) {
+            stackLinesList.add(testStepLabelStackLines);
+        }
+        File captureFile = captureScreenForStackLines(currentRunResult.getRootMethod(), stackLinesList);
         if (captureFile != null) {
-            logger.info("beforeCodeBodyHook: end with capture " + captureFile.getName());
+            if (capturesThisLine) {
+                logger.info("beforeCodeBodyHook: end with this line capture " + captureFile.getName());
+            }
+            if (capturesTestStepLabel) {
+                logger.info("beforeCodeBodyHook: end with TestStepLabel capture " + captureFile.getName());
+            }
         }
-    }
-
-    // - returns null if fails to capture
-    private File captureScreenForStackLine(
-            TestMethod rootMethod, List<StackLine> stackLines) {
-        File captureFile = captureScreen(rootMethod);
-        if (captureFile == null) {
-            return null;
-        }
-        LineScreenCapture capture = new LineScreenCapture();
-        capture.setPath(new File(captureFile.getAbsolutePath()));
-        capture.addAllStackLines(stackLines);
-        currentRunResult.addLineScreenCapture(capture);
-        return captureFile;
     }
 
     // returns null if not executed
@@ -278,20 +325,28 @@ public class HookMethodManager {
         return captureFile;
     }
 
-    // returns screen capture file
-    // returns null if fail to capture
-    private File captureScreen(TestMethod rootMethod, List<StackLine> stackLines) {
+    // Take a screenshot for all stackLines in stackLinesList.
+    // This screenshot is taken for multiple stackLines.
+    // - returns screen capture file.
+    // - returns null if fails to capture
+    private File captureScreenForStackLines(
+            TestMethod rootMethod, List<List<StackLine>> stackLinesList) {
+        if (stackLinesList == null) {
+            throw new NullPointerException();
+        }
+        if (stackLinesList.size() == 0) {
+            throw new IllegalArgumentException("empty list");
+        }
         File captureFile = captureScreen(rootMethod);
         if (captureFile == null) {
             return null;
         }
-
-        LineScreenCapture capture = new LineScreenCapture();
-        capture.setPath(new File(captureFile.getAbsolutePath()));
-        for (StackLine stackLine : stackLines) {
-            capture.addStackLine(stackLine);
+        for (List<StackLine> stackLines : stackLinesList) {
+            LineScreenCapture capture = new LineScreenCapture();
+            capture.setPath(new File(captureFile.getAbsolutePath()));
+            capture.addAllStackLines(stackLines);
+            currentRunResult.addLineScreenCapture(capture);
         }
-        currentRunResult.addLineScreenCapture(capture);
         return captureFile;
     }
 

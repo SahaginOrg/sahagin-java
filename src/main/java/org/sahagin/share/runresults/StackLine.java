@@ -15,6 +15,19 @@ public class StackLine implements YamlConvertible {
     private int line;
     private int codeBodyIndex;
 
+    // normal constructor
+    public StackLine() {
+    }
+
+    // Copy constructor.
+    // Generate new copy of source instance. This copy is shallow copy.
+    public StackLine(StackLine src) {
+        this.methodKey = src.methodKey;
+        this.method = src.method;
+        this.line = src.line;
+        this.codeBodyIndex = src.codeBodyIndex;
+    }
+
     public String getMethodKey() {
         return methodKey;
     }

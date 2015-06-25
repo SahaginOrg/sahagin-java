@@ -125,6 +125,8 @@ public class TestMain extends Java6TestBase {
         TestDoc("Doc: main1");
         subMethodWithTestStepLabel();
         TestDoc("Doc: main2");
+        System.out.println("no testDoc line");
+        TestDoc("Doc: main3");
     }
 
 }
