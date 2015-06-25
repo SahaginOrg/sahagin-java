@@ -83,7 +83,7 @@ public class HtmlReport {
     }
 
     // Add or replace capture information for each stack line of runFailure
-    // by error screen capture.
+    // with error screen capture.
     // The same capture is used for the all StackLines.
     private void addLineScreenCaptureForErrorEachStackLine(
             List<LineScreenCapture> lineScreenCaptures, RunFailure runFailure) {

@@ -178,10 +178,8 @@ public class HookMethodManager {
         String hookedMethodKey = TestMethod.generateMethodKey(
                 hookedClassQualifiedName, hookedMethodSimpleName, hookedArgClassesStr);
         TestMethod hookedTestMethod;
-        if (codeLineHookedMethodKeyCache != null
-                && codeLineHookedMethodKeyCache.equals(hookedMethodKey)) {
-            // re-use cache
-            hookedTestMethod = codeLineHookedMethodCache;
+        if (StringUtils.equals(codeLineHookedMethodKeyCache, hookedMethodKey)) {
+            hookedTestMethod = codeLineHookedMethodCache; // re-use cache
         } else {
             try {
                 hookedTestMethod = srcTree.getTestMethodByKey(hookedMethodKey, true);
@@ -205,9 +203,11 @@ public class HookMethodManager {
             @Override
             public void replace(String classQualifiedName, String methodSimpleName, int line) {
                 super.replace(classQualifiedName, methodSimpleName, line);
+                // replacing root method name
                 if (StringUtils.equals(methodSimpleName, currentActualRootMethodSimpleName)) {
                     replaceMethodSimpleName(currentRunResult.getRootMethod().getSimpleName());
                 }
+                // replacing hooked method name and line number
                 if (StringUtils.equals(methodSimpleName, actualHookedMethodSimpleName)
                         && (line == actualHookedLine)) {
                     replaceMethodSimpleName(hookedMethodSimpleName);
@@ -279,7 +279,8 @@ public class HookMethodManager {
             return;
         }
 
-        // screen capture
+        // screen capture.
+        // Takes this line screen capture and TestStepLabel block screen capture at the same time.
         List<List<StackLine>> stackLinesList = new ArrayList<List<StackLine>>(2);
         if (capturesThisLine) {
             stackLinesList.add(thisStackLines);
