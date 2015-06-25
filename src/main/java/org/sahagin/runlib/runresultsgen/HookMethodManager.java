@@ -112,7 +112,6 @@ public class HookMethodManager {
         }
         currentRunResult.addRunFailure(runFailure);
 
-        // TODO if groovy
         List<List<StackLine>> stackLinesList = new ArrayList<List<StackLine>>(2);
         stackLinesList.add(stackLines);
         captureScreenForStackLines(rootMethod, stackLinesList);
@@ -249,7 +248,8 @@ public class HookMethodManager {
         }
 
         // calculate testStepLabelStackLines and capturesTestStepLabel.
-        // capturesTestStepLabel is set true only when this line is TestStepLabel block last line.
+        // Since screen capture for TestStepLabel is taken at the last line of the TestStepLabel block,
+        // capturesTestStepLabel is set true only for the last line of the TestStepLabel block.
         List<StackLine> testStepLabelStackLines = null;
         boolean capturesTestStepLabel = false;
         int stepLabelIndex = getTestStepLabelIndexIfThisLineIsStepLastCode(
