@@ -475,8 +475,11 @@ function loadCodeBodyHiddenNode(tr) {
       lineClass = "successLine";
     }
     var pageClass = sahagin.TestDocResolver.codePage(codeLine.getCode());
+    var pageDoc;
     if (pageClass == null || pageClass.getTestDoc() == null) {
-      pageTestDoc = '-';
+      pageDoc = '-';
+    } else {
+      pageDoc = pageClass.getTestDoc();
     }
     var testDoc = sahagin.TestDocResolver.placeholderResolvedMethodTestDoc(
         codeLine.getCode(), parentMethodArgTestDocs);
@@ -489,7 +492,7 @@ function loadCodeBodyHiddenNode(tr) {
     childNodeHtml = childNodeHtml + sahagin.CommonUtils.strFormat(
       '<tr data-tt-id="{0}" data-tt-parent-id="{1}" data-image-id="{0}" data-method-key="{2}" class="{3}">'
           + '<td>{4}</td><td>{5}</td><td class="srcInfo">{6}</td></tr>',
-      ttId, parentTtId, methodKey, lineClass, pageTestDoc, testDoc, original);
+      ttId, parentTtId, methodKey, lineClass, pageDoc, testDoc, original);
     
     var methodArgTestDocs = sahagin.TestDocResolver.placeholderResolvedMethodArgTestDocs(
         codeLine.getCode(), parentMethodArgTestDocs);
