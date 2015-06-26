@@ -12,7 +12,7 @@ import org.sahagin.share.srctree.code.SubMethodInvoke;
  */
 public class ReportCodeLine {
     private CodeLine codeLine;
-    private String pagetTestDoc;
+    private String pageDoc;
     // placeholder must have been resolved
     private String testDoc;
     // placeholder must have been resolved
@@ -53,12 +53,12 @@ public class ReportCodeLine {
         this.codeLine = codeLine;
     }
 
-    public String getPageTestDoc() {
-        return pagetTestDoc;
+    public String getPageDoc() {
+        return pageDoc;
     }
 
-    public void setPagetTestDoc(String pagetTestDoc) {
-        this.pagetTestDoc = pagetTestDoc;
+    public void setPageDoc(String pageDoc) {
+        this.pageDoc = pageDoc;
     }
 
     public String getTestDoc() {

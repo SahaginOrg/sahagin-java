@@ -14,6 +14,8 @@ import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.sahagin.runlib.external.CaptureStyle;
 import org.sahagin.runlib.external.Locale;
 import org.sahagin.runlib.external.Page;
+import org.sahagin.runlib.external.PageDoc;
+import org.sahagin.runlib.external.PageDocs;
 import org.sahagin.runlib.external.Pages;
 import org.sahagin.runlib.external.TestDoc;
 import org.sahagin.runlib.external.TestDocs;
@@ -35,6 +37,7 @@ public class ASTUtils {
         for (IAnnotationBinding annotation : annotations) {
             String qName = annotation.getAnnotationType().getBinaryName();
             assert qName != null;
+            // TODO if multiple annotations for annotationClassName exists
             if (qName.equals(annotationClassName)) {
                 return annotation;
             }
@@ -166,24 +169,39 @@ public class ASTUtils {
     }
 
     // return empty list if no Page is found
-    private static Map<Locale, String> getAllPageTestDocs(
-            IAnnotationBinding[] annotations) {
-        IAnnotationBinding pageAnnotation = getAnnotationBinding(annotations, Page.class);
-        IAnnotationBinding pagesAnnotation = getAnnotationBinding(annotations, Pages.class);
-        if (pageAnnotation != null && pagesAnnotation != null) {
-            // TODO throw IllegalTestScriptException
-            throw new RuntimeException("don't use @Page and @Pages at the same place");
-        }
-
-        // all @Page annotations including annotations contained in @Pages
+    private static Map<Locale, String> getAllPageDocs(IAnnotationBinding[] annotations) {
+        // all @PageDoc or @Page annotations including annotations contained in @PageDocs or @Page
         List<IAnnotationBinding> allPageAnnotations = new ArrayList<IAnnotationBinding>(2);
 
-        if (pageAnnotation != null) {
-            // get @Page
-            allPageAnnotations.add(pageAnnotation);
-        } else if (pagesAnnotation != null) {
-            // get @Page from @Pages
-            Object value = getAnnotationValue(pagesAnnotation, "value");
+        List<Class<?>> singlePageAnnotationClasses = new ArrayList<Class<?>>(2);
+        singlePageAnnotationClasses.add(PageDoc.class);
+        singlePageAnnotationClasses.add(Page.class);
+        for (Class<?> annotationClass : singlePageAnnotationClasses) {
+            IAnnotationBinding annotation = getAnnotationBinding(annotations, annotationClass);
+            if (annotation == null) {
+                continue; // annotation is not found
+            }
+            if (allPageAnnotations.size() > 0) {
+                // TODO throw IllegalTestScriptException
+                throw new RuntimeException("don't use multiple page annoations at the same place");
+            }
+            allPageAnnotations.add(annotation);
+        }
+
+        List<Class<?>> multiplePageAnnotationClasses = new ArrayList<Class<?>>(2);
+        multiplePageAnnotationClasses.add(PageDocs.class);
+        multiplePageAnnotationClasses.add(Pages.class);
+        for (Class<?> annotationClass : multiplePageAnnotationClasses) {
+            IAnnotationBinding annotation = getAnnotationBinding(annotations, annotationClass);
+            if (annotation == null) {
+                continue; // annotation is not found
+            }
+            if (allPageAnnotations.size() > 0) {
+                // TODO throw IllegalTestScriptException
+                throw new RuntimeException("don't use multiple page annoations at the same place");
+            }
+            // get @PageDoc or @Page from @PageDocs or @Pages
+            Object value = getAnnotationValue(annotation, "value");
             Object[] values = (Object[]) value;
             for (Object element : values) {
                 allPageAnnotations.add((IAnnotationBinding) element);
@@ -230,9 +248,9 @@ public class ASTUtils {
     }
 
     // return null if no Page found
-    private static String getPageTestDoc(
+    private static String getPageDoc(
             IAnnotationBinding[] annotations, AcceptableLocales locales) {
-        Map<Locale, String> allPages = getAllPageTestDocs(annotations);
+        Map<Locale, String> allPages = getAllPageDocs(annotations);
         if (allPages.isEmpty()) {
             return null; // no @Page found
         }
@@ -248,8 +266,8 @@ public class ASTUtils {
     }
 
     // return null if not found
-    public static String getPageTestDoc(ITypeBinding type, AcceptableLocales locales) {
-        return getPageTestDoc(type.getAnnotations(), locales);
+    public static String getPageDoc(ITypeBinding type, AcceptableLocales locales) {
+        return getPageDoc(type.getAnnotations(), locales);
     }
 
     // return null if not found

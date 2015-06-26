@@ -86,9 +86,9 @@ public class SrcTreeGenerator {
     // result second value.. isPage
     private Pair<String, Boolean> getTestDoc(ITypeBinding type) {
         // Page testDoc is prior to TestDoc value
-        String pageTestDoc = ASTUtils.getPageTestDoc(type, locales);
-        if (pageTestDoc != null) {
-            return Pair.of(pageTestDoc, true);
+        String pageDoc = ASTUtils.getPageDoc(type, locales);
+        if (pageDoc != null) {
+            return Pair.of(pageDoc, true);
         }
 
         String testDoc = ASTUtils.getTestDoc(type, locales);

@@ -210,7 +210,7 @@ public class HtmlReport {
         return 0;
     }
 
-    private String pageTestDoc(CodeLine codeLine) {
+    private String pageDoc(CodeLine codeLine) {
         PageClass pageClass = TestDocResolver.codePage(codeLine.getCode());
         if (pageClass == null || pageClass.getTestDoc() == null || pageClass.getTestDoc().equals("")) {
             return "-";
@@ -240,8 +240,8 @@ public class HtmlReport {
         }
         ReportCodeLine result = new ReportCodeLine();
         result.setCodeLine(codeLine);
-        String pageTestDoc = pageTestDoc(codeLine);
-        result.setPagetTestDoc(pageTestDoc);
+        String pageDoc = pageDoc(codeLine);
+        result.setPageDoc(pageDoc);
         String testDoc = placeholderResolvedTestDoc(codeLine, parentMethodArgTestDocs);
         result.setTestDoc(testDoc);
         List<String> methodArgTestDocs
