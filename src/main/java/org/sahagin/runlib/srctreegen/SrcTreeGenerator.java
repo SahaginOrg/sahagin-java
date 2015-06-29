@@ -45,7 +45,6 @@ import org.sahagin.runlib.additionaltestdoc.AdditionalTestDocs;
 import org.sahagin.runlib.external.CaptureStyle;
 import org.sahagin.runlib.external.TestStepLabelMethod;
 import org.sahagin.runlib.external.adapter.JavaAdapterContainer;
-import org.sahagin.runlib.external.adapter.javasystem.JavaSystemAdapter;
 import org.sahagin.share.AcceptableLocales;
 import org.sahagin.share.CommonUtils;
 import org.sahagin.share.IllegalTestScriptException;
@@ -68,6 +67,7 @@ import org.sahagin.share.srctree.code.SubMethodInvoke;
 import org.sahagin.share.srctree.code.TestStepLabel;
 import org.sahagin.share.srctree.code.UnknownCode;
 import org.sahagin.share.srctree.code.VarAssign;
+import static org.sahagin.runlib.external.adapter.javasystem.JavaSystemAdditionalTestDocsAdapter.*;
 
 public class SrcTreeGenerator {
     private static Logger logger = Logging.getLogger(SrcTreeGenerator.class.getName());
@@ -669,8 +669,7 @@ public class SrcTreeGenerator {
         }
 
         private SubMethodInvoke generateAssertCode(Expression expression, TestMethod parentMethod) {
-            String assertMethodKey = TestMethod.generateMethodKey(
-                    JavaSystemAdapter.CLASS_QUALIFIED_NAME, JavaSystemAdapter.METHOD_ASSERT);
+            String assertMethodKey = TestMethod.generateMethodKey(CLASS_QUALIFIED_NAME, METHOD_ASSERT);
             TestMethod assertMethod = subMethodTable.getByKey(assertMethodKey);
             assert assertMethod != null;
             SubMethodInvoke assertInvoke = new SubMethodInvoke();
@@ -685,11 +684,9 @@ public class SrcTreeGenerator {
             String infixMethodKey;
             String operator = infix.getOperator().toString();
             if (operator.equals(InfixExpression.Operator.EQUALS.toString())) {
-                infixMethodKey = TestMethod.generateMethodKey(
-                        JavaSystemAdapter.CLASS_QUALIFIED_NAME, JavaSystemAdapter.METHOD_EQUALS);
+                infixMethodKey = TestMethod.generateMethodKey(CLASS_QUALIFIED_NAME, METHOD_EQUALS);
             } else if (operator.equals(InfixExpression.Operator.NOT_EQUALS.toString())) {
-                infixMethodKey = TestMethod.generateMethodKey(
-                        JavaSystemAdapter.CLASS_QUALIFIED_NAME, JavaSystemAdapter.METHOD_NOT_EQUALS);
+                infixMethodKey = TestMethod.generateMethodKey(CLASS_QUALIFIED_NAME, METHOD_NOT_EQUALS);
             } else {
                 return generateUnknownCode(infix);
             }
