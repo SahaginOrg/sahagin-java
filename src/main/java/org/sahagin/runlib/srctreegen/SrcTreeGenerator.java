@@ -14,9 +14,9 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.AssertStatement;
 import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
@@ -29,10 +29,12 @@ import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
+import org.eclipse.jdt.core.dom.InfixExpression;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
+import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
@@ -43,6 +45,7 @@ import org.sahagin.runlib.additionaltestdoc.AdditionalTestDocs;
 import org.sahagin.runlib.external.CaptureStyle;
 import org.sahagin.runlib.external.TestStepLabelMethod;
 import org.sahagin.runlib.external.adapter.JavaAdapterContainer;
+import org.sahagin.runlib.external.adapter.javasystem.JavaSystemAdapter;
 import org.sahagin.share.AcceptableLocales;
 import org.sahagin.share.CommonUtils;
 import org.sahagin.share.IllegalTestScriptException;
@@ -665,6 +668,45 @@ public class SrcTreeGenerator {
             return stepLabel;
         }
 
+        private SubMethodInvoke generateAssertCode(Expression expression, TestMethod parentMethod) {
+            String assertMethodKey = TestMethod.generateMethodKey(
+                    JavaSystemAdapter.CLASS_QUALIFIED_NAME, JavaSystemAdapter.METHOD_ASSERT);
+            TestMethod assertMethod = subMethodTable.getByKey(assertMethodKey);
+            assert assertMethod != null;
+            SubMethodInvoke assertInvoke = new SubMethodInvoke();
+            assertInvoke.setSubMethodKey(assertMethodKey);
+            assertInvoke.setSubMethod(assertMethod);
+            assertInvoke.addArg(expressionCode(expression, parentMethod));
+            assertInvoke.setOriginal(expression.toString().trim());
+            return assertInvoke;
+        }
+
+        private Code generateInfixCode(InfixExpression infix, TestMethod parentMethod) {
+            String infixMethodKey;
+            String operator = infix.getOperator().toString();
+            if (operator.equals(InfixExpression.Operator.EQUALS.toString())) {
+                infixMethodKey = TestMethod.generateMethodKey(
+                        JavaSystemAdapter.CLASS_QUALIFIED_NAME, JavaSystemAdapter.METHOD_EQUALS);
+            } else if (operator.equals(InfixExpression.Operator.NOT_EQUALS.toString())) {
+                infixMethodKey = TestMethod.generateMethodKey(
+                        JavaSystemAdapter.CLASS_QUALIFIED_NAME, JavaSystemAdapter.METHOD_NOT_EQUALS);
+            } else {
+                return generateUnknownCode(infix);
+            }
+
+            TestMethod infixMethod = subMethodTable.getByKey(infixMethodKey);
+            assert infixMethod != null;
+            SubMethodInvoke infixMethodInvoke = new SubMethodInvoke();
+            infixMethodInvoke.setSubMethodKey(infixMethodKey);
+            infixMethodInvoke.setSubMethod(infixMethod);
+            Code leftCode = expressionCode(infix.getLeftOperand(), parentMethod);
+            Code rightcode = expressionCode(infix.getRightOperand(), parentMethod);
+            infixMethodInvoke.addArg(leftCode);
+            infixMethodInvoke.addArg(rightcode);
+            infixMethodInvoke.setOriginal(infix.toString().trim());
+            return infixMethodInvoke;
+        }
+
         private UnknownCode generateUnknownCode(String original) {
             UnknownCode unknownCode = new UnknownCode();
             unknownCode.setOriginal(original);
@@ -675,7 +717,6 @@ public class SrcTreeGenerator {
             return generateUnknownCode(expression.toString().trim());
         }
 
-        // localVars is write only. not read in this expression
         private Code expressionCode(Expression expression, TestMethod parentMethod) {
             if (expression == null) {
                 StringCode strCode = new StringCode();
@@ -722,9 +763,46 @@ public class SrcTreeGenerator {
                } else {
                    return generateUnknownCode(expression);
                }
+            } else if (expression instanceof InfixExpression) {
+                InfixExpression infix = (InfixExpression) expression;
+                return generateInfixCode(infix, parentMethod);
             } else{
                 return generateUnknownCode(expression);
             }
+        }
+
+        private CodeLine statementCode(Statement statement, TestMethod parentMethod) {
+            Code code;
+            if (statement instanceof ExpressionStatement) {
+                Expression expression = ((ExpressionStatement) statement).getExpression();
+                code = expressionCode(expression, parentMethod);
+            } else if (statement instanceof VariableDeclarationStatement) {
+                // TODO assume single VariableDeclarationFragment
+                VariableDeclarationStatement varDeclStatement = (VariableDeclarationStatement) statement;
+                VariableDeclarationFragment varFrag
+                = (VariableDeclarationFragment) varDeclStatement.fragments().get(0);
+                Expression expression = varFrag.getInitializer();
+                if (expression == null) {
+                    code = new UnknownCode();
+                } else {
+                    code = generateLocalVarAssignCode(expression, varFrag.getName(),
+                            expression, parentMethod);
+                }
+            } else if (statement instanceof AssertStatement) {
+                Expression expression = ((AssertStatement) statement).getExpression();
+                code = generateAssertCode(expression, parentMethod);
+            } else {
+                code = new UnknownCode();
+            }
+
+            CodeLine codeLine = new CodeLine();
+            codeLine.setStartLine(compilationUnit.getLineNumber(statement.getStartPosition()));
+            codeLine.setEndLine(compilationUnit.getLineNumber(
+                    statement.getStartPosition() + statement.getLength()));
+            codeLine.setCode(code);
+            // sometimes original value set by expressionCode method does not equal to the one of statementNode
+            code.setOriginal(statement.toString().trim());
+            return codeLine;
         }
 
         @Override
@@ -755,34 +833,8 @@ public class SrcTreeGenerator {
             }
             List<?> list = body.statements();
             for (Object obj : list) {
-                assert obj instanceof ASTNode;
-                ASTNode statementNode = (ASTNode) obj;
-                Code code;
-                if (statementNode instanceof ExpressionStatement) {
-                    Expression expression = ((ExpressionStatement)statementNode).getExpression();
-                    code = expressionCode(expression, testMethod);
-                } else if (statementNode instanceof VariableDeclarationStatement) {
-                    // TODO assume single VariableDeclarationFragment
-                    VariableDeclarationFragment varFrag
-                    = (VariableDeclarationFragment)(((VariableDeclarationStatement)statementNode).fragments().get(0));
-                    Expression expression = varFrag.getInitializer();
-                    if (expression == null) {
-                        code = new UnknownCode();
-                    } else {
-                        code = generateLocalVarAssignCode(expression, varFrag.getName(),
-                                expression, testMethod);
-                    }
-                } else {
-                    code = new UnknownCode();
-                }
-
-                CodeLine codeLine = new CodeLine();
-                codeLine.setStartLine(compilationUnit.getLineNumber(statementNode.getStartPosition()));
-                codeLine.setEndLine(compilationUnit.getLineNumber(
-                        statementNode.getStartPosition() + statementNode.getLength()));
-                codeLine.setCode(code);
-                // sometimes original value set by expressionCode method does not equal to the one of statementNode
-                code.setOriginal(statementNode.toString().trim());
+                assert obj instanceof Statement;
+                CodeLine codeLine = statementCode((Statement) obj, testMethod);
                 testMethod.addCodeBody(codeLine);
             }
             return super.visit(node);

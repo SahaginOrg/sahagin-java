@@ -12,6 +12,7 @@ import org.sahagin.runlib.external.adapter.appium.AppiumAdapter;
 import org.sahagin.runlib.external.adapter.fluentlenium.FluentLeniumAdapter;
 import org.sahagin.runlib.external.adapter.iosdriver.IOSDriverAdapter;
 import org.sahagin.runlib.external.adapter.javalib.JavaLibAdapter;
+import org.sahagin.runlib.external.adapter.javasystem.JavaSystemAdapter;
 import org.sahagin.runlib.external.adapter.junit3.JUnit3Adapter;
 import org.sahagin.runlib.external.adapter.junit4.JUnit4Adapter;
 import org.sahagin.runlib.external.adapter.selendroid.SelendroidAdapter;
@@ -53,6 +54,7 @@ public class SahaginPreMain {
         SysMessages.globalInitialize(locales);
 
         // default adapters
+        new JavaSystemAdapter().initialSetAdapter();
         new JUnit3Adapter().initialSetAdapter();
         new JUnit4Adapter().initialSetAdapter();
         new TestNGAdapter().initialSetAdapter();

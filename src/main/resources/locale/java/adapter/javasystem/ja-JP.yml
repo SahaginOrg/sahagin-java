@@ -1,0 +1,4 @@
+method:
+  javaSystem.assert: "{0}をチェック"
+  javaSystem.equals: 「{0}」が「{1}」に等しいか
+  javaSystem.notEquals: 「{0}」が「{1}」と異なるか

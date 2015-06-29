@@ -1,0 +1,27 @@
+rootMethodTable:
+  methods:
+  - name: test
+    codeBody:
+    - code:
+        args:
+        - args:
+          - original: '1'
+          - original: '1'
+          methodKey: javaSystem.equals
+          type: method
+        methodKey: javaSystem.assert
+        type: method
+    - code:
+        args:
+        - args:
+          - original: '2'
+          - original: '1'
+          methodKey: javaSystem.notEquals
+          type: method
+        methodKey: javaSystem.assert
+        type: method
+    - code:
+        args:
+        - {original: '"ABC".equals("ABC")', type: unknown}
+        methodKey: javaSystem.assert
+        type: method

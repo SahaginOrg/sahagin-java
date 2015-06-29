@@ -10,6 +10,7 @@ import org.sahagin.runlib.external.Locale;
 import org.sahagin.runlib.external.adapter.Adapter;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.runlib.external.adapter.JavaAdapterContainer;
+import org.sahagin.runlib.external.adapter.javasystem.JavaSystemAdapter;
 import org.sahagin.runlib.external.adapter.junit3.JUnit3Adapter;
 import org.sahagin.runlib.external.adapter.junit4.JUnit4Adapter;
 import org.sahagin.runlib.external.adapter.testng.TestNGAdapter;
@@ -139,6 +140,16 @@ public class SrcTreeGeneratorTest extends TestBase {
     @Test
     public void testStepLabel() {
         testMain("testStepLabel", null, null, JUNIT4);
+    }
+
+    @Test
+    public void assertTest() {
+        AcceptableLocales locales = AcceptableLocales.getInstance(Locale.EN_US);
+        JavaAdapterContainer.globalInitialize(locales, new JUnit4Adapter().getName());
+        new JavaSystemAdapter().initialSetAdapter();
+        AdditionalTestDocs testDocs
+        = AdapterContainer.globalInstance().getAdditionalTestDocs();
+        testMain("assertTest", testDocs, Locale.EN_US, JUNIT4);
     }
 
     @Test
