@@ -668,19 +668,20 @@ public class SrcTreeGenerator {
             return stepLabel;
         }
 
-        private SubMethodInvoke generateAssertCode(Expression expression, TestMethod parentMethod) {
+        private SubMethodInvoke generateAssertMethodInvokeCode(
+                Expression expression, String original, TestMethod parentMethod) {
             String assertMethodKey = TestMethod.generateMethodKey(CLASS_QUALIFIED_NAME, METHOD_ASSERT);
             TestMethod assertMethod = subMethodTable.getByKey(assertMethodKey);
             assert assertMethod != null;
-            SubMethodInvoke assertInvoke = new SubMethodInvoke();
-            assertInvoke.setSubMethodKey(assertMethodKey);
-            assertInvoke.setSubMethod(assertMethod);
-            assertInvoke.addArg(expressionCode(expression, parentMethod));
-            assertInvoke.setOriginal(expression.toString().trim());
-            return assertInvoke;
+            SubMethodInvoke assertMethodInvoke = new SubMethodInvoke();
+            assertMethodInvoke.setSubMethodKey(assertMethodKey);
+            assertMethodInvoke.setSubMethod(assertMethod);
+            assertMethodInvoke.addArg(expressionCode(expression, parentMethod));
+            assertMethodInvoke.setOriginal(original);
+            return assertMethodInvoke;
         }
 
-        private Code generateInfixCode(InfixExpression infix, TestMethod parentMethod) {
+        private Code generateInfixMethodInvokeCode(InfixExpression infix, TestMethod parentMethod) {
             String infixMethodKey;
             String operator = infix.getOperator().toString();
             if (operator.equals(InfixExpression.Operator.EQUALS.toString())) {
@@ -762,13 +763,13 @@ public class SrcTreeGenerator {
                }
             } else if (expression instanceof InfixExpression) {
                 InfixExpression infix = (InfixExpression) expression;
-                return generateInfixCode(infix, parentMethod);
+                return generateInfixMethodInvokeCode(infix, parentMethod);
             } else{
                 return generateUnknownCode(expression);
             }
         }
 
-        private CodeLine statementCode(Statement statement, TestMethod parentMethod) {
+        private CodeLine statementCodeLine(Statement statement, TestMethod parentMethod) {
             Code code;
             if (statement instanceof ExpressionStatement) {
                 Expression expression = ((ExpressionStatement) statement).getExpression();
@@ -787,7 +788,7 @@ public class SrcTreeGenerator {
                 }
             } else if (statement instanceof AssertStatement) {
                 Expression expression = ((AssertStatement) statement).getExpression();
-                code = generateAssertCode(expression, parentMethod);
+                code = generateAssertMethodInvokeCode(expression, statement.toString().trim(), parentMethod);
             } else {
                 code = new UnknownCode();
             }
@@ -831,7 +832,7 @@ public class SrcTreeGenerator {
             List<?> list = body.statements();
             for (Object obj : list) {
                 assert obj instanceof Statement;
-                CodeLine codeLine = statementCode((Statement) obj, testMethod);
+                CodeLine codeLine = statementCodeLine((Statement) obj, testMethod);
                 testMethod.addCodeBody(codeLine);
             }
             return super.visit(node);
