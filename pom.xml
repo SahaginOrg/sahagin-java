@@ -101,6 +101,26 @@
     <plugins>     
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-eclipse-plugin</artifactId>
+        <version>2.9</version>
+        <configuration>
+          <additionalConfig>
+          　<!-- generates setting files by calling mvn eclipse:eclipse -->
+            <file>
+              <name>.settings/org.eclipse.jdt.ui.prefs</name>
+              <content>
+                <![CDATA[editor_save_participant_org.eclipse.jdt.ui.postsavelistener.cleanup=true
+sp_cleanup.on_save_use_additional_actions=true
+sp_cleanup.remove_trailing_whitespaces=true
+sp_cleanup.remove_trailing_whitespaces_all=true
+sp_cleanup.remove_trailing_whitespaces_ignore_empty=false]]>
+              </content>
+            </file>
+          </additionalConfig>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.2</version>
         <configuration>
