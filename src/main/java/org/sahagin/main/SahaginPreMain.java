@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.lang.instrument.Instrumentation;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.sahagin.runlib.external.adapter.Adapter;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.runlib.external.adapter.JavaAdapterContainer;
@@ -42,10 +43,14 @@ public class SahaginPreMain {
             throws YamlConvertException, IllegalTestScriptException,
             IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         String configFilePath;
-        if (agentArgs == null) {
-            configFilePath = "sahagin.yml";
-        } else {
+        String propValue = System.getProperty("sahagin.configPath");
+        if (!StringUtils.isBlank(propValue)) {
+            configFilePath = propValue;
+        } else if (agentArgs != null) {
+            // check agent argument for backward compatibility
             configFilePath = agentArgs;
+        } else {
+            configFilePath = "sahagin.yml";
         }
         JavaConfig config = JavaConfig.generateFromYamlConfig(new File(configFilePath));
         Logging.setLoggerEnabled(config.isOutputLog());
