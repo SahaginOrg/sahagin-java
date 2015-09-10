@@ -240,7 +240,6 @@ public class TestMethod extends ASTData implements YamlConvertible {
             codeLine.fromYamlObject(codeLineYamlObj);
             codeBody.add(codeLine);
         }
-        clearMemo();
     }
 
 }

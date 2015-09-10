@@ -157,7 +157,6 @@ public class TestClass extends ASTData implements YamlConvertible {
         testMethods.clear();
         testFieldKeys = YamlUtils.getStrListValue(yamlObject, "fieldKeys", true);
         testFields.clear();
-        clearMemo();
     }
 
     public static TestClass newInstanceFromYamlObject(Map<String, Object> yamlObject)

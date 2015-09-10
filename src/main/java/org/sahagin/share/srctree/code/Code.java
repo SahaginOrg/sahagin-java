@@ -35,7 +35,6 @@ public abstract class Code extends ASTData implements YamlConvertible {
     public void fromYamlObject(Map<String, Object> yamlObject) throws YamlConvertException {
         YamlUtils.strValueEqualsCheck(yamlObject, "type", getType());
         original = YamlUtils.getStrValue(yamlObject, "original");
-        clearMemo();
     }
 
     public static Code newInstanceFromYamlObject(Map<String, Object> yamlObject)
