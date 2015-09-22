@@ -21,6 +21,7 @@ import org.sahagin.runlib.external.TestDoc;
 import org.sahagin.runlib.external.TestDocs;
 import org.sahagin.share.AcceptableLocales;
 
+@SuppressWarnings("deprecation") // ignore Page and Pages annotation warning
 public class ASTUtils {
 
     // Get the method annotation whose class name is equals  to annotationClass canonical name.
