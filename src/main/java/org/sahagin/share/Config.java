@@ -9,7 +9,8 @@ import org.sahagin.share.yaml.YamlUtils;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlConvertible;
 
-public abstract class Config implements YamlConvertible {
+public class Config implements YamlConvertible {
+    private static final String INVALID_CONFIG_YAML = "failed to load config file \"%s\": %s";
     private static final File REPORT_INTERMEDIATE_DATA_DIR_DEFAULT = new File("sahagin-intermediate-data");
     private static final File REPORT_OUTPUDT_DATA_DIR_DEFAULT = new File("sahagin-report");
 
@@ -22,12 +23,25 @@ public abstract class Config implements YamlConvertible {
     private Locale userLocale = Locale.getSystemLocale();
     private boolean usesSystemLocale = true;
 
-    protected final File getRootDir() {
-        return rootDir;
+    public static Config generateFromYamlConfig(File yamlConfigFile) throws YamlConvertException {
+        Map<String, Object> configYamlObj = YamlUtils.load(yamlConfigFile);
+        // use the parent directory of yamlConfigFile as the root directory
+        Config config = new Config(yamlConfigFile.getParentFile());
+        try {
+            config.fromYamlObject(configYamlObj);
+        } catch (YamlConvertException e) {
+            throw new YamlConvertException(String.format(
+                    INVALID_CONFIG_YAML, yamlConfigFile.getAbsolutePath(), e.getLocalizedMessage()), e);
+        }
+        return config;
     }
 
-    protected final void setRootDir(File rootDir) {
+    public Config(File rootDir) {
         this.rootDir = rootDir;
+    }
+
+    protected final File getRootDir() {
+        return rootDir;
     }
 
     public final File getRootBaseReportIntermediateDataDir() {

@@ -31,8 +31,7 @@ public class JavaConfig extends Config {
     }
 
     public JavaConfig(File rootDir) {
-        super();
-        setRootDir(rootDir);
+        super(rootDir);
     }
 
     public File getRootBaseTestDir() {

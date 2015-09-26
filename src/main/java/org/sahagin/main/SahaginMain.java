@@ -7,7 +7,6 @@ import org.sahagin.share.AcceptableLocales;
 import org.sahagin.share.Config;
 import org.sahagin.share.IllegalDataStructureException;
 import org.sahagin.share.IllegalTestScriptException;
-import org.sahagin.share.JavaConfig;
 import org.sahagin.share.Logging;
 import org.sahagin.share.SysMessages;
 import org.sahagin.share.yaml.YamlConvertException;
@@ -64,7 +63,7 @@ public class SahaginMain {
             throw new IllegalArgumentException(String.format(
                     MSG_CONFIG_NOT_FOUND, configFile.getAbsolutePath()));
         }
-        Config config = JavaConfig.generateFromYamlConfig(configFile);
+        Config config = Config.generateFromYamlConfig(configFile);
         Logging.setLoggerEnabled(config.isOutputLog());
         AcceptableLocales locales = AcceptableLocales.getInstance(config.getUserLocale());
         SysMessages.globalInitialize(locales);
