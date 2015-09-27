@@ -1,12 +1,12 @@
 package org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.localVar.input;
 
 import org.junit.Test;
-import org.sahagin.runlib.external.Page;
+import org.sahagin.runlib.external.PageDoc;
 import org.sahagin.runlib.external.TestDoc;
 
 public class TestMain {
 
-    @Page("Doc: Page")
+    @PageDoc("Doc: Page")
     public static class SubPage {
 
         @TestDoc("Doc:SubPage")

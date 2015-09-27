@@ -1,9 +1,9 @@
 package org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.utf8Character.input;
 
-import org.sahagin.runlib.external.Page;
+import org.sahagin.runlib.external.PageDoc;
 import org.sahagin.runlib.external.TestDoc;
 
-@Page("Doc:ページクラス")
+@PageDoc("Doc:ページクラス")
 public class ページクラス {
 
     @TestDoc("ページメソッド")

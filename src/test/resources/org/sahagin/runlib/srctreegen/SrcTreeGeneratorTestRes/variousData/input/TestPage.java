@@ -1,9 +1,9 @@
 package org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.variousData.input;
 
-import org.sahagin.runlib.external.Page;
+import org.sahagin.runlib.external.PageDoc;
 import org.sahagin.runlib.external.TestDoc;
 
-@Page("Doc:TestPage")
+@PageDoc("Doc:TestPage")
 public class TestPage {
 
     @TestDoc("Doc: TestPage")

@@ -1,9 +1,9 @@
 package implementstest;
 
-import org.sahagin.runlib.external.Page;
+import org.sahagin.runlib.external.PageDoc;
 import org.sahagin.runlib.external.TestDoc;
 
-@Page("Doc: ImplementsPageBase")
+@PageDoc("Doc: ImplementsPageBase")
 public interface ImplementsPageBase {
 
     @TestDoc("Doc: baseMethod: {arg}")

@@ -1,9 +1,9 @@
 package org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.implementsTest.input;
 
-import org.sahagin.runlib.external.Page;
+import org.sahagin.runlib.external.PageDoc;
 import org.sahagin.runlib.external.TestDoc;
 
-@Page("Doc: ImplementsPage")
+@PageDoc("Doc: ImplementsPage")
 public class ImplementsPage implements ImplementsPageBase {
 
     @TestDoc("Doc: baseMethod: override: {arg}")

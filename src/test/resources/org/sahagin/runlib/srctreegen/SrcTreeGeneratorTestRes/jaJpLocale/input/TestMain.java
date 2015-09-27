@@ -1,14 +1,14 @@
 package org.sahagin.runlib.srctreegen.SrcTreeGeneratorTestRes.jaJpLocale.input;
 
 import org.sahagin.runlib.external.Locale;
-import org.sahagin.runlib.external.Page;
-import org.sahagin.runlib.external.Pages;
+import org.sahagin.runlib.external.PageDoc;
+import org.sahagin.runlib.external.PageDocs;
 import org.sahagin.runlib.external.TestDoc;
 import org.sahagin.runlib.external.TestDocs;
 
-@Pages({
-    @Page(value = "Pages:ja-JP", locale = Locale.JA_JP),
-    @Page(value = "Pages:default"),
+@PageDocs({
+    @PageDoc(value = "Pages:ja-JP", locale = Locale.JA_JP),
+    @PageDoc(value = "Pages:default"),
 })
 public class TestMain {
 

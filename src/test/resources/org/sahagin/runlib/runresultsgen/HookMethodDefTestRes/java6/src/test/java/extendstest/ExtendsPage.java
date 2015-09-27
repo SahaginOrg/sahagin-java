@@ -1,11 +1,11 @@
 package extendstest;
 
-import org.sahagin.runlib.external.Page;
-import org.sahagin.runlib.external.Pages;
+import org.sahagin.runlib.external.PageDoc;
+import org.sahagin.runlib.external.PageDocs;
 import org.sahagin.runlib.external.TestDoc;
 import org.sahagin.runlib.external.TestDocs;
 
-@Pages({@Page("Doc: ExtendsPage")})
+@PageDocs({@PageDoc("Doc: ExtendsPage")})
 public class ExtendsPage extends ExtendsPageBase {
 
     @TestDoc("Doc: overriddenMethod: override: {arg}")
