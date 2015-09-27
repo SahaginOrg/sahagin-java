@@ -1,0 +1,16 @@
+subMethodTable:
+  methods:
+  - {testDoc: 'Doc:staticMethod', 
+    key: "*TestSub.staticMethod-void", name: staticMethod}
+rootMethodTable:
+  methods:
+  - codeBody:
+    - code:
+        type: method
+        methodKey: "*TestSub.staticMethod-void"
+        thisInstance: {type: unknown}
+    - code: {type: unknown}
+    - code:
+        type: method
+        methodKey: "*TestSub.staticMethod-void"
+        thisInstance: {type: localVar}

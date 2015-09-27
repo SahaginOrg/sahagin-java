@@ -62,24 +62,48 @@ public class SrcTreeGeneratorTest extends TestBase {
     // this test checks:
     // - calling method defined at the same class and the other class
     // - constructor with @TestDoc
-    // - inner class
-    // - static method
-    // - recursive method call
-    // - mutual recursive method call
-    // - nested sub method call and it's method argument
-    // - when arguments of SubMethodInvoke is another SubMethodInvoke
     // - testDoc placeholder (variable name and index and this)
     // - @Test, @TestDoc, @Page annotation
     // - capture value of @TestDoc
-    // - variable assignment with SubMethodInvoke
-    // - predefined methods ( assert, webDriver, findElement, by, click, sendKeys)
-    // - multiple lines statement
-    // - multiple statements in a line
+    // - nested sub method call and it's method argument
+    // - when arguments of SubMethodInvoke is another SubMethodInvoke
     // TODO this test checks multiple things,
     // so split to multiple test method when srcTree YAML format is fixed.
     @Test
     public void variousData() {
         testMain("variousData", null, null, JUNIT4);
+    }
+
+    @Test
+    public void innerClass() {
+        testMain("innerClass", null, null, JUNIT4);
+    }
+
+    @Test
+    public void staticMethod() {
+        testMain("staticMethod", null, null, JUNIT4);
+    }
+
+    @Test
+    public void recurseMethodCall() {
+        // ordinal and mutual recurse call
+       // testMain("recurseMethodCall", null, null, JUNIT4);
+    }
+
+    @Test
+    public void multiLinesStatement() {
+        //testMain("multiLinesStatement", null, null, JUNIT4);
+    }
+
+    @Test
+    public void multiStatementsInOneLine() {
+        //testMain("multiStatementsInOneLine", null, null, JUNIT4);
+    }
+
+    @Test
+    public void predefinedMethods() {
+        // predefined methods ( assert, webDriver, findElement, by, click, sendKeys)
+        //testMain("predefinedMethods", null, null, JUNIT4);
     }
 
     @Test

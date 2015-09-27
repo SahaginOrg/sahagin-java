@@ -17,22 +17,6 @@ public class TestPage {
     @TestDoc("Doc:argMethod:{arg1}:{arg2}:{0}:{1}:{this}")
     public void argMethod(String arg1, int arg2) {}
 
-    @TestDoc("Doc:staticMethod")
-    public static void staticMethod() {}
-
-    private static class InnerClass {
-
-        @TestDoc("Doc:innerClass")
-        private void innerClassMethod() {}
-
-    }
-
-    @TestDoc("Doc:innerTestCall")
-    public void inenrClassCall() {
-        InnerClass innerClass = new InnerClass();
-        innerClass.innerClassMethod();
-    }
-
     @TestDoc("Doc:nest1:{arg}")
     public void nest1(String arg) {
         nest2(arg);

@@ -1,0 +1,23 @@
+subClassTable:
+  classes:
+  - qname: "*TestMain$MainInnerClass"
+    key: "*TestMain$MainInnerClass"
+    methodKeys: ["*TestMain$MainInnerClass.mainInnerClassMethod-void"]
+  - qname: "*TestSub$SubInnerClass"
+    key: "*TestSub$SubInnerClass"
+    methodKeys: ["*TestSub$SubInnerClass.subInnerClassMethod-void"]
+subMethodTable:
+  methods:
+  - {testDoc: 'Doc:mainInnerClass', key: "*TestMain$MainInnerClass.mainInnerClassMethod-void"}
+  - {testDoc: 'Doc:subInnerClass', key: "*TestSub$SubInnerClass.subInnerClassMethod-void"}
+rootMethodTable:
+  methods:
+  - codeBody:
+    - code: {type: unknown}
+    - code:
+        type: method
+        methodKey: "*TestMain$MainInnerClass.mainInnerClassMethod-void"
+    - code: {type: unknown}
+    - code:
+        type: method
+        methodKey: "*TestSub$SubInnerClass.subInnerClassMethod-void"

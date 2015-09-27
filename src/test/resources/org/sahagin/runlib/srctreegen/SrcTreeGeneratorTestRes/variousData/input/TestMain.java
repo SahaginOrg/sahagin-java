@@ -14,7 +14,6 @@ import static org.junit.Assert.assertThat;
 public class TestMain {
     WebDriver wd;
 
-    @SuppressWarnings("static-access")
     @Test
     public void testMethod1() {
         TestSub.subMethod();
@@ -23,9 +22,6 @@ public class TestMain {
         noTestDocMethod();
 
         TestPage page = new TestPage();
-        page.inenrClassCall();
-        TestPage.staticMethod();
-        page.staticMethod();
         page.argMethod("AAA", 999);
         page.argMethod(null, 0);
         page.recurseMethodCall();

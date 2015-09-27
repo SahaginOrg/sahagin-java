@@ -5,10 +5,6 @@ subMethodTable:
     classKey: "*TestMain"
     testDoc: Doc:testDocMethod
     key: "*TestMain.testDocMethod-void"
-  - name: "innerClassMethod"
-    classKey: "*TestPage$InnerClass"
-    testDoc: Doc:innerClass
-    key: "*TestPage$InnerClass.innerClassMethod*"
   - name: "TestPage"
     classKey: "*TestPage"
     testDoc: 'Doc: TestPage'
@@ -24,16 +20,6 @@ subMethodTable:
     classKey: "*TestPage"
     testDoc: data
     key: "*TestPage.getData*"
-  - codeBody:
-    - code: {original: InnerClass innerClass=new InnerClass();, type: unknown}
-    - code:
-        original: innerClass.innerClassMethod();
-        methodKey: "*TestPage$InnerClass.innerClassMethod*"
-        thisInstance: {original: innerClass, type: localVar, name: innerClass}
-    name: "inenrClassCall"
-    classKey: "*TestPage"
-    testDoc: Doc:innerTestCall
-    key: "*TestPage.inenrClassCall*"
   - codeBody:
     - code:
         original: nest2(arg);
@@ -91,10 +77,6 @@ subMethodTable:
     classKey: "*TestPage"
     testDoc: 'Doc: recurseMethodCall'
     key: "*TestPage.recurseMethodCall*"
-  - name: "staticMethod"
-    classKey: "*TestPage"
-    testDoc: Doc:staticMethod
-    key: "*TestPage.staticMethod*"
   - name: "subMethod"
     classKey: "*TestSub"
     testDoc: 'Doc: subMethod'
@@ -119,18 +101,6 @@ rootMethodTable:
     - code:
         original: TestPage page=new TestPage();
         methodKey: "*TestPage.*"
-    - code:
-        original: page.inenrClassCall();
-        methodKey: "*TestPage.inenrClassCall*"
-        thisInstance: {original: page, type: localVar, name: page}
-    - code:
-        original: TestPage.staticMethod();
-        methodKey: "*TestPage.staticMethod*"
-        thisInstance: {original: TestPage, type: unknown}
-    - code:
-        original: page.staticMethod();
-        methodKey: "*TestPage.staticMethod*"
-        thisInstance: {original: page, type: localVar, name: page}
     - code:
         original: page.argMethod("AAA",999);
         methodKey: "*TestPage.argMethod*"
@@ -176,9 +146,6 @@ subClassTable:
     key: "*TestPage"
     methodKeys: "*"
     qname: "*.TestPage"
-  - key: "*TestPage$InnerClass"
-    methodKeys: ["*TestPage$InnerClass.innerClassMethod*"]
-    qname: "*.TestPage$InnerClass"
   - key: "*TestSub"
     methodKeys: ["*TestSub.subMethod*"]
     qname: "*.TestSub"
