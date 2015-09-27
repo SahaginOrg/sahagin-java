@@ -28,13 +28,6 @@ public class TestPage {
     }
 
     @TestDoc("Doc:nest3:{arg}")
-    private void nest3(String arg) {
-        int i = 0;
-        int j = 1;
-        if (i != j) {
-            return;
-        }
-        nest1(arg);
-    }
+    private void nest3(String arg) {}
 
 }

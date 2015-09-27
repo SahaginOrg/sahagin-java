@@ -86,18 +86,12 @@ public class SrcTreeGeneratorTest extends TestBase {
 
     @Test
     public void recurseMethodCall() {
-        // ordinal and mutual recurse call
         testMain("recurseMethodCall", null, null, JUNIT4);
     }
 
     @Test
-    public void multiLinesStatement() {
-        //testMain("multiLinesStatement", null, null, JUNIT4);
-    }
-
-    @Test
-    public void multiStatementsInOneLine() {
-        //testMain("multiStatementsInOneLine", null, null, JUNIT4);
+    public void multiLinesAndStatements() {
+        testMain("multiLinesAndStatements", null, null, JUNIT4);
     }
 
     @Test

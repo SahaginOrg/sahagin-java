@@ -42,21 +42,7 @@ subMethodTable:
     classKey: "*TestPage"
     testDoc: Doc:nest2:{arg}
     key: "*TestPage.nest2*"
-  - codeBody:
-    - code: {original: int i=0;, type: unknown}
-    - code: {original: int j=1;, type: unknown}
-    - code:
-        original: |-
-          if (i != j) {
-            return;
-          }
-        type: unknown
-    - code:
-        original: nest1(arg);
-        methodKey: "*TestPage.nest1*"
-        args:
-        - {argIndex: 0, original: arg, type: arg}
-    name: "nest3"
+  - name: "nest3"
     argVariables: [arg]
     classKey: "*TestPage"
     testDoc: Doc:nest3:{arg}
@@ -72,12 +58,6 @@ rootMethodTable:
         original: TestSub.subMethod();
         methodKey: "*TestSub.subMethod*"
         thisInstance: {original: TestSub, type: unknown}
-    - code:
-        original: testDocMethod();
-        methodKey: "*TestMain.testDocMethod*"
-    - code:
-        original: testDocMethod();
-        methodKey: "*TestMain.testDocMethod*"
     - code:
         original: testDocMethod();
         methodKey: "*TestMain.testDocMethod*"

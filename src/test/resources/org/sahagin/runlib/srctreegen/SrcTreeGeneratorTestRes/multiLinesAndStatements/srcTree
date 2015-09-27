@@ -1,0 +1,19 @@
+rootMethodTable:
+  methods:
+  - codeBody:
+    - startLine: 18
+      code:
+        original: testDocMethod(1,2);
+      endLine: 18
+    - startLine: 18
+      code:
+        original: testDocMethod(1,3);
+      endLine: 18
+    - startLine: 18
+      code:
+        original: testDocMethod(1,4);
+      endLine: 19
+    - startLine: 20
+      code:
+        original: this.testDocMethod(1,5);
+      endLine: 24

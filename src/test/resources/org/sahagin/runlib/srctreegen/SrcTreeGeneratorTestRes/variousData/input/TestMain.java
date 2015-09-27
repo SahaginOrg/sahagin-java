@@ -18,16 +18,13 @@ public class TestMain {
     public void testMethod1() {
         TestSub.subMethod();
         testDocMethod();
-        testDocMethod();testDocMethod();
         noTestDocMethod();
 
         TestPage page = new TestPage();
         page.argMethod("AAA", 999);
         page.argMethod(null, 0);
-        page
-        .nest1("DDD");
-        assertThat(
-                page.getData(), is("EEE"));
+        page.nest1("DDD");
+        assertThat(page.getData(), is("EEE"));
         assertEquals(page.getData(), "EEE");
         if (wd == null) {
             return;
