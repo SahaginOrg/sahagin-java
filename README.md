@@ -11,19 +11,16 @@ Sahagin's advantages are:
 - Generate easy-to-understand HTML report for non-programmers from the standard Selenium test code written in the programming language.
 - Automatically take screen captures for each test step and on test failures, and show it on the HTML report.
 
-Sahagin only supports Java in the current latest version.
-
-For more information, let's go to [Sahagin overview](https://github.com/SahaginOrg/sahagin-java/wiki/Sahagin-overview).
-
+Sahagin now supports Java and [Groovy](https://github.com/SahaginOrg/sahagin-groovy) (beta supoprt) in the current latest version.
 
 [![Build Status](https://travis-ci.org/SahaginOrg/sahagin-java.svg?branch=master)](https://travis-ci.org/SahaginOrg/sahagin-java)
 
 # For more information
 
-* [Sahagin overview](https://github.com/SahaginOrg/sahagin-java/wiki/Sahagin-overview)
-* [Getting started](https://github.com/SahaginOrg/sahagin-java/wiki/Getting-started)
-* [Various features](https://github.com/SahaginOrg/sahagin-java/wiki/Various-features)
-* [Sahagin development](https://github.com/SahaginOrg/sahagin-java/wiki/Sahagin-development)
+* Sahagin-Java
+  * [Sahagin overview](https://github.com/SahaginOrg/sahagin-java/wiki/Sahagin-overview)
+* Sahagin-Groovy
+  * [Sahagin-Groovy overview](https://github.com/SahaginOrg/sahagin-groovy/wiki/Sahagin-Groovy-overview)
 
 # Japanese information
 
