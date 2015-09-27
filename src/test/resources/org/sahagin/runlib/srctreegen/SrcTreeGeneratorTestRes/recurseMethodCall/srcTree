@@ -1,0 +1,11 @@
+subMethodTable:
+  methods:
+  - codeBody:
+    - code: {type: method, methodKey: "*TestMain.mutualRecurseMethodCall2-void"}
+    key: "*TestMain.mutualRecurseMethodCall1-void"
+  - codeBody:
+    - code: {type: method, methodKey: "*TestMain.mutualRecurseMethodCall1-void"}
+    key: "*TestMain.mutualRecurseMethodCall2-void"
+  - codeBody:
+    - code: {type: method, methodKey: "*TestMain.recurseMethodCall-void"}
+    key: "*TestMain.recurseMethodCall-void"

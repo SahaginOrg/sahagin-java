@@ -87,7 +87,7 @@ public class SrcTreeGeneratorTest extends TestBase {
     @Test
     public void recurseMethodCall() {
         // ordinal and mutual recurse call
-       // testMain("recurseMethodCall", null, null, JUNIT4);
+        testMain("recurseMethodCall", null, null, JUNIT4);
     }
 
     @Test

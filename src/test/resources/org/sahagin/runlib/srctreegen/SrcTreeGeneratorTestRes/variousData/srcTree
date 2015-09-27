@@ -61,22 +61,6 @@ subMethodTable:
     classKey: "*TestPage"
     testDoc: Doc:nest3:{arg}
     key: "*TestPage.nest3*"
-  - codeBody:
-    - code: {original: int i=0;, type: unknown}
-    - code: {original: int j=1;, type: unknown}
-    - code:
-        original: |-
-          if (i != j) {
-            return;
-          }
-        type: unknown
-    - code:
-        original: recurseMethodCall();
-        methodKey: "*TestPage.recurseMethodCall*"
-    name: "recurseMethodCall"
-    classKey: "*TestPage"
-    testDoc: 'Doc: recurseMethodCall'
-    key: "*TestPage.recurseMethodCall*"
   - name: "subMethod"
     classKey: "*TestSub"
     testDoc: 'Doc: subMethod'
@@ -113,9 +97,6 @@ rootMethodTable:
         args:
         - {original: 'null', type: unknown}
         - {original: '0', type: unknown}
-    - code:
-        original: page.recurseMethodCall();
-        methodKey: "*TestPage.recurseMethodCall*"
     - code:
         original: page.nest1("DDD");
         methodKey: "*TestPage.nest1*"

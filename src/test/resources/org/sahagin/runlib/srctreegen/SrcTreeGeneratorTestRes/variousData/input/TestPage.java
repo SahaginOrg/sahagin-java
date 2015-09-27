@@ -37,14 +37,4 @@ public class TestPage {
         nest1(arg);
     }
 
-    @TestDoc("Doc: recurseMethodCall")
-    public void recurseMethodCall() {
-        int i = 0;
-        int j = 1;
-        if (i != j) {
-            return;
-        }
-        recurseMethodCall();
-    }
-
 }

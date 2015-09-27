@@ -24,7 +24,6 @@ public class TestMain {
         TestPage page = new TestPage();
         page.argMethod("AAA", 999);
         page.argMethod(null, 0);
-        page.recurseMethodCall();
         page
         .nest1("DDD");
         assertThat(
