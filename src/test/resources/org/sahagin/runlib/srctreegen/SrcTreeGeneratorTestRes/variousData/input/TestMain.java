@@ -12,7 +12,6 @@ import static org.junit.Assert.assertThat;
 
 
 public class TestMain {
-    WebDriver wd;
 
     @Test
     public void testMethod1() {
@@ -26,12 +25,6 @@ public class TestMain {
         page.nest1("DDD");
         assertThat(page.getData(), is("EEE"));
         assertEquals(page.getData(), "EEE");
-        if (wd == null) {
-            return;
-        }
-        wd.get("***.com");
-        wd.findElement(By.id("FFF")).click();
-        wd.findElement(By.cssSelector("GGG")).sendKeys("HHH");
     }
 
     @Test

@@ -84,15 +84,6 @@ rootMethodTable:
         - {value: DDD, original: '"DDD"', type: string}
     - code: {original: 'assertThat(page.getData(),is("EEE"));', type: unknown}
     - code: {original: 'assertEquals(page.getData(),"EEE");', type: unknown}
-    - code:
-        original: |-
-          if (wd == null) {
-            return;
-          }
-        type: unknown
-    - code: {original: wd.get("***.com");, type: unknown}
-    - code: {original: wd.findElement(By.id("FFF")).click();, type: unknown}
-    - code: {original: wd.findElement(By.cssSelector("GGG")).sendKeys("HHH");, type: unknown}
     name: "testMethod1"
     classKey: "*TestMain"
     key: "*TestMain.testMethod1*"

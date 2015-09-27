@@ -95,12 +95,6 @@ public class SrcTreeGeneratorTest extends TestBase {
     }
 
     @Test
-    public void predefinedMethods() {
-        // predefined methods ( assert, webDriver, findElement, by, click, sendKeys)
-        //testMain("predefinedMethods", null, null, JUNIT4);
-    }
-
-    @Test
     public void classAndMethodKey() {
         testMain("classAndMethodKey", null, null, JUNIT4);
     }
