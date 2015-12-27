@@ -2,10 +2,6 @@ checkout:
   post:
     - git submodule sync
     - git submodule update --init
-general:
-  # this setting is just to try Circle CI artifacts feature
-  artifacts:
-    - "work/org/sahagin/report"
 test:
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
