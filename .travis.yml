@@ -6,7 +6,6 @@ jdk:
 
 env:
   matrix:
-    - COMPILE_VERSION=java6-compile
     - COMPILE_VERSION=java7-compile
     - COMPILE_VERSION=java8-compile
     

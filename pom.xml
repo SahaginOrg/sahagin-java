@@ -124,8 +124,8 @@ sp_cleanup.remove_trailing_whitespaces_ignore_empty=false]]>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.2</version>
         <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
+          <source>1.7</source>
+          <target>1.7</target>
         </configuration>
       </plugin>
       <plugin>
@@ -184,22 +184,6 @@ sp_cleanup.remove_trailing_whitespaces_ignore_empty=false]]>
             <artifactId>maven-jar-plugin</artifactId>
             <configuration>
               <finalName>sahagin-temp</finalName>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>  
-
-    <profile>
-      <id>java6-compile</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <configuration>
-              <source>1.6</source>
-              <target>1.6</target>
             </configuration>
           </plugin>
         </plugins>
