@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.openqa.selenium.io.IOUtils;
@@ -14,6 +15,7 @@ import org.sahagin.runlib.external.CaptureStyle;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.runlib.runresultsgen.StackLineUtils.LineReplacer;
 import org.sahagin.share.CommonPath;
+import org.sahagin.share.CommonUtils;
 import org.sahagin.share.Config;
 import org.sahagin.share.IllegalDataStructureException;
 import org.sahagin.share.Logging;
@@ -130,12 +132,16 @@ public class HookMethodManager {
 
         logger.info("afterMethodHook: " + hookedMethodSimpleName);
 
-        // write runResult to YAML file
-        File runResultFile = new File(String.format(
-                "%s/%s/%s", runResultsRootDir, hookedClassQualifiedName, hookedMethodSimpleName));
+        // use encoded name to avoid various possible file name encoding problem
+        // and to escape invalid file name character (Method name may contain such characters
+        // if method is Groovy method, for example).
+        File runResultFile = new File(String.format("%s/%s/%s", runResultsRootDir,
+                CommonUtils.encodeToSafeAsciiFileNameString(hookedClassQualifiedName, Charsets.UTF_8),
+                CommonUtils.encodeToSafeAsciiFileNameString(hookedMethodSimpleName, Charsets.UTF_8)));
         if (runResultFile.getParentFile() != null) {
             runResultFile.getParentFile().mkdirs();
         }
+        // write runResult to YAML file
         YamlUtils.dump(currentRunResult.toYamlObject(), runResultFile);
 
         // clear current captureNo and runResult
@@ -306,9 +312,13 @@ public class HookMethodManager {
             return null;
         }
 
-        File captureFile = new File(String.format("%s/%s/%s/%03d.png",
-                captureRootDir, rootMethod.getTestClass().getQualifiedName(),
-                rootMethod.getSimpleName(), currentCaptureNo));
+        // use encoded name to avoid various possible file name encoding problem
+        // and to escape invalid file name character (Method name may contain such characters
+        // if method is Groovy method, for example).
+        File captureFile = new File(String.format("%s/%s/%s/%03d.png", captureRootDir,
+                CommonUtils.encodeToSafeAsciiFileNameString(rootMethod.getTestClass().getQualifiedName(), Charsets.UTF_8),
+                CommonUtils.encodeToSafeAsciiFileNameString(rootMethod.getSimpleName(), Charsets.UTF_8),
+                currentCaptureNo));
         currentCaptureNo++;
 
         if (captureFile.getParentFile() != null) {

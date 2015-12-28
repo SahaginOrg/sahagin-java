@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.output.FileWriterWithEncoding;
@@ -516,8 +517,9 @@ public class HtmlReport {
         // generate each method report
         for (TestMethod rootMethod : testMethods) {
             TestMethod method = rootMethod;
-            File methodReportParentDir = new File(CommonPath.methodHtmlReportRootDir(reportOutputDir),
-                    method.getTestClass().getQualifiedName());
+            // use encoded test class name to avoid various possible file name encoding problem
+            File methodReportParentDir= new File(CommonPath.methodHtmlReportRootDir(reportOutputDir),
+                        CommonUtils.encodeToSafeAsciiFileNameString(method.getTestClass().getQualifiedName(), Charsets.UTF_8));
             methodReportParentDir.mkdirs();
 
             VelocityContext methodContext = new VelocityContext();
@@ -574,7 +576,11 @@ public class HtmlReport {
                     lineScreenCaptures, inputCaptureRootDir, reportOutputDir, methodReportParentDir);
             methodContext.put("captures", captures);
 
-            File methodReportFile = new File(methodReportParentDir, rootMethod.getSimpleName() + ".html");
+            // use encoded method name to avoid various possible file name encoding problem
+            // and to escape invalid file name character (Method name may contain such characters
+            // if method is Groovy method, for example).
+            File methodReportFile = new File(methodReportParentDir,
+                    CommonUtils.encodeToSafeAsciiFileNameString(rootMethod.getSimpleName(), Charsets.UTF_8) + ".html");
             generateVelocityOutput(methodContext, "/template/report.html.vm", methodReportFile);
 
             // set reportLinks data

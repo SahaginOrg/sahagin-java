@@ -7,6 +7,9 @@ import java.io.InputStream;
 import java.net.JarURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.jar.Manifest;
 import java.util.regex.Pattern;
 
@@ -17,6 +20,8 @@ import org.apache.commons.lang3.SystemUtils;
 import org.openqa.selenium.io.IOUtils;
 
 public class CommonUtils {
+    private static final Pattern SAFE_ASCII_PATTERN = Pattern.compile("[\\w\\.]*");
+    private static final Pattern SHA1_DIGEST_PATTERN = Pattern.compile("[a-f0-9]{40}");
 
     public static String formatVersion() {
         return "0.8.1";
@@ -104,6 +109,47 @@ public class CommonUtils {
             throw new RuntimeException(String.format(
                     "target: %s; baseDir: %s; separator: %s", target, baseDir, separator), e);
         }
+    }
+
+    public static String calcSHA1Digest(String input, Charset inputEncoding) {
+        MessageDigest msgDigest;
+        try {
+            msgDigest = java.security.MessageDigest.getInstance("SHA1");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+        byte[] digest = msgDigest.digest(input.getBytes(inputEncoding));
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < digest.length; i++) {
+            int eachByte = digest[i];
+            if (eachByte < 0) {
+                result.append(Integer.toHexString(eachByte + 256));
+            } else {
+                if (eachByte < 16) {
+                    result.append("0");
+                }
+                result.append(Integer.toHexString(eachByte));
+            }
+        }
+        return result.toString();
+    }
+
+    // Encode str to unique hash (such as SHA1 digest) if it contains such characters as:
+    // - unicode character (which sometimes causes various character encoding problem)
+    // - character which will be encoded by URL encoding
+    public static String encodeToSafeAsciiFileNameString(String str, Charset strCharset) {
+        if (str == null) {
+            return str;
+        }
+        if (!SAFE_ASCII_PATTERN.matcher(str).matches()) {
+            return calcSHA1Digest(str, strCharset);
+        }
+        // encode again since if str is SHA1 digest
+        // it can easily conflict with the other encoded string
+        if (SHA1_DIGEST_PATTERN.matcher(str).matches()) {
+            return calcSHA1Digest(str, strCharset);
+        }
+        return str;
     }
 
     // returns null if no manifest found

@@ -83,6 +83,7 @@ public class HtmlReportTest extends TestBase {
         }
 
         // TODO need more check such as Js error check
+        // TODO SHA1 encoded name test
         try {
             driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
             String indexHtmlUrl = "file:///" + indexHtml.getAbsolutePath();
@@ -93,12 +94,6 @@ public class HtmlReportTest extends TestBase {
         } finally {
             quietQuit(driver);
         }
-    }
-
-    @Test
-    public void reportGenerationShouldSucceed()
-            throws IllegalDataStructureException, IllegalTestScriptException {
-        generateTestReport();
     }
 
     @Test
