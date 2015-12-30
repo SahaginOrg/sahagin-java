@@ -19,18 +19,15 @@ public class JavaAdapterContainer extends AdapterContainer {
 
     // some method call of this class requires initialization before calling the method
     public static void globalInitialize(AcceptableLocales locales, String acceptableTestFramework) {
-        globalInstance = new JavaAdapterContainer(locales, acceptableTestFramework);
+        setGlobalInstance(new JavaAdapterContainer(locales, acceptableTestFramework));
     }
 
     public static JavaAdapterContainer globalInstance() {
-        if (globalInstance == null) {
-            throw new IllegalStateException("globalInitialize is not called yet");
-        }
-        if (!(globalInstance instanceof JavaAdapterContainer)) {
+        if (!(AdapterContainer.globalInstance() instanceof JavaAdapterContainer)) {
             throw new IllegalStateException(
-                    "global instance is not JavaAdapterContainer: " + globalInstance);
+                    "global instance is not JavaAdapterContainer: " + AdapterContainer.globalInstance());
         }
-        return (JavaAdapterContainer) globalInstance;
+        return (JavaAdapterContainer) AdapterContainer.globalInstance();
     }
 
     // TODO throw error if called　from other method than initialSetAdapter
