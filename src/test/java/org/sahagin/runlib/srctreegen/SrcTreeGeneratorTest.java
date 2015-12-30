@@ -3,6 +3,7 @@ package org.sahagin.runlib.srctreegen;
 import java.io.File;
 import java.util.Map;
 
+import org.apache.commons.io.Charsets;
 import org.junit.Test;
 import org.sahagin.TestBase;
 import org.sahagin.runlib.additionaltestdoc.AdditionalTestDocs;
@@ -35,7 +36,7 @@ public class SrcTreeGeneratorTest extends TestBase {
         SrcTreeGenerator gen = new SrcTreeGenerator(additionalTestDocs, locales);
         SrcTree srcTree;
         try {
-            srcTree = gen.generateWithRuntimeClassPath(testSrcDir, "UTF-8");
+            srcTree = gen.generateWithRuntimeClassPath(testSrcDir, Charsets.UTF_8);
         } catch (IllegalTestScriptException e) {
             throw new RuntimeException(e);
         }

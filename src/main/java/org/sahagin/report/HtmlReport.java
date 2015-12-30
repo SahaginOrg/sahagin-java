@@ -443,7 +443,7 @@ public class HtmlReport {
         // generate src-tree-yaml.js
         String srcTreeYamlStr;
         try {
-            srcTreeYamlStr = FileUtils.readFileToString(CommonPath.srcTreeFile(reportInputDataDir), "UTF-8");
+            srcTreeYamlStr = FileUtils.readFileToString(CommonPath.srcTreeFile(reportInputDataDir), Charsets.UTF_8);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -518,6 +518,7 @@ public class HtmlReport {
         for (TestMethod rootMethod : testMethods) {
             TestMethod method = rootMethod;
             // use encoded test class name to avoid various possible file name encoding problem
+            // TODO use java.nio.charset.StandardCharsets
             File methodReportParentDir= new File(CommonPath.methodHtmlReportRootDir(reportOutputDir),
                         CommonUtils.encodeToSafeAsciiFileNameString(method.getTestClass().getQualifiedName(), Charsets.UTF_8));
             methodReportParentDir.mkdirs();
@@ -610,8 +611,8 @@ public class HtmlReport {
         FileWriterWithEncoding writer = null;
         try {
             in = this.getClass().getResourceAsStream(templateResourcePath);
-            reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            writer = new FileWriterWithEncoding(outputFile, "UTF-8");
+            reader = new BufferedReader(new InputStreamReader(in, Charsets.UTF_8));
+            writer = new FileWriterWithEncoding(outputFile, Charsets.UTF_8);
             Velocity.evaluate(context, writer, this.getClass().getSimpleName(), reader);
             writer.close();
             reader.close();

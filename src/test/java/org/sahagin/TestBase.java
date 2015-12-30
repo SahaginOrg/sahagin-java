@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 
 public abstract class TestBase {
@@ -81,8 +83,8 @@ public abstract class TestBase {
         List<String> expectedLines;
         List<String> actualLines;
         try {
-            expectedLines = FileUtils.readLines(expected, "UTF-8");
-            actualLines = FileUtils.readLines(actual, "UTF-8");
+            expectedLines = FileUtils.readLines(expected, Charsets.UTF_8);
+            actualLines = FileUtils.readLines(actual, Charsets.UTF_8);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

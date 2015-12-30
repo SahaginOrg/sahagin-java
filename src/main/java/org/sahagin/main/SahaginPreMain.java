@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
 
+import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.sahagin.runlib.external.adapter.Adapter;
@@ -103,7 +104,8 @@ public class SahaginPreMain {
         SrcTreeGenerator generator = new SrcTreeGenerator(
                 AdapterContainer.globalInstance().getAdditionalTestDocs(), locales);
         File srcTreeFile = CommonPath.srcTreeFile(config.getRootBaseReportIntermediateDataDir());
-        SrcTree srcTree = generator.generateWithRuntimeClassPath(config.getRootBaseTestDir(), "UTF-8");
+        SrcTree srcTree = generator.generateWithRuntimeClassPath(
+                config.getRootBaseTestDir(), Charsets.UTF_8);
         SrcTreeChecker.check(srcTree);
         YamlUtils.dump(srcTree.toYamlObject(), srcTreeFile);
         return srcTree;

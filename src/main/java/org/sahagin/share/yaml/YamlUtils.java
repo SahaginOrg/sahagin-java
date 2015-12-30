@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.Charsets;
 import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.io.IOUtils;
@@ -306,7 +307,7 @@ public class YamlUtils {
         Yaml yaml = new Yaml();
         FileWriterWithEncoding writer = null;
         try {
-            writer = new FileWriterWithEncoding(dumpFile, "UTF-8");
+            writer = new FileWriterWithEncoding(dumpFile, Charsets.UTF_8);
             yaml.dump(yamlObj, writer);
             writer.close();
         } catch (IOException e) {

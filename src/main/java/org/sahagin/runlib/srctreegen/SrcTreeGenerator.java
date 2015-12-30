@@ -1,6 +1,7 @@
 package org.sahagin.runlib.srctreegen;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -67,6 +68,7 @@ import org.sahagin.share.srctree.code.SubMethodInvoke;
 import org.sahagin.share.srctree.code.TestStepLabel;
 import org.sahagin.share.srctree.code.UnknownCode;
 import org.sahagin.share.srctree.code.VarAssign;
+
 import static org.sahagin.runlib.external.adapter.javasystem.JavaSystemAdditionalTestDocsAdapter.*;
 
 public class SrcTreeGenerator {
@@ -188,8 +190,8 @@ public class SrcTreeGenerator {
 
     // srcFiles..parse target files
     // classPathEntries.. all class paths (class file containing directory or jar file) srcFiles depend
-    private static void parseAST(
-            String[] srcFiles, String srcEncoding, String[] classPathEntries, FileASTRequestor requestor) {
+    private static void parseAST(String[] srcFiles, Charset srcCharset,
+            String[] classPathEntries, FileASTRequestor requestor) {
         ASTParser parser = ASTParser.newParser(AST.JLS8);
         Map<?, ?> options = JavaCore.getOptions();
         JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
@@ -200,7 +202,7 @@ public class SrcTreeGenerator {
         parser.setEnvironment(classPathEntries, null, null, true);
         String[] srcEncodings = new String[srcFiles.length];
         for (int i = 0; i < srcEncodings.length; i++) {
-            srcEncodings[i] = srcEncoding;
+            srcEncodings[i] = srcCharset.name();
         }
         parser.createASTs(
                 srcFiles, srcEncodings, new String[]{}, requestor, null);
@@ -862,18 +864,18 @@ public class SrcTreeGenerator {
     }
 
     // srcFiles..parse target files
-    // srcEncoding.. encoding of srcFiles. "UTF-8" etc
+    // srcCharset.. charset of srcFiles.
     // classPathEntries.. all class paths (class file containing directory or jar file) srcFiles depend.
     // this path value is similar to --classpath command line argument, but you must give
     // all class containing sub directories even if the class is in a named package
-    public SrcTree generate(String[] srcFiles, String srcEncoding, String[] classPathEntries) {
+    public SrcTree generate(String[] srcFiles, Charset srcCharset, String[] classPathEntries) {
         // collect root class and method table without code body
         CollectRootRequestor rootRequestor = new CollectRootRequestor();
-        parseAST(srcFiles, srcEncoding, classPathEntries, rootRequestor);
+        parseAST(srcFiles, srcCharset, classPathEntries, rootRequestor);
 
         // collect sub class and method table without code body
         CollectSubRequestor subRequestor = new CollectSubRequestor(rootRequestor.getRootClassTable());
-        parseAST(srcFiles, srcEncoding, classPathEntries, subRequestor);
+        parseAST(srcFiles, srcCharset, classPathEntries, subRequestor);
 
         // add additional TestDoc to the table
         AdditionalTestDocsSetter setter = new AdditionalTestDocsSetter(
@@ -885,7 +887,7 @@ public class SrcTreeGenerator {
         CollectCodeRequestor codeRequestor = new CollectCodeRequestor(
                 subRequestor.getSubClassTable(), rootRequestor.getRootMethodTable(),
                 subRequestor.getSubMethodTable(), subRequestor.getFieldTable());
-        parseAST(srcFiles, srcEncoding, classPathEntries, codeRequestor);
+        parseAST(srcFiles, srcCharset, classPathEntries, codeRequestor);
 
         SrcTree result = new SrcTree();
         result.setRootClassTable(rootRequestor.getRootClassTable());
@@ -955,7 +957,7 @@ public class SrcTreeGenerator {
         }
     }
 
-    public SrcTree generateWithRuntimeClassPath(File srcRootDir, String srcEncoding)
+    public SrcTree generateWithRuntimeClassPath(File srcRootDir, Charset srcCharset)
             throws IllegalTestScriptException {
         // set up srcFilePaths
         if (!srcRootDir.exists()) {
@@ -977,7 +979,7 @@ public class SrcTreeGenerator {
         for (String classPath : classPathList) {
             logger.info("classPath: " + classPath);
         }
-        return generate(srcFilePaths, srcEncoding, classPathList.toArray(new String[0]));
+        return generate(srcFilePaths, srcCharset, classPathList.toArray(new String[0]));
     }
 
 }
