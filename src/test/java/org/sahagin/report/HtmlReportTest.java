@@ -61,25 +61,26 @@ public class HtmlReportTest extends TestBase {
     }
 
     private void seleniumTestRun(File indexHtml, boolean chrome) {
-        WebDriver driver = null;
+        WebDriver driver;
+        if (chrome) {
+            boolean onTravisCI =
+                    StringUtils.equals(System.getenv("CI"), "true")
+                    && StringUtils.equals(System.getenv("TRAVIS"), "true");
+            boolean onCircleCI =
+                    StringUtils.equals(System.getenv("CI"), "true")
+                    && StringUtils.equals(System.getenv("CIRCLECI"), "true");
 
-        try {
-            if (chrome) {
-                // Don't execute ChromeDriver test on Travis CI
-                // because the test will freeze..
-                boolean onTravisCI =
-                        StringUtils.equals(System.getenv("CI"), "true")
-                        && StringUtils.equals(System.getenv("TRAVIS"), "true");
-                Assume.assumeTrue(!onTravisCI);
+            // Don't execute ChromeDriver test on Travis CI
+            // because the test will freeze..
+            Assume.assumeTrue(!onTravisCI);
 
+            // CircleCI environment has its own ChromeDriver
+            if (!onCircleCI) {
                 System.setProperty("webdriver.chrome.driver", chromeDriverPath());
-                driver = new ChromeDriver();
-            } else {
-                driver = new FirefoxDriver();
             }
-        } catch (Exception e) {
-            quietQuit(driver);
-            Assume.assumeNoException("This Driver can not work on this enviroment", e);
+            driver = new ChromeDriver();
+        } else {
+            driver = new FirefoxDriver();
         }
 
         // TODO need more check such as Js error check
