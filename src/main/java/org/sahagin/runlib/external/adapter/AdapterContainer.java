@@ -25,7 +25,7 @@ public abstract class AdapterContainer {
     public static AdapterContainer globalInstance() {
         if (globalInstance instanceof EmptyAdapterContainer) {
             logger.severe("You should not use EmptyAdapterContainer. Use other concrete AdapterContainer");
-            String message = String.format("Invalid global instance (Maybe javaagent option is not recognized properly)");
+            String message = String.format("Sahagin: Global instance error. Maybe javaagent option is not recognized properly.");
             // Don't throw error and just output fatal error message
             // (User may want to switch sahagin enabled by just removing javaagent JVM argument)
             logger.severe(message);
