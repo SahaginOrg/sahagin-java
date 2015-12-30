@@ -24,3 +24,7 @@ before_install:
   - "sh -e /etc/init.d/xvfb start"
   
 script: "mvn clean test -P ${COMPILE_VERSION}"
+
+notifications:
+  email:
+    on_success: always
