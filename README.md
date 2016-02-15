@@ -24,4 +24,5 @@ Sahagin now supports Java and [Groovy](https://github.com/SahaginOrg/sahagin-gro
 
 # Japanese information
 
-* 日本語情報は[こちら](http://blog.trident-qa.com/2015/01/sahagin-first-release-1/)
+* [日本語情報](http://blog.trident-qa.com/2015/01/sahagin-first-release-1/)
+* [日本語フォーラム](https://github.com/SahaginOrg/japanese-forum)
