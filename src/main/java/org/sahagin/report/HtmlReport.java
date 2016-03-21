@@ -6,10 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.Charsets;
@@ -275,6 +272,14 @@ public class HtmlReport {
             throw new RuntimeException("implementation error");
         }
         return result;
+    }
+
+    private int getTotalExecutionTime(List<StackLine> stackLines) {
+        int executionTime = 0;
+        for (StackLine stackLine : stackLines) {
+            executionTime += stackLine.getExecutionTime();
+        }
+        return executionTime;
     }
 
     private StackLine generateStackLine(TestMethod method, String methodKey,
@@ -553,6 +558,9 @@ public class HtmlReport {
             escapePut(methodContext, "jsVarAssign", SysMessages.get(SysMessages.JS_VAR_ASSIGN));
             RootMethodRunResult runResult = runResults.getRunResultByRootMethod(rootMethod);
             boolean executed = (runResult != null);
+            if (executed) {
+                escapePut(methodContext, "executionTime", Integer.toString(runResult.getExecutionTime()));
+            }
             RunFailure runFailure = getRunFailure(runResult);
             if (runFailure == null) {
                 escapePut(methodContext, "errMsg", null);
@@ -571,6 +579,7 @@ public class HtmlReport {
                 lineScreenCaptures = new ArrayList<LineScreenCapture>(0);
             } else {
                 lineScreenCaptures = runResult.getLineScreenCaptures();
+                addExecutionTime(runResult, reportCodeBody);
             }
             addLineScreenCaptureForErrorEachStackLine(lineScreenCaptures, runFailure);
             List<ReportScreenCapture> captures = generateReportScreenCaptures(
@@ -599,6 +608,26 @@ public class HtmlReport {
         mainContext.put("reportLinks", reportLinks);
         generateVelocityOutput(mainContext, "/template/index.html.vm",
                 CommonPath.htmlReportMainFile(reportOutputDir));
+    }
+
+    private void addExecutionTime(RootMethodRunResult runResult, List<ReportCodeLine> reportCodeBody) {
+        Map<Integer, Integer> executionTimeMap = new HashMap<Integer, Integer>();
+        for (LineScreenCapture lineScreenCapture : runResult.getLineScreenCaptures()) {
+            for (StackLine stackLine : lineScreenCapture.getStackLines()) {
+                executionTimeMap.put(stackLine.getLine(), stackLine.getExecutionTime());
+            }
+        }
+
+        for (ReportCodeLine reportCodeLine : reportCodeBody) {
+            int executionTime = 0;
+            if (reportCodeLine.getStackLines().size() != 0) {
+                int key = reportCodeLine.getStackLines().get(0).getLine();
+                if (executionTimeMap.containsKey(key)) {
+                    executionTime += executionTimeMap.get(key);
+                    reportCodeLine.setExecutionTime(executionTime);
+                }
+            }
+        }
     }
 
     private void generateVelocityOutput(

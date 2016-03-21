@@ -24,6 +24,7 @@ public class ReportCodeLine {
     private String parentTtId = null; // null means no parent
     private String imageId;
     private boolean childLoaded = false;
+    private int executionTime;
 
     public String getMethodKey() {
         if (!(codeLine.getCode() instanceof SubMethodInvoke)) {
@@ -137,6 +138,14 @@ public class ReportCodeLine {
 
     public void setChildLoaded(boolean childLoaded) {
         this.childLoaded = childLoaded;
+    }
+
+    public int getExecutionTime() {
+        return executionTime;
+    }
+
+    public void setExecutionTime(int executionTime) {
+        this.executionTime = executionTime;
     }
 
 }

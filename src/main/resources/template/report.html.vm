@@ -56,6 +56,11 @@
       #else
       <div>${methodName}</div>
       #end
+      #if ( ${executionTime} )
+      <div>${executionTime} ms</div>
+      #else
+      <div>${executionTime}</div>
+      #end
     </header>
     <div id="main_container">
       <div id="button_container">
@@ -85,9 +90,15 @@
                 #else
                   #set( $loadedClass = "" )
                 #end
+                #if( ${codeLine.getExecutionTime()} >= 0 )
+                  #set( $executionTime = ${codeLine.getExecutionTime()} + " ms" )
+                #else
+                  #set( $executionTime = "" )
+                #end
                 <tr data-tt-id="${codeLine.getTtId()}" ${dataTtParentId} data-image-id="${codeLine.getImageId()}" data-method-key="${codeLine.getMethodKey()}" class="${lineClass} ${loadedClass}">
                   <td>${codeLine.getPageDoc()}</td>
                   <td>${codeLine.getTestDoc()}</td>
+                  <td class="numeric_cell">$executionTime</td>
                   <td class="srcInfo">${codeLine.getCodeLine().getCode().getOriginal()}</td>
                 </tr>
                 #end

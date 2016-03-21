@@ -1,11 +1,12 @@
 runFailures:
 - message: err
   stackLines:
-  - {codeBodyIndex: 0, methodKey: sample.SampleTest.shouldFail-void, line: 29}
+  - {codeBodyIndex: 0, methodKey: sample.SampleTest.shouldFail-void, line: 29, executionTime: 50}
   stackTrace: "err"
 lineScreenCaptures:
 - path: ${inputCaptureRootDirForSahaginInternalTest}/001.png
   stackLines:
-  - {codeBodyIndex: 0, methodKey: sample.SampleTest.shouldFail-void, line: 29}
+  - {codeBodyIndex: 0, methodKey: sample.SampleTest.shouldFail-void, line: 29, executionTime: 50}
 formatVersion: "*"
 rootMethodKey: sample.SampleTest.shouldFail-void
+executionTime: 100

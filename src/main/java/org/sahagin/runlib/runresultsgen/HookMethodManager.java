@@ -44,6 +44,9 @@ public class HookMethodManager {
     // method and key for last called beforeCodeLineHook is cached
     private String codeLineHookedMethodKeyCache = null;
     private TestMethod codeLineHookedMethodCache = null;
+    private long startMethodTime;
+    private long startCodeLineTime;
+    private StackLine prevCodeLine;
 
     public HookMethodManager(SrcTree srcTree, Config config) {
         if (srcTree == null) {
@@ -80,6 +83,9 @@ public class HookMethodManager {
         currentRunResult.setRootMethodKey(rootMethod.getKey());
         currentRunResult.setRootMethod(rootMethod);
         currentActualRootMethodSimpleName = actualHookedMethodSimpleName;
+
+        startMethodTime = System.currentTimeMillis();
+        startCodeLineTime = startMethodTime;
     }
 
     // set up runFailure information
@@ -128,6 +134,11 @@ public class HookMethodManager {
         if (!rootMethod.getTestClassKey().equals(hookedClassQualifiedName)
                 || !rootMethod.getSimpleName().equals(hookedMethodSimpleName)) {
             return; // hooked method is not current root method
+        }
+
+        if (prevCodeLine != null) {
+            int executionTime = (int) (System.currentTimeMillis() - startCodeLineTime);
+            prevCodeLine.setExecutionTime(executionTime);
         }
 
         logger.info("afterMethodHook: " + hookedMethodSimpleName);
@@ -274,6 +285,14 @@ public class HookMethodManager {
             topStackLine.setLine(stepLabelCodeLine.getStartLine());
             topStackLine.setCodeBodyIndex(stepLabelIndex);
         }
+
+        long prevStartCodeLineTime = startCodeLineTime;
+        startCodeLineTime = System.currentTimeMillis();
+        if (prevCodeLine != null) {
+            int executionTime = (int) (startCodeLineTime - prevStartCodeLineTime);
+            prevCodeLine.setExecutionTime(executionTime);
+        }
+        prevCodeLine = thisStackLines.get(0);
 
         if (!capturesThisLine && !capturesTestStepLabel) {
             logger.info("beforeCodeBodyHook: skip not capture line");
