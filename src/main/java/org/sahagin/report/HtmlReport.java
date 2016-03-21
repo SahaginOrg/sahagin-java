@@ -611,23 +611,27 @@ public class HtmlReport {
     }
 
     private void addExecutionTime(RootMethodRunResult runResult, List<ReportCodeLine> reportCodeBody) {
-        Map<Integer, Integer> executionTimeMap = new HashMap<Integer, Integer>();
+        Map<String, Integer> executionTimeMap = new HashMap<String, Integer>();
         for (LineScreenCapture lineScreenCapture : runResult.getLineScreenCaptures()) {
             for (StackLine stackLine : lineScreenCapture.getStackLines()) {
-                executionTimeMap.put(stackLine.getLine(), stackLine.getExecutionTime());
+                executionTimeMap.put(createMethodLineKey(stackLine), stackLine.getExecutionTime());
             }
         }
 
         for (ReportCodeLine reportCodeLine : reportCodeBody) {
             int executionTime = 0;
             if (reportCodeLine.getStackLines().size() != 0) {
-                int key = reportCodeLine.getStackLines().get(0).getLine();
+                String key = createMethodLineKey(reportCodeLine.getStackLines().get(0));
                 if (executionTimeMap.containsKey(key)) {
                     executionTime += executionTimeMap.get(key);
                     reportCodeLine.setExecutionTime(executionTime);
                 }
             }
         }
+    }
+
+    private String createMethodLineKey(StackLine stackLine) {
+        return String.format("%s_%d", stackLine.getMethodKey(), stackLine.getLine());
     }
 
     private void generateVelocityOutput(
