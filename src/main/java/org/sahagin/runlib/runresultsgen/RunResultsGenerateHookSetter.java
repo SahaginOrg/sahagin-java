@@ -123,7 +123,6 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
             return null;
         }
 
-        // TODO don't need to do anything for java package classes
         ClassPool classPool = ClassPool.getDefault();
         String hookClassName = HookMethodDef.class.getCanonicalName();
         String initializeSrc = hookInitializeSrc();
@@ -169,7 +168,7 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
 
                     // Hook should be inserted just after the code has finished
                     // since the code inserted by the insertAt method is inserted just before the specified line.
-                    int insertedLine = subMethod.getCodeBody().get(i).getEndLine() + 1;
+                    int insertedLine = codeLine.getEndLine() + 1;
                     int actualInsertedLine = ctSubMethod.insertAt(insertedLine, false, null);
                     ctSubMethod.insertAt(insertedLine,
                             String.format("%s%s.beforeCodeLineHook(\"%s\",\"%s\",\"%s\",\"%s\",%d, %d);",
@@ -210,7 +209,7 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
 
                     // Hook should be inserted just after the code has finished
                     // since the code inserted by the insertAt method is inserted just before the specified line.
-                    int insertedLine = rootMethod.getCodeBody().get(i).getEndLine() + 1;
+                    int insertedLine = codeLine.getEndLine() + 1;
                     int actualInsertedLine = ctRootMethod.insertAt(insertedLine, false, null);
                     ctRootMethod.insertAt(insertedLine,
                             String.format("%s%s.beforeCodeLineHook(\"%s\",\"%s\",\"%s\",\"%s\",%d,%d);",

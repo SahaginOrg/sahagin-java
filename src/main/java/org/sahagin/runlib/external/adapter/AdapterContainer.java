@@ -28,6 +28,7 @@ public abstract class AdapterContainer {
             String message = String.format("Sahagin: Global instance error. Maybe javaagent option is not recognized properly.");
             // Don't throw error and just output fatal error message
             // (User may want to switch sahagin enabled by just removing javaagent JVM argument)
+            // TODO should abolish javaagent argument.
             logger.severe(message);
             System.err.println(message);
         }

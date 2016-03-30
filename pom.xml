@@ -48,9 +48,9 @@
       <version>3.10.0-v20140318-2214</version>
     </dependency>
     <dependency>
-	  <groupId>org.eclipse.birt.runtime</groupId>
-	  <artifactId>org.eclipse.core.resources</artifactId>
-	  <version>3.9.1.v20140825-1431</version>
+      <groupId>org.eclipse.birt.runtime</groupId>
+      <artifactId>org.eclipse.core.resources</artifactId>
+      <version>3.9.1.v20140825-1431</version>
     </dependency>
     <dependency>
       <groupId>org.apache.velocity</groupId>
