@@ -166,12 +166,12 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
                         }
                     }
 
-                    // Hook should be inserted just after the code has finished
-                    // since the code inserted by the insertAt method is inserted just before the specified line.
+                    // Insert hook to the next line of the codeLine
+                    // since insertAt method inserts code just before the specified line.
                     int insertedLine = codeLine.getEndLine() + 1;
                     int actualInsertedLine = ctSubMethod.insertAt(insertedLine, false, null);
                     ctSubMethod.insertAt(insertedLine,
-                            String.format("%s%s.beforeCodeLineHook(\"%s\",\"%s\",\"%s\",\"%s\",%d, %d);",
+                            String.format("%s%s.afterCodeLineHook(\"%s\",\"%s\",\"%s\",\"%s\",%d, %d);",
                                     initializeSrc, hookClassName, subClassQualifiedName,
                                     subMethodSimpleName, subMethodSimpleName,
                                     subMethodArgClassesStr, codeLine.getStartLine(), actualInsertedLine));
@@ -207,12 +207,12 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
                         }
                     }
 
-                    // Hook should be inserted just after the code has finished
-                    // since the code inserted by the insertAt method is inserted just before the specified line.
+                    // Insert hook to the next line of the codeLine
+                    // since insertAt method inserts code just before the specified line.
                     int insertedLine = codeLine.getEndLine() + 1;
                     int actualInsertedLine = ctRootMethod.insertAt(insertedLine, false, null);
                     ctRootMethod.insertAt(insertedLine,
-                            String.format("%s%s.beforeCodeLineHook(\"%s\",\"%s\",\"%s\",\"%s\",%d,%d);",
+                            String.format("%s%s.afterCodeLineHook(\"%s\",\"%s\",\"%s\",\"%s\",%d,%d);",
                                     initializeSrc, hookClassName, rootClassQualifiedName,
                                     rootMethodSimpleName, rootMethodSimpleName,
                                     rootMethodArgClassesStr, codeLine.getStartLine(), actualInsertedLine));

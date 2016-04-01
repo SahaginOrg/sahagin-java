@@ -41,7 +41,7 @@ public class HookMethodManager {
     private int currentCaptureNo = 1;
     private RootMethodRunResult currentRunResult = null;
     private String currentActualRootMethodSimpleName = null;
-    // method and key for last called beforeCodeLineHook is cached
+    // method and key for last called afterCodeLineHook is cached
     private String codeLineHookedMethodKeyCache = null;
     private TestMethod codeLineHookedMethodCache = null;
 
@@ -173,7 +173,7 @@ public class HookMethodManager {
         return -1; // not TestStepLabel is found before the specified codeLineIndex line
     }
 
-    public void beforeCodeLineHook(String hookedClassQualifiedName,
+    public void afterCodeLineHook(String hookedClassQualifiedName,
             final String hookedMethodSimpleName, final String actualHookedMethodSimpleName,
             String hookedArgClassesStr, final int hookedLine, final int actualHookedLine) {
         if (currentRunResult == null) {
@@ -203,7 +203,7 @@ public class HookMethodManager {
             return; // hooked method is not current root method
         }
 
-        logger.info(String.format("beforeCodeBodyHook: start: %s(%d)", hookedMethodSimpleName, hookedLine));
+        logger.info(String.format("afterCodeLineHook: start: %s(%d)", hookedMethodSimpleName, hookedLine));
         LineReplacer replacer = new LineReplacer() {
 
             @Override
@@ -276,12 +276,12 @@ public class HookMethodManager {
         }
 
         if (!capturesThisLine && !capturesTestStepLabel) {
-            logger.info("beforeCodeBodyHook: skip not capture line");
+            logger.info("afterCodeLineHook: skip not capture line");
             return;
         }
 
         if (!canStepInCaptureTo(thisStackLines)) {
-            logger.info("beforeCodeBodyHook: skip not stepInCapture line");
+            logger.info("afterCodeLineHook: skip not stepInCapture line");
             return;
         }
 
@@ -297,10 +297,10 @@ public class HookMethodManager {
         File captureFile = captureScreenForStackLines(currentRunResult.getRootMethod(), stackLinesList);
         if (captureFile != null) {
             if (capturesThisLine) {
-                logger.info("beforeCodeBodyHook: end with this line capture " + captureFile.getName());
+                logger.info("afterCodeLineHook: end with this line capture " + captureFile.getName());
             }
             if (capturesTestStepLabel) {
-                logger.info("beforeCodeBodyHook: end with TestStepLabel capture " + captureFile.getName());
+                logger.info("afterCodeLineHook: end with TestStepLabel capture " + captureFile.getName());
             }
         }
     }
