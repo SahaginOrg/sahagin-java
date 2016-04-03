@@ -238,7 +238,8 @@ public class HookMethodManager {
             return; // hooked method is not current root method
         }
 
-        logger.info(String.format("beforeCodeLineHook: start: %s(%d)", hookedMethodSimpleName, hookedLine));
+        logger.info(String.format("beforeCodeLineHook: start: %s: %d(%d)",
+                hookedMethodSimpleName, hookedLine, actualHookedLine));
 
         // currently do nothing
     }
@@ -256,7 +257,8 @@ public class HookMethodManager {
             return; // hooked method is not current root method
         }
 
-        logger.info(String.format("afterCodeLineHook: start: %s(%d)", hookedMethodSimpleName, hookedLine));
+        logger.info(String.format("afterCodeLineHook: start: %s: %d(%d)",
+                hookedMethodSimpleName, hookedLine, actualHookedLine));
 
         List<StackLine> thisStackLines = getCodeLineHookedStackLines(
                 hookedMethodSimpleName, actualHookedMethodSimpleName, hookedLine, actualHookedLine);
