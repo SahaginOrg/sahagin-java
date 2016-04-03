@@ -106,6 +106,44 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
         return false;
     }
 
+    // - set afterCodeLineHook for the each CodeLine of the specified method body
+    // - returns true this method actually transform ctMethod body
+    private boolean insertCodeBodyHook(TestMethod method, CtMethod ctMethod,
+            String classQualifiedName, String methodSimpleName, String methodArgClassesStr) throws CannotCompileException {
+        String hookClassName = HookMethodDef.class.getCanonicalName();
+        String initializeSrc = hookInitializeSrc();
+        boolean transformed = false;
+
+        for (int i = 0; i < method.getCodeBody().size(); i++) {
+            CodeLine codeLine = method.getCodeBody().get(i);
+            if (i + 1 < method.getCodeBody().size()) {
+                CodeLine nextCodeLine = method.getCodeBody().get(i + 1);
+                assert codeLine.getEndLine() <= nextCodeLine.getStartLine();
+                if (codeLine.getEndLine() == nextCodeLine.getStartLine()) {
+                    // - if multiple statements exist on a line, insert hook only after the last statement
+                    // - avoid insertion at the middle of the statement.
+                    //   The problem happens when multi-line statements are like:
+                    //   method(1);method(
+                    //           2);
+                    continue;
+                }
+            }
+
+            // Insert hook to the next line of the codeLine
+            // since insertAt method inserts code just before the specified line.
+            int insertedLine = codeLine.getEndLine() + 1;
+            int actualInsertedLine = ctMethod.insertAt(insertedLine, false, null);
+            ctMethod.insertAt(insertedLine,
+                    String.format("%s%s.afterCodeLineHook(\"%s\",\"%s\",\"%s\",\"%s\",%d, %d);",
+                            initializeSrc, hookClassName, classQualifiedName,
+                            methodSimpleName, methodSimpleName,
+                            methodArgClassesStr, codeLine.getStartLine(), actualInsertedLine));
+            transformed = true;
+        }
+
+        return transformed;
+    }
+
     @Override
     public byte[] transform(ClassLoader loader, String className,
             Class<?> classBeingRedefined,
@@ -151,30 +189,9 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
                 String subMethodSimpleName = subMethod.getSimpleName();
                 String subMethodArgClassesStr = TestMethod.argClassQualifiedNamesToArgClassesStr(
                         getArgClassQualifiedNames(ctSubMethod));
-                for (int i = 0; i < subMethod.getCodeBody().size(); i++) {
-                    CodeLine codeLine = subMethod.getCodeBody().get(i);
-                    if (i + 1 < subMethod.getCodeBody().size()) {
-                        CodeLine nextCodeLine = subMethod.getCodeBody().get(i + 1);
-                        assert codeLine.getEndLine() <= nextCodeLine.getStartLine();
-                        if (codeLine.getEndLine() == nextCodeLine.getStartLine()) {
-                            // - if multiple statements exist on a line, insert hook only after the last statement
-                            // - avoid insertion at the middle of the statement.
-                            //   The problem happens when multi-line statements are like:
-                            //   method(1);method(
-                            //           2);
-                            continue;
-                        }
-                    }
-
-                    // Insert hook to the next line of the codeLine
-                    // since insertAt method inserts code just before the specified line.
-                    int insertedLine = codeLine.getEndLine() + 1;
-                    int actualInsertedLine = ctSubMethod.insertAt(insertedLine, false, null);
-                    ctSubMethod.insertAt(insertedLine,
-                            String.format("%s%s.afterCodeLineHook(\"%s\",\"%s\",\"%s\",\"%s\",%d, %d);",
-                                    initializeSrc, hookClassName, subClassQualifiedName,
-                                    subMethodSimpleName, subMethodSimpleName,
-                                    subMethodArgClassesStr, codeLine.getStartLine(), actualInsertedLine));
+                boolean insertResult = insertCodeBodyHook(
+                        subMethod, ctSubMethod, subClassQualifiedName, subMethodSimpleName, subMethodArgClassesStr);
+                if (insertResult) {
                     transformed = true;
                 }
             }
@@ -191,33 +208,7 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
                 String rootMethodSimpleName = rootMethod.getSimpleName();
                 String rootMethodArgClassesStr = TestMethod.argClassQualifiedNamesToArgClassesStr(
                         getArgClassQualifiedNames(ctRootMethod));
-                for (int i = 0; i < rootMethod.getCodeBody().size(); i++) {
-                    CodeLine codeLine = rootMethod.getCodeBody().get(i);
-                    if (i + 1 < rootMethod.getCodeBody().size()) {
-                        CodeLine nextCodeLine = rootMethod.getCodeBody().get(i + 1);
-                        assert codeLine.getEndLine() <= nextCodeLine.getStartLine();
-                        if (codeLine.getEndLine() == nextCodeLine.getStartLine()) {
-                            // - if multiple statements exist on a line, insert hook only after the last statement
-                            // - avoid insertion at the middle of the statement.
-                            //   The problem happens when multi-line statements are like:
-                            //   method(1);method(
-                            //           2);
-                            continue;
-                            // TODO screen capture is not taken correctly for multiple statements in a line
-                        }
-                    }
-
-                    // Insert hook to the next line of the codeLine
-                    // since insertAt method inserts code just before the specified line.
-                    int insertedLine = codeLine.getEndLine() + 1;
-                    int actualInsertedLine = ctRootMethod.insertAt(insertedLine, false, null);
-                    ctRootMethod.insertAt(insertedLine,
-                            String.format("%s%s.afterCodeLineHook(\"%s\",\"%s\",\"%s\",\"%s\",%d,%d);",
-                                    initializeSrc, hookClassName, rootClassQualifiedName,
-                                    rootMethodSimpleName, rootMethodSimpleName,
-                                    rootMethodArgClassesStr, codeLine.getStartLine(), actualInsertedLine));
-                }
-
+                insertCodeBodyHook(rootMethod, ctRootMethod, rootClassQualifiedName, rootMethodSimpleName, rootMethodArgClassesStr);
                 ctRootMethod.insertBefore(String.format("%s%s.beforeMethodHook(\"%s\",\"%s\",\"%s\");",
                         initializeSrc, hookClassName, rootClassQualifiedName, rootMethodSimpleName, rootMethodSimpleName));
                 ctRootMethod.addCatch(String.format("{ %s%s.methodErrorHook(\"%s\",\"%s\",$e); throw $e; }",
