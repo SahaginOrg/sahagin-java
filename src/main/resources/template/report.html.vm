@@ -98,8 +98,8 @@
                 <tr data-tt-id="${codeLine.getTtId()}" ${dataTtParentId} data-image-id="${codeLine.getImageId()}" data-method-key="${codeLine.getMethodKey()}" class="${lineClass} ${loadedClass}">
                   <td>${codeLine.getPageDoc()}</td>
                   <td>${codeLine.getTestDoc()}</td>
-                  <td class="numeric_cell">$executionTime</td>
                   <td class="srcInfo">${codeLine.getCodeLine().getCode().getOriginal()}</td>
+                  <td class="srcInfo numeric_cell">$executionTime</td>
                 </tr>
                 #end
               </tbody>
