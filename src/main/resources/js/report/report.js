@@ -491,7 +491,7 @@ function loadCodeBodyHiddenNode(tr) {
     
     childNodeHtml = childNodeHtml + sahagin.CommonUtils.strFormat(
       '<tr data-tt-id="{0}" data-tt-parent-id="{1}" data-image-id="{0}" data-method-key="{2}" class="{3}">'
-          + '<td>{4}</td><td>{5}</td><td class="srcInfo">{6}</td></tr>',
+          + '<td>{4}</td><td>{5}</td><td class="srcInfo">{6}</td><td class="srcInfo"></td></tr>',
       ttId, parentTtId, methodKey, lineClass, pageDoc, testDoc, original);
     
     var methodArgTestDocs = sahagin.TestDocResolver.placeholderResolvedMethodArgTestDocs(
