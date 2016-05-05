@@ -104,14 +104,21 @@ public class HookMethodDefTest extends TestBase {
             File reportIntermediateDir, boolean checksTestSuccess) throws YamlConvertException {
         File testMainResultDir
         = new File(CommonPath.runResultRootDir(reportIntermediateDir), className);
-        Map<String, Object> actualYamlObj = YamlUtils.load(new File(testMainResultDir, methodName));
+        File actualFile = new File(testMainResultDir, methodName);
+        if (!actualFile.exists()) {
+            fail(actualFile + " does not exist");
+        }
+        Map<String, Object> actualYamlObj = YamlUtils.load(actualFile);
         if (checksTestSuccess) {
             // check runFailures entry does not exist
             // since assertYamlEquals method does not check this
             assertThat(actualYamlObj.containsKey("runFailures"), is(not(true)));
         }
-        Map<String, Object> expectedYamlObj = YamlUtils.load(
-                new File(new File(testResourceDir("expected"), className),  methodName));
+        File expectedFile = new File(new File(testResourceDir("expected"), className),  methodName);
+        if (!expectedFile.exists()) {
+            fail(expectedFile + " does not exist");
+        }
+        Map<String, Object> expectedYamlObj = YamlUtils.load(expectedFile);
         assertYamlEquals(expectedYamlObj, actualYamlObj, true);
     }
 

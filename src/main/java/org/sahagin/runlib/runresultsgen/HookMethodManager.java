@@ -41,9 +41,8 @@ public class HookMethodManager {
     private int currentCaptureNo = 1;
     private RootMethodRunResult currentRunResult = null;
     private String currentActualRootMethodSimpleName = null;
-    // method and key for last called beforeCodeLineHook is cached
-    private String codeLineHookedMethodKeyCache = null;
-    private TestMethod codeLineHookedMethodCache = null;
+    private String methodKeyCache = null; // used in getTestMethod method
+    private TestMethod methodCache = null; // used in getTestMethod method
     private long startMethodTime;
     private long startCodeLineTime;
     private StackLine prevCodeLine;
@@ -184,37 +183,35 @@ public class HookMethodManager {
         return -1; // not TestStepLabel is found before the specified codeLineIndex line
     }
 
-    public void beforeCodeLineHook(String hookedClassQualifiedName,
-            final String hookedMethodSimpleName, final String actualHookedMethodSimpleName,
-            String hookedArgClassesStr, final int hookedLine, final int actualHookedLine) {
-        if (currentRunResult == null) {
-            return; // maybe called outside of the root method
-        }
-
-        // method containing this line
-        String hookedMethodKey = TestMethod.generateMethodKey(
-                hookedClassQualifiedName, hookedMethodSimpleName, hookedArgClassesStr);
-        TestMethod hookedTestMethod;
-        if (StringUtils.equals(codeLineHookedMethodKeyCache, hookedMethodKey)) {
-            hookedTestMethod = codeLineHookedMethodCache; // re-use cache
+    // get TestMethod for the method information.
+    // this method uses cache to improve performance
+    private TestMethod getTestMethod(String classQualifiedName,
+            String methodSimpleName, String argClassesStr) {
+        String methodKey = TestMethod.generateMethodKey(
+                classQualifiedName, methodSimpleName, argClassesStr);
+        TestMethod result;
+        if (StringUtils.equals(methodKeyCache, methodKey)) {
+            result = methodCache; // re-use cache
         } else {
             try {
-                hookedTestMethod = srcTree.getTestMethodByKey(hookedMethodKey, true);
+                result = srcTree.getTestMethodByKey(methodKey, true);
             } catch (IllegalDataStructureException e) {
                 throw new RuntimeException(e);
             }
         }
 
-        // cache key and method to improve method search performance
-        // caching is executed even if method is not found
-        codeLineHookedMethodKeyCache = hookedMethodKey;
-        codeLineHookedMethodCache = hookedTestMethod;
+        // cache key and method to improve method search performance.
+        // caching is executed even if TestMethod is not found
+        methodKeyCache = methodKey;
+        methodCache = result;
+        return result;
+    }
 
-        if (hookedTestMethod == null) {
-            return; // hooked method is not current root method
-        }
-
-        logger.info(String.format("beforeCodeBodyHook: start: %s(%d)", hookedMethodSimpleName, hookedLine));
+    // get the stackLines for the hook method code line.
+    private List<StackLine> getCodeLineHookedStackLines(
+            final String hookedMethodSimpleName, final String actualHookedMethodSimpleName,
+            final int hookedLine, final int actualHookedLine) {
+        // this replacer replaces method name and line to the actual hooked method name and line
         LineReplacer replacer = new LineReplacer() {
 
             @Override
@@ -233,10 +230,51 @@ public class HookMethodManager {
             }
         };
 
-        // calculate thisStackLines and capturesThisLine value
-        List<StackLine> thisStackLines = StackLineUtils.getStackLines(
+        List<StackLine> result = StackLineUtils.getStackLines(
                 srcTree, Thread.currentThread().getStackTrace(), replacer);
-        assert thisStackLines.size() > 0;
+        assert result.size() > 0;
+        return result;
+    }
+
+    public void beforeCodeLineHook(String hookedClassQualifiedName,
+            final String hookedMethodSimpleName, final String actualHookedMethodSimpleName,
+            String hookedArgClassesStr, final int hookedLine, final int actualHookedLine) {
+        if (currentRunResult == null) {
+            return; // maybe called outside of the root method
+        }
+
+        TestMethod hookedTestMethod = getTestMethod(
+                hookedClassQualifiedName, hookedMethodSimpleName, hookedArgClassesStr);
+        if (hookedTestMethod == null) {
+            return; // hooked method is not current root method
+        }
+
+        logger.info(String.format("beforeCodeLineHook: start: %s: %d(%d)",
+                hookedMethodSimpleName, hookedLine, actualHookedLine));
+
+        // currently do nothing
+    }
+
+    public void afterCodeLineHook(String hookedClassQualifiedName,
+            final String hookedMethodSimpleName, final String actualHookedMethodSimpleName,
+            String hookedArgClassesStr, final int hookedLine, final int actualHookedLine) {
+        if (currentRunResult == null) {
+            return; // maybe called outside of the root method
+        }
+
+        TestMethod hookedTestMethod = getTestMethod(
+                hookedClassQualifiedName, hookedMethodSimpleName, hookedArgClassesStr);
+        if (hookedTestMethod == null) {
+            return; // hooked method is not current root method
+        }
+
+        logger.info(String.format("afterCodeLineHook: start: %s: %d(%d)",
+                hookedMethodSimpleName, hookedLine, actualHookedLine));
+
+        List<StackLine> thisStackLines = getCodeLineHookedStackLines(
+                hookedMethodSimpleName, actualHookedMethodSimpleName, hookedLine, actualHookedLine);
+
+        // calculate capturesThisLine value
         CodeLine thisCodeLine = thisStackLines.get(0).getMethod().getCodeBody().get(
                 thisStackLines.get(0).getCodeBodyIndex());
         boolean capturesThisLine;
@@ -295,12 +333,12 @@ public class HookMethodManager {
         prevCodeLine = thisStackLines.get(0);
 
         if (!capturesThisLine && !capturesTestStepLabel) {
-            logger.info("beforeCodeBodyHook: skip not capture line");
+            logger.info("afterCodeLineHook: skip not capture line");
             return;
         }
 
         if (!canStepInCaptureTo(thisStackLines)) {
-            logger.info("beforeCodeBodyHook: skip not stepInCapture line");
+            logger.info("afterCodeLineHook: skip not stepInCapture line");
             return;
         }
 
@@ -316,10 +354,10 @@ public class HookMethodManager {
         File captureFile = captureScreenForStackLines(currentRunResult.getRootMethod(), stackLinesList);
         if (captureFile != null) {
             if (capturesThisLine) {
-                logger.info("beforeCodeBodyHook: end with this line capture " + captureFile.getName());
+                logger.info("afterCodeLineHook: end with this line capture " + captureFile.getName());
             }
             if (capturesTestStepLabel) {
-                logger.info("beforeCodeBodyHook: end with TestStepLabel capture " + captureFile.getName());
+                logger.info("afterCodeLineHook: end with TestStepLabel capture " + captureFile.getName());
             }
         }
     }

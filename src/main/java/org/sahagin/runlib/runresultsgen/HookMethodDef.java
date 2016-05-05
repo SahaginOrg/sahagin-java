@@ -104,4 +104,12 @@ public class HookMethodDef {
                 hookedArgClassesStr, hookedLine, actualInsertedLine);
     }
 
+    public static void afterCodeLineHook(String hookedClassQualifiedName,
+            String hookedMethodSimpleName, String actualHookedMethodSimpleName,
+            String hookedArgClassesStr, int hookedLine, int actualInsertedLine) {
+        initializedCheck();
+        manager.afterCodeLineHook(hookedClassQualifiedName,
+                hookedMethodSimpleName, actualHookedMethodSimpleName,
+                hookedArgClassesStr, hookedLine, actualInsertedLine);
+    }
 }
