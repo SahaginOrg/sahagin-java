@@ -155,6 +155,7 @@ public class HtmlReport {
             String ttId = generateTtId(lineScreenCapture.getStackLines());
             reportCapture.setImageId(ttId);
             reportCapture.setImageSizeFromImageFile(lineScreenCapture.getPath());
+            reportCapture.setExecutionTime(lineScreenCapture.getExecutionTime());
             reportCaptures.add(reportCapture);
         }
         return reportCaptures;
@@ -272,14 +273,6 @@ public class HtmlReport {
             throw new RuntimeException("implementation error");
         }
         return result;
-    }
-
-    private int getTotalExecutionTime(List<StackLine> stackLines) {
-        int executionTime = 0;
-        for (StackLine stackLine : stackLines) {
-            executionTime += stackLine.getExecutionTime();
-        }
-        return executionTime;
     }
 
     private StackLine generateStackLine(TestMethod method, String methodKey,
@@ -579,7 +572,7 @@ public class HtmlReport {
                 lineScreenCaptures = new ArrayList<LineScreenCapture>(0);
             } else {
                 lineScreenCaptures = runResult.getLineScreenCaptures();
-                addExecutionTime(runResult, reportCodeBody);
+                addExecutionTime(lineScreenCaptures, reportCodeBody);
             }
             addLineScreenCaptureForErrorEachStackLine(lineScreenCaptures, runFailure);
             List<ReportScreenCapture> captures = generateReportScreenCaptures(
@@ -610,25 +603,37 @@ public class HtmlReport {
                 CommonPath.htmlReportMainFile(reportOutputDir));
     }
 
-    private void addExecutionTime(RootMethodRunResult runResult, List<ReportCodeLine> reportCodeBody) {
+    private void addExecutionTime(List<LineScreenCapture> captures, List<ReportCodeLine> codeLines) {
         Map<String, Integer> executionTimeMap = new HashMap<String, Integer>();
-        for (LineScreenCapture lineScreenCapture : runResult.getLineScreenCaptures()) {
-            for (StackLine stackLine : lineScreenCapture.getStackLines()) {
-                executionTimeMap.put(createMethodLineKey(stackLine), stackLine.getExecutionTime());
-            }
+        for (LineScreenCapture lineScreenCapture : captures) {
+            executionTimeMap.put(generateTtId(lineScreenCapture.getStackLines()), lineScreenCapture.getExecutionTime());
         }
 
-        for (ReportCodeLine reportCodeLine : reportCodeBody) {
-            int executionTime = 0;
-            if (reportCodeLine.getStackLines().size() != 0) {
-                String key = createMethodLineKey(reportCodeLine.getStackLines().get(0));
-                if (executionTimeMap.containsKey(key)) {
-                    executionTime += executionTimeMap.get(key);
-                    reportCodeLine.setExecutionTime(executionTime);
-                }
+        for (ReportCodeLine reportCodeLine : codeLines) {
+            String key = reportCodeLine.getTtId();
+            if (executionTimeMap.containsKey(key)) {
+                reportCodeLine.setExecutionTime(executionTimeMap.get(key));
             }
         }
     }
+
+//    private void addExecutionTime(RootMethodRunResult runResult, List<ReportCodeLine> reportCodeBody) {
+//        Map<String, Integer> executionTimeMap = new HashMap<String, Integer>();
+//        for (LineScreenCapture lineScreenCapture : runResult.getLineScreenCaptures()) {
+//            executionTimeMap.put(createMethodLineKey(stackLine), lineScreenCapture.getExecutionTime());
+//        }
+//
+//        for (ReportCodeLine reportCodeLine : reportCodeBody) {
+//            int executionTime = 0;
+//            if (reportCodeLine.getStackLines().size() != 0) {
+//                String key = createMethodLineKey(reportCodeLine.getStackLines().get(0));
+//                if (executionTimeMap.containsKey(key)) {
+//                    executionTime += executionTimeMap.get(key);
+//                    reportCodeLine.setExecutionTime(executionTime);
+//                }
+//            }
+//        }
+//    }
 
     private String createMethodLineKey(StackLine stackLine) {
         return String.format("%s_%d", stackLine.getMethodKey(), stackLine.getLine());

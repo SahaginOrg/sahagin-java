@@ -1,8 +1,9 @@
 runFailures: []
 lineScreenCaptures:
-- path: ${inputCaptureRootDirForSahaginInternalTest}/001.png
+- executionTime: 50
+  path: ${inputCaptureRootDirForSahaginInternalTest}/001.png
   stackLines:
-  - {codeBodyIndex: 0, methodKey: sample.SampleTest.shouldSucceed-void, line: 24, executionTime: 50}
+  - {codeBodyIndex: 0, methodKey: sample.SampleTest.shouldSucceed-void, line: 24}
 formatVersion: "*"
 rootMethodKey: sample.SampleTest.shouldSucceed-void
 executionTime: 100

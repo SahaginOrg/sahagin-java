@@ -14,7 +14,6 @@ public class StackLine implements YamlConvertible {
     private TestMethod method;
     private int line;
     private int codeBodyIndex;
-    private int executionTime = 0;
 
     // normal constructor
     public StackLine() {
@@ -61,21 +60,12 @@ public class StackLine implements YamlConvertible {
         this.codeBodyIndex = codeBodyIndex;
     }
 
-    public int getExecutionTime() {
-        return executionTime;
-    }
-
-    public void setExecutionTime(int executionTime) {
-        this.executionTime = executionTime;
-    }
-
     @Override
     public Map<String, Object> toYamlObject() {
         Map<String, Object> result = new HashMap<String, Object>(8);
         result.put("methodKey", methodKey);
         result.put("codeBodyIndex", codeBodyIndex);
         result.put("line", line);
-        result.put("executionTime", executionTime);
         return result;
     }
 
@@ -85,7 +75,6 @@ public class StackLine implements YamlConvertible {
         method = null;
         codeBodyIndex = YamlUtils.getIntValue(yamlObject, "codeBodyIndex");
         line = YamlUtils.getIntValue(yamlObject, "line");
-        executionTime = YamlUtils.getIntValue(yamlObject, "executionTime");
     }
 
 }

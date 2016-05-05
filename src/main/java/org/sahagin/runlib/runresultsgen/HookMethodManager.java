@@ -84,7 +84,6 @@ public class HookMethodManager {
         currentActualRootMethodSimpleName = actualHookedMethodSimpleName;
 
         startMethodTime = System.currentTimeMillis();
-        startCodeLineTime = startMethodTime;
     }
 
     // set up runFailure information
@@ -118,10 +117,11 @@ public class HookMethodManager {
             runFailure.addStackLine(stackLine);
         }
         currentRunResult.addRunFailure(runFailure);
+        int executionTime = (int) (System.currentTimeMillis() - startCodeLineTime);
 
         List<List<StackLine>> stackLinesList = new ArrayList<List<StackLine>>(2);
         stackLinesList.add(stackLines);
-        captureScreenForStackLines(rootMethod, stackLinesList);
+        captureScreenForStackLines(rootMethod, stackLinesList, executionTime);
     }
 
     // write runResult to YAML file if the method for the arguments is root method
@@ -135,10 +135,12 @@ public class HookMethodManager {
             return; // hooked method is not current root method
         }
 
-        if (prevCodeLine != null) {
-            int executionTime = (int) (System.currentTimeMillis() - startCodeLineTime);
-            prevCodeLine.setExecutionTime(executionTime);
-        }
+        long currentTime = System.currentTimeMillis();
+        currentRunResult.setExecutionTime((int) (currentTime - startMethodTime));
+//        if (prevCodeLine != null) {
+//            int executionTime = (int) (currentTime - startCodeLineTime);
+//            prevCodeLine.setExecutionTime(executionTime);
+//        }
 
         logger.info("afterMethodHook: " + hookedMethodSimpleName);
 
@@ -248,6 +250,7 @@ public class HookMethodManager {
         if (hookedTestMethod == null) {
             return; // hooked method is not current root method
         }
+        startCodeLineTime = System.currentTimeMillis();
 
         logger.info(String.format("beforeCodeLineHook: start: %s: %d(%d)",
                 hookedMethodSimpleName, hookedLine, actualHookedLine));
@@ -273,6 +276,8 @@ public class HookMethodManager {
 
         List<StackLine> thisStackLines = getCodeLineHookedStackLines(
                 hookedMethodSimpleName, actualHookedMethodSimpleName, hookedLine, actualHookedLine);
+
+        int executionTime = (int) (System.currentTimeMillis() - startCodeLineTime);
 
         // calculate capturesThisLine value
         CodeLine thisCodeLine = thisStackLines.get(0).getMethod().getCodeBody().get(
@@ -324,14 +329,6 @@ public class HookMethodManager {
             topStackLine.setCodeBodyIndex(stepLabelIndex);
         }
 
-        long prevStartCodeLineTime = startCodeLineTime;
-        startCodeLineTime = System.currentTimeMillis();
-        if (prevCodeLine != null) {
-            int executionTime = (int) (startCodeLineTime - prevStartCodeLineTime);
-            prevCodeLine.setExecutionTime(executionTime);
-        }
-        prevCodeLine = thisStackLines.get(0);
-
         if (!capturesThisLine && !capturesTestStepLabel) {
             logger.info("afterCodeLineHook: skip not capture line");
             return;
@@ -351,7 +348,7 @@ public class HookMethodManager {
         if (capturesTestStepLabel) {
             stackLinesList.add(testStepLabelStackLines);
         }
-        File captureFile = captureScreenForStackLines(currentRunResult.getRootMethod(), stackLinesList);
+        File captureFile = captureScreenForStackLines(currentRunResult.getRootMethod(), stackLinesList, executionTime);
         if (captureFile != null) {
             if (capturesThisLine) {
                 logger.info("afterCodeLineHook: end with this line capture " + captureFile.getName());
@@ -398,7 +395,7 @@ public class HookMethodManager {
     // - returns screen capture file.
     // - returns null if fails to capture
     private File captureScreenForStackLines(
-            TestMethod rootMethod, List<List<StackLine>> stackLinesList) {
+            TestMethod rootMethod, List<List<StackLine>> stackLinesList, int executionTime) {
         if (stackLinesList == null) {
             throw new NullPointerException();
         }
@@ -413,6 +410,7 @@ public class HookMethodManager {
             LineScreenCapture capture = new LineScreenCapture();
             capture.setPath(new File(captureFile.getAbsolutePath()));
             capture.addAllStackLines(stackLines);
+            capture.setExecutionTime(executionTime);
             currentRunResult.addLineScreenCapture(capture);
         }
         return captureFile;
