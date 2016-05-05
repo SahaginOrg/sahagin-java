@@ -59,7 +59,7 @@
       #if ( ${executionTime} )
       <div>${executionTime} ms</div>
       #else
-      <div>${executionTime}</div>
+      <div></div>
       #end
     </header>
     <div id="main_container">
@@ -122,7 +122,7 @@
         <ul class="bxslider">
           #foreach( $capture in $captures )
           <li>
-            <div data-image-id="${capture.getImageId()}" data-image-width="${capture.getImageWidth()}" data-image-height="${capture.getImageHeight()}" class="scrollContainer">
+            <div data-image-id="${capture.getImageId()}" data-image-width="${capture.getImageWidth()}" data-image-height="${capture.getImageHeight()}" execution-time="${capture.getExecutionTime()}" class="scrollContainer">
               <img src="${capture.getPath()}" />
             </div>
           </li>
