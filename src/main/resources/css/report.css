@@ -11,11 +11,11 @@ body {
 }
 
 #button_container.noCode {
-  width: 62%;	
+  width: 62%;
 }
 
 #button_container.withCode {
-  width: 99%;	
+  width: 99%;
 }
 
 #showSrcButton {
