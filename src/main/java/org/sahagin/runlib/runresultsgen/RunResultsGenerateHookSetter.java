@@ -170,22 +170,15 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
         String initializeSrc = hookInitializeSrc();
         boolean transformed = false;
 
-        // iterate code body in the inverse order
+        // iterate code body in the inverse order,
         // so that beforeHook is always inserted after the afterHook of the previous line
         // even if target line of these two hooks are the same
         for (int i = method.getCodeBody().size() - 1; i >= 0; i--) {
             int hookedLine = method.getCodeBody().get(i).getStartLine();
 
-            int beforeHookInsertedLine = beforeHookInsertLine(method, i);
-            if (beforeHookInsertedLine != -1) {
-                int actualBeforeHookInsertedLine = ctMethod.insertAt(beforeHookInsertedLine, false, null);
-                ctMethod.insertAt(beforeHookInsertedLine,
-                        String.format("%s%s.beforeCodeLineHook(\"%s\",\"%s\",\"%s\",\"%s\",%d, %d);",
-                                initializeSrc, hookClassName, classQualifiedName,
-                                methodSimpleName, methodSimpleName,
-                                methodArgClassesStr, hookedLine, actualBeforeHookInsertedLine));
-                transformed = true;
-            }
+            // insert afterHook first and beforeHook second in each iteration,
+            // so that beforeHook is always inserted before the afterHook
+            // even if actual inserted lines for these two hooks are the same
 
             int afterHookInsertedLine = afterHookInsertLine(method, i);
             if (afterHookInsertedLine != -1) {
@@ -195,6 +188,17 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
                                 initializeSrc, hookClassName, classQualifiedName,
                                 methodSimpleName, methodSimpleName,
                                 methodArgClassesStr, hookedLine, actualAfterHookInsertedLine));
+                transformed = true;
+            }
+
+            int beforeHookInsertedLine = beforeHookInsertLine(method, i);
+            if (beforeHookInsertedLine != -1) {
+                int actualBeforeHookInsertedLine = ctMethod.insertAt(beforeHookInsertedLine, false, null);
+                ctMethod.insertAt(beforeHookInsertedLine,
+                        String.format("%s%s.beforeCodeLineHook(\"%s\",\"%s\",\"%s\",\"%s\",%d, %d);",
+                                initializeSrc, hookClassName, classQualifiedName,
+                                methodSimpleName, methodSimpleName,
+                                methodArgClassesStr, hookedLine, actualBeforeHookInsertedLine));
                 transformed = true;
             }
         }

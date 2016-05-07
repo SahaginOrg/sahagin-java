@@ -44,7 +44,6 @@ public class HookMethodManager {
     private TestMethod methodCache = null; // used in getTestMethod method
     private long startMethodTime;
     private LinkedHashMap<String, Long> startTimeMap = new LinkedHashMap<>();
-    private long latestStartTime;
 
     public HookMethodManager(SrcTree srcTree, Config config) {
         if (srcTree == null) {
@@ -256,7 +255,6 @@ public class HookMethodManager {
         }
         logger.info(String.format("putting codeLineKey: %s", codeLineKey));
         startTimeMap.put(codeLineKey, System.currentTimeMillis());
-        latestStartTime = startTimeMap.get(codeLineKey);
 
         logger.info(String.format("beforeCodeLineHook: start: %s: %d(%d)",
                 hookedMethodSimpleName, hookedLine, actualHookedLine));
@@ -287,9 +285,8 @@ public class HookMethodManager {
                 hookedArgClassesStr, hookedLine);
         Long startTime = startTimeMap.get(codeLineKey);
         if (startTime == null) {
-            // TODO Reach here when local variable is stored with annotated submethods
-            logger.info("codeLineKey not found: " + codeLineKey);
-            startTime = latestStartTime;
+            // maybe beforeHook for codeLineKey has not been called unexpectedly
+            throw new RuntimeException("codeLineKey not found: " + codeLineKey);
         }
         int executionTime = (int) (System.currentTimeMillis() - startTime);
         startTimeMap.remove(codeLineKey);
