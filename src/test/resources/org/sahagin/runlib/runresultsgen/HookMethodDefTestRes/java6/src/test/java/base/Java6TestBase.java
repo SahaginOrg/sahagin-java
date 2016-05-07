@@ -28,7 +28,7 @@ public class Java6TestBase {
 
             @Override
             public byte[] captureScreen() {
-                File captureFile = getTestCapturePath(counter);
+                File captureFile = getTestCapturePath(Math.min(counter, 9));
                 counter++;
                 try {
                     return IOUtils.toByteArray(new FileInputStream(captureFile));

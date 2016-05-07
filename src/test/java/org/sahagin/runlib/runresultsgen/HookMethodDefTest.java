@@ -25,6 +25,8 @@ import org.junit.Test;
 import org.sahagin.TestBase;
 import org.sahagin.share.CommonPath;
 import org.sahagin.share.JavaConfig;
+import org.sahagin.share.runresults.LineScreenCapture;
+import org.sahagin.share.runresults.RootMethodRunResult;
 import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlUtils;
 
@@ -98,6 +100,31 @@ public class HookMethodDefTest extends TestBase {
                     new File(testMainCaptureDir, String.format("%s/00%d.png", methodName, i)));
         }
         // TODO assert file for counterMax + 1 does not exist
+    }
+
+    // returns pair of whole method execution time and
+    // each screen capture line execution time list in the executed order
+    private Pair<Integer, List<Integer>> getTestExecutionTimes(
+            String className, String methodName, File reportIntermediateDir) {
+        File testMainResultDir
+        = new File(CommonPath.runResultRootDir(reportIntermediateDir), className);
+        File actualFile = new File(testMainResultDir, methodName);
+        if (!actualFile.exists()) {
+            fail(actualFile + " does not exist");
+        }
+        Map<String, Object> actualYamlObj = YamlUtils.load(actualFile);
+        RootMethodRunResult result = new RootMethodRunResult();
+        try {
+            result.fromYamlObject(actualYamlObj);
+        } catch (YamlConvertException e) {
+            throw new RuntimeException(e);
+        }
+        List<Integer> lineScreenCatureExecutionTimes
+        = new ArrayList<Integer>(result.getLineScreenCaptures().size());
+        for (LineScreenCapture lineScreenCapture : result.getLineScreenCaptures()) {
+            lineScreenCatureExecutionTimes.add(lineScreenCapture.getExecutionTime());
+        }
+        return Pair.of(result.getExecutionTime(), lineScreenCatureExecutionTimes);
     }
 
     private void testResultAssertion(String className, String methodName,
@@ -246,6 +273,34 @@ public class HookMethodDefTest extends TestBase {
             String multiExtendsTest2 = "multiextendstest.Test2";
             testResultAssertion(multiExtendsTest2, "test2", reportIntermediateDir, true);
             captureAssertion(subDirName, multiExtendsTest2, "test2", reportIntermediateDir, 1);
+
+            int unitTime = 10;
+            String executionTimeTest = "executiontimetest.TestMain";
+            Pair<Integer, List<Integer>> execTimePair
+            = getTestExecutionTimes(executionTimeTest, "executionTimeTest", reportIntermediateDir);
+            List<Integer> lineExecTimes = execTimePair.getRight();
+            // screenCaptureLine execution times size
+            assertThat(lineExecTimes.size(), is(12));
+            // subMethod
+            assertTrue(lineExecTimes.get(0) >= unitTime);
+            assertTrue(lineExecTimes.get(1) >= unitTime);
+            assertTrue(lineExecTimes.get(2) >= lineExecTimes.get(0) + lineExecTimes.get(1));
+            // noStepInSubMethod
+            assertTrue(lineExecTimes.get(3) >= unitTime);
+            // recurseSubMethod
+            assertTrue(lineExecTimes.get(4) >= unitTime);
+            assertTrue(lineExecTimes.get(5) >= unitTime);
+            assertTrue(lineExecTimes.get(6) >= unitTime);
+            assertTrue(lineExecTimes.get(7) >= lineExecTimes.get(6));
+            assertTrue(lineExecTimes.get(8) >= lineExecTimes.get(5) + lineExecTimes.get(7));
+            assertTrue(lineExecTimes.get(9) >= lineExecTimes.get(4) + lineExecTimes.get(8));
+            // returnSubMethod
+            assertTrue(lineExecTimes.get(10) >= unitTime);
+            assertTrue(lineExecTimes.get(11) >= lineExecTimes.get(10));
+            // root method whole execution time
+            assertTrue(execTimePair.getLeft()
+                    >= lineExecTimes.get(2) + lineExecTimes.get(3)
+                    + lineExecTimes.get(9) + lineExecTimes.get(11));
         } catch (AssertionError e) {
             pair.getLeft().printStdOutsAndErrs();
             throw e;
