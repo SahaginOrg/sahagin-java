@@ -60,7 +60,7 @@ body {
 }
 
 .successLine {
-  background-color: #abff7f;
+  background-color: #dbf99d;
 }
 
 .errorLine {
@@ -76,7 +76,7 @@ body {
 }
 
 #err_msg {
-  color: red; 
+  color: #f1393c; 
 }
 
 #right_container {
