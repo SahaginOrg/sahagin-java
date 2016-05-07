@@ -19,6 +19,7 @@ public class ReportScreenCapture {
     private String imageId;
     private int imageWidth;
     private int imageHeight;
+    private int executionTime;
 
     public String getPath() {
         return path;
@@ -50,6 +51,14 @@ public class ReportScreenCapture {
 
     public void setImageHeight(int imageHeight) {
         this.imageHeight = imageHeight;
+    }
+
+    public int getExecutionTime() {
+        return executionTime;
+    }
+
+    public void setExecutionTime(int executionTime) {
+        this.executionTime = executionTime;
     }
 
     public void setImageSizeFromImageFile(File file) {

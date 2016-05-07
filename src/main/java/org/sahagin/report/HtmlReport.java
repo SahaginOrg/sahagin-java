@@ -6,10 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.Charsets;
@@ -158,6 +155,7 @@ public class HtmlReport {
             String ttId = generateTtId(lineScreenCapture.getStackLines());
             reportCapture.setImageId(ttId);
             reportCapture.setImageSizeFromImageFile(lineScreenCapture.getPath());
+            reportCapture.setExecutionTime(lineScreenCapture.getExecutionTime());
             reportCaptures.add(reportCapture);
         }
         return reportCaptures;
@@ -553,6 +551,9 @@ public class HtmlReport {
             escapePut(methodContext, "jsVarAssign", SysMessages.get(SysMessages.JS_VAR_ASSIGN));
             RootMethodRunResult runResult = runResults.getRunResultByRootMethod(rootMethod);
             boolean executed = (runResult != null);
+            if (executed) {
+                escapePut(methodContext, "executionTime", Integer.toString(runResult.getExecutionTime()));
+            }
             RunFailure runFailure = getRunFailure(runResult);
             if (runFailure == null) {
                 escapePut(methodContext, "errMsg", null);
@@ -571,6 +572,7 @@ public class HtmlReport {
                 lineScreenCaptures = new ArrayList<LineScreenCapture>(0);
             } else {
                 lineScreenCaptures = runResult.getLineScreenCaptures();
+                addExecutionTime(lineScreenCaptures, reportCodeBody);
             }
             addLineScreenCaptureForErrorEachStackLine(lineScreenCaptures, runFailure);
             List<ReportScreenCapture> captures = generateReportScreenCaptures(
@@ -599,6 +601,24 @@ public class HtmlReport {
         mainContext.put("reportLinks", reportLinks);
         generateVelocityOutput(mainContext, "/template/index.html.vm",
                 CommonPath.htmlReportMainFile(reportOutputDir));
+    }
+
+    private void addExecutionTime(List<LineScreenCapture> captures, List<ReportCodeLine> codeLines) {
+        Map<String, Integer> executionTimeMap = new HashMap<String, Integer>();
+        for (LineScreenCapture lineScreenCapture : captures) {
+            executionTimeMap.put(generateTtId(lineScreenCapture.getStackLines()), lineScreenCapture.getExecutionTime());
+        }
+
+        for (ReportCodeLine reportCodeLine : codeLines) {
+            String key = reportCodeLine.getTtId();
+            if (executionTimeMap.containsKey(key)) {
+                reportCodeLine.setExecutionTime(executionTimeMap.get(key));
+            }
+        }
+    }
+
+    private String createMethodLineKey(StackLine stackLine) {
+        return String.format("%s_%d", stackLine.getMethodKey(), stackLine.getLine());
     }
 
     private void generateVelocityOutput(

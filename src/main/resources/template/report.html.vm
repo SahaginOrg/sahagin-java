@@ -56,6 +56,11 @@
       #else
       <div>${methodName}</div>
       #end
+      #if ( ${executionTime} )
+      <div>${executionTime} ms</div>
+      #else
+      <div></div>
+      #end
     </header>
     <div id="main_container">
       <div id="button_container">
@@ -85,10 +90,16 @@
                 #else
                   #set( $loadedClass = "" )
                 #end
+                #if( ${codeLine.getExecutionTime()} >= 0 )
+                  #set( $executionTime = ${codeLine.getExecutionTime()} + " ms" )
+                #else
+                  #set( $executionTime = "" )
+                #end
                 <tr data-tt-id="${codeLine.getTtId()}" ${dataTtParentId} data-image-id="${codeLine.getImageId()}" data-method-key="${codeLine.getMethodKey()}" class="${lineClass} ${loadedClass}">
                   <td>${codeLine.getPageDoc()}</td>
                   <td>${codeLine.getTestDoc()}</td>
                   <td class="srcInfo">${codeLine.getCodeLine().getCode().getOriginal()}</td>
+                  <td class="srcInfo numeric_cell">$executionTime</td>
                 </tr>
                 #end
               </tbody>
@@ -111,7 +122,7 @@
         <ul class="bxslider">
           #foreach( $capture in $captures )
           <li>
-            <div data-image-id="${capture.getImageId()}" data-image-width="${capture.getImageWidth()}" data-image-height="${capture.getImageHeight()}" class="scrollContainer">
+            <div data-image-id="${capture.getImageId()}" data-image-width="${capture.getImageWidth()}" data-image-height="${capture.getImageHeight()}" execution-time="${capture.getExecutionTime()}" class="scrollContainer">
               <img src="${capture.getPath()}" />
             </div>
           </li>

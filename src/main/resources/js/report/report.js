@@ -488,11 +488,17 @@ function loadCodeBodyHiddenNode(tr) {
       testDoc = '- ' + $("#codeLineWithoutTestDoc").text() + ' -';
     }
     var original = codeLine.getCode().getOriginal();
+    var executionTime = $("div[data-image-id='" + ttId + "']").attr("execution-time")
+    if (executionTime == undefined) {
+        executionTime = "";
+    } else {
+        executionTime = executionTime + " ms";
+    }
     
     childNodeHtml = childNodeHtml + sahagin.CommonUtils.strFormat(
       '<tr data-tt-id="{0}" data-tt-parent-id="{1}" data-image-id="{0}" data-method-key="{2}" class="{3}">'
-          + '<td>{4}</td><td>{5}</td><td class="srcInfo">{6}</td></tr>',
-      ttId, parentTtId, methodKey, lineClass, pageDoc, testDoc, original);
+          + '<td>{4}</td><td>{5}</td><td class="srcInfo">{6}</td><td class="srcInfo numeric_cell">{7}</td></tr>',
+      ttId, parentTtId, methodKey, lineClass, pageDoc, testDoc, original, executionTime);
     
     var methodArgTestDocs = sahagin.TestDocResolver.placeholderResolvedMethodArgTestDocs(
         codeLine.getCode(), parentMethodArgTestDocs);

@@ -19,6 +19,7 @@ public class RootMethodRunResult implements YamlConvertible {
     private TestMethod rootMethod;
     private List<RunFailure> runFailures = new ArrayList<RunFailure>(16);
     private List<LineScreenCapture> lineScreenCaptures = new ArrayList<LineScreenCapture>(32);
+    private int executionTime;
 
     public String getRootMethodKey() {
         return rootMethodKey;
@@ -52,6 +53,14 @@ public class RootMethodRunResult implements YamlConvertible {
         this.lineScreenCaptures.add(lineScreenCapture);
     }
 
+    public void setExecutionTime(int executionTime) {
+        this.executionTime = executionTime;
+    }
+
+    public int getExecutionTime() {
+        return executionTime;
+    }
+
     @Override
     public Map<String, Object> toYamlObject() {
         Map<String, Object> result = new HashMap<String, Object>(4);
@@ -63,6 +72,7 @@ public class RootMethodRunResult implements YamlConvertible {
         if (!lineScreenCaptures.isEmpty()) {
             result.put("lineScreenCaptures", YamlUtils.toYamlObjectList(lineScreenCaptures));
         }
+        result.put("executionTime", executionTime);
         return result;
     }
 
@@ -93,6 +103,7 @@ public class RootMethodRunResult implements YamlConvertible {
             lineScreenCapture.fromYamlObject(lineScreenCaptureYamlObj);
             lineScreenCaptures.add(lineScreenCapture);
         }
+        executionTime = YamlUtils.getIntValue(yamlObject, "executionTime");
     }
 
 }

@@ -121,3 +121,7 @@ body {
 #localeData {
   display: none;
 }
+
+.numeric_cell {
+  text-align: right;
+}

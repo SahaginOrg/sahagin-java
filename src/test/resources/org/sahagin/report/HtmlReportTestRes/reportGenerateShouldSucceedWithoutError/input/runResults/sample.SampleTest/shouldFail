@@ -4,8 +4,10 @@ runFailures:
   - {codeBodyIndex: 0, methodKey: sample.SampleTest.shouldFail-void, line: 29}
   stackTrace: "err"
 lineScreenCaptures:
-- path: ${inputCaptureRootDirForSahaginInternalTest}/001.png
+- executionTime: 50
+  path: ${inputCaptureRootDirForSahaginInternalTest}/001.png
   stackLines:
   - {codeBodyIndex: 0, methodKey: sample.SampleTest.shouldFail-void, line: 29}
 formatVersion: "*"
 rootMethodKey: sample.SampleTest.shouldFail-void
+executionTime: 100

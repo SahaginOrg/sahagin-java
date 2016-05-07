@@ -29,6 +29,8 @@ runFailures:
 formatVersion: "*"
 rootMethodKey: Lorg/sahagin/runlib/runresultsgen/RunResultGenerateHookTestRes/test/TestMain;.noTestDocMethodFailTest()V
 lineScreenCaptures:
-- path: 001.png
+- executionTime: 5
+  path: 001.png
   stackLines:
   - {line: 91, codeBodyIndex: 1, methodKey: Lorg/sahagin/runlib/runresultsgen/RunResultGenerateHookTestRes/test/TestMain;.noTestDocMethodFailTest()V}
+executionTime: 1500
