@@ -17,6 +17,8 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.tools.generic.MathTool;
+import org.apache.velocity.tools.generic.NumberTool;
 import org.openqa.selenium.io.IOUtils;
 import org.sahagin.share.CommonPath;
 import org.sahagin.share.CommonUtils;
@@ -522,6 +524,8 @@ public class HtmlReport {
             methodReportParentDir.mkdirs();
 
             VelocityContext methodContext = new VelocityContext();
+            methodContext.put("number", new NumberTool());
+            methodContext.put("math", new MathTool());
             if (rootMethod.getTestDoc() == null) {
                 escapePut(methodContext, "title", rootMethod.getSimpleName());
             } else {

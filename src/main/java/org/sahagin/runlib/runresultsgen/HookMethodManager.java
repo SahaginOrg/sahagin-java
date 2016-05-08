@@ -133,11 +133,6 @@ public class HookMethodManager {
 
         long currentTime = System.currentTimeMillis();
         currentRunResult.setExecutionTime((int) (currentTime - startMethodTime));
-//        if (prevCodeLine != null) {
-//            int executionTime = (int) (currentTime - startCodeLineTime);
-//            prevCodeLine.setExecutionTime(executionTime);
-//        }
-
         logger.info("afterMethodHook: " + hookedMethodSimpleName);
 
         // use encoded name to avoid various possible file name encoding problem
