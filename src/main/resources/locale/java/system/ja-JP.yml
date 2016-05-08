@@ -3,5 +3,6 @@ jsLocalVar: 変数「{0}」
 jsVarAssign: 「{1}」に「{0}」をセット
 localVar: 変数「%s」
 varAssign: 「%2$s」に「%1$s」をセット
+reportTimeUnit: 秒
 reportHideCode: コード非表示
 reportShowCode: コード表示

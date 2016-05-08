@@ -15,6 +15,7 @@ public class SysMessages {
     public static final String JS_VAR_ASSIGN = "jsVarAssign";
     public static final String LOCAL_VAR = "localVar";
     public static final String VAR_ASSIGN = "varAssign";
+    public static final String REPORT_TIME_UNIT = "reportTimeUnit";
     public static final String REPORT_HIDE_CODE = "reportHideCode";
     public static final String REPORT_SHOW_CODE = "reportShowCode";
 

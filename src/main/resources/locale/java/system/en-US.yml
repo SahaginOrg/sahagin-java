@@ -3,5 +3,6 @@ jsLocalVar: variable '{0}'
 jsVarAssign: set '{0}' to '{1}'
 localVar: variable '%s'
 varAssign: set '%s' to '%s'
+reportTimeUnit: sec
 reportHideCode: hide code
 reportShowCode: show code

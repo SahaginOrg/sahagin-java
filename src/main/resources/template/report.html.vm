@@ -57,7 +57,7 @@
       <div>${methodName}</div>
       #end
       #if ( ${executionTime} )
-      <div>$number.format("#0.0", $math.div(${executionTime}, 1000.0)) sec</div>
+      <div>$number.format("#0.0", $math.div(${executionTime}, 1000.0)) ${timeUnit}</div>
       #else
       <div></div>
       #end
@@ -67,7 +67,7 @@
         <div id="showSrcButton" onclick="showSrcInfo()"><u>${msgShowCode} &gt;&gt;</u></div>
         <div id="hide_button_container">
           <span id="hideSrcButton" onclick="hideSrcInfo()"><u>&lt;&lt; ${msgHideCode}</u></span>
-          <span id="time_unit">(sec)</span>
+          <span id="time_unit">(${timeUnit})</span>
         </div>
       </div>
       <div id="left_container">

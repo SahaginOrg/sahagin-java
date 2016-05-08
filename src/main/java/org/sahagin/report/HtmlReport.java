@@ -545,6 +545,7 @@ public class HtmlReport {
             escapePut(methodContext, "classTestDoc", method.getTestClass().getTestDoc());
             escapePut(methodContext, "methodName", rootMethod.getSimpleName());
             escapePut(methodContext, "methodTestDoc", rootMethod.getTestDoc());
+            escapePut(methodContext, "timeUnit", SysMessages.get(SysMessages.REPORT_TIME_UNIT));
             escapePut(methodContext, "msgShowCode", SysMessages.get(SysMessages.REPORT_SHOW_CODE));
             escapePut(methodContext, "msgHideCode", SysMessages.get(SysMessages.REPORT_HIDE_CODE));
             // TODO js logic should construct message according to the user locale
