@@ -24,10 +24,19 @@ body {
   float: right;
 }
 
+#hide_button_container {
+  float: right;
+}
+
 #hideSrcButton {
   color: blue;
   cursor: pointer;
-  float: right;
+}
+
+#time_unit {
+  font-size: .7em;
+  margin-left: 25px;
+  margin-right: 4px;
 }
 
 #left_container {
@@ -124,9 +133,4 @@ body {
 
 .numeric_cell {
   text-align: right;
-}
-
-#time_unit {
-  position: absolute;
-  font-size: .7em;
 }

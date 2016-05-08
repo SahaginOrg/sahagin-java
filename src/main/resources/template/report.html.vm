@@ -65,7 +65,10 @@
     <div id="main_container">
       <div id="button_container">
         <div id="showSrcButton" onclick="showSrcInfo()"><u>${msgShowCode} &gt;&gt;</u></div>
-        <div id="hideSrcButton" onclick="hideSrcInfo()"><u>&lt;&lt; ${msgHideCode}</u></div>
+        <div id="hide_button_container">
+          <span id="hideSrcButton" onclick="hideSrcInfo()"><u>&lt;&lt; ${msgHideCode}</u></span>
+          <span id="time_unit">(sec)</span>
+        </div>
       </div>
       <div id="left_container">
         <div id="outer_script_table_container" class="noCode">
@@ -106,8 +109,6 @@
             </table>
           </div>
         </div>
-        <br/>
-        <div id="time_unit" style="display: none;">(sec)</div>
         <br/>
         <div id="msg_container">
           #if( ${errMsg} )

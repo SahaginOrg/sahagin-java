@@ -383,31 +383,27 @@ function selectTrSlideAndRefresh(sliderReload) {
 function showSrcInfo(refresh) {
   $(".srcInfo").show();
   $("#showSrcButton").hide();
-  $("#hideSrcButton").show();
+  $("#hide_button_container").show();
   $("#script_table_container").removeClass("noCode");
   $("#script_table_container").addClass("withCode");
   $("#button_container").removeClass("noCode");
   $("#button_container").addClass("withCode");
   $("#bxslider_container").removeClass("noCode");
   $("#bxslider_container").addClass("withCode");
-  $("#time_unit").css("top", $("#script_table_container").offset().top + $("#script_table_container").height());
-  $("#time_unit").css("left", $("#script_table_container").offset().left + $("#script_table_container").width() - $("#time_unit").width() - 5);
-  $("#time_unit").show();
   srcInfoShown = true;
   selectTrSlideAndRefresh(true);
 };
 
 function hideSrcInfo() {
-  $(".srcInfo").hide();  
+  $(".srcInfo").hide();
   $("#showSrcButton").show();
-  $("#hideSrcButton").hide();
+  $("#hide_button_container").hide();
   $("#script_table_container").removeClass("withCode");
   $("#script_table_container").addClass("noCode");
   $("#button_container").removeClass("withCode");
   $("#button_container").addClass("noCode");
   $("#bxslider_container").removeClass("withCode");
   $("#bxslider_container").addClass("noCode");
-  $("#time_unit").hide();
   srcInfoShown = false;
   selectTrSlideAndRefresh(true);
 };
