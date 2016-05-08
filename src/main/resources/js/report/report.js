@@ -390,6 +390,9 @@ function showSrcInfo(refresh) {
   $("#button_container").addClass("withCode");
   $("#bxslider_container").removeClass("noCode");
   $("#bxslider_container").addClass("withCode");
+  $("#time_unit").css("top", $("#script_table_container").offset().top + $("#script_table_container").height());
+  $("#time_unit").css("left", $("#script_table_container").offset().left + $("#script_table_container").width() - $("#time_unit").width() - 5);
+  $("#time_unit").show();
   srcInfoShown = true;
   selectTrSlideAndRefresh(true);
 };
@@ -404,6 +407,7 @@ function hideSrcInfo() {
   $("#button_container").addClass("noCode");
   $("#bxslider_container").removeClass("withCode");
   $("#bxslider_container").addClass("noCode");
+  $("#time_unit").hide();
   srcInfoShown = false;
   selectTrSlideAndRefresh(true);
 };
@@ -490,9 +494,9 @@ function loadCodeBodyHiddenNode(tr) {
     var original = codeLine.getCode().getOriginal();
     var executionTime = $("div[data-image-id='" + ttId + "']").attr("execution-time")
     if (executionTime == undefined) {
-        executionTime = "";
+        executionTime = "-";
     } else {
-        executionTime = executionTime + " ms";
+        executionTime = (new Number(executionTime / 1000)).toFixed(1);
     }
     
     childNodeHtml = childNodeHtml + sahagin.CommonUtils.strFormat(

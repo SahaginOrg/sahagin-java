@@ -57,7 +57,7 @@
       <div>${methodName}</div>
       #end
       #if ( ${executionTime} )
-      <div>${executionTime} ms</div>
+      <div>$number.format("#0.0", $math.div(${executionTime}, 1000.0)) sec</div>
       #else
       <div></div>
       #end
@@ -91,9 +91,9 @@
                   #set( $loadedClass = "" )
                 #end
                 #if( ${codeLine.getExecutionTime()} >= 0 )
-                  #set( $executionTime = ${codeLine.getExecutionTime()} + " ms" )
+                  #set( $executionTime = $number.format("#0.0", $math.div(${codeLine.getExecutionTime()}, 1000.0)) )
                 #else
-                  #set( $executionTime = "" )
+                  #set( $executionTime = "-" )
                 #end
                 <tr data-tt-id="${codeLine.getTtId()}" ${dataTtParentId} data-image-id="${codeLine.getImageId()}" data-method-key="${codeLine.getMethodKey()}" class="${lineClass} ${loadedClass}">
                   <td>${codeLine.getPageDoc()}</td>
@@ -106,6 +106,8 @@
             </table>
           </div>
         </div>
+        <br/>
+        <div id="time_unit" style="display: none;">(sec)</div>
         <br/>
         <div id="msg_container">
           #if( ${errMsg} )

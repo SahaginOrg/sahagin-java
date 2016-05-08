@@ -125,3 +125,8 @@ body {
 .numeric_cell {
   text-align: right;
 }
+
+#time_unit {
+  position: absolute;
+  font-size: .7em;
+}
