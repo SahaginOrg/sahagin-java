@@ -274,37 +274,67 @@ public class HookMethodDefTest extends TestBase {
             testResultAssertion(multiExtendsTest2, "test2", reportIntermediateDir, true);
             captureAssertion(subDirName, multiExtendsTest2, "test2", reportIntermediateDir, 1);
 
-            int unitTime = 10;
             String executionTimeTest = "executiontimetest.TestMain";
             Pair<Integer, List<Integer>> execTimePair
             = getTestExecutionTimes(executionTimeTest, "executionTimeTest", reportIntermediateDir);
-            List<Integer> lineExecTimes = execTimePair.getRight();
-            // screenCaptureLine execution times size
-            assertThat(lineExecTimes.size(), is(12));
-            // subMethod
-            assertTrue(lineExecTimes.get(0) >= unitTime);
-            assertTrue(lineExecTimes.get(1) >= unitTime);
-            assertTrue(lineExecTimes.get(2) >= lineExecTimes.get(0) + lineExecTimes.get(1));
-            // noStepInSubMethod
-            assertTrue(lineExecTimes.get(3) >= unitTime);
-            // recurseSubMethod
-            assertTrue(lineExecTimes.get(4) >= unitTime);
-            assertTrue(lineExecTimes.get(5) >= unitTime);
-            assertTrue(lineExecTimes.get(6) >= unitTime);
-            assertTrue(lineExecTimes.get(7) >= lineExecTimes.get(6));
-            assertTrue(lineExecTimes.get(8) >= lineExecTimes.get(5) + lineExecTimes.get(7));
-            assertTrue(lineExecTimes.get(9) >= lineExecTimes.get(4) + lineExecTimes.get(8));
-            // returnSubMethod
-            assertTrue(lineExecTimes.get(10) >= unitTime);
-            assertTrue(lineExecTimes.get(11) >= lineExecTimes.get(10));
-            // root method whole execution time
-            assertTrue(execTimePair.getLeft()
-                    >= lineExecTimes.get(2) + lineExecTimes.get(3)
-                    + lineExecTimes.get(9) + lineExecTimes.get(11));
+            executionTimeTestAssertion(execTimePair.getLeft(), execTimePair.getRight());
+            Pair<Integer, List<Integer>> testStepLabelExecTimePair
+            = getTestExecutionTimes(executionTimeTest, "testStepLabelExecutionTimeTest", reportIntermediateDir);
+            testStepLabelExecutionTimeTestAssertion(
+                    testStepLabelExecTimePair.getLeft(), testStepLabelExecTimePair.getRight());
         } catch (AssertionError e) {
             pair.getLeft().printStdOutsAndErrs();
             throw e;
         }
+    }
+
+    private void executionTimeTestAssertion(int totalExecTime, List<Integer> lineExecTimes) {
+        int unitTime = 10;
+
+        // screenCaptureLine execution times size
+        assertThat(lineExecTimes.size(), is(12));
+
+        // subMethod
+        assertTrue(lineExecTimes.get(0) >= unitTime);
+        assertTrue(lineExecTimes.get(1) >= unitTime);
+        assertTrue(lineExecTimes.get(2) >= lineExecTimes.get(0) + lineExecTimes.get(1));
+
+        // noStepInSubMethod
+        assertTrue(lineExecTimes.get(3) >= unitTime);
+
+        // recurseSubMethod
+        assertTrue(lineExecTimes.get(4) >= unitTime);
+        assertTrue(lineExecTimes.get(5) >= unitTime);
+        assertTrue(lineExecTimes.get(6) >= unitTime);
+        assertTrue(lineExecTimes.get(7) >= lineExecTimes.get(6));
+        assertTrue(lineExecTimes.get(8) >= lineExecTimes.get(5) + lineExecTimes.get(7));
+        assertTrue(lineExecTimes.get(9) >= lineExecTimes.get(4) + lineExecTimes.get(8));
+
+        // returnSubMethod
+        assertTrue(lineExecTimes.get(10) >= unitTime);
+        assertTrue(lineExecTimes.get(11) >= lineExecTimes.get(10));
+
+        // root method whole execution time
+        assertTrue(totalExecTime
+                >= lineExecTimes.get(2) + lineExecTimes.get(3)
+                + lineExecTimes.get(9) + lineExecTimes.get(11));
+    }
+
+    private void testStepLabelExecutionTimeTestAssertion(
+            int totalExecTime, List<Integer> lineExecTimes) {
+        int unitTime = 10;
+
+        // screenCaptureLine execution times size
+        assertThat(lineExecTimes.size(), is(5));
+
+        // step 1
+        assertTrue(lineExecTimes.get(0) >= unitTime);
+        assertTrue(lineExecTimes.get(1) >= unitTime);
+        assertTrue(lineExecTimes.get(2) >= lineExecTimes.get(0) + lineExecTimes.get(1));
+
+        // step 2
+        assertTrue(lineExecTimes.get(3) >= unitTime);
+        assertTrue(lineExecTimes.get(4) >= lineExecTimes.get(3));
     }
 
     @Test

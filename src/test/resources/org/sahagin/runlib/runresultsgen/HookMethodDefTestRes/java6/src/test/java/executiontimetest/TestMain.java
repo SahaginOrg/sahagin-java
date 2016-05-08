@@ -6,26 +6,20 @@ import org.sahagin.runlib.external.TestDoc;
 
 import base.Java6TestBase;
 
+import static org.sahagin.runlib.external.TestStepLabelMethod.*;
+
 // TODO error test execution time test
 
 public class TestMain extends Java6TestBase {
     private int counter = 0;
 
     @TestDoc("*")
-    private void sleep() {
+    public void sleep() {
         try {
             Thread.sleep(10);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Test
-    public void executionTimeTest() {
-        subMethod();
-        noStepInSubMethod();
-        recurseSubMethod();
-        returnSubMethod();
     }
 
     @TestDoc(value = "*", capture = CaptureStyle.STEP_IN)
@@ -53,5 +47,27 @@ public class TestMain extends Java6TestBase {
     public int returnSubMethod() {
         sleep();
         return 1;
+    }
+
+    @Test
+    public void executionTimeTest() {
+        subMethod();
+        noStepInSubMethod();
+        recurseSubMethod();
+        returnSubMethod();
+    }
+
+    @TestDoc("*")
+    public void stepSubMethod() {
+        sleep();
+    }
+
+    @Test
+    public void testStepLabelExecutionTimeTest() {
+        TestDoc("step 1");
+        stepSubMethod();
+        stepSubMethod();
+        TestDoc("step 2");
+        stepSubMethod();
     }
 }
