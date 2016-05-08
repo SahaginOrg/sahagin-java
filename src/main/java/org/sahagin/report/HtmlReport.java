@@ -621,10 +621,6 @@ public class HtmlReport {
         }
     }
 
-    private String createMethodLineKey(StackLine stackLine) {
-        return String.format("%s_%d", stackLine.getMethodKey(), stackLine.getLine());
-    }
-
     private void generateVelocityOutput(
             VelocityContext context, String templateResourcePath, File outputFile) {
         if (outputFile.getParentFile() != null) {
