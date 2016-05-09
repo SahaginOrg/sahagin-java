@@ -200,6 +200,17 @@ public class HookMethodManager {
         return result;
     }
 
+    private List<Integer> getHookedCodeLineIndex(TestMethod method, int hookedLine) {
+        List<Integer> result = new ArrayList<Integer>(2);
+        for (int i = 0; i < method.getCodeBody().size(); i++) {
+            CodeLine codeLine = method.getCodeBody().get(i);
+            if (codeLine.getStartLine() <= hookedLine && hookedLine <= codeLine.getEndLine()) {
+                result.add(i);
+            }
+        }
+        return result;
+    }
+
     // get the stackLines for the hook method code line.
     private List<StackLine> getCodeLineHookedStackLines(
             final String hookedMethodSimpleName, final String actualHookedMethodSimpleName,
@@ -245,11 +256,14 @@ public class HookMethodManager {
         logger.info(String.format("beforeCodeLineHook: start: %s: %d(%d)",
                 hookedMethodSimpleName, hookedLine, actualHookedLine));
 
-        List<StackLine> thisStackLines = getCodeLineHookedStackLines(
-                hookedMethodSimpleName, actualHookedMethodSimpleName, hookedLine, actualHookedLine);
-        CodeLine thisCodeLine = thisStackLines.get(0).getMethod().getCodeBody().get(
-                thisStackLines.get(0).getCodeBodyIndex());
-        if (thisCodeLine.getCode() instanceof TestStepLabel) {
+        // don't use getCodeLineHookedStackLines method
+        // since line number in beforeHook current stack trace may not be set
+        // for the root method first line, especially in Sahagin-Groovy
+
+        int thisCodeLineIndex = getHookedCodeLineIndex(hookedTestMethod, hookedLine).get(0);
+        if (hookedTestMethod.getCodeBody().get(thisCodeLineIndex).getCode() instanceof TestStepLabel
+                || (thisCodeLineIndex > 0
+                        && hookedTestMethod.getCodeBody().get(thisCodeLineIndex - 1).getCode() instanceof TestStepLabel)) {
             startTestStepLabelTime = System.currentTimeMillis();
         }
 
