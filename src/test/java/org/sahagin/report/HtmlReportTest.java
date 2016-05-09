@@ -29,7 +29,7 @@ public class HtmlReportTest extends TestBase {
         } else if (SystemUtils.IS_OS_LINUX) {
             file = new File(testResourceRoot(), "selenium/linux/chromedriver");
         } else if (SystemUtils.IS_OS_WINDOWS) {
-            file = new File(testResourceDir(), "selenium/win/chromedriver.exe");
+            file = new File(testResourceRoot(), "selenium/win/chromedriver.exe");
         } else {
             throw new RuntimeException("not supported OS environment");
         }
