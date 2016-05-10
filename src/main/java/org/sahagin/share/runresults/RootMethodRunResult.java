@@ -103,6 +103,7 @@ public class RootMethodRunResult implements YamlConvertible {
             lineScreenCapture.fromYamlObject(lineScreenCaptureYamlObj);
             lineScreenCaptures.add(lineScreenCapture);
         }
+        // TODO should accept empty executionTime
         executionTime = YamlUtils.getIntValue(yamlObject, "executionTime");
     }
 

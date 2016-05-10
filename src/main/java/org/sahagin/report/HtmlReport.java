@@ -577,6 +577,8 @@ public class HtmlReport {
                 lineScreenCaptures = new ArrayList<LineScreenCapture>(0);
             } else {
                 lineScreenCaptures = runResult.getLineScreenCaptures();
+                // TODO execution-time tag is used in HTML report now,
+                // but should use data-execution-time tag
                 addExecutionTime(lineScreenCaptures, reportCodeBody);
             }
             addLineScreenCaptureForErrorEachStackLine(lineScreenCaptures, runFailure);

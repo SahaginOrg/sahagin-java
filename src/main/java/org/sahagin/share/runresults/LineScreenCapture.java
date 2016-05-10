@@ -78,6 +78,7 @@ public class LineScreenCapture implements YamlConvertible {
     public void fromYamlObject(Map<String, Object> yamlObject)
             throws YamlConvertException {
         path = new File(YamlUtils.getStrValue(yamlObject, "path"));
+        // TODO should accept empty executionTime
         executionTime = YamlUtils.getIntValue(yamlObject, "executionTime");
         List<Map<String, Object>> stackLinesYamlObj
         = YamlUtils.getYamlObjectListValue(yamlObject, "stackLines");
