@@ -270,9 +270,13 @@ public class HookMethodManager {
         String codeLineKey = getCodeLineKey(hookedClassQualifiedName, hookedMethodSimpleName,
                 hookedArgClassesStr, hookedLine);
         if (startTimeMap.containsKey(codeLineKey)) {
-            throw new RuntimeException("codeLineKey is duplicated: " + codeLineKey);
+            // this is the case when afterCodeLineHook has not been called for the previous method call.
+            // TODO fix RunResultsGenerateHookSetter so that afterCodeLineHook is called
+            // even if hooked line throws exception.
+            logger.info(String.format("overwriting duplicated codeLineKey: %s", codeLineKey));
+        } else {
+            logger.info(String.format("putting codeLineKey: %s", codeLineKey));
         }
-        logger.info(String.format("putting codeLineKey: %s", codeLineKey));
         startTimeMap.put(codeLineKey, System.currentTimeMillis());
     }
 
