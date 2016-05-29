@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.runlib.external.adapter.ScreenCaptureAdapter;
 
-public class Java6TestBase {
+public class Java7TestBase {
     private int counter = 1;
 
     private File getTestCapturePath(int counter) {

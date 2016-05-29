@@ -4,13 +4,13 @@ import org.junit.Test;
 import org.sahagin.runlib.external.CaptureStyle;
 import org.sahagin.runlib.external.TestDoc;
 
-import base.Java6TestBase;
+import base.Java7TestBase;
 
 import static org.sahagin.runlib.external.TestStepLabelMethod.*;
 
 // TODO error test execution time test
 
-public class TestMain extends Java6TestBase {
+public class TestMain extends Java7TestBase {
     private int counter = 0;
 
     @TestDoc("*")

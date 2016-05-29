@@ -221,8 +221,8 @@ public class HookMethodDefTest extends TestBase {
     }
 
     @Test
-    public void java6() throws MavenInvocationException, YamlConvertException, IOException {
-        String subDirName = "java6";
+    public void java7() throws MavenInvocationException, YamlConvertException, IOException {
+        String subDirName = "java7";
         generateTempJar(subDirName);
         Pair<MavenInvokeResult, JavaConfig> pair = invokeChildTest(subDirName, null);
 

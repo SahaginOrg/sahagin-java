@@ -2,9 +2,9 @@ package implementstest;
 
 import org.junit.Test;
 
-import base.Java6TestBase;
+import base.Java7TestBase;
 
-public class ImplementsTest extends Java6TestBase
+public class ImplementsTest extends Java7TestBase
 implements ImplementsTestBase {
 
     @Override

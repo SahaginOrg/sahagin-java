@@ -7,9 +7,9 @@ import org.junit.Test;
 import org.sahagin.runlib.external.CaptureStyle;
 import org.sahagin.runlib.external.TestDoc;
 
-import base.Java6TestBase;
+import base.Java7TestBase;
 
-public class TestMain extends Java6TestBase {
+public class TestMain extends Java7TestBase {
 
     // - check capture line number
     // - check if capture is taken just after the target line call
