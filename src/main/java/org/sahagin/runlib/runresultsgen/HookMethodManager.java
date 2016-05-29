@@ -54,8 +54,8 @@ public class HookMethodManager {
             throw new NullPointerException();
         }
         this.srcTree = srcTree;
-        runResultsRootDir = CommonPath.runResultRootDir(config.getRootBaseReportIntermediateDataDir());
-        captureRootDir = CommonPath.inputCaptureRootDir(config.getRootBaseReportIntermediateDataDir());
+        runResultsRootDir = CommonPath.runResultRootDir(config.getRootBaseRunOutputIntermediateDataDir());
+        captureRootDir = CommonPath.inputCaptureRootDir(config.getRootBaseRunOutputIntermediateDataDir());
     }
 
     // initialize runResult information if the method for the arguments is root method

@@ -80,7 +80,7 @@ public class SahaginMain {
     private static void report(Config config)
             throws IllegalDataStructureException, IllegalTestScriptException {
         HtmlReport report = new HtmlReport();
-        report.generate(config.getRootBaseReportIntermediateDataDir(),
+        report.generate(config.getRootBaseReportInputIntermediateDataDirs(),
                 config.getRootBaseReportOutputDir());
     }
 

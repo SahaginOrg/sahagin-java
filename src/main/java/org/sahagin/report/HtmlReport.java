@@ -432,8 +432,12 @@ public class HtmlReport {
     }
 
     // each report HTML file is {methodQualifiedParentPath}/{methodSimpleName}.html
-    public void generate(File reportInputDataDir, File reportOutputDir)
+    public void generate(List<File> reportInputDataDirs, File reportOutputDir)
             throws IllegalDataStructureException, IllegalTestScriptException {
+        if (reportInputDataDirs.size() > 1) {
+            throw new IllegalArgumentException("not implemented");
+        }
+        File reportInputDataDir = reportInputDataDirs.get(0);
         deleteDirIfExists(reportOutputDir); // delete previous execution output
         SrcTree srcTree = generateSrcTree(reportInputDataDir);
         RunResults runResults = generateRunResults(reportInputDataDir, srcTree);

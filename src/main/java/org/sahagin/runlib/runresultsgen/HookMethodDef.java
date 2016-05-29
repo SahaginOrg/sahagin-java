@@ -36,7 +36,7 @@ public class HookMethodDef {
         }
 
         // load srcTree from already dumped srcTree YAML
-        final File srcTreeFile = CommonPath.srcTreeFile(config.getRootBaseReportIntermediateDataDir());
+        final File srcTreeFile = CommonPath.srcTreeFile(config.getRootBaseRunOutputIntermediateDataDir());
         SrcTree srcTree = new SrcTree();
         try {
             srcTree.fromYamlObject(YamlUtils.load(srcTreeFile));
@@ -58,7 +58,7 @@ public class HookMethodDef {
                 public void run() {
                     HtmlReport report = new HtmlReport();
                     try {
-                        report.generate(config.getRootBaseReportIntermediateDataDir(),
+                        report.generate(config.getRootBaseReportInputIntermediateDataDirs(),
                                 config.getRootBaseReportOutputDir());
                     } catch (IllegalDataStructureException e) {
                         throw new RuntimeException(e);

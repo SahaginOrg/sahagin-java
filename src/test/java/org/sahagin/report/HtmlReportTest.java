@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
@@ -45,7 +46,7 @@ public class HtmlReportTest extends TestBase {
         clearWorkDir(subDirName);
         File outputDir = mkWorkDir(subDirName);
         report.generate(
-                testResourceDir("reportGenerateShouldSucceedWithoutError/input"),
+                Arrays.asList(testResourceDir("reportGenerateShouldSucceedWithoutError/input")),
                 outputDir);
         assertThat(new File(outputDir, "captures").exists(), is(true));
         assertThat(new File(outputDir, "css").exists(), is(true));
