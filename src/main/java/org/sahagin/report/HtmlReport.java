@@ -19,7 +19,6 @@ import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.tools.generic.MathTool;
 import org.apache.velocity.tools.generic.NumberTool;
-import org.openqa.selenium.io.IOUtils;
 import org.sahagin.share.CommonPath;
 import org.sahagin.share.CommonUtils;
 import org.sahagin.share.IllegalDataStructureException;
@@ -632,23 +631,13 @@ public class HtmlReport {
         if (outputFile.getParentFile() != null) {
             outputFile.getParentFile().mkdirs();
         }
-        InputStream in = null;
-        Reader reader = null;
-        FileWriterWithEncoding writer = null;
-        try {
-            in = this.getClass().getResourceAsStream(templateResourcePath);
-            reader = new BufferedReader(new InputStreamReader(in, Charsets.UTF_8));
-            writer = new FileWriterWithEncoding(outputFile, Charsets.UTF_8);
-            Velocity.evaluate(context, writer, this.getClass().getSimpleName(), reader);
-            writer.close();
-            reader.close();
-            in.close();
+        try (InputStream stream = this.getClass().getResourceAsStream(templateResourcePath);
+                Reader streamReader = new InputStreamReader(stream, Charsets.UTF_8);
+                Reader bfReader = new BufferedReader(streamReader);
+                FileWriterWithEncoding writer = new FileWriterWithEncoding(outputFile, Charsets.UTF_8)) {
+            Velocity.evaluate(context, writer, this.getClass().getSimpleName(), bfReader);
         } catch (IOException e) {
             throw new RuntimeException(e);
-        } finally {
-            IOUtils.closeQuietly(writer);
-            IOUtils.closeQuietly(reader);
-            IOUtils.closeQuietly(in);
         }
     }
 

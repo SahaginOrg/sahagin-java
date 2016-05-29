@@ -11,7 +11,6 @@ import java.util.Map;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.commons.lang.StringUtils;
-import org.openqa.selenium.io.IOUtils;
 import org.sahagin.runlib.external.CaptureStyle;
 import org.sahagin.runlib.external.Locale;
 import org.yaml.snakeyaml.Yaml;
@@ -286,34 +285,22 @@ public class YamlUtils {
     }
 
     public static Map<String, Object> load(File yamlFile) {
-        FileInputStream input = null;
-        Map<String, Object> result = null;
-        try {
-            input = new FileInputStream(yamlFile);
-            result = load(input);
-            input.close();
+        try (FileInputStream input = new FileInputStream(yamlFile)) {
+            return load(input);
         } catch (IOException e) {
             throw new RuntimeException("exception for " + yamlFile.getAbsolutePath(), e);
-        } finally {
-            IOUtils.closeQuietly(input);
         }
-        return result;
     }
 
     public static void dump(Map<String, Object> yamlObj, File dumpFile) {
         if (dumpFile.getParentFile() != null) {
             dumpFile.getParentFile().mkdirs();
         }
-        Yaml yaml = new Yaml();
-        FileWriterWithEncoding writer = null;
-        try {
-            writer = new FileWriterWithEncoding(dumpFile, Charsets.UTF_8);
+        try (FileWriterWithEncoding writer = new FileWriterWithEncoding(dumpFile, Charsets.UTF_8)) {
+            Yaml yaml = new Yaml();
             yaml.dump(yamlObj, writer);
-            writer.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
-        } finally {
-            IOUtils.closeQuietly(writer);
         }
     }
 }
