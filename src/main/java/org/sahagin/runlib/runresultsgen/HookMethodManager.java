@@ -201,7 +201,7 @@ public class HookMethodManager {
     }
 
     private List<Integer> getHookedCodeLineIndex(TestMethod method, int hookedLine) {
-        List<Integer> result = new ArrayList<Integer>(2);
+        List<Integer> result = new ArrayList<>(2);
         for (int i = 0; i < method.getCodeBody().size(); i++) {
             CodeLine codeLine = method.getCodeBody().get(i);
             if (codeLine.getStartLine() <= hookedLine && hookedLine <= codeLine.getEndLine()) {
@@ -350,7 +350,7 @@ public class HookMethodManager {
             // testStepLabelStackLines can be obtained
             // by changing the top element of thisStackLines
             CodeLine stepLabelCodeLine = hookedTestMethod.getCodeBody().get(stepLabelIndex);
-            testStepLabelStackLines = new ArrayList<StackLine>(thisStackLines.size());
+            testStepLabelStackLines = new ArrayList<>(thisStackLines.size());
             for (StackLine stackLine : thisStackLines) {
                 // clone and add new StackLine instance
                 testStepLabelStackLines.add(new StackLine(stackLine));
@@ -374,8 +374,8 @@ public class HookMethodManager {
 
         // screen capture.
         // Takes this line screen capture and TestStepLabel block screen capture at the same time.
-        List<List<StackLine>> stackLinesList = new ArrayList<List<StackLine>>(2);
-        List<Integer> executionTimeList = new ArrayList<Integer>(2);
+        List<List<StackLine>> stackLinesList = new ArrayList<>(2);
+        List<Integer> executionTimeList = new ArrayList<>(2);
         if (capturesThisLine) {
             stackLinesList.add(thisStackLines);
             executionTimeList.add(executionTime);

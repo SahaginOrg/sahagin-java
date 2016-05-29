@@ -209,7 +209,7 @@ public class YamlUtils {
             if (!allowsEmpty) {
                 throw new YamlConvertException(MSG_LIST_MUST_NOT_BE_NULL);
             }
-            result = new ArrayList<String>(0);
+            result = new ArrayList<>(0);
         }
         return result;
     }
@@ -229,7 +229,7 @@ public class YamlUtils {
             if (!allowsEmpty) {
                 throw new YamlConvertException(MSG_LIST_MUST_NOT_BE_NULL);
             }
-            result = new ArrayList<Integer>(0);
+            result = new ArrayList<>(0);
         }
         return result;
     }
@@ -257,7 +257,7 @@ public class YamlUtils {
             if (!allowsEmpty) {
                 throw new YamlConvertException(MSG_LIST_MUST_NOT_BE_NULL);
             }
-            result = new ArrayList<Map<String, Object>>(0);
+            result = new ArrayList<>(0);
         }
         return result;
     }
@@ -268,7 +268,7 @@ public class YamlUtils {
     }
 
     public static <T extends YamlConvertible> List<Map<String, Object>> toYamlObjectList(List<T> srcList) {
-        List<Map<String, Object>> result = new ArrayList<Map<String, Object>>(srcList.size());
+        List<Map<String, Object>> result = new ArrayList<>(srcList.size());
         for (T src : srcList) {
             Map<String, Object> yamlObj = toYamlObject(src);
             result.add(yamlObj);

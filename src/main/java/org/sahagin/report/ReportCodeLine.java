@@ -16,7 +16,7 @@ public class ReportCodeLine {
     // placeholder must have been resolved
     private String testDoc;
     // placeholder must have been resolved
-    private List<String> methodArgTestDocs = new ArrayList<String>(4);
+    private List<String> methodArgTestDocs = new ArrayList<>(4);
     private List<StackLine> stackLines;
     private boolean hasError = false;
     private boolean alreadyRun = false;

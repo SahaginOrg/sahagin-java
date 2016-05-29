@@ -123,7 +123,7 @@ public class TestDocResolver {
             //   is the comma connected string of all rest arguments.
             // - TestDoc for variable length argument
             //   is empty string if no rest arguments exist.
-            List<Code> variableCodes = new ArrayList<Code>(4);
+            List<Code> variableCodes = new ArrayList<>(4);
             for (int i = varIndex; i < methodInvoke.getArgs().size(); i++) {
                 variableCodes.add(methodInvoke.getArgs().get(i));
             }
@@ -302,10 +302,10 @@ public class TestDocResolver {
     public static List<String> placeholderResolvedMethodArgTestDocs(Code code,
             List<String> placeholderResolvedParentMethodArgTestDocs) throws IllegalTestScriptException {
         if (!(code instanceof SubMethodInvoke)) {
-            return new ArrayList<String>(0);
+            return new ArrayList<>(0);
         }
         SubMethodInvoke methodInvoke = (SubMethodInvoke) code;
-        List<String> result = new ArrayList<String>(methodInvoke.getArgs().size());
+        List<String> result = new ArrayList<>(methodInvoke.getArgs().size());
         for (Code arg : methodInvoke.getArgs()) {
             String argStr = methodTestDocSub(arg, placeholderResolvedParentMethodArgTestDocs);
             result.add(argStr);

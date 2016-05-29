@@ -28,8 +28,8 @@ implements AdditionalTestDocsAdapter {
 
     // list of locale and its YAML object pair
     private void setLocaleYamlObjListFromResource() throws YamlConvertException {
-        localeClassYamlObjMap = new HashMap<Locale, Map<String, Object>>(8);
-        localeMethodYamlObjMap = new HashMap<Locale, Map<String, Object>>(8);
+        localeClassYamlObjMap = new HashMap<>(8);
+        localeMethodYamlObjMap = new HashMap<>(8);
         for (Locale locale : Locale.values()) {
             InputStream in = this.getClass().getResourceAsStream(
                     resourceDirPath() + "/" + locale.getValue() + ".yml");

@@ -7,10 +7,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.sahagin.share.srctree.TestMethod;
 
 public class AdditionalTestDocs {
-    private List<AdditionalClassTestDoc> classTestDocs
-    = new ArrayList<AdditionalClassTestDoc>(128);
-    private List<AdditionalMethodTestDoc> methodTestDocs
-    = new ArrayList<AdditionalMethodTestDoc>(256);
+    private List<AdditionalClassTestDoc> classTestDocs = new ArrayList<>(128);
+    private List<AdditionalMethodTestDoc> methodTestDocs = new ArrayList<>(256);
 
     public List<AdditionalClassTestDoc> getClassTestDocs() {
         return classTestDocs;

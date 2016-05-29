@@ -158,7 +158,7 @@ public class SrcTreeGenerator {
             paramTypes = method.getParameterTypes();
         }
 
-        List<String> result = new ArrayList<String>(paramTypes.length);
+        List<String> result = new ArrayList<>(paramTypes.length);
         for (ITypeBinding param : paramTypes) {
             // AdditionalTestDoc's argClassQualifiedNames are defined by type erasure.
             // TODO is this generic handling logic always work well??
@@ -964,7 +964,7 @@ public class SrcTreeGenerator {
             throw new IllegalArgumentException("directory does not exist: " + srcRootDir.getAbsolutePath());
         }
         Collection<File> srcFileCollection = FileUtils.listFiles(srcRootDir, new String[]{"java"}, true);
-        List<File> srcFileList = new ArrayList<File>(srcFileCollection);
+        List<File> srcFileList = new ArrayList<>(srcFileCollection);
         String[] srcFilePaths = new String[srcFileList.size()];
         for (int i = 0; i < srcFileList.size(); i++) {
             srcFilePaths[i] = srcFileList.get(i).getAbsolutePath();
@@ -972,7 +972,7 @@ public class SrcTreeGenerator {
 
         // set up classPathEntries
         // TODO handle wild card classpath entry
-        List<String> classPathList = new ArrayList<String>(64);
+        List<String> classPathList = new ArrayList<>(64);
         String classPathStr = System.getProperty("java.class.path");
         String[] classPathArray = classPathStr.split(Pattern.quote(File.pathSeparator));
         addToClassPathList(classPathList, classPathArray);

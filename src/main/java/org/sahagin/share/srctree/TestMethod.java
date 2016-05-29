@@ -19,9 +19,9 @@ public class TestMethod extends ASTData implements YamlConvertible {
     private String simpleName;
     private String testDoc;
     private CaptureStyle captureStyle = CaptureStyle.getDefault();
-    private List<String> argVariables = new ArrayList<String>(4);
+    private List<String> argVariables = new ArrayList<>(4);
     private int variableLengthArgIndex = -1;
-    private List<CodeLine> codeBody = new ArrayList<CodeLine>(32);
+    private List<CodeLine> codeBody = new ArrayList<>(32);
 
     public String getTestClassKey() {
         return testClassKey;
@@ -190,7 +190,7 @@ public class TestMethod extends ASTData implements YamlConvertible {
 
     @Override
     public Map<String, Object> toYamlObject() {
-        Map<String, Object> result = new HashMap<String, Object>(8);
+        Map<String, Object> result = new HashMap<>(8);
         result.put("classKey", testClassKey);
         result.put("key", key);
         result.put("name", simpleName);
@@ -234,7 +234,7 @@ public class TestMethod extends ASTData implements YamlConvertible {
         }
         List<Map<String, Object>> codeBodyYamlObj
         = YamlUtils.getYamlObjectListValue(yamlObject, "codeBody", true);
-        codeBody = new ArrayList<CodeLine>(codeBodyYamlObj.size());
+        codeBody = new ArrayList<>(codeBodyYamlObj.size());
         for (Map<String, Object> codeLineYamlObj : codeBodyYamlObj) {
             CodeLine codeLine = new CodeLine();
             codeLine.fromYamlObject(codeLineYamlObj);

@@ -14,7 +14,7 @@ public class LineScreenCapture implements YamlConvertible {
     // should use absolute path
     private File path;
     // head element means stack top
-    private List<StackLine> stackLines = new ArrayList<StackLine>(16);
+    private List<StackLine> stackLines = new ArrayList<>(16);
     private int executionTime;
 
     public File getPath() {
@@ -67,7 +67,7 @@ public class LineScreenCapture implements YamlConvertible {
 
     @Override
     public Map<String, Object> toYamlObject() {
-        Map<String, Object> result = new HashMap<String, Object>(2);
+        Map<String, Object> result = new HashMap<>(2);
         result.put("path", path.getPath());
         result.put("stackLines", YamlUtils.toYamlObjectList(stackLines));
         result.put("executionTime", executionTime);
@@ -82,7 +82,7 @@ public class LineScreenCapture implements YamlConvertible {
         executionTime = YamlUtils.getIntValue(yamlObject, "executionTime");
         List<Map<String, Object>> stackLinesYamlObj
         = YamlUtils.getYamlObjectListValue(yamlObject, "stackLines");
-        stackLines = new ArrayList<StackLine>(stackLinesYamlObj.size());
+        stackLines = new ArrayList<>(stackLinesYamlObj.size());
         for (Map<String, Object> stackLineYamlObj : stackLinesYamlObj) {
             StackLine stackLine = new StackLine();
             stackLine.fromYamlObject(stackLineYamlObj);

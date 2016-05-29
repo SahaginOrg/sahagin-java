@@ -13,7 +13,7 @@ public class SubMethodInvoke extends Code {
 
     private String subMethodKey;
     private TestMethod subMethod;
-    private List<Code> args = new ArrayList<Code>(4);
+    private List<Code> args = new ArrayList<>(4);
     private Code thisInstance;
     // whether the actual invoked method is the child method of the method for the subMethodKey
     private boolean childInvoke = false;
@@ -86,7 +86,7 @@ public class SubMethodInvoke extends Code {
         subMethodKey = YamlUtils.getStrValue(yamlObject, "methodKey");
         subMethod = null;
         List<Map<String, Object>> argsYamlObj = YamlUtils.getYamlObjectListValue(yamlObject, "args", true);
-        args = new ArrayList<Code>(argsYamlObj.size());
+        args = new ArrayList<>(argsYamlObj.size());
         for (Map<String, Object> argYamlObj : argsYamlObj) {
             Code code = Code.newInstanceFromYamlObject(argYamlObj);
             args.add(code);

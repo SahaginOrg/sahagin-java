@@ -14,7 +14,7 @@ import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlConvertible;
 
 public class TestMethodTable implements YamlConvertible {
-    private List<TestMethod> testMethods = new ArrayList<TestMethod>(512);
+    private List<TestMethod> testMethods = new ArrayList<>(512);
 
     public List<TestMethod> getTestMethods() {
         return testMethods;
@@ -49,7 +49,7 @@ public class TestMethodTable implements YamlConvertible {
         if (methodSimpleName == null) {
             throw new NullPointerException();
         }
-        List<TestMethod> result = new ArrayList<TestMethod>(1);
+        List<TestMethod> result = new ArrayList<>(1);
         for (TestMethod testMethod : testMethods) {
             if (StringUtils.equals(classQualifiedName, testMethod.getTestClass().getQualifiedName())
                     && StringUtils.equals(methodSimpleName, testMethod.getSimpleName())) {
@@ -78,7 +78,7 @@ public class TestMethodTable implements YamlConvertible {
 
     @Override
     public Map<String, Object> toYamlObject() {
-        Map<String, Object> result = new HashMap<String, Object>(1);
+        Map<String, Object> result = new HashMap<>(1);
         if (!isEmpty()) {
             result.put("methods", YamlUtils.toYamlObjectList(testMethods));
         }
@@ -90,7 +90,7 @@ public class TestMethodTable implements YamlConvertible {
             throws YamlConvertException {
         List<Map<String, Object>> testMethodsYamlObj
         = YamlUtils.getYamlObjectListValue(yamlObject, "methods", true);
-        testMethods = new ArrayList<TestMethod>(testMethodsYamlObj.size());
+        testMethods = new ArrayList<>(testMethodsYamlObj.size());
         for (Map<String, Object> testMethodYamlObj : testMethodsYamlObj) {
             TestMethod testMethod = new TestMethod();
             testMethod.fromYamlObject(testMethodYamlObj);

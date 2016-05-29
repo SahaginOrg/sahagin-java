@@ -17,8 +17,8 @@ public class RootMethodRunResult implements YamlConvertible {
 
     private String rootMethodKey;
     private TestMethod rootMethod;
-    private List<RunFailure> runFailures = new ArrayList<RunFailure>(16);
-    private List<LineScreenCapture> lineScreenCaptures = new ArrayList<LineScreenCapture>(32);
+    private List<RunFailure> runFailures = new ArrayList<>(16);
+    private List<LineScreenCapture> lineScreenCaptures = new ArrayList<>(32);
     private int executionTime;
 
     public String getRootMethodKey() {
@@ -63,7 +63,7 @@ public class RootMethodRunResult implements YamlConvertible {
 
     @Override
     public Map<String, Object> toYamlObject() {
-        Map<String, Object> result = new HashMap<String, Object>(4);
+        Map<String, Object> result = new HashMap<>(4);
         result.put("formatVersion", CommonUtils.formatVersion());
         result.put("rootMethodKey", rootMethodKey);
         if (!runFailures.isEmpty()) {
@@ -89,7 +89,7 @@ public class RootMethodRunResult implements YamlConvertible {
         rootMethodKey = YamlUtils.getStrValue(yamlObject, "rootMethodKey");
         List<Map<String, Object>> runFailuresYamlObj
         = YamlUtils.getYamlObjectListValue(yamlObject, "runFailures", true);
-        runFailures = new ArrayList<RunFailure>(runFailuresYamlObj.size());
+        runFailures = new ArrayList<>(runFailuresYamlObj.size());
         for (Map<String, Object> runFailureYamlObj : runFailuresYamlObj) {
             RunFailure runFailure = new RunFailure();
             runFailure.fromYamlObject(runFailureYamlObj);
@@ -97,7 +97,7 @@ public class RootMethodRunResult implements YamlConvertible {
         }
         List<Map<String, Object>> lineScreenCapturesYamlObj
         = YamlUtils.getYamlObjectListValue(yamlObject, "lineScreenCaptures", true);
-        lineScreenCaptures = new ArrayList<LineScreenCapture>(lineScreenCapturesYamlObj.size());
+        lineScreenCaptures = new ArrayList<>(lineScreenCapturesYamlObj.size());
         for (Map<String, Object> lineScreenCaptureYamlObj : lineScreenCapturesYamlObj) {
             LineScreenCapture lineScreenCapture = new LineScreenCapture();
             lineScreenCapture.fromYamlObject(lineScreenCaptureYamlObj);

@@ -41,7 +41,7 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
     // (for example when class of method argument type has not been loaded by class loader)
     private List<String> getArgClassQualifiedNames(CtMethod method) throws NotFoundException {
         CtClass[] paramTypes = method.getParameterTypes();
-        List<String> result = new ArrayList<String>(paramTypes.length);
+        List<String> result = new ArrayList<>(paramTypes.length);
         for (CtClass paramType : paramTypes) {
             result.add(paramType.getName());
         }
@@ -60,8 +60,7 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
     private List<Pair<CtMethod, TestMethod>> allMethodsSub(
             TestMethodTable table, CtClass ctClass) {
         CtMethod[] allMethods = ctClass.getMethods();
-        List<Pair<CtMethod, TestMethod>> result
-        = new ArrayList<Pair<CtMethod, TestMethod>>(allMethods.length);
+        List<Pair<CtMethod, TestMethod>> result = new ArrayList<>(allMethods.length);
         for (CtMethod ctMethod : allMethods) {
             if (!ctMethod.getDeclaringClass().getName().equals(ctClass.getName())) {
                 // methods defined on superclass are also included in the result list of

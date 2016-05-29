@@ -99,7 +99,7 @@ public class HtmlReport {
         LineScreenCapture failureCapture = lineScreenCaptures.get(failureCaptureIndex);
 
         for (int i = 1; i < failureLines.size(); i++) {
-            List<StackLine> errorEachStackLine = new ArrayList<StackLine>(failureLines.size() - i);
+            List<StackLine> errorEachStackLine = new ArrayList<>(failureLines.size() - i);
             for (int j = i; j < failureLines.size(); j++) {
                 errorEachStackLine.add(failureLines.get(j));
             }
@@ -122,8 +122,7 @@ public class HtmlReport {
     private List<ReportScreenCapture> generateReportScreenCaptures(
             List<LineScreenCapture> lineScreenCaptures,
             File inputCaptureRootDir, File reportOutputDir, File methodReportParentDir) {
-        List<ReportScreenCapture> reportCaptures
-        = new ArrayList<ReportScreenCapture>(lineScreenCaptures.size());
+        List<ReportScreenCapture> reportCaptures = new ArrayList<>(lineScreenCaptures.size());
 
         // add noImage capture
         String noImageFilePath = new File(CommonUtils.relativize(
@@ -291,7 +290,7 @@ public class HtmlReport {
     private List<ReportCodeLine> generateReportCodeBody(TestMethod rootMethod,
             RunFailure runFailure, boolean executed) throws IllegalTestScriptException {
         String currentStepLabelTtId = null;
-        List<ReportCodeLine> result = new ArrayList<ReportCodeLine>(rootMethod.getCodeBody().size());
+        List<ReportCodeLine> result = new ArrayList<>(rootMethod.getCodeBody().size());
         for (int i = 0; i < rootMethod.getCodeBody().size(); i++) {
             CodeLine codeLine = rootMethod.getCodeBody().get(i);
             String rootTtId = Integer.toString(i);
@@ -307,7 +306,7 @@ public class HtmlReport {
 
             StackLine rootStackLine = generateStackLine(
                     rootMethod, rootMethod.getKey(), i, codeLine.getStartLine());
-            List<StackLine> rootStackLines = new ArrayList<StackLine>(1);
+            List<StackLine> rootStackLines = new ArrayList<>(1);
             rootStackLines.add(rootStackLine);
 
             ReportCodeLine reportCodeLine = generateReportCodeLine(
@@ -334,7 +333,7 @@ public class HtmlReport {
                         }
                         StackLine childStackLine = generateStackLine(invoke.getSubMethod(),
                                 invoke.getSubMethodKey(), j, childCodeLine.getStartLine());
-                        List<StackLine> childStackLines = new ArrayList<StackLine>(2);
+                        List<StackLine> childStackLines = new ArrayList<>(2);
                         childStackLines.add(childStackLine);
                         childStackLines.add(rootStackLine);
 
@@ -401,7 +400,7 @@ public class HtmlReport {
         if (runResultsRootDir.exists()) {
             runResultFiles = FileUtils.listFiles(runResultsRootDir, null, true);
         } else {
-            runResultFiles = new ArrayList<File>(0);
+            runResultFiles = new ArrayList<>(0);
         }
         for (File runResultFile : runResultFiles) {
             Map<String, Object> runResultYamlObj = YamlUtils.load(runResultFile);
@@ -516,7 +515,7 @@ public class HtmlReport {
 
         List<TestMethod> testMethods = srcTree.getRootMethodTable().getTestMethods();
         File reportMainDir = CommonPath.htmlReportMainFile(reportOutputDir).getParentFile();
-        List<ReportMethodLink> reportLinks = new ArrayList<ReportMethodLink>(testMethods.size());
+        List<ReportMethodLink> reportLinks = new ArrayList<>(testMethods.size());
 
         // generate each method report
         for (TestMethod rootMethod : testMethods) {
@@ -578,7 +577,7 @@ public class HtmlReport {
 
             List<LineScreenCapture> lineScreenCaptures;
             if (runResult == null) {
-                lineScreenCaptures = new ArrayList<LineScreenCapture>(0);
+                lineScreenCaptures = new ArrayList<>(0);
             } else {
                 lineScreenCaptures = runResult.getLineScreenCaptures();
                 // TODO execution-time tag is used in HTML report now,
@@ -615,7 +614,7 @@ public class HtmlReport {
     }
 
     private void addExecutionTime(List<LineScreenCapture> captures, List<ReportCodeLine> codeLines) {
-        Map<String, Integer> executionTimeMap = new HashMap<String, Integer>();
+        Map<String, Integer> executionTimeMap = new HashMap<>();
         for (LineScreenCapture lineScreenCapture : captures) {
             executionTimeMap.put(generateTtId(lineScreenCapture.getStackLines()), lineScreenCapture.getExecutionTime());
         }

@@ -13,7 +13,7 @@ import org.sahagin.share.yaml.YamlConvertException;
 import org.sahagin.share.yaml.YamlConvertible;
 
 public class RunResults implements YamlConvertible {
-    private List<RootMethodRunResult> rootMethodRunResults = new ArrayList<RootMethodRunResult>(512);
+    private List<RootMethodRunResult> rootMethodRunResults = new ArrayList<>(512);
 
     public List<RootMethodRunResult> getRootMethodRunResults() {
         return rootMethodRunResults;
@@ -39,7 +39,7 @@ public class RunResults implements YamlConvertible {
 
     @Override
     public Map<String, Object> toYamlObject() {
-        Map<String, Object> result = new HashMap<String, Object>(2);
+        Map<String, Object> result = new HashMap<>(2);
         if (!rootMethodRunResults.isEmpty()) {
             result.put("rootMethodRunResults", YamlUtils.toYamlObjectList(rootMethodRunResults));
         }
@@ -51,7 +51,7 @@ public class RunResults implements YamlConvertible {
             throws YamlConvertException {
         List<Map<String, Object>> rootMethodRunResultsYamlObj
         = YamlUtils.getYamlObjectListValue(yamlObject, "rootMethodRunResults", true);
-        rootMethodRunResults = new ArrayList<RootMethodRunResult>(rootMethodRunResultsYamlObj.size());
+        rootMethodRunResults = new ArrayList<>(rootMethodRunResultsYamlObj.size());
         for (Map<String, Object> rootMethodRunResultYamlObj : rootMethodRunResultsYamlObj) {
             RootMethodRunResult rootMethodRunResult = new RootMethodRunResult();
             rootMethodRunResult.fromYamlObject(rootMethodRunResultYamlObj);

@@ -12,7 +12,7 @@ public class TestStep extends Code {
 
     private String label;
     private String text;
-    private List<CodeLine> stepBody = new ArrayList<CodeLine>(32);
+    private List<CodeLine> stepBody = new ArrayList<>(32);
 
     public String getLabel() {
         return label;
@@ -66,7 +66,7 @@ public class TestStep extends Code {
         label = YamlUtils.getStrValue(yamlObject, "label", true);
         text = YamlUtils.getStrValue(yamlObject, "text", true);
         List<Map<String, Object>> stepBodyYamlObj = YamlUtils.getYamlObjectListValue(yamlObject, "body", true);
-        stepBody = new ArrayList<CodeLine>(stepBodyYamlObj.size());
+        stepBody = new ArrayList<>(stepBodyYamlObj.size());
         for (Map<String, Object> stepYamlObj : stepBodyYamlObj) {
             CodeLine step = new CodeLine();
             step.fromYamlObject(stepYamlObj);

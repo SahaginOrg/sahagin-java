@@ -16,7 +16,7 @@ public class TestMain extends Java8TestBase {
     @Test
     public void streamApiCallTest() {
         print("a");
-        List<String> slist = new ArrayList<String>(2);
+        List<String> slist = new ArrayList<>(2);
         slist.add("b");
         slist.stream().forEach(s -> System.out.println(s));
         slist.stream().forEach(s -> print(s));

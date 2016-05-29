@@ -10,7 +10,7 @@ public class TestMain {
 
     @Test
     public void streamApiCallTest() {
-        List<String> slist = new ArrayList<String>(2);
+        List<String> slist = new ArrayList<>(2);
         slist.add("a");
         slist.stream().forEach(s -> System.out.println(s));
         slist.stream().forEach(s -> print(s));

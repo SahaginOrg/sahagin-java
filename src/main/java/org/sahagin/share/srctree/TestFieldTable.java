@@ -13,7 +13,7 @@ import org.sahagin.share.yaml.YamlConvertible;
 import org.sahagin.share.yaml.YamlUtils;
 
 public class TestFieldTable implements YamlConvertible {
-    private List<TestField> testFields = new ArrayList<TestField>(512);
+    private List<TestField> testFields = new ArrayList<>(512);
 
     public List<TestField> getTestFields() {
         return testFields;
@@ -59,7 +59,7 @@ public class TestFieldTable implements YamlConvertible {
 
     @Override
     public Map<String, Object> toYamlObject() {
-        Map<String, Object> result = new HashMap<String, Object>(1);
+        Map<String, Object> result = new HashMap<>(1);
         if (!isEmpty()) {
             result.put("fields", YamlUtils.toYamlObjectList(testFields));
         }
@@ -71,7 +71,7 @@ public class TestFieldTable implements YamlConvertible {
             throws YamlConvertException {
         List<Map<String, Object>> testFieldsYamlObj
         = YamlUtils.getYamlObjectListValue(yamlObject, "fields", true);
-        testFields = new ArrayList<TestField>(testFieldsYamlObj.size());
+        testFields = new ArrayList<>(testFieldsYamlObj.size());
         for (Map<String, Object> testFieldYamlObj : testFieldsYamlObj) {
             TestField testField = new TestField();
             testField.fromYamlObject(testFieldYamlObj);

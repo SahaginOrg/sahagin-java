@@ -19,7 +19,7 @@ rootMethodTable:
         thisInstance: {type: localVar, name: instance}
     name: "defaultInterfaceTest"
   - codeBody:
-    - code: {original: List<String> slist=new ArrayList<String>(2);, type: unknown}
+    - code: {original: List<String> slist=new ArrayList<>(2);, type: unknown}
     - code: {original: slist.add("a");, type: unknown}
     - code: {original: slist.stream().forEach(s -> System.out.println(s));, type: unknown}
     - code: {original: slist.stream().forEach(s -> print(s));, type: unknown}

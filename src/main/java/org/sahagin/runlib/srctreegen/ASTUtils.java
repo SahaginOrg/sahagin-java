@@ -134,7 +134,7 @@ public class ASTUtils {
         }
 
         // all @testDoc annotations including annotations contained in @TestDocs
-        List<IAnnotationBinding> allTestDocAnnotations = new ArrayList<IAnnotationBinding>(2);
+        List<IAnnotationBinding> allTestDocAnnotations = new ArrayList<>(2);
         CaptureStyle resultCaptureStyle = null;
 
         if (testDocAnnotation != null) {
@@ -158,8 +158,7 @@ public class ASTUtils {
         }
 
         // get resultTestDocMap
-        Map<Locale, String> resultTestDocMap
-        = new HashMap<Locale, String>(allTestDocAnnotations.size());
+        Map<Locale, String> resultTestDocMap = new HashMap<>(allTestDocAnnotations.size());
         for (IAnnotationBinding eachTestDocAnnotation : allTestDocAnnotations) {
             Object value = getAnnotationValue(eachTestDocAnnotation, "value");
             Locale locale = getAnnotationLocaleValue(eachTestDocAnnotation, "locale");
@@ -172,9 +171,9 @@ public class ASTUtils {
     // return empty list if no Page is found
     private static Map<Locale, String> getAllPageDocs(IAnnotationBinding[] annotations) {
         // all @PageDoc or @Page annotations including annotations contained in @PageDocs or @Page
-        List<IAnnotationBinding> allPageAnnotations = new ArrayList<IAnnotationBinding>(2);
+        List<IAnnotationBinding> allPageAnnotations = new ArrayList<>(2);
 
-        List<Class<?>> singlePageAnnotationClasses = new ArrayList<Class<?>>(2);
+        List<Class<?>> singlePageAnnotationClasses = new ArrayList<>(2);
         singlePageAnnotationClasses.add(PageDoc.class);
         singlePageAnnotationClasses.add(Page.class);
         for (Class<?> annotationClass : singlePageAnnotationClasses) {
@@ -189,7 +188,7 @@ public class ASTUtils {
             allPageAnnotations.add(annotation);
         }
 
-        List<Class<?>> multiplePageAnnotationClasses = new ArrayList<Class<?>>(2);
+        List<Class<?>> multiplePageAnnotationClasses = new ArrayList<>(2);
         multiplePageAnnotationClasses.add(PageDocs.class);
         multiplePageAnnotationClasses.add(Pages.class);
         for (Class<?> annotationClass : multiplePageAnnotationClasses) {
@@ -210,8 +209,7 @@ public class ASTUtils {
         }
 
         // get resultPageMap
-        Map<Locale, String> resultPageMap
-        = new HashMap<Locale, String>(allPageAnnotations.size());
+        Map<Locale, String> resultPageMap = new HashMap<>(allPageAnnotations.size());
         for (IAnnotationBinding eachPageAnnotation : allPageAnnotations) {
             Object value = getAnnotationValue(eachPageAnnotation, "value");
             Locale locale = getAnnotationLocaleValue(eachPageAnnotation, "locale");

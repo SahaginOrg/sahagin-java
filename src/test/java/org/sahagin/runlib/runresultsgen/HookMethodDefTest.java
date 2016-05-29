@@ -41,8 +41,8 @@ public class HookMethodDefTest extends TestBase {
 
     private class MavenInvokeResult {
         private String invokerName;
-        private final List<String> stdOuts = new ArrayList<String>(1024);
-        private final List<String> stdErrs = new ArrayList<String>(1024);
+        private final List<String> stdOuts = new ArrayList<>(1024);
+        private final List<String> stdErrs = new ArrayList<>(1024);
         private boolean succeeded = false;
 
         private MavenInvokeResult(String invokerName) {
@@ -120,7 +120,7 @@ public class HookMethodDefTest extends TestBase {
             throw new RuntimeException(e);
         }
         List<Integer> lineScreenCatureExecutionTimes
-        = new ArrayList<Integer>(result.getLineScreenCaptures().size());
+        = new ArrayList<>(result.getLineScreenCaptures().size());
         for (LineScreenCapture lineScreenCapture : result.getLineScreenCaptures()) {
             lineScreenCatureExecutionTimes.add(lineScreenCapture.getExecutionTime());
         }

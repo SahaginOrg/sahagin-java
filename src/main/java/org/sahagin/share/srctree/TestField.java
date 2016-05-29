@@ -74,7 +74,7 @@ public class TestField extends ASTData implements YamlConvertible {
 
     @Override
     public Map<String, Object> toYamlObject() {
-        Map<String, Object> result = new HashMap<String, Object>(8);
+        Map<String, Object> result = new HashMap<>(8);
         result.put("classKey", testClassKey);
         result.put("key", key);
         result.put("name", simpleName);

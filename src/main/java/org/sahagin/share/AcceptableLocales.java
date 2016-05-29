@@ -6,7 +6,7 @@ import java.util.List;
 import org.sahagin.runlib.external.Locale;
 
 public class AcceptableLocales {
-    private List<Locale> locales = new ArrayList<Locale>(4);
+    private List<Locale> locales = new ArrayList<>(4);
 
     // private constructor
     private AcceptableLocales() {}

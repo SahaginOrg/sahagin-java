@@ -14,7 +14,7 @@ public class RunFailure implements YamlConvertible {
     // this is display only string, and the format is arbitrary
     private String stackTrace;
     // head element means stack top
-    private List<StackLine> stackLines = new ArrayList<StackLine>(16);
+    private List<StackLine> stackLines = new ArrayList<>(16);
 
     public String getMessage() {
         return message;
@@ -42,7 +42,7 @@ public class RunFailure implements YamlConvertible {
 
     @Override
     public Map<String, Object> toYamlObject() {
-        Map<String, Object> result = new HashMap<String, Object>(4);
+        Map<String, Object> result = new HashMap<>(4);
         if (message != null) {
             result.put("message", message);
         }
@@ -62,7 +62,7 @@ public class RunFailure implements YamlConvertible {
         stackTrace = YamlUtils.getStrValue(yamlObject, "stackTrace", true);
         List<Map<String, Object>> stackLinesYamlObj
         = YamlUtils.getYamlObjectListValue(yamlObject, "stackLines", true);
-        stackLines = new ArrayList<StackLine>(stackLinesYamlObj.size());
+        stackLines = new ArrayList<>(stackLinesYamlObj.size());
         for (Map<String, Object> stackLineYamlObj : stackLinesYamlObj) {
             StackLine stackLine = new StackLine();
             stackLine.fromYamlObject(stackLineYamlObj);

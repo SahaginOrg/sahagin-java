@@ -14,7 +14,7 @@ public class JavaConfig extends Config {
     private static final String TEST_FRAMEWORK_DEFAULT = "jUnit4";
 
     private File testDir;
-    private List<String> adapterClassNames = new ArrayList<String>(8);
+    private List<String> adapterClassNames = new ArrayList<>(8);
     private String testFramework = TEST_FRAMEWORK_DEFAULT;
 
     public static JavaConfig generateFromYamlConfig(File yamlConfigFile) throws YamlConvertException {
@@ -65,7 +65,7 @@ public class JavaConfig extends Config {
     @Override
     public Map<String, Object> toYamlObject() {
         Map<String, Object> result = super.toYamlObject();
-        Map<String, Object> javaConf = new HashMap<String, Object>(4);
+        Map<String, Object> javaConf = new HashMap<>(4);
         javaConf.put("testDir", testDir.getPath());
         javaConf.put("adapters", adapterClassNames);
         javaConf.put("testFramework", testFramework);

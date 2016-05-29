@@ -14,7 +14,7 @@ import org.sahagin.share.yaml.YamlConvertible;
 
 //class or interface
 public class TestClassTable implements YamlConvertible {
-    private List<TestClass> testClasses = new ArrayList<TestClass>(512);
+    private List<TestClass> testClasses = new ArrayList<>(512);
 
     public List<TestClass> getTestClasses() {
         return testClasses;
@@ -53,7 +53,7 @@ public class TestClassTable implements YamlConvertible {
 
     @Override
     public Map<String, Object> toYamlObject() {
-        Map<String, Object> result = new HashMap<String, Object>(1);
+        Map<String, Object> result = new HashMap<>(1);
         if (!isEmpty()) {
             result.put("classes", YamlUtils.toYamlObjectList(testClasses));
         }
@@ -65,7 +65,7 @@ public class TestClassTable implements YamlConvertible {
             throws YamlConvertException {
         List<Map<String, Object>> testClassesYamlObj
         = YamlUtils.getYamlObjectListValue(yamlObject, "classes", true);
-        testClasses = new ArrayList<TestClass>(testClassesYamlObj.size());
+        testClasses = new ArrayList<>(testClassesYamlObj.size());
         for (Map<String, Object> testClassYamlObj : testClassesYamlObj) {
             TestClass testClass = TestClass.newInstanceFromYamlObject(testClassYamlObj);
             testClasses.add(testClass);

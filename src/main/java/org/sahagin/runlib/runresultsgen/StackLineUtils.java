@@ -114,7 +114,7 @@ class StackLineUtils {
     // gap line (the line out of SrcTree) is skipped
     public static List<StackLine> getStackLines(SrcTree srcTree,
             StackTraceElement[] elements, LineReplacer replacer) {
-        List<StackLine> stackLines = new ArrayList<StackLine>(elements.length);
+        List<StackLine> stackLines = new ArrayList<>(elements.length);
         for (StackTraceElement element : elements) {
             StackLine stackLine = getStackLine(srcTree, element, replacer);
             if (stackLine != null) {

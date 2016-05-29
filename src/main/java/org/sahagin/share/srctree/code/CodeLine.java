@@ -40,7 +40,7 @@ public class CodeLine extends ASTData implements YamlConvertible {
 
     @Override
     public Map<String, Object> toYamlObject() {
-        Map<String, Object> result = new HashMap<String, Object>(4);
+        Map<String, Object> result = new HashMap<>(4);
         result.put("startLine", startLine);
         result.put("endLine", endLine);
         result.put("code", YamlUtils.toYamlObject(code));

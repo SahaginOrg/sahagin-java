@@ -26,7 +26,7 @@ public class SysMessages {
 
     private void loadFromResource(AcceptableLocales locales) throws YamlConvertException {
         this.locales = locales;
-        localeYamlObjMap = new HashMap<Locale, Map<String, Object>>(8);
+        localeYamlObjMap = new HashMap<>(8);
         for (Locale locale : this.locales.getLocales()) {
             InputStream in = this.getClass().getResourceAsStream(
                     CommonPath.standardSystemLocaleResDirPath("java")

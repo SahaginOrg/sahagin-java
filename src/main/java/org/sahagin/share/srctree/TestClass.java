@@ -21,10 +21,10 @@ public class TestClass extends ASTData implements YamlConvertible {
     // null represents no delegation
     private String delegateToTestClassKey = null;
     private TestClass delegateToTestClass = null;
-    private List<String> testMethodKeys = new ArrayList<String>(16);
-    private List<TestMethod> testMethods = new ArrayList<TestMethod>(16);
-    private List<String> testFieldKeys = new ArrayList<String>(16);
-    private List<TestField> testFields = new ArrayList<TestField>(16);
+    private List<String> testMethodKeys = new ArrayList<>(16);
+    private List<TestMethod> testMethods = new ArrayList<>(16);
+    private List<String> testFieldKeys = new ArrayList<>(16);
+    private List<TestField> testFields = new ArrayList<>(16);
 
     public String getKey() {
         return key;
@@ -123,7 +123,7 @@ public class TestClass extends ASTData implements YamlConvertible {
 
     @Override
     public Map<String, Object> toYamlObject() {
-        Map<String, Object> result = new HashMap<String, Object>(8);
+        Map<String, Object> result = new HashMap<>(8);
         result.put("key", key);
         result.put("qname", qualifiedName);
         if (!getType().equals(DEFAULT_TYPE)) {

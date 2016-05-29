@@ -20,7 +20,7 @@ public class Config implements YamlConvertible {
     private File rootDir;
     private File runOutputIntermediateDataDir = INTERMEDIATE_DATA_DIR_DEFAULT;
     private List<File> reportInputIntermediateDataDirs
-    = new ArrayList<File>(Arrays.asList(INTERMEDIATE_DATA_DIR_DEFAULT));
+    = new ArrayList<>(Arrays.asList(INTERMEDIATE_DATA_DIR_DEFAULT));
     private File reportOutputDir = REPORT_OUTPUDT_DATA_DIR_DEFAULT;
     private boolean outputLog = false; // TODO provisional. this is only for debugging
     // if true, don't generate report, generate only report input
@@ -62,7 +62,7 @@ public class Config implements YamlConvertible {
     }
 
     public final List<File> getRootBaseReportInputIntermediateDataDirs() {
-        List<File> result = new ArrayList<File>(reportInputIntermediateDataDirs.size());
+        List<File> result = new ArrayList<>(reportInputIntermediateDataDirs.size());
         for (File reportInputIntermediateDataDir : reportInputIntermediateDataDirs) {
             if (reportInputIntermediateDataDir.isAbsolute()) {
                 result.add(reportInputIntermediateDataDir);
@@ -129,10 +129,10 @@ public class Config implements YamlConvertible {
 
     @Override
     public Map<String, Object> toYamlObject() {
-        Map<String, Object> commonConf = new HashMap<String, Object>(4);
+        Map<String, Object> commonConf = new HashMap<>(4);
         commonConf.put("runOutputIntermediateDataDir", runOutputIntermediateDataDir.getPath());
         if (!reportInputIntermediateDataDirs.isEmpty()) {
-            List<String> paths = new ArrayList<String>(reportInputIntermediateDataDirs.size());
+            List<String> paths = new ArrayList<>(reportInputIntermediateDataDirs.size());
             for (File reportInputIntermediateDataDir : reportInputIntermediateDataDirs) {
                 paths.add(reportInputIntermediateDataDir.getPath());
             }
@@ -146,7 +146,7 @@ public class Config implements YamlConvertible {
         } else {
             commonConf.put("userLocale", userLocale.getValue());
         }
-        Map<String, Object> result = new HashMap<String, Object>(4);
+        Map<String, Object> result = new HashMap<>(4);
         result.put("common", commonConf);
         return result;
     }

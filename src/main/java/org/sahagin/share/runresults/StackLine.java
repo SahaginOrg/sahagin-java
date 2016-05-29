@@ -61,7 +61,7 @@ public class StackLine implements YamlConvertible {
 
     @Override
     public Map<String, Object> toYamlObject() {
-        Map<String, Object> result = new HashMap<String, Object>(8);
+        Map<String, Object> result = new HashMap<>(8);
         result.put("methodKey", methodKey);
         result.put("codeBodyIndex", codeBodyIndex);
         result.put("line", line);
