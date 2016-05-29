@@ -2,7 +2,6 @@ package base;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
@@ -16,7 +15,7 @@ public class Java8TestBase {
     private File getTestCapturePath(int counter) {
         return new File("captures", counter + ".png");
     }
-    
+
     protected int nextCounter() {
         return counter;
     }
@@ -32,8 +31,6 @@ public class Java8TestBase {
                 counter++;
                 try {
                     return IOUtils.toByteArray(new FileInputStream(captureFile));
-                } catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

@@ -60,9 +60,7 @@ public class HookMethodDef {
                     try {
                         report.generate(config.getRootBaseReportInputIntermediateDataDirs(),
                                 config.getRootBaseReportOutputDir());
-                    } catch (IllegalDataStructureException e) {
-                        throw new RuntimeException(e);
-                    } catch (IllegalTestScriptException e) {
+                    } catch (IllegalDataStructureException | IllegalTestScriptException e) {
                         throw new RuntimeException(e);
                     }
                 }
