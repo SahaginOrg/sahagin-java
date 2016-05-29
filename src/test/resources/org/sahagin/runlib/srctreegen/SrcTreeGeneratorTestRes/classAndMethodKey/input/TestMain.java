@@ -38,7 +38,5 @@ public class TestMain {
 
         @TestDoc("Doc: innerStaticClassMethod")
         public void innerStaticClassMethod() {}
-
     }
-
 }

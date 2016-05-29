@@ -302,5 +302,4 @@ public class RunResultsGenerateHookSetter implements ClassFileTransformer {
             IOUtils.closeQuietly(stream);
         }
     }
-
 }

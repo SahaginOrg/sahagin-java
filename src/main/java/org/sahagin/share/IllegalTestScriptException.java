@@ -17,5 +17,4 @@ public class IllegalTestScriptException extends Exception {
     public IllegalTestScriptException(Throwable cause) {
         super(cause);
     }
-
 }

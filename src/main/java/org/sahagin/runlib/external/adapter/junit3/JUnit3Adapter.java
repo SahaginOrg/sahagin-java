@@ -63,8 +63,7 @@ public class JUnit3Adapter implements Adapter {
         }
 
         @Override
-        public void classAdd() {
-        }
+        public void classAdd() {}
 
         @Override
         public void methodAdd() {
@@ -76,7 +75,5 @@ public class JUnit3Adapter implements Adapter {
             methodAdd("junit.framework.Assert", "assertEquals", "Object,Object");
             methodAdd("junit.framework.Assert", "assertEquals", "Object[],Object[]");
         }
-
     }
-
 }

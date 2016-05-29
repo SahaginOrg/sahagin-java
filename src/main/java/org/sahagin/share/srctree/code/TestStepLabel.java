@@ -52,5 +52,4 @@ public class TestStepLabel extends Code {
         label = YamlUtils.getStrValue(yamlObject, "label", true);
         text = YamlUtils.getStrValue(yamlObject, "text", true);
     }
-
 }

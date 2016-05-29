@@ -8,5 +8,4 @@ public class PageClass extends TestClass {
     protected String getType() {
         return TYPE;
     }
-
 }

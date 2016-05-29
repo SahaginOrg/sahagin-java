@@ -71,5 +71,4 @@ public class TestClassTable implements YamlConvertible {
             testClasses.add(testClass);
         }
     }
-
 }

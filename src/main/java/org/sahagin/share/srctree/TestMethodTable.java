@@ -97,5 +97,4 @@ public class TestMethodTable implements YamlConvertible {
             testMethods.add(testMethod);
         }
     }
-
 }

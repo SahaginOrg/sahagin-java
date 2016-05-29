@@ -176,5 +176,4 @@ public class TestClass extends ASTData implements YamlConvertible {
         result.fromYamlObject(yamlObject);
         return result;
     }
-
 }

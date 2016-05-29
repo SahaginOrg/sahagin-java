@@ -83,5 +83,4 @@ public class SahaginMain {
         report.generate(config.getRootBaseReportInputIntermediateDataDirs(),
                 config.getRootBaseReportOutputDir());
     }
-
 }

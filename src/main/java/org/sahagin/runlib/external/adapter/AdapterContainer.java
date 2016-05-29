@@ -66,5 +66,4 @@ public abstract class AdapterContainer {
     public final AdditionalTestDocs getAdditionalTestDocs() {
         return additionalTestDocs;
     }
-
 }

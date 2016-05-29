@@ -78,5 +78,4 @@ public class TestFieldTable implements YamlConvertible {
             testFields.add(testField);
         }
     }
-
 }

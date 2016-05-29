@@ -11,5 +11,4 @@ public class TestMain {
         TestSub sub = new TestSub();
         sub.staticMethod();
     }
-
 }

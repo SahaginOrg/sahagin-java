@@ -58,7 +58,7 @@ public enum Locale {
         }
         return null;
     }
-    
+
     // search locale for java.util.Locale
     public static Locale getLocale(java.util.Locale locale) {
         for (Locale lang : values()) {
@@ -69,10 +69,9 @@ public enum Locale {
         }
         return null;
     }
-    
+
     // returns null if not Locale found
     public static Locale getSystemLocale() {
         return getLocale(java.util.Locale.getDefault());
     }
-
 }

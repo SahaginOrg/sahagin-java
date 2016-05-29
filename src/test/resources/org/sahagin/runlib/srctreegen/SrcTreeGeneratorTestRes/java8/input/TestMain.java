@@ -30,5 +30,4 @@ public class TestMain {
         @TestDoc("Doc: defaultMethod")
         default void defaultMethod() {}
     }
-
 }

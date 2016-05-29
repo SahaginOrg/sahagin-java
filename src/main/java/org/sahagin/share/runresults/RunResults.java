@@ -83,5 +83,4 @@ public class RunResults implements YamlConvertible {
             }
         }
     }
-
 }

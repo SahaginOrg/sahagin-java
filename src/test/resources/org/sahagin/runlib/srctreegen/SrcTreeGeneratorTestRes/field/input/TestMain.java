@@ -15,5 +15,4 @@ public class TestMain {
         int localVar2 = field2;
         System.out.println(localVar1 + localVar2);
     }
-
 }

@@ -70,5 +70,4 @@ public abstract class Code extends ASTData implements YamlConvertible {
         result.fromYamlObject(yamlObject);
         return result;
     }
-
 }

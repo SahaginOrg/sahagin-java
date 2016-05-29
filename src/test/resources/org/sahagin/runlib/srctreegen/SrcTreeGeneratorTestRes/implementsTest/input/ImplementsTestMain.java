@@ -16,5 +16,4 @@ public class ImplementsTestMain implements ImplementsTestBase {
         ImplementsPageBase baseInstance = new ImplementsPage();
         baseInstance.baseMethod("RRR");
     }
-
 }

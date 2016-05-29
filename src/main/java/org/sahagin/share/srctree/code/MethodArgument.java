@@ -36,5 +36,4 @@ public class MethodArgument extends Code {
         super.fromYamlObject(yamlObject);
         argIndex = YamlUtils.getIntValue(yamlObject, "argIndex");
     }
-
 }

@@ -88,5 +88,4 @@ public class TestDocResolverTest extends TestBase {
                 invokeWithoutVarLenArg, new ArrayList<String>(0));
         assertThat(testDocWithoutOptArg, is("abc"));
     }
-
 }

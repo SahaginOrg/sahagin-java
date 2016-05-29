@@ -75,5 +75,4 @@ public class SysMessages {
         }
         return globalInstance.getMessage(key);
     }
-
 }

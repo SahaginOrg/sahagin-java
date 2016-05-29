@@ -20,5 +20,4 @@ public class IllegalDataStructureException extends Exception {
     public IllegalDataStructureException(Throwable cause) {
         super(cause);
     }
-
 }

@@ -15,5 +15,4 @@ public class JavaLibAdapter implements Adapter {
     public String getName() {
         return "javaLib";
     }
-
 }

@@ -212,5 +212,4 @@ public class Config implements YamlConvertible {
             userLocale = YamlUtils.getLocaleValue(commonYamlObj, "userLocale");
         }
     }
-
 }

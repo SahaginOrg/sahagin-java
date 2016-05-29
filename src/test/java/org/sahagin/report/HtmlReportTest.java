@@ -119,5 +119,4 @@ public class HtmlReportTest extends TestBase {
             } catch (Exception ignored) {}
         }
     }
-
 }

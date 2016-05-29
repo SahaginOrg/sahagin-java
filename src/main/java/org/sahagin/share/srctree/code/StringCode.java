@@ -36,5 +36,4 @@ public class StringCode extends Code {
         super.fromYamlObject(yamlObject);
         value = YamlUtils.getStrValue(yamlObject, "value");
     }
-
 }

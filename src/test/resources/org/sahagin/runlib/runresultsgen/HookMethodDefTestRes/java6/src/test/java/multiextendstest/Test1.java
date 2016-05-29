@@ -8,5 +8,4 @@ public class Test1 extends Base {
     public void test1() {
         baseMethod();
     }
-
 }

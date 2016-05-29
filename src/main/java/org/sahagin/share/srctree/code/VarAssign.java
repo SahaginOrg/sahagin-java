@@ -49,5 +49,4 @@ public class VarAssign extends Code {
         Map<String, Object> valueYamlObj = YamlUtils.getYamlObjectValue(yamlObject, "value");
         value = Code.newInstanceFromYamlObject(valueYamlObj);
     }
-
 }

@@ -34,5 +34,4 @@ public class TestMain {
         child.parentClassMethod("abc");
         child.parentInterfaceMethod("def");
     }
-
 }

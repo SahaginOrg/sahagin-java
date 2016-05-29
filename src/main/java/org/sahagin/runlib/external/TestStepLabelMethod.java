@@ -6,5 +6,4 @@ public class TestStepLabelMethod {
     public static void TestDoc(String text) {
         // do nothing
     }
-
 }

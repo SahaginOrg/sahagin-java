@@ -15,5 +15,4 @@ public class JavaSystemAdapter implements Adapter {
     public String getName() {
         return "javaSystem";
     }
-
 }

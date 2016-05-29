@@ -361,5 +361,4 @@ public class HookMethodDefTest extends TestBase {
             throw e;
         }
     }
-
 }

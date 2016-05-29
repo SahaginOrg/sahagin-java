@@ -60,5 +60,4 @@ public class Field extends Code {
         Map<String, Object> thisInstanceYamlObj = YamlUtils.getYamlObjectValue(yamlObject, "thisInstance", true);
         thisInstance = Code.newInstanceFromYamlObject(thisInstanceYamlObj);
     }
-
 }

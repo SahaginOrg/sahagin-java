@@ -128,5 +128,4 @@ public class TestMain extends Java6TestBase {
         System.out.println("no testDoc line");
         TestDoc("Doc: main3");
     }
-
 }

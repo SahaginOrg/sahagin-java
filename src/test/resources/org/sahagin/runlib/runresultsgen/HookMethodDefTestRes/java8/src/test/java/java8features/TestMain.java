@@ -36,5 +36,4 @@ public class TestMain extends Java8TestBase {
         @TestDoc("Doc: defaultMethod")
         default void defaultMethod() {}
     }
-
 }

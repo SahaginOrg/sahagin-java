@@ -110,5 +110,4 @@ public class SahaginPreMain {
         YamlUtils.dump(srcTree.toYamlObject(), srcTreeFile);
         return srcTree;
     }
-
 }

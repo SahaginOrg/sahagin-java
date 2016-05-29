@@ -10,5 +10,4 @@ public class Base extends Java6TestBase {
     public void baseMethod() {
         System.out.println("baseMethod");
     }
-
 }

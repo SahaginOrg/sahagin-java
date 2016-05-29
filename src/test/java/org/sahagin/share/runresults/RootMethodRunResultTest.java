@@ -20,5 +20,4 @@ public class RootMethodRunResultTest extends TestBase {
         Map<String, Object> toYamlObj = result.toYamlObject();
         assertYamlEquals(fromYamlObj, toYamlObj);
     }
-
 }

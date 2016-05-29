@@ -287,5 +287,4 @@ public class ASTUtils {
             IVariableBinding variable, AcceptableLocales locales) {
         return getTestDoc(variable.getAnnotations(), locales).getLeft();
     }
-
 }

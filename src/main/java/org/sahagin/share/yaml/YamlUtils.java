@@ -316,5 +316,4 @@ public class YamlUtils {
             IOUtils.closeQuietly(writer);
         }
     }
-
 }

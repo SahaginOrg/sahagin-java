@@ -86,5 +86,4 @@ public class AdditionalMethodTestDoc {
     public void setCaptureStyle(CaptureStyle captureStyle) {
         this.captureStyle = captureStyle;
     }
-
 }

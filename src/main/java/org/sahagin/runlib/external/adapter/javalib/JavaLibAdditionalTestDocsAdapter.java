@@ -12,13 +12,11 @@ public class JavaLibAdditionalTestDocsAdapter extends ResourceAdditionalTestDocs
     }
 
     @Override
-    public void classAdd() {
-    }
+    public void classAdd() {}
 
     @Override
     public void methodAdd() {
         // in alphabetical order
         methodAdd("java.util.List", "get", CaptureStyle.NONE);
     }
-
 }

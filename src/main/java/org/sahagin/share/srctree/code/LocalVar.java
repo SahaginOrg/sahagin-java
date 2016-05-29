@@ -35,5 +35,4 @@ public class LocalVar extends Code {
         super.fromYamlObject(yamlObject);
         name = YamlUtils.getStrValue(yamlObject, "name");
     }
-
 }

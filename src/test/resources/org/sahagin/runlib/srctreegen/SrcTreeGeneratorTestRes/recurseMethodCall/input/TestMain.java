@@ -18,5 +18,4 @@ public class TestMain {
     public void mutualRecurseMethodCall2() {
         mutualRecurseMethodCall1();
     }
-
 }

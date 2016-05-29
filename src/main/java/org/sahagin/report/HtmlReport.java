@@ -665,5 +665,4 @@ public class HtmlReport {
             throw new RuntimeException(e);
         }
     }
-
 }

@@ -15,5 +15,4 @@ public class YamlConvertException extends Exception {
     public YamlConvertException(Throwable cause) {
         super(cause);
     }
-
 }

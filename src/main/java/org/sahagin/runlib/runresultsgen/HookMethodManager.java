@@ -479,5 +479,4 @@ public class HookMethodManager {
         }
         return true;
     }
-
 }

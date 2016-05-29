@@ -189,5 +189,4 @@ public class SrcTreeGeneratorTest extends TestBase {
     public void testNG() {
         testMain("testNG", null, null, TESTNG);
     }
-
 }

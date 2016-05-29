@@ -147,5 +147,4 @@ public class ReportCodeLine {
     public void setExecutionTime(int executionTime) {
         this.executionTime = executionTime;
     }
-
 }

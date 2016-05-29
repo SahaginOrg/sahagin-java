@@ -106,5 +106,4 @@ public class RootMethodRunResult implements YamlConvertible {
         // TODO should accept empty executionTime
         executionTime = YamlUtils.getIntValue(yamlObject, "executionTime");
     }
-
 }

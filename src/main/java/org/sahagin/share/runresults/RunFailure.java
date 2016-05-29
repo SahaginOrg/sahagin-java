@@ -69,5 +69,4 @@ public class RunFailure implements YamlConvertible {
             stackLines.add(stackLine);
         }
     }
-
 }

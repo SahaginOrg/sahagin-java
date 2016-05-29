@@ -30,5 +30,4 @@ public class WebDriverScreenCaptureAdapter implements ScreenCaptureAdapter {
         }
         // TODO test should not fail when taking screen capture fails?
     }
-
 }

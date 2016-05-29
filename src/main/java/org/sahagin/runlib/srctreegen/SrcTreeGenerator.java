@@ -981,5 +981,4 @@ public class SrcTreeGenerator {
         }
         return generate(srcFilePaths, srcCharset, classPathList.toArray(new String[0]));
     }
-
 }

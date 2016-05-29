@@ -19,5 +19,4 @@ public class TestMain {
         TestSub.SubInnerClass subInner = new TestSub.SubInnerClass();
         subInner.subInnerClassMethod();
     }
-
 }

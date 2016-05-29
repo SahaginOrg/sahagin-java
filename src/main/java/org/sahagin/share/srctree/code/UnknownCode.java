@@ -7,5 +7,4 @@ public class UnknownCode extends Code {
     protected String getType() {
         return TYPE;
     }
-
 }

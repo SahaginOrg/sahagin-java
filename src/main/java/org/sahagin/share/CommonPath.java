@@ -42,5 +42,4 @@ public class CommonPath {
     public static String standardSystemLocaleResDirPath(String bindingName) {
         return "/locale/" + bindingName + "/system";
     }
-
 }

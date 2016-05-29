@@ -40,5 +40,4 @@ public class TestMain extends Java6TestBase {
     public void assertCaptureNextCounterNoTestDoc(int expected) {
         assertThat(nextCounter(), is(expected));
     }
-
 }

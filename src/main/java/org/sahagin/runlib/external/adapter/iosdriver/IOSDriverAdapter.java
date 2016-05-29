@@ -35,16 +35,13 @@ public class IOSDriverAdapter implements Adapter {
         }
 
         @Override
-        public void classAdd() {
-        }
+        public void classAdd() {}
 
         @Override
         public void methodAdd() {
             // in alphabetical order
         }
-
     }
-
 }
 
 

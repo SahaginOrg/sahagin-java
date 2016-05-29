@@ -91,5 +91,4 @@ public class JavaConfig extends Config {
             testFramework = testFrameworkValue;
         }
     }
-
 }

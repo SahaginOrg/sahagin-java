@@ -371,5 +371,4 @@ public class TestDocResolver {
         }
         return null;
     }
-
 }

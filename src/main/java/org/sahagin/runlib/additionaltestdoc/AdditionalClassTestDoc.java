@@ -42,5 +42,4 @@ public class AdditionalClassTestDoc {
             String delegateToQualifiedName) {
         this.delegateToQualifiedName = delegateToQualifiedName;
     }
-
 }

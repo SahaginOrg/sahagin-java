@@ -174,6 +174,4 @@ public class CommonUtils {
               IOUtils.closeQuietly(in);
           }
     }
-
 }
-

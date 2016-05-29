@@ -20,5 +20,4 @@ public class SrcTreeTest extends TestBase {
         Map<String, Object> toYamlObj = srcTree.toYamlObject();
         assertYamlEquals(fromYamlObj, toYamlObj);
     }
-
 }

@@ -11,5 +11,4 @@ public class TestMain {
         assertThat("ABC", is("ABC"));
         assertThat("ABC", is(not("DEF")));
     }
-
 }

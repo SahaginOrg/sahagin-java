@@ -12,8 +12,7 @@ public class JUnit4AdditionalTestDocsAdapter extends ResourceAdditionalTestDocsA
     }
 
     @Override
-    public void classAdd() {
-    }
+    public void classAdd() {}
 
     @Override
     public void methodAdd() {
@@ -33,5 +32,4 @@ public class JUnit4AdditionalTestDocsAdapter extends ResourceAdditionalTestDocsA
         methodAdd("org.junit.Assert", "assertThat", "Object,org.hamcrest.Matcher");
         methodAdd("org.junit.Assert", "assertThat", "String,Object,org.hamcrest.Matcher");
     }
-
 }

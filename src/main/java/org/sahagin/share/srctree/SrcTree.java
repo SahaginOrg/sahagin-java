@@ -313,5 +313,4 @@ public class SrcTree implements YamlConvertible {
             resolveTestClass(testField);
         }
     }
-
 }

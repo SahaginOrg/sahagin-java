@@ -90,5 +90,4 @@ public class AdditionalTestDocs {
         classTestDocs.clear();
         methodTestDocs.clear();
     }
-
 }

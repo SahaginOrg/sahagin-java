@@ -26,5 +26,4 @@ public class WebDriverAdapter implements Adapter {
         AdapterContainer container = AdapterContainer.globalInstance();
         container.setScreenCaptureAdapter(new WebDriverScreenCaptureAdapter(driver));
     }
-
 }

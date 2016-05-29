@@ -123,5 +123,4 @@ class StackLineUtils {
         }
         return stackLines;
     }
-
 }

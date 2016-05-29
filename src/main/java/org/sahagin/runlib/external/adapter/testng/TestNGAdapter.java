@@ -51,8 +51,7 @@ public class TestNGAdapter implements Adapter {
         }
 
         @Override
-        public void classAdd() {
-        }
+        public void classAdd() {}
 
         @Override
         public void methodAdd() {
@@ -66,7 +65,5 @@ public class TestNGAdapter implements Adapter {
             methodAdd("org.testng.Assert", "assertEquals", "Object[],Object[]");
             methodAdd("org.testng.Assert", "assertEquals", "String,String");
         }
-
     }
-
 }

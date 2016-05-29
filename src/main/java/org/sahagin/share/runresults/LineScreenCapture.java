@@ -89,5 +89,4 @@ public class LineScreenCapture implements YamlConvertible {
             stackLines.add(stackLine);
         }
     }
-
 }

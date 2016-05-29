@@ -45,5 +45,4 @@ public class ClassInstance extends Code {
         super.fromYamlObject(yamlObject);
         testClassKey = YamlUtils.getStrValue(yamlObject, "classKey");
     }
-
 }

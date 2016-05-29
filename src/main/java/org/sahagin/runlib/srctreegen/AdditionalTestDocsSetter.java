@@ -129,5 +129,4 @@ public class AdditionalTestDocsSetter {
         subMethodTable.addTestMethod(newMethod);
         return newMethod;
     }
-
 }

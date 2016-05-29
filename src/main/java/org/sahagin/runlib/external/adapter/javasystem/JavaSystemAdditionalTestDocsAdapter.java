@@ -16,8 +16,7 @@ public class JavaSystemAdditionalTestDocsAdapter extends ResourceAdditionalTestD
     }
 
     @Override
-    public void classAdd() {
-    }
+    public void classAdd() {}
 
     @Override
     public void methodAdd() {
@@ -26,5 +25,4 @@ public class JavaSystemAdditionalTestDocsAdapter extends ResourceAdditionalTestD
         methodAdd(CLASS_QUALIFIED_NAME, METHOD_EQUALS, null, CaptureStyle.NONE);
         methodAdd(CLASS_QUALIFIED_NAME, METHOD_NOT_EQUALS, null, CaptureStyle.NONE);
     }
-
 }

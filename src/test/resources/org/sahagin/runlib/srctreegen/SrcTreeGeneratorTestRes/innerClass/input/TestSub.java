@@ -8,7 +8,5 @@ public class TestSub {
 
         @TestDoc("Doc:subInnerClass")
         private void subInnerClassMethod() {}
-
     }
-
 }

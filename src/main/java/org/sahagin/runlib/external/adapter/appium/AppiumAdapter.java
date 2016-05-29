@@ -36,8 +36,7 @@ public class AppiumAdapter implements Adapter {
         }
 
         @Override
-        public void classAdd() {
-        }
+        public void classAdd() {}
 
         @Override
         public void methodAdd() {
@@ -63,8 +62,6 @@ public class AppiumAdapter implements Adapter {
             methodAdd("io.appium.java_client.MobileBy", "AndroidUIAutomator", CaptureStyle.NONE);
             methodAdd("io.appium.java_client.MobileBy", "IosUIAutomation", CaptureStyle.NONE);
         }
-
     }
-
 }
 

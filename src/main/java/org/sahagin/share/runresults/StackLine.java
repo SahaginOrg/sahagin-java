@@ -16,8 +16,7 @@ public class StackLine implements YamlConvertible {
     private int codeBodyIndex;
 
     // normal constructor
-    public StackLine() {
-    }
+    public StackLine() {}
 
     // Copy constructor.
     // Generate new copy of source instance. This copy is shallow copy.
@@ -76,5 +75,4 @@ public class StackLine implements YamlConvertible {
         codeBodyIndex = YamlUtils.getIntValue(yamlObject, "codeBodyIndex");
         line = YamlUtils.getIntValue(yamlObject, "line");
     }
-
 }

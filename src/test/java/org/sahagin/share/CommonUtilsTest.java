@@ -29,5 +29,4 @@ public class CommonUtilsTest {
         String str = "aAzZ012_.";
         assertThat(CommonUtils.encodeToSafeAsciiFileNameString(str, Charsets.UTF_8), is(str));
     }
-
 }

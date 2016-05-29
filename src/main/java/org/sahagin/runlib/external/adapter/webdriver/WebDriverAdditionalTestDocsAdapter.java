@@ -12,8 +12,7 @@ public class WebDriverAdditionalTestDocsAdapter extends ResourceAdditionalTestDo
     }
 
     @Override
-    public void classAdd() {
-    }
+    public void classAdd() {}
 
     @Override
     public void methodAdd() {
@@ -69,5 +68,4 @@ public class WebDriverAdditionalTestDocsAdapter extends ResourceAdditionalTestDo
         methodAdd("org.openqa.selenium.WebElement", "sendKeys");
         methodAdd("org.openqa.selenium.WebElement", "submit");
     }
-
 }

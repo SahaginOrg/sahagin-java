@@ -9,5 +9,4 @@ public class TestMain {
         assert 2 != 1;
         assert "ABC".equals("ABC");
     }
-
 }

@@ -38,7 +38,5 @@ public class JUnit4Adapter implements Adapter {
         public String getName() {
             return name;
         }
-
     }
-
 }

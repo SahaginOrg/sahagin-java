@@ -53,5 +53,4 @@ public class CodeLine extends ASTData implements YamlConvertible {
         endLine = YamlUtils.getIntValue(yamlObject, "endLine");
         code = Code.newInstanceFromYamlObject(YamlUtils.getYamlObjectValue(yamlObject, "code"));
     }
-
 }

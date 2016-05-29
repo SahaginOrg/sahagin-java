@@ -241,5 +241,4 @@ public class TestMethod extends ASTData implements YamlConvertible {
             codeBody.add(codeLine);
         }
     }
-
 }

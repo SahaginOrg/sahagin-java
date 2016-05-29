@@ -39,5 +39,4 @@ public class Logging {
         }
         return logger;
     }
-
 }

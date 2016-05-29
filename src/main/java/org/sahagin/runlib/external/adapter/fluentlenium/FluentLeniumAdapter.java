@@ -109,7 +109,5 @@ public class FluentLeniumAdapter implements Adapter {
             methodAdd("org.fluentlenium.core.FluentPage", "go");
             methodAdd("org.fluentlenium.core.FluentPage", "isAt");
         }
-
     }
-
 }
