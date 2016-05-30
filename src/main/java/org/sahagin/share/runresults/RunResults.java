@@ -92,7 +92,6 @@ public class RunResults implements YamlConvertible {
         }
     }
 
-
     // if the keys for this run results or the specified runResults have already been resolved,
     // you should call resolveKeyReference again for this run results after calling this method.
     // (since merging can break correct reference)

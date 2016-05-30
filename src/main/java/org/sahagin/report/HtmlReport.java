@@ -7,8 +7,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.*;
-import java.util.logging.Logger;
-
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -23,7 +21,6 @@ import org.sahagin.share.CommonPath;
 import org.sahagin.share.CommonUtils;
 import org.sahagin.share.IllegalDataStructureException;
 import org.sahagin.share.IllegalTestScriptException;
-import org.sahagin.share.Logging;
 import org.sahagin.share.SysMessages;
 import org.sahagin.share.TestDocResolver;
 import org.sahagin.share.runresults.LineScreenCapture;
@@ -46,7 +43,6 @@ import org.sahagin.share.yaml.YamlUtils;
 //TODO support method optional argument
 
 public class HtmlReport {
-    private static Logger logger = Logging.getLogger(HtmlReport.class.getName());
     private static final int NO_IMAGE_WIDTH = 736;
     private static final int NO_IMAGE_HEIGHT = 455;
 
@@ -134,10 +130,6 @@ public class HtmlReport {
         noImageCapture.setImageWidth(NO_IMAGE_WIDTH);
         noImageCapture.setImageHeight(NO_IMAGE_HEIGHT);
         reportCaptures.add(noImageCapture);
-
-        logger.info("inputCaptureRootDir: " + inputCaptureRootDir);
-        logger.info("reportOutputDir: " + reportOutputDir);
-        logger.info("methodReportParentDir: " + methodReportParentDir);
 
         // add each line screen capture
         for (LineScreenCapture lineScreenCapture : lineScreenCaptures) {
@@ -376,43 +368,52 @@ public class HtmlReport {
         return result;
     }
 
-    private SrcTree generateSrcTree(File reportInputDataDir)
+    private SrcTree generateSrcTree(List<File> reportInputDataDirs)
             throws IllegalDataStructureException {
-        // generate srcTree from YAML file
-        Map<String, Object> yamlObj = YamlUtils.load(
-                CommonPath.srcTreeFile(reportInputDataDir));
         SrcTree srcTree = new SrcTree();
-        try {
-            srcTree.fromYamlObject(yamlObj);
-        } catch (YamlConvertException e) {
-            throw new IllegalDataStructureException(e);
+        for (File reportInputDataDir : reportInputDataDirs) {
+            // generate srcTree from YAML file
+            Map<String, Object> yamlObj = YamlUtils.load(
+                    CommonPath.srcTreeFile(reportInputDataDir));
+            try {
+                SrcTree eachSrcTree = new SrcTree();
+                eachSrcTree.fromYamlObject(yamlObj);
+                srcTree.merge(eachSrcTree);
+            } catch (YamlConvertException e) {
+                throw new IllegalDataStructureException(e);
+            }
         }
         srcTree.resolveKeyReference();
         return srcTree;
     }
 
-    private RunResults generateRunResults(File reportInputDataDir, SrcTree srcTree)
+    // returns RunResults list for reportInputDataDirs
+    private List<RunResults> generateRunResultList(List<File> reportInputDataDirs, SrcTree srcTree)
             throws IllegalDataStructureException {
-        RunResults results = new RunResults();
-        Collection<File> runResultFiles;
-        File runResultsRootDir = CommonPath.runResultRootDir(reportInputDataDir);
-        if (runResultsRootDir.exists()) {
-            runResultFiles = FileUtils.listFiles(runResultsRootDir, null, true);
-        } else {
-            runResultFiles = new ArrayList<>(0);
-        }
-        for (File runResultFile : runResultFiles) {
-            Map<String, Object> runResultYamlObj = YamlUtils.load(runResultFile);
-            RootMethodRunResult rootMethodRunResult = new RootMethodRunResult();
-            try {
-                rootMethodRunResult.fromYamlObject(runResultYamlObj);
-            } catch (YamlConvertException e) {
-                throw new IllegalDataStructureException(e);
+        List<RunResults> resultsList = new ArrayList<>(reportInputDataDirs.size());
+        for (File reportInputDataDir : reportInputDataDirs) {
+            RunResults results = new RunResults();
+            Collection<File> runResultFiles;
+            File runResultsRootDir = CommonPath.runResultRootDir(reportInputDataDir);
+            if (runResultsRootDir.exists()) {
+                runResultFiles = FileUtils.listFiles(runResultsRootDir, null, true);
+            } else {
+                runResultFiles = new ArrayList<>(0);
             }
-            results.addRootMethodRunResults(rootMethodRunResult);
+            for (File runResultFile : runResultFiles) {
+                Map<String, Object> runResultYamlObj = YamlUtils.load(runResultFile);
+                RootMethodRunResult rootMethodRunResult = new RootMethodRunResult();
+                try {
+                    rootMethodRunResult.fromYamlObject(runResultYamlObj);
+                } catch (YamlConvertException e) {
+                    throw new IllegalDataStructureException(e);
+                }
+                results.addRootMethodRunResults(rootMethodRunResult);
+            }
+            results.resolveKeyReference(srcTree);
+            resultsList.add(results);
         }
-        results.resolveKeyReference(srcTree);
-        return results;
+        return resultsList;
     }
 
     private void deleteDirIfExists(File dir) {
@@ -432,25 +433,15 @@ public class HtmlReport {
     // each report HTML file is {methodQualifiedParentPath}/{methodSimpleName}.html
     public void generate(List<File> reportInputDataDirs, File reportOutputDir)
             throws IllegalDataStructureException, IllegalTestScriptException {
-        if (reportInputDataDirs.size() > 1) {
-            throw new IllegalArgumentException("not implemented");
-        }
-        File reportInputDataDir = reportInputDataDirs.get(0);
         deleteDirIfExists(reportOutputDir); // delete previous execution output
-        SrcTree srcTree = generateSrcTree(reportInputDataDir);
-        RunResults runResults = generateRunResults(reportInputDataDir, srcTree);
-
         File htmlExternalResRootDir = CommonPath.htmlExternalResourceRootDir(reportOutputDir);
+        SrcTree srcTree = generateSrcTree(reportInputDataDirs);
+        List<RunResults> runResultsList = generateRunResultList(reportInputDataDirs, srcTree);
 
         // generate src-tree-yaml.js
-        String srcTreeYamlStr;
-        try {
-            srcTreeYamlStr = FileUtils.readFileToString(CommonPath.srcTreeFile(reportInputDataDir), Charsets.UTF_8);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
         VelocityContext srcTreeContext = new VelocityContext();
         // don't need HTML encode
+        String srcTreeYamlStr = YamlUtils.dumpToString(srcTree.toYamlObject());
         srcTreeContext.put("yamlStr", srcTreeYamlStr);
         File srcTreeYamlJsFile = new File(htmlExternalResRootDir, "js/report/src-tree-yaml.js");
         generateVelocityOutput(srcTreeContext, "/template/src-tree-yaml.js.vm", srcTreeYamlJsFile);
@@ -502,14 +493,18 @@ public class HtmlReport {
 
         // copy screen captures to reportOutputDir
         // TODO copying screen capture may be slow action
-        File inputCaptureRootDir = CommonPath.inputCaptureRootDir(reportInputDataDir);
         File htmlReportCaptureRootDir = CommonPath.htmlReportCaptureRootDir(reportOutputDir);
-        try {
-            if (inputCaptureRootDir.exists()) {
-                FileUtils.copyDirectory(inputCaptureRootDir, htmlReportCaptureRootDir);
+        for (File reportInputDataDir : reportInputDataDirs) {
+            File inputCaptureRootDir = CommonPath.inputCaptureRootDir(reportInputDataDir);
+            try {
+                if (inputCaptureRootDir.exists()) {
+                    // assume runResults for each reportInputDataDir has different root method run results
+                    // and the capture files are not overwritten.
+                    FileUtils.copyDirectory(inputCaptureRootDir, htmlReportCaptureRootDir);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
 
         List<TestMethod> testMethods = srcTree.getRootMethodTable().getTestMethods();
@@ -556,11 +551,17 @@ public class HtmlReport {
                     SysMessages.get(SysMessages.CODE_LINE_WITHOUT_TEST_DOC));
             escapePut(methodContext, "jsLocalVar", SysMessages.get(SysMessages.JS_LOCAL_VAR));
             escapePut(methodContext, "jsVarAssign", SysMessages.get(SysMessages.JS_VAR_ASSIGN));
-            RootMethodRunResult runResult = runResults.getRunResultByRootMethod(rootMethod);
-            boolean executed = (runResult != null);
-            if (executed) {
-                escapePut(methodContext, "executionTime", Integer.toString(runResult.getExecutionTime()));
+            RootMethodRunResult runResult = null;
+            File inputCaptureRootDir = null;
+            for (int i = 0; i < runResultsList.size(); i++) {
+                runResult = runResultsList.get(i).getRunResultByRootMethod(rootMethod);
+                if (runResult != null) {
+                    inputCaptureRootDir = CommonPath.inputCaptureRootDir(reportInputDataDirs.get(i));
+                    escapePut(methodContext, "executionTime", Integer.toString(runResult.getExecutionTime()));
+                    break; // assume results for each runResults are for different root method
+                }
             }
+            boolean executed = (runResult != null);
             RunFailure runFailure = getRunFailure(runResult);
             if (runFailure == null) {
                 escapePut(methodContext, "errMsg", null);
@@ -581,7 +582,7 @@ public class HtmlReport {
                 lineScreenCaptures = runResult.getLineScreenCaptures();
                 // TODO execution-time tag is used in HTML report now,
                 // but should use data-execution-time tag
-                addExecutionTime(lineScreenCaptures, reportCodeBody);
+                addExecutionTimeToCodeBody(lineScreenCaptures, reportCodeBody);
             }
             addLineScreenCaptureForErrorEachStackLine(lineScreenCaptures, runFailure);
             List<ReportScreenCapture> captures = generateReportScreenCaptures(
@@ -612,13 +613,14 @@ public class HtmlReport {
                 CommonPath.htmlReportMainFile(reportOutputDir));
     }
 
-    private void addExecutionTime(List<LineScreenCapture> captures, List<ReportCodeLine> codeLines) {
+    private void addExecutionTimeToCodeBody(
+            List<LineScreenCapture> captures, List<ReportCodeLine> codeCodeBody) {
         Map<String, Integer> executionTimeMap = new HashMap<>();
         for (LineScreenCapture lineScreenCapture : captures) {
             executionTimeMap.put(generateTtId(lineScreenCapture.getStackLines()), lineScreenCapture.getExecutionTime());
         }
 
-        for (ReportCodeLine reportCodeLine : codeLines) {
+        for (ReportCodeLine reportCodeLine : codeCodeBody) {
             String key = reportCodeLine.getTtId();
             if (executionTimeMap.containsKey(key)) {
                 reportCodeLine.setExecutionTime(executionTimeMap.get(key));

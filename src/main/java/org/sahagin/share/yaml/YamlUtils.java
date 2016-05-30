@@ -303,4 +303,9 @@ public class YamlUtils {
             throw new RuntimeException(e);
         }
     }
+
+    public static String dumpToString(Map<String, Object> yamlObj) {
+        Yaml yaml = new Yaml();
+        return yaml.dump(yamlObj);
+    }
 }
