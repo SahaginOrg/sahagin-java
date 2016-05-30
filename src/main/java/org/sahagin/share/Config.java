@@ -162,7 +162,11 @@ public class Config implements YamlConvertible {
 
         String runOutputIntermediateDataDirValue
         = YamlUtils.getStrValue(commonYamlObj, "runOutputIntermediateDataDir", true);
-        runOutputIntermediateDataDir = new File(runOutputIntermediateDataDirValue);
+        if (runOutputIntermediateDataDirValue == null) {
+            runOutputIntermediateDataDir  = null;
+        } else {
+            runOutputIntermediateDataDir = new File(runOutputIntermediateDataDirValue);
+        }
         List<String> reportInputIntermediateDataDirsValue
         = YamlUtils.getStrListValue(commonYamlObj, "reportInputIntermediateDataDirs", true);
         reportInputIntermediateDataDirs.clear();
@@ -180,7 +184,6 @@ public class Config implements YamlConvertible {
         } else if (reportInputIntermediateDataDirs.size() == 0) {
             reportInputIntermediateDataDirs.add(runOutputIntermediateDataDir);
         }
-
 
         String reportOutputDirValue = YamlUtils.getStrValue(commonYamlObj, "reportOutputDir", true);
         if (reportOutputDirValue != null) {
