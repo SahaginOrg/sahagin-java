@@ -42,11 +42,11 @@ public class HtmlReportTest extends TestBase {
             throws IllegalDataStructureException, IllegalTestScriptException {
         SysMessages.globalInitialize(AcceptableLocales.getInstance(null));
         HtmlReport report = new HtmlReport();
-        String subDirName = "reportGenerateShouldSucceedWithoutError/output";
+        String subDirName = "generatedReportShouldWork/output";
         clearWorkDir(subDirName);
         File outputDir = mkWorkDir(subDirName);
         report.generate(
-                Arrays.asList(testResourceDir("reportGenerateShouldSucceedWithoutError/input")),
+                Arrays.asList(testResourceDir("generatedReportShouldWork/input")),
                 outputDir);
         assertThat(new File(outputDir, "captures").exists(), is(true));
         assertThat(new File(outputDir, "css").exists(), is(true));
