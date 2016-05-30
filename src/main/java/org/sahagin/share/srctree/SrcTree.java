@@ -313,4 +313,55 @@ public class SrcTree implements YamlConvertible {
             resolveTestClass(testField);
         }
     }
+
+    // merge src to dest
+    private void mergeTestClassTable(TestClassTable srcTable, TestClassTable destTable) {
+        for (TestClass srcClass : srcTable.getTestClasses()) {
+            TestClass destClass = destTable.getByKey(srcClass.getKey());
+            if (destClass == null) {
+                destTable.addTestClass(srcClass);
+            } else {
+                // some test methods or test fields may not be included in the test class
+                for (String srcMethodKey : srcClass.getTestMethodKeys()) {
+                    if (!destClass.getTestMethodKeys().contains(srcMethodKey)) {
+                        destClass.addTestMethodKey(srcMethodKey);
+                    }
+                }
+                for (String srcFieldKey : srcClass.getTestFieldKeys()) {
+                    if (!destClass.getTestFieldKeys().contains(srcFieldKey)) {
+                        destClass.addTestFieldKey(srcFieldKey);
+                    }
+                }
+            }
+        }
+    }
+
+    // merge src to dest
+    private void mergeTestMethodTable(TestMethodTable srcTable, TestMethodTable destTable) {
+        for (TestMethod srcMethod : srcTable.getTestMethods()) {
+            if (destTable.getByKey(srcMethod.getKey()) == null) {
+                destTable.addTestMethod(srcMethod);
+            }
+        }
+    }
+
+    // merge src to dest
+    private void mergeTestFieldTable(TestFieldTable srcTable, TestFieldTable destTable) {
+        for (TestField srcField : srcTable.getTestFields()) {
+            if (destTable.getByKey(srcField.getKey()) == null) {
+                destTable.addTestField(srcField);
+            }
+        }
+    }
+
+    // if the keys for this tree or the specified srcTree have already been resolved,
+    // you should call resolveKeyReference again for this tree after calling this method.
+    // (since merging can break correct reference)
+    public void merge(SrcTree srcTree) {
+        mergeTestClassTable(srcTree.rootClassTable, rootClassTable);
+        mergeTestClassTable(srcTree.subClassTable, subClassTable);
+        mergeTestMethodTable(srcTree.rootMethodTable, rootMethodTable);
+        mergeTestMethodTable(srcTree.subMethodTable, subMethodTable);
+        mergeTestFieldTable(srcTree.fieldTable, fieldTable);
+    }
 }

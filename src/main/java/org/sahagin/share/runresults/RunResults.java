@@ -24,17 +24,25 @@ public class RunResults implements YamlConvertible {
     }
 
     // returns null if not found
-    public RootMethodRunResult getRunResultByRootMethod(TestMethod rootMethod) {
-        if (rootMethod == null) {
+    public RootMethodRunResult getRunResultByRootMethodKey(String key) {
+        if (key == null) {
             throw new NullPointerException();
         }
         for (RootMethodRunResult rootMethodRunResult : rootMethodRunResults) {
             if ((rootMethodRunResult.getRootMethod() != null)
-                    && rootMethod.getKey().equals(rootMethodRunResult.getRootMethod().getKey())) {
+                    && key.equals(rootMethodRunResult.getRootMethod().getKey())) {
                 return rootMethodRunResult;
             }
         }
         return null;
+    }
+
+    // returns null if not found
+    public RootMethodRunResult getRunResultByRootMethod(TestMethod rootMethod) {
+        if (rootMethod == null) {
+            throw new NullPointerException();
+        }
+        return getRunResultByRootMethodKey(rootMethod.getKey());
     }
 
     @Override
@@ -81,6 +89,20 @@ public class RunResults implements YamlConvertible {
                     resolveTestMethod(srcTree, stackLine);
                 }
             }
+        }
+    }
+
+
+    // if the keys for this run results or the specified runResults have already been resolved,
+    // you should call resolveKeyReference again for this run results after calling this method.
+    // (since merging can break correct reference)
+    public void merge(RunResults runResults) {
+        for (RootMethodRunResult srcResult : runResults.rootMethodRunResults) {
+            if (getRunResultByRootMethodKey(srcResult.getRootMethodKey()) != null) {
+                throw new RuntimeException(String.format(
+                        "not supported: root method %s is called multi times", srcResult.getRootMethodKey()));
+            }
+            addRootMethodRunResults(srcResult);
         }
     }
 }
