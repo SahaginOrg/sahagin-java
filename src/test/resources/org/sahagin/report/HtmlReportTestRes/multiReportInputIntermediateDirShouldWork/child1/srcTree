@@ -1,0 +1,34 @@
+rootClassTable:
+  classes:
+  - methodKeys: [test.Test1.test1-void]
+    key: test.Test1
+    qname: test.Test1
+formatVersion: '*'
+rootMethodTable:
+  methods:
+  - name: test1
+    classKey: test.Test1
+    codeBody:
+    - endLine: 9
+      startLine: 9
+      code:
+        methodKey: test.Sub.sub-void
+        original: Sub.sub();
+        type: method
+        thisInstance: {original: Sub, type: unknown}
+    key: test.Test1.test1-void
+subMethodTable:
+  methods:
+  - name: sub
+    testDoc: sub
+    classKey: test.Sub
+    codeBody:
+    - endLine: 9
+      startLine: 9
+      code: {original: System.out.println("a");, type: unknown}
+    key: test.Sub.sub-void
+subClassTable:
+  classes:
+  - methodKeys: [test.Sub.sub-void]
+    key: test.Sub
+    qname: test.Sub

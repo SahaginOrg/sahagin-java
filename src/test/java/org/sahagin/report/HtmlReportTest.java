@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.Assume;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -37,16 +38,20 @@ public class HtmlReportTest extends TestBase {
         return file.getAbsolutePath();
     }
 
-    // returns generated index.html
-    private File generateTestReport()
-            throws IllegalDataStructureException, IllegalTestScriptException {
+    @BeforeClass
+    public static void setUpClass() {
         SysMessages.globalInitialize(AcceptableLocales.getInstance(null));
+    }
+
+    // returns generated index.html
+    private File generateNormalReport(String testName)
+            throws IllegalDataStructureException, IllegalTestScriptException {
         HtmlReport report = new HtmlReport();
-        String subDirName = "generatedReportShouldWork/output";
+        String subDirName = testName + "/output";
         clearWorkDir(subDirName);
         File outputDir = mkWorkDir(subDirName);
         report.generate(
-                Arrays.asList(testResourceDir("generatedReportShouldWork/input")),
+                Arrays.asList(testResourceDir(testName + "/input")),
                 outputDir);
         assertThat(new File(outputDir, "captures").exists(), is(true));
         assertThat(new File(outputDir, "css").exists(), is(true));
@@ -58,6 +63,27 @@ public class HtmlReportTest extends TestBase {
         assertThat(indexHtml.exists(), is(true));
         assertThat(shouldFailHtml.exists(), is(true));
         assertThat(shouldSucceedHtml.exists(), is(true));
+        return indexHtml;
+    }
+
+    // returns generated index.html
+    // TODO check that capture files have been copied
+    private File generateMultiReport(String testName)
+            throws IllegalDataStructureException, IllegalTestScriptException {
+        HtmlReport report = new HtmlReport();
+        String subDirName = testName + "/output";
+        clearWorkDir(subDirName);
+        File outputDir = mkWorkDir(subDirName);
+        report.generate(Arrays.asList(
+                testResourceDir(testName + "/child1"),
+                testResourceDir(testName + "/child2")),
+                outputDir);
+        File indexHtml = new File(outputDir, "index.html");
+        File test1Html = new File(outputDir, "reports/test.Test1/test1.html");
+        File test2Html = new File(outputDir, "reports/test.Test2/test2.html");
+        assertThat(indexHtml.exists(), is(true));
+        assertThat(test1Html.exists(), is(true));
+        assertThat(test2Html.exists(), is(true));
         return indexHtml;
     }
 
@@ -101,15 +127,21 @@ public class HtmlReportTest extends TestBase {
     @Test
     public void generatedReportShouldWorkOnFirefox()
             throws IllegalDataStructureException, IllegalTestScriptException {
-        File indexHtml = generateTestReport();
+        File indexHtml = generateNormalReport("generatedReportShouldWork");
         seleniumTestRun(indexHtml, false);
     }
 
     @Test
     public void generatedReportShouldWorkOnChrome()
             throws IllegalDataStructureException, IllegalTestScriptException {
-        File indexHtml = generateTestReport();
+        File indexHtml = generateNormalReport("generatedReportShouldWork");
         seleniumTestRun(indexHtml, true);
+    }
+
+    @Test
+    public void multiReportInputIntermediateDirShouldWork()
+            throws IllegalDataStructureException, IllegalTestScriptException {
+        generateMultiReport("multiReportInputIntermediateDirShouldWork");
     }
 
     private void quietQuit(WebDriver driver) {

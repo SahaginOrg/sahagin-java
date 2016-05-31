@@ -163,26 +163,20 @@ public class Config implements YamlConvertible {
         String runOutputIntermediateDataDirValue
         = YamlUtils.getStrValue(commonYamlObj, "runOutputIntermediateDataDir", true);
         if (runOutputIntermediateDataDirValue == null) {
-            runOutputIntermediateDataDir  = null;
+            runOutputIntermediateDataDir  = INTERMEDIATE_DATA_DIR_DEFAULT;
         } else {
             runOutputIntermediateDataDir = new File(runOutputIntermediateDataDirValue);
         }
+
         List<String> reportInputIntermediateDataDirsValue
         = YamlUtils.getStrListValue(commonYamlObj, "reportInputIntermediateDataDirs", true);
         reportInputIntermediateDataDirs.clear();
-        for (String reportInputIntermediateDataDirValue : reportInputIntermediateDataDirsValue) {
-            reportInputIntermediateDataDirs.add(new File(reportInputIntermediateDataDirValue));
-        }
-
-        // set default values for runOutputIntermediateDataDir and reportInputIntermediateDataDirs
-        // if they are empty
-        if (runOutputIntermediateDataDir == null && reportInputIntermediateDataDirs.size() == 0) {
-            runOutputIntermediateDataDir = INTERMEDIATE_DATA_DIR_DEFAULT;
+        if (reportInputIntermediateDataDirsValue.size() == 0) {
             reportInputIntermediateDataDirs.add(INTERMEDIATE_DATA_DIR_DEFAULT);
-        } else if (runOutputIntermediateDataDir == null) {
-            runOutputIntermediateDataDir = reportInputIntermediateDataDirs.get(0);
-        } else if (reportInputIntermediateDataDirs.size() == 0) {
-            reportInputIntermediateDataDirs.add(runOutputIntermediateDataDir);
+        } else {
+            for (String reportInputIntermediateDataDirValue : reportInputIntermediateDataDirsValue) {
+                reportInputIntermediateDataDirs.add(new File(reportInputIntermediateDataDirValue));
+            }
         }
 
         String reportOutputDirValue = YamlUtils.getStrValue(commonYamlObj, "reportOutputDir", true);
