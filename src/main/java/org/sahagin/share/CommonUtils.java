@@ -23,7 +23,7 @@ public class CommonUtils {
     private static final Pattern SHA1_DIGEST_PATTERN = Pattern.compile("[a-f0-9]{40}");
 
     public static String formatVersion() {
-        return "0.9";
+        return "0.9.2";
     }
 
     // - nulls last
