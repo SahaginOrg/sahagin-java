@@ -3,10 +3,10 @@ package org.sahagin.runlib.runresultsgen;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.logging.Logger;
 
-import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -139,8 +139,8 @@ public class HookMethodManager {
         // and to escape invalid file name character (Method name may contain such characters
         // if method is Groovy method, for example).
         File runResultFile = new File(String.format("%s/%s/%s", runResultsRootDir,
-                CommonUtils.encodeToSafeAsciiFileNameString(hookedClassQualifiedName, Charsets.UTF_8),
-                CommonUtils.encodeToSafeAsciiFileNameString(hookedMethodSimpleName, Charsets.UTF_8)));
+                CommonUtils.encodeToSafeAsciiFileNameString(hookedClassQualifiedName, StandardCharsets.UTF_8),
+                CommonUtils.encodeToSafeAsciiFileNameString(hookedMethodSimpleName, StandardCharsets.UTF_8)));
         if (runResultFile.getParentFile() != null) {
             runResultFile.getParentFile().mkdirs();
         }
@@ -418,8 +418,8 @@ public class HookMethodManager {
         // and to escape invalid file name character (Method name may contain such characters
         // if method is Groovy method, for example).
         File captureFile = new File(String.format("%s/%s/%s/%03d.png", captureRootDir,
-                CommonUtils.encodeToSafeAsciiFileNameString(rootMethod.getTestClass().getQualifiedName(), Charsets.UTF_8),
-                CommonUtils.encodeToSafeAsciiFileNameString(rootMethod.getSimpleName(), Charsets.UTF_8),
+                CommonUtils.encodeToSafeAsciiFileNameString(rootMethod.getTestClass().getQualifiedName(), StandardCharsets.UTF_8),
+                CommonUtils.encodeToSafeAsciiFileNameString(rootMethod.getSimpleName(), StandardCharsets.UTF_8),
                 currentCaptureNo));
         currentCaptureNo++;
 

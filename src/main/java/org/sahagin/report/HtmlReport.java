@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
-import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.output.FileWriterWithEncoding;
@@ -517,7 +517,7 @@ public class HtmlReport {
             // use encoded test class name to avoid various possible file name encoding problem
             // TODO use java.nio.charset.StandardCharsets
             File methodReportParentDir= new File(CommonPath.methodHtmlReportRootDir(reportOutputDir),
-                        CommonUtils.encodeToSafeAsciiFileNameString(method.getTestClass().getQualifiedName(), Charsets.UTF_8));
+                        CommonUtils.encodeToSafeAsciiFileNameString(method.getTestClass().getQualifiedName(), StandardCharsets.UTF_8));
             methodReportParentDir.mkdirs();
 
             VelocityContext methodContext = new VelocityContext();
@@ -593,7 +593,7 @@ public class HtmlReport {
             // and to escape invalid file name character (Method name may contain such characters
             // if method is Groovy method, for example).
             File methodReportFile = new File(methodReportParentDir,
-                    CommonUtils.encodeToSafeAsciiFileNameString(rootMethod.getSimpleName(), Charsets.UTF_8) + ".html");
+                    CommonUtils.encodeToSafeAsciiFileNameString(rootMethod.getSimpleName(), StandardCharsets.UTF_8) + ".html");
             generateVelocityOutput(methodContext, "/template/report.html.vm", methodReportFile);
 
             // set reportLinks data
@@ -634,9 +634,9 @@ public class HtmlReport {
             outputFile.getParentFile().mkdirs();
         }
         try (InputStream stream = this.getClass().getResourceAsStream(templateResourcePath);
-                Reader streamReader = new InputStreamReader(stream, Charsets.UTF_8);
+                Reader streamReader = new InputStreamReader(stream, StandardCharsets.UTF_8);
                 Reader bfReader = new BufferedReader(streamReader);
-                FileWriterWithEncoding writer = new FileWriterWithEncoding(outputFile, Charsets.UTF_8)) {
+                FileWriterWithEncoding writer = new FileWriterWithEncoding(outputFile, StandardCharsets.UTF_8)) {
             Velocity.evaluate(context, writer, this.getClass().getSimpleName(), bfReader);
         } catch (IOException e) {
             throw new RuntimeException(e);

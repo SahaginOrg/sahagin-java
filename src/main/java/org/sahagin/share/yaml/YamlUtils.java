@@ -4,11 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.Charsets;
 import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.commons.lang.StringUtils;
 import org.sahagin.runlib.external.CaptureStyle;
@@ -296,7 +296,7 @@ public class YamlUtils {
         if (dumpFile.getParentFile() != null) {
             dumpFile.getParentFile().mkdirs();
         }
-        try (FileWriterWithEncoding writer = new FileWriterWithEncoding(dumpFile, Charsets.UTF_8)) {
+        try (FileWriterWithEncoding writer = new FileWriterWithEncoding(dumpFile, StandardCharsets.UTF_8)) {
             Yaml yaml = new Yaml();
             yaml.dump(yamlObj, writer);
         } catch (IOException e) {
