@@ -1,9 +1,9 @@
 package org.sahagin.runlib.external.adapter.webdriver;
 
+import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.SessionNotFoundException;
 import org.sahagin.runlib.external.adapter.ScreenCaptureAdapter;
 
 public class WebDriverScreenCaptureAdapter implements ScreenCaptureAdapter {
@@ -24,7 +24,7 @@ public class WebDriverScreenCaptureAdapter implements ScreenCaptureAdapter {
         try {
             return ((TakesScreenshot) driver)
                     .getScreenshotAs(OutputType.BYTES);
-        } catch (SessionNotFoundException e) {
+        } catch (NoSuchSessionException e) {
             // just do nothing if WebDriver instance is in invalid state
             return null;
         }

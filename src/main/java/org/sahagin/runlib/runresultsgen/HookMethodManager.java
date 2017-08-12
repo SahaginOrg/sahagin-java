@@ -7,9 +7,9 @@ import java.util.*;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.Charsets;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.openqa.selenium.io.IOUtils;
 import org.sahagin.runlib.external.CaptureStyle;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
 import org.sahagin.runlib.runresultsgen.StackLineUtils.LineReplacer;

@@ -193,7 +193,7 @@ public class SrcTreeGenerator {
     private static void parseAST(String[] srcFiles, Charset srcCharset,
             String[] classPathEntries, FileASTRequestor requestor) {
         ASTParser parser = ASTParser.newParser(AST.JLS8);
-        Map<?, ?> options = JavaCore.getOptions();
+        Map<String, String> options = JavaCore.getOptions();
         JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
         parser.setCompilerOptions(options);
         parser.setKind(ASTParser.K_COMPILATION_UNIT);
