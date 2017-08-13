@@ -1,6 +1,6 @@
 package org.sahagin.runlib.external.adapter.fluentlenium;
 
-import org.fluentlenium.core.Fluent;
+import org.fluentlenium.core.FluentDriver;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -26,16 +26,16 @@ public class FluentLeniumAdapter implements Adapter {
     }
 
     // can set null
-    public static void setAdapter(Fluent fluent) {
+    public static void setAdapter(FluentDriver fluent) {
         AdapterContainer container = AdapterContainer.globalInstance();
         container.setScreenCaptureAdapter(new ScreenCaptureAdapterImpl(fluent));
     }
 
     private static class ScreenCaptureAdapterImpl implements
             ScreenCaptureAdapter {
-        private Fluent fluent;
+        private FluentDriver fluent;
 
-        public ScreenCaptureAdapterImpl(Fluent fluent) {
+        public ScreenCaptureAdapterImpl(FluentDriver fluent) {
             this.fluent = fluent;
         }
 
