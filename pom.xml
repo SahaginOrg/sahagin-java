@@ -194,6 +194,22 @@ sp_cleanup.remove_trailing_whitespaces_ignore_empty=false]]>
     </profile>
 
     <profile>
+      <id>java7-compile</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <source>1.7</source>
+              <target>1.7</target>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
       <id>java8-compile</id>
       <build>
         <plugins>
