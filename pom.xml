@@ -212,6 +212,17 @@ sp_cleanup.remove_trailing_whitespaces_ignore_empty=false]]>
               <target>1.7</target>
             </configuration>
           </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>2.20</version>
+            <configuration>
+              <systemPropertyVariables>
+                <!-- Recent Firefox can't be tested in old Selenium environment. -->
+                <shouldTestByFirefox>false</shouldTestByFirefox>
+              </systemPropertyVariables>
+            </configuration>
+          </plugin>
         </plugins>
       </build>
     </profile>

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThat;
 import java.io.File;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
@@ -23,6 +24,8 @@ import org.sahagin.share.IllegalTestScriptException;
 import org.sahagin.share.SysMessages;
 
 public class HtmlReportTest extends TestBase {
+
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
 
     private String chromeDriverPath() {
         File file;
@@ -143,6 +146,10 @@ public class HtmlReportTest extends TestBase {
     @Test
     public void generatedReportShouldWorkOnFirefox()
             throws IllegalDataStructureException, IllegalTestScriptException {
+        if ("false".equals(System.getProperty("shouldTestByFirefox", "true"))) {
+            logger.info("Firefox test is skipped.");
+            return;
+        }
         File indexHtml = generateNormalReport("generatedReportShouldWork");
         seleniumTestRun(indexHtml, false);
     }
