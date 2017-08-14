@@ -78,16 +78,6 @@
       <version>3.6</version>
     </dependency>
     <dependency>
-      <groupId>org.seleniumhq.selenium</groupId>
-      <artifactId>selenium-java</artifactId>
-      <version>3.4.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.fluentlenium</groupId>
-      <artifactId>fluentlenium-core</artifactId>
-      <version>3.3.0</version>
-    </dependency>
-    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.12</version>
@@ -104,6 +94,11 @@
       <artifactId>maven-invoker</artifactId>
       <version>3.0.0</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.5</version>
     </dependency>
   </dependencies>
 
@@ -195,6 +190,18 @@ sp_cleanup.remove_trailing_whitespaces_ignore_empty=false]]>
 
     <profile>
       <id>java7-compile</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.seleniumhq.selenium</groupId>
+          <artifactId>selenium-java</artifactId>
+          <version>2.53.1</version>
+        </dependency>
+        <dependency>
+          <groupId>org.fluentlenium</groupId>
+          <artifactId>fluentlenium-core</artifactId>
+          <version>1.1.1</version>
+        </dependency>
+      </dependencies>
       <build>
         <plugins>
           <plugin>
@@ -211,6 +218,21 @@ sp_cleanup.remove_trailing_whitespaces_ignore_empty=false]]>
 
     <profile>
       <id>java8-compile</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>org.seleniumhq.selenium</groupId>
+          <artifactId>selenium-java</artifactId>
+          <version>3.4.0</version>
+        </dependency>
+        <dependency>
+          <groupId>org.fluentlenium</groupId>
+          <artifactId>fluentlenium-core</artifactId>
+          <version>3.3.0</version>
+        </dependency>
+      </dependencies>
       <build>
         <plugins>
           <plugin>
