@@ -22,6 +22,7 @@ before_install:
   - sudo rm /etc/mavenrc
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
+  - "chmod u+x ${HOME}/build/SahaginOrg/sahagin-java/src/test/resources/selenium/linux/*"
   
 script: "mvn clean test -P ${COMPILE_VERSION}"
 
