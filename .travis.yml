@@ -23,6 +23,8 @@ before_install:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - "chmod u+x ${HOME}/build/SahaginOrg/sahagin-java/src/test/resources/selenium/linux/*"
+  - "killall geckodriver"
+  - "killall chromedriver"
   
 script: "mvn clean test -P ${COMPILE_VERSION}"
 
