@@ -1,7 +1,9 @@
+addons:  
+  firefox: latest
+
 language: java
 
 jdk:
-  - openjdk7
   - oraclejdk8
 
 env:
@@ -11,8 +13,6 @@ env:
     
 matrix:
   exclude:
-    - jdk: openjdk7
-      env: COMPILE_VERSION=java8-compile,!java7-compile
     - jdk: oraclejdk8
       env: COMPILE_VERSION=java7-compile,!java8-compile
   
