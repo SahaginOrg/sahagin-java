@@ -38,6 +38,20 @@ public class HtmlReportTest extends TestBase {
         return file.getAbsolutePath();
     }
 
+    private String geckoDriverPath() {
+        File file;
+        if (SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_MAC_OSX) {
+            file = new File(testResourceRoot(), "selenium/mac/geckodriver");
+        } else if (SystemUtils.IS_OS_LINUX) {
+            file = new File(testResourceRoot(), "selenium/linux/geckodriver");
+        } else if (SystemUtils.IS_OS_WINDOWS) {
+            file = new File(testResourceRoot(), "selenium/win/geckodriver.exe");
+        } else {
+            throw new RuntimeException("not supported OS environment");
+        }
+        return file.getAbsolutePath();
+    }
+
     @BeforeClass
     public static void setUpClass() {
         SysMessages.globalInitialize(AcceptableLocales.getInstance(null));
@@ -89,14 +103,13 @@ public class HtmlReportTest extends TestBase {
 
     private void seleniumTestRun(File indexHtml, boolean chrome) {
         WebDriver driver;
+        boolean onTravisCI =
+                StringUtils.equals(System.getenv("CI"), "true")
+                && StringUtils.equals(System.getenv("TRAVIS"), "true");
+        boolean onCircleCI =
+                StringUtils.equals(System.getenv("CI"), "true")
+                && StringUtils.equals(System.getenv("CIRCLECI"), "true");
         if (chrome) {
-            boolean onTravisCI =
-                    StringUtils.equals(System.getenv("CI"), "true")
-                    && StringUtils.equals(System.getenv("TRAVIS"), "true");
-            boolean onCircleCI =
-                    StringUtils.equals(System.getenv("CI"), "true")
-                    && StringUtils.equals(System.getenv("CIRCLECI"), "true");
-
             // Don't execute ChromeDriver test on Travis CI
             // because the test will freeze..
             Assume.assumeTrue(!onTravisCI);
@@ -107,6 +120,9 @@ public class HtmlReportTest extends TestBase {
             }
             driver = new ChromeDriver();
         } else {
+            if (!onCircleCI) {
+                System.setProperty("webdriver.gecko.driver", geckoDriverPath());
+            }
             driver = new FirefoxDriver();
         }
 
