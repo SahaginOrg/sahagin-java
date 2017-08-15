@@ -119,13 +119,15 @@ public class HtmlReportTest extends TestBase {
 
             // CircleCI environment has its own ChromeDriver
             if (!onCircleCI) {
-                System.setProperty("webdriver.chrome.driver", chromeDriverPath());
+                String driverPath = chromeDriverPath();
+                logger.info("webdriver.chrome.driver: " + driverPath);
+                System.setProperty("webdriver.chrome.driver", driverPath);
             }
             driver = new ChromeDriver();
         } else {
-            if (!onCircleCI) {
-                System.setProperty("webdriver.gecko.driver", geckoDriverPath());
-            }
+            String driverPath = geckoDriverPath();
+            logger.info("webdriver.gecko.driver: " + driverPath);
+            System.setProperty("webdriver.gecko.driver", driverPath);
             driver = new FirefoxDriver();
         }
 
