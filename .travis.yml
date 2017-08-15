@@ -1,5 +1,5 @@
 addons:  
-  firefox: latest
+  firefox: "53.0.3"
 
 language: java
 
