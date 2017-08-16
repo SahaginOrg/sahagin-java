@@ -6,8 +6,6 @@ checkout:
     - git submodule sync
     - git submodule update --init
 test:
-  pre:
-    - chmod u+x ${HOME}/${CIRCLE_PROJECT_REPONAME}/src/test/resources/selenium/linux/*
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
     - find . -type f -regex ".*/target/surefire-reports/TEST-org.sahagin.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;

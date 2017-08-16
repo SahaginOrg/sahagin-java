@@ -17,6 +17,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.sahagin.TestBase;
 import org.sahagin.share.AcceptableLocales;
 import org.sahagin.share.IllegalDataStructureException;
@@ -138,6 +140,7 @@ public class HtmlReportTest extends TestBase {
             String indexHtmlUrl = "file:///" + indexHtml.getAbsolutePath();
             driver.get(indexHtmlUrl);
             driver.findElement(By.linkText("sample.SampleTest.shouldSucceed")).click();
+            new WebDriverWait(driver, 60).until(ExpectedConditions.titleIs("shouldSucceed"));
             driver.navigate().back();
             driver.findElement(By.linkText("sample.SampleTest.shouldFail")).click();
         } finally {
