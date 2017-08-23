@@ -14,9 +14,9 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
-import org.openqa.selenium.io.IOUtils;
 
 public class CommonUtils {
     private static final Pattern SAFE_ASCII_PATTERN = Pattern.compile("[\\w\\.]*");

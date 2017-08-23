@@ -1,3 +1,11 @@
+machine:
+  java:
+    version: oraclejdk8
+dependencies:
+  pre:
+    - mkdir ../firefox-53.0.3
+    - wget -O firefox-53.0.3.tar.bz2 'https://archive.mozilla.org/pub/firefox/releases/53.0.3/linux-x86_64/ja/firefox-53.0.3.tar.bz2';tar xjf firefox-53.0.3.tar.bz2;firefox_cmd=`which firefox`;sudo rm -f $firefox_cmd;sudo ln -s `pwd`/firefox/firefox $firefox_cmd:
+        pwd: ../firefox-53.0.3
 checkout:
   post:
     - git submodule sync

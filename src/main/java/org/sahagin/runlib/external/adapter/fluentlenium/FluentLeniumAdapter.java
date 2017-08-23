@@ -1,10 +1,10 @@
 package org.sahagin.runlib.external.adapter.fluentlenium;
 
-import org.fluentlenium.core.Fluent;
+import org.fluentlenium.core.FluentDriver;
+import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.SessionNotFoundException;
 import org.sahagin.runlib.external.CaptureStyle;
 import org.sahagin.runlib.external.adapter.Adapter;
 import org.sahagin.runlib.external.adapter.AdapterContainer;
@@ -26,16 +26,16 @@ public class FluentLeniumAdapter implements Adapter {
     }
 
     // can set null
-    public static void setAdapter(Fluent fluent) {
+    public static void setAdapter(FluentDriver fluent) {
         AdapterContainer container = AdapterContainer.globalInstance();
         container.setScreenCaptureAdapter(new ScreenCaptureAdapterImpl(fluent));
     }
 
     private static class ScreenCaptureAdapterImpl implements
             ScreenCaptureAdapter {
-        private Fluent fluent;
+        private FluentDriver fluent;
 
-        public ScreenCaptureAdapterImpl(Fluent fluent) {
+        public ScreenCaptureAdapterImpl(FluentDriver fluent) {
             this.fluent = fluent;
         }
 
@@ -54,7 +54,7 @@ public class FluentLeniumAdapter implements Adapter {
             try {
                 return ((TakesScreenshot) driver)
                         .getScreenshotAs(OutputType.BYTES);
-            } catch (SessionNotFoundException e) {
+            } catch (NoSuchSessionException e) {
                 // just do nothing if WebDriver instance is in invalid state
                 return null;
             }

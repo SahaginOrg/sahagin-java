@@ -1,4 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <properties>
@@ -40,7 +40,7 @@
     <dependency>
       <groupId>org.eclipse.tycho</groupId>
       <artifactId>org.eclipse.jdt.core</artifactId>
-      <version>3.10.0.v20140604-1726</version>
+      <version>3.13.0.v20170516-1929</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.core</groupId>
@@ -50,7 +50,7 @@
     <dependency>
       <groupId>org.eclipse.birt.runtime</groupId>
       <artifactId>org.eclipse.core.resources</artifactId>
-      <version>3.9.1.v20140825-1431</version>
+      <version>3.10.0.v20150423-0755</version>
     </dependency>
     <dependency>
       <groupId>org.apache.velocity</groupId>
@@ -65,27 +65,17 @@
     <dependency>
       <groupId>org.javassist</groupId>
       <artifactId>javassist</artifactId>
-      <version>3.19.0-GA</version>
+      <version>3.21.0-GA</version>
     </dependency>
     <dependency>
       <groupId>org.yaml</groupId>
       <artifactId>snakeyaml</artifactId>
-      <version>1.14</version>
+      <version>1.18</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.4</version>
-    </dependency>
-    <dependency>
-      <groupId>org.seleniumhq.selenium</groupId>
-      <artifactId>selenium-java</artifactId>
-      <version>2.53.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.fluentlenium</groupId>
-      <artifactId>fluentlenium-core</artifactId>
-      <version>0.13.1</version>
+      <version>3.6</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -96,14 +86,19 @@
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
-      <version>6.9.10</version>
+      <version>6.11</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.shared</groupId>
       <artifactId>maven-invoker</artifactId>
-      <version>2.1.1</version>
+      <version>3.0.0</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.5</version>
     </dependency>
   </dependencies>
 
@@ -112,7 +107,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-eclipse-plugin</artifactId>
-        <version>2.9</version>
+        <version>2.10</version>
         <configuration>
           <additionalConfig>
           　<!-- generates setting files by calling mvn eclipse:eclipse -->
@@ -131,24 +126,8 @@ sp_cleanup.remove_trailing_whitespaces_ignore_empty=false]]>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.2</version>
-        <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.18.1</version>
-        <dependencies>
-          <dependency>
-            <groupId>org.apache.maven.surefire</groupId>
-            <artifactId>surefire-junit47</artifactId>
-            <version>2.18.1</version>
-          </dependency>
-        </dependencies> 
+        <version>2.20</version>
         <configuration>
           <systemPropertyVariables>
             <!-- give Maven home for child Maven Invoker -->
@@ -160,7 +139,7 @@ sp_cleanup.remove_trailing_whitespaces_ignore_empty=false]]>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>2.5</version>
+        <version>3.0.2</version>
         <configuration>
           <archive>
             <manifestEntries>
@@ -173,7 +152,7 @@ sp_cleanup.remove_trailing_whitespaces_ignore_empty=false]]>
       <plugin>
         <groupId>org.sonatype.plugins</groupId>
         <artifactId>nexus-staging-maven-plugin</artifactId>
-        <version>1.6.3</version>
+        <version>1.6.8</version>
         <extensions>true</extensions>
         <configuration>
           <serverId>ossrh</serverId>
@@ -202,14 +181,38 @@ sp_cleanup.remove_trailing_whitespaces_ignore_empty=false]]>
 
     <profile>
       <id>java7-compile</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.seleniumhq.selenium</groupId>
+          <artifactId>selenium-java</artifactId>
+          <version>2.53.1</version>
+        </dependency>
+        <dependency>
+          <groupId>org.fluentlenium</groupId>
+          <artifactId>fluentlenium-core</artifactId>
+          <version>1.1.1</version>
+        </dependency>
+      </dependencies>
       <build>
         <plugins>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.6.2</version>
             <configuration>
               <source>1.7</source>
               <target>1.7</target>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>2.20</version>
+            <configuration>
+              <systemPropertyVariables>
+                <!-- Recent Firefox can't be tested in old Selenium environment. -->
+                <shouldTestByFirefox>false</shouldTestByFirefox>
+              </systemPropertyVariables>
             </configuration>
           </plugin>
         </plugins>
@@ -218,11 +221,27 @@ sp_cleanup.remove_trailing_whitespaces_ignore_empty=false]]>
 
     <profile>
       <id>java8-compile</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>org.seleniumhq.selenium</groupId>
+          <artifactId>selenium-java</artifactId>
+          <version>3.4.0</version>
+        </dependency>
+        <dependency>
+          <groupId>org.fluentlenium</groupId>
+          <artifactId>fluentlenium-core</artifactId>
+          <version>3.3.0</version>
+        </dependency>
+      </dependencies>
       <build>
         <plugins>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.6.2</version>
             <configuration>
               <source>1.8</source>
               <target>1.8</target>
@@ -273,7 +292,7 @@ sp_cleanup.remove_trailing_whitespaces_ignore_empty=false]]>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.5</version>
+            <version>1.6</version>
             <executions>
               <execution>
                 <id>sign-artifacts</id>
@@ -287,7 +306,7 @@ sp_cleanup.remove_trailing_whitespaces_ignore_empty=false]]>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-source-plugin</artifactId>
-            <version>2.2.1</version>
+            <version>3.0.1</version>
             <executions>
               <execution>
                 <id>attach-sources</id>
@@ -300,7 +319,7 @@ sp_cleanup.remove_trailing_whitespaces_ignore_empty=false]]>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
-            <version>2.9.1</version>
+            <version>3.0.0-M1</version>
             <executions>
               <execution>
                 <id>attach-javadocs</id>
@@ -313,7 +332,7 @@ sp_cleanup.remove_trailing_whitespaces_ignore_empty=false]]>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-assembly-plugin</artifactId>
-            <version>2.5.3</version>
+            <version>3.0.0</version>
             <executions>
               <execution>
                 <id>generate-standalone-jar</id>
@@ -341,7 +360,7 @@ sp_cleanup.remove_trailing_whitespaces_ignore_empty=false]]>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-dependency-plugin</artifactId>
-            <version>2.9</version>
+            <version>3.0.1</version>
             <executions>
               <execution>
                 <id>collect-all-dependencies</id>
