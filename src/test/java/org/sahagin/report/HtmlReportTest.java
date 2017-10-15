@@ -155,6 +155,11 @@ public class HtmlReportTest extends TestBase {
             logger.info("Firefox test is skipped.");
             return;
         }
+        String osName = System.getProperty("os.name");
+        if (osName != null && osName.toLowerCase().contains("mac")) {
+            // skip mac OS x Firefox test since it does not work well at least with Selenium 3.5.3
+            return;
+        }
         File indexHtml = generateNormalReport("generatedReportShouldWork");
         seleniumTestRun(indexHtml, false);
     }
