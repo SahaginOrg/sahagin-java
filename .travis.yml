@@ -17,9 +17,6 @@ matrix:
       env: COMPILE_VERSION=java7-compile,!java8-compile
   
 before_install: 
-  # So that Travis CI does not ignore Java Maven Invoker class option.
-  # See https://github.com/travis-ci/travis-ci/issues/1689
-  - sudo rm /etc/mavenrc
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   
